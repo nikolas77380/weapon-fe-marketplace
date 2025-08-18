@@ -18,13 +18,19 @@ const Navbar = () => {
             className="border-black pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
             placeholder:text-black h-10"
           />
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer" />
+          <Search
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
+          />
         </div>
         <ul className="flex items-center gap-6">
-          <Link href="/login" className="">
+          <Link href="/auth?mode=login" className="">
             <li className="font-bold text-lg hover:text-black/80">Log In</li>
           </Link>
-          <Link href="/register" className="p-2.5 bg-gray-primary rounded-md">
+          <Link
+            href="/auth?mode=register"
+            className="p-2.5 bg-gray-primary rounded-md"
+          >
             <li className="font-bold text-lg hover:text-black/80">Register</li>
           </Link>
         </ul>

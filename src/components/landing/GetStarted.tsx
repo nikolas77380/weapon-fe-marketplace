@@ -14,7 +14,7 @@ const GetStarted = () => {
             prototypes.
           </p>
           <Link
-            href="/register"
+            href="/auth?mode=register"
             className="bg-white rounded-xl mt-10 font-bold text-2xl p-5 border border-black 
             hover:bg-white/80 hover:border-black/80 duration-300 transition-all"
           >
