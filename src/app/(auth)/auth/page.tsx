@@ -2,25 +2,43 @@
 
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BuyerFormValues } from "@/schemas/buyerSchema";
 import { SellerFormValues } from "@/schemas/sellerSchema";
 import { LoginFormValues } from "@/schemas/loginSchema";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import BuyerForm from "@/components/auth/BuyerForm";
 import SellerForm from "@/components/auth/SellerForm";
 import Breadcrumb from "@/components/auth/Breadcrumb";
 import AuthSwitcher from "@/components/auth/AuthSwitcher";
 
-const RegisterPage = () => {
+const AuthPage = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const mode = searchParams.get("mode");
 
   const [authMode, setAuthMode] = useState<"login" | "register">(
     mode === "login" ? "login" : "register"
   );
   const [activeType, setActiveType] = useState<"buyer" | "seller">("buyer");
+
+  useEffect(() => {
+    if (authMode === "login") {
+      router.replace("/auth?mode=login");
+    } else {
+      router.replace("/auth?mode=register");
+    }
+  }, [authMode, router]);
+
+  useEffect(() => {
+    const currentMode = searchParams.get("mode");
+    if (currentMode === "login") {
+      setAuthMode("login");
+    } else {
+      setAuthMode("register");
+    }
+  }, [searchParams]);
 
   const onBuyerSubmit = (values: BuyerFormValues) => {
     console.log("Buyer submitted:", values);
@@ -33,6 +51,7 @@ const RegisterPage = () => {
   const onLoginSubmit = (values: LoginFormValues) => {
     console.log("Login submitted:", values);
   };
+
   return (
     <div className="h-screen w-full">
       <div className="max-w-xl mx-auto">
@@ -124,4 +143,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default AuthPage;
