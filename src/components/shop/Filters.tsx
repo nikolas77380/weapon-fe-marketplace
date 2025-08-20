@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-const LeftFilters = () => {
+const Filters = () => {
   return (
     <div className="border border-[#D3D3D3] rounded-lg pl-10 pr-6 pt-5.5 flex flex-col gap-5.5">
       <div className="flex items-center gap-2">
@@ -94,4 +94,4 @@ const LeftFilters = () => {
   );
 };
 
-export default LeftFilters;
+export default Filters;

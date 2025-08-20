@@ -3,7 +3,7 @@ import React from "react";
 import ShopCard from "./ShopCard";
 import { Button } from "../ui/button";
 
-const ShopCards = () => {
+const ShopContent = () => {
   const shopCards = shopCategories;
   return (
     <div className="mb-12">
@@ -23,4 +23,4 @@ const ShopCards = () => {
   );
 };
 
-export default ShopCards;
+export default ShopContent;

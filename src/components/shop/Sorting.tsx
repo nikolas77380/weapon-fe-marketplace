@@ -3,7 +3,7 @@
 import { ChevronDown, LayoutGrid, List } from "lucide-react";
 import React, { useState } from "react";
 
-const FiltersTop = () => {
+const Sorting = () => {
   const [activeTab, setActiveTab] = useState<"grid" | "list">("grid");
   return (
     <div className="flex items-center gap-22">
@@ -39,4 +39,4 @@ const FiltersTop = () => {
   );
 };
 
-export default FiltersTop;
+export default Sorting;

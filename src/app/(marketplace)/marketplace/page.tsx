@@ -1,9 +1,9 @@
-import FiltersTop from "@/components/shop/FiltersTop";
-import LeftFilters from "@/components/shop/LeftFilters";
-import ShopCards from "@/components/shop/ShopCards";
+import ShopContent from "@/components/shop/ShopContent";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import React from "react";
+import Sorting from "@/components/shop/Sorting";
+import Filters from "@/components/shop/Filters";
 
 const ShopPage = () => {
   return (
@@ -25,17 +25,16 @@ const ShopPage = () => {
               className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#B3B3B3]"
             />
           </div>
-          {/* Filters top */}
-          <FiltersTop />
+          {/* Sorting */}
+          <Sorting />
         </div>
         {/* Shop Content */}
         <div className="mt-12 flex gap-12 h-full w-full">
-          {/* Left Filters */}
-          <LeftFilters />
-          
-          {/* Right Content */}
+          {/* Filters */}
+          <Filters />
+          {/* Shop Content */}
           <div className="w-full h-full">
-            <ShopCards />
+            <ShopContent />
           </div>
         </div>
       </div>
