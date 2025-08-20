@@ -1,4 +1,4 @@
-import z from "zod"
+import z from "zod";
 
 export const buyerSchema = z
   .object({
@@ -13,6 +13,6 @@ export const buyerSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-  })
+  });
 
-export type BuyerFormValues = z.infer<typeof buyerSchema>
+export type BuyerFormValues = z.infer<typeof buyerSchema>;
