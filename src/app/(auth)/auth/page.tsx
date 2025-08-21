@@ -12,44 +12,123 @@ import BuyerForm from "@/components/auth/BuyerForm";
 import SellerForm from "@/components/auth/SellerForm";
 import Breadcrumb from "@/components/auth/Breadcrumb";
 import AuthSwitcher from "@/components/auth/AuthSwitcher";
+import {
+  registerBuyer,
+  login,
+  getSessionTokenFromCookie,
+  registerSeller,
+} from "@/lib/auth";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+
   const mode = searchParams.get("mode");
+  const type = searchParams.get("type");
 
   const [authMode, setAuthMode] = useState<"login" | "register">(
     mode === "login" ? "login" : "register"
   );
-  const [activeType, setActiveType] = useState<"buyer" | "seller">("buyer");
-
-  useEffect(() => {
-    if (authMode === "login") {
-      router.replace("/auth?mode=login");
-    } else {
-      router.replace("/auth?mode=register");
-    }
-  }, [authMode, router]);
+  const [activeType, setActiveType] = useState<"buyer" | "seller">(
+    type === "seller" ? "seller" : "buyer"
+  );
 
   useEffect(() => {
     const currentMode = searchParams.get("mode");
+    const currentType = searchParams.get("type");
+
     if (currentMode === "login") {
       setAuthMode("login");
     } else {
       setAuthMode("register");
     }
+
+    if (currentType === "seller") {
+      setActiveType("seller");
+    } else if (currentType === "buyer") {
+      setActiveType("buyer");
+    }
   }, [searchParams]);
 
-  const onBuyerSubmit = (values: BuyerFormValues) => {
-    console.log("Buyer submitted:", values);
+  // Check if user is already authenticated
+  useEffect(() => {
+    const sessionToken = getSessionTokenFromCookie();
+    if (sessionToken) {
+      console.log("User is already authenticated");
+      router.push("/dashboard");
+    }
+  }, []);
+
+  const handleAuthMode = (mode: "login" | "register") => {
+    setAuthMode(mode);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("mode", mode);
+
+    if (mode === "login") {
+      params.delete("type");
+    } else if (mode === "register" && !params.has("type")) {
+      params.set("type", "buyer");
+    }
+
+    router.replace(`/auth?${params.toString()}`);
   };
 
-  const onSellerSubmit = (values: SellerFormValues) => {
-    console.log("Seller submitted:", values);
+  const handleTypeChange = (type: "buyer" | "seller") => {
+    setActiveType(type);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("type", type);
+    router.replace(`/auth?${params.toString()}`);
   };
 
-  const onLoginSubmit = (values: LoginFormValues) => {
-    console.log("Login submitted:", values);
+  const onBuyerSubmit = async (values: BuyerFormValues) => {
+    try {
+      console.log("Registering buyer:", values);
+      const response = await registerBuyer(values);
+      console.log("Buyer registration response:", response);
+
+      if (response && "jwt" in response) {
+        console.log("Buyer registration successful! JWT cookie set");
+        router.push("/dashboard");
+      } else {
+        console.error("Buyer registration failed:", response);
+      }
+    } catch (error) {
+      console.error("Buyer registration error:", error);
+    }
+  };
+
+  const onSellerSubmit = async (values: SellerFormValues) => {
+    try {
+      console.log("Registering seller:", values);
+      const response = await registerSeller(values);
+      console.log("Seller registration response:", response);
+
+      if (response && "jwt" in response) {
+        console.log("Seller registration successful! JWT cookie set");
+        router.push("/dashboard");
+      } else {
+        console.error("Seller registration failed:", response);
+      }
+    } catch (error) {
+      console.error("Seller registration error:", error);
+    }
+  };
+
+  const onLoginSubmit = async (values: LoginFormValues) => {
+    try {
+      console.log("Attempting login with:", values);
+      const response = await login(values);
+      console.log("Login response:", response);
+
+      if (response && "jwt" in response) {
+        console.log("Login successful! JWT cookie set");
+        router.push("/dashboard");
+      } else {
+        console.error("Login failed - no JWT in response:", response);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -71,7 +150,7 @@ const AuthPage = () => {
             </p>
           </div>
           {/* Switcher */}
-          <AuthSwitcher authMode={authMode} onAuthModeChange={setAuthMode} />
+          <AuthSwitcher authMode={authMode} onAuthModeChange={handleAuthMode} />
           {/* Content */}
           {authMode === "register" && (
             <>
@@ -79,7 +158,7 @@ const AuthPage = () => {
               <div className="flex items-center justify-between gap-11 mt-5">
                 {/* Buyer */}
                 <div
-                  onClick={() => setActiveType("buyer")}
+                  onClick={() => handleTypeChange("buyer")}
                   className={`border flex flex-col items-center justify-center pt-2.5 pb-4.5 px-2.5 rounded-md cursor-pointer transition-colors
                     ${
                       activeType === "buyer"
@@ -101,7 +180,7 @@ const AuthPage = () => {
                 </div>
                 {/* Seller */}
                 <div
-                  onClick={() => setActiveType("seller")}
+                  onClick={() => handleTypeChange("seller")}
                   className={`border flex flex-col items-center justify-center pt-2.5 pb-4.5 px-2.5 rounded-md cursor-pointer transition-colors
                     ${
                       activeType === "seller"
