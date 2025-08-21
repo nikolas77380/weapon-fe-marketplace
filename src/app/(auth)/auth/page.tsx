@@ -132,7 +132,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="h-screen w-full">
+    <div className="h-full w-full mb-20">
       <div className="max-w-xl mx-auto">
         {/* Breadcrumb */}
         <Breadcrumb />
