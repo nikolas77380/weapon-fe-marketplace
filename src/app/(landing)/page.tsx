@@ -1,5 +1,4 @@
 import BestSelling from "@/components/landing/BestSelling";
-import Footer from "@/components/landing/Footer";
 import GetStarted from "@/components/landing/GetStarted";
 import HowItWorks from "@/components/landing/HowItWorks";
 import MainBanner from "@/components/landing/MainBanner";
@@ -13,7 +12,6 @@ export default function Home() {
       <BestSelling />
       <HowItWorks />
       <GetStarted />
-      <Footer />
     </main>
   );
 }
