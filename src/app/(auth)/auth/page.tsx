@@ -18,10 +18,12 @@ import {
   getSessionTokenFromCookie,
   registerSeller,
 } from "@/lib/auth";
+import { useAuthContext } from "@/context/AuthContext";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { fetchUser } = useAuthContext();
 
   const mode = searchParams.get("mode");
   const type = searchParams.get("type");
@@ -88,6 +90,7 @@ const AuthPage = () => {
 
       if (response && "jwt" in response) {
         console.log("Buyer registration successful! JWT cookie set");
+        await fetchUser();
         router.push("/dashboard");
       } else {
         console.error("Buyer registration failed:", response);
@@ -122,6 +125,7 @@ const AuthPage = () => {
 
       if (response && "jwt" in response) {
         console.log("Login successful! JWT cookie set");
+        await fetchUser();
         router.push("/dashboard");
       } else {
         console.error("Login failed - no JWT in response:", response);

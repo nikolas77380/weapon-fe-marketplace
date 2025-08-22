@@ -184,3 +184,20 @@ export const getSessionTokenFromCookie = (): string | null => {
   }
   return null;
 };
+
+export const getCurrentUserFromCookie =
+  async (): Promise<UserProfile | null> => {
+    const token = getSessionTokenFromCookie();
+    if (!token) return null;
+
+    try {
+      const response = await getCurrentUser(token);
+      if (response && "id" in response) {
+        return response;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error getting current user:", error);
+      return null;
+    }
+  };

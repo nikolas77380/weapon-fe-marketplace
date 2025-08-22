@@ -1,11 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
+import BuyerNavbarAuth from "../buyer/navbar/BuyerNavbarAuth";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Navbar = () => {
+  const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
+
   return (
-    <nav className="w-full px-7 py-5.5">
+    <nav className="w-full px-7 py-5.5 border-b border-gray-primary">
       <div className="h-16 flex justify-between items-center">
         <Link href="/">
           <h1 className="text-xl size-16 font-bold rounded-full border border-black flex items-center justify-center">
@@ -23,17 +28,29 @@ const Navbar = () => {
             className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
           />
         </div>
-        <ul className="flex items-center gap-6">
-          <Link href="/auth?mode=login" className="">
-            <li className="font-bold text-lg hover:text-black/80">Log In</li>
-          </Link>
-          <Link
-            href="/auth?mode=register"
-            className="p-2.5 bg-gray-primary rounded-md"
-          >
-            <li className="font-bold text-lg hover:text-black/80">Register</li>
-          </Link>
-        </ul>
+        {!currentUserLoading && (
+          <>
+            {currentUser && currentUser.storeRole === "buyer" ? (
+              <BuyerNavbarAuth user={currentUser} onLogout={handleLogout} />
+            ) : (
+              <ul className="flex items-center gap-6">
+                <Link href="/auth?mode=login" className="">
+                  <li className="font-bold text-lg hover:text-black/80">
+                    Log In
+                  </li>
+                </Link>
+                <Link
+                  href="/auth?mode=register"
+                  className="p-2.5 bg-gray-primary rounded-md"
+                >
+                  <li className="font-bold text-lg hover:text-black/80">
+                    Register
+                  </li>
+                </Link>
+              </ul>
+            )}
+          </>
+        )}
       </div>
     </nav>
   );
