@@ -28,9 +28,9 @@ interface BuyerNavbarAuthProps {
   onLogout: () => void;
 }
 
-const BuyerNavbarAuth = ({ user, onLogout }: BuyerNavbarAuthProps) => {
+const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
-    <NavigationMenu viewport={false}>
+    <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
         <NavigationMenuItem className="relative">
           <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
@@ -49,7 +49,7 @@ const BuyerNavbarAuth = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               <div className="font-medium">
                 {user.displayName || user.username}
               </div>
-              <div className="text-gray-600 capitalize">{user.storeRole}</div>
+              <div className="text-gray-600 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -63,7 +63,7 @@ const BuyerNavbarAuth = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               <Separator className="mt-2" />
               <li>
                 <NavigationMenuLink asChild className="p-3">
-                  <Link href="/buyer-account">
+                  <Link href="/account">
                     <div className="flex items-center gap-3">
                       <User size={18} />
                       <p className="font-semibold">My Account</p>
@@ -120,4 +120,4 @@ const BuyerNavbarAuth = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   );
 };
 
-export default BuyerNavbarAuth;
+export default BuyerNavbar;

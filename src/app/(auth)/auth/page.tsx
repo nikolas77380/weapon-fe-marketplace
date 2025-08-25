@@ -3,13 +3,12 @@
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { BuyerFormValues } from "@/schemas/buyerSchema";
+import { RegisterFormValues } from "@/schemas/registerSchema";
 import { SellerFormValues } from "@/schemas/sellerSchema";
 import { LoginFormValues } from "@/schemas/loginSchema";
 import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
-import BuyerForm from "@/components/auth/BuyerForm";
-import SellerForm from "@/components/auth/SellerForm";
+import RegisterForm from "@/components/auth/RegisterForm";
 import Breadcrumb from "@/components/auth/Breadcrumb";
 import AuthSwitcher from "@/components/auth/AuthSwitcher";
 import {
@@ -17,8 +16,10 @@ import {
   login,
   getSessionTokenFromCookie,
   registerSeller,
+  getCurrentUser,
 } from "@/lib/auth";
 import { useAuthContext } from "@/context/AuthContext";
+import { isSeller } from "@/lib/utils";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
@@ -82,38 +83,31 @@ const AuthPage = () => {
     router.replace(`/auth?${params.toString()}`);
   };
 
-  const onBuyerSubmit = async (values: BuyerFormValues) => {
+  const onRegistrationSubmit = async (values: RegisterFormValues) => {
+    console.log("Attempting registration with:", values);
     try {
-      console.log("Registering buyer:", values);
-      const response = await registerBuyer(values);
-      console.log("Buyer registration response:", response);
+      let response;
+      if (activeType === "buyer") {
+        response = await registerBuyer(values);
+        console.log("Buyer registration response:", response);
+      } else if (activeType === "seller") {
+        response = await registerSeller(values);
+        console.log("Seller registration response:", response);
+      }
 
       if (response && "jwt" in response) {
         console.log("Buyer registration successful! JWT cookie set");
         await fetchUser();
-        router.push("/dashboard");
+        if (isSeller(response.user)) {
+          router.push("/account");
+        } else {
+          router.push("/marketplace");
+        }
       } else {
         console.error("Buyer registration failed:", response);
       }
     } catch (error) {
       console.error("Buyer registration error:", error);
-    }
-  };
-
-  const onSellerSubmit = async (values: SellerFormValues) => {
-    try {
-      console.log("Registering seller:", values);
-      const response = await registerSeller(values);
-      console.log("Seller registration response:", response);
-
-      if (response && "jwt" in response) {
-        console.log("Seller registration successful! JWT cookie set");
-        router.push("/dashboard");
-      } else {
-        console.error("Seller registration failed:", response);
-      }
-    } catch (error) {
-      console.error("Seller registration error:", error);
     }
   };
 
@@ -124,9 +118,15 @@ const AuthPage = () => {
       console.log("Login response:", response);
 
       if (response && "jwt" in response) {
+        const currentUser = await getCurrentUser(response.jwt);
         console.log("Login successful! JWT cookie set");
         await fetchUser();
-        router.push("/dashboard");
+        console.log("response.user", response.user);
+        if (isSeller(currentUser)) {
+          router.push("/account");
+        } else {
+          router.push("/marketplace");
+        }
       } else {
         console.error("Login failed - no JWT in response:", response);
       }
@@ -208,13 +208,7 @@ const AuthPage = () => {
 
               {/* Forms */}
               <div className="mt-8">
-                {activeType === "buyer" && (
-                  <BuyerForm onSubmit={onBuyerSubmit} />
-                )}
-
-                {activeType === "seller" && (
-                  <SellerForm onSubmit={onSellerSubmit} />
-                )}
+                <RegisterForm onSubmit={onRegistrationSubmit} />
               </div>
             </>
           )}
