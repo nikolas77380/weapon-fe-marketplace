@@ -3,6 +3,7 @@ import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/landing/Footer";
+import { AuthContextProvider } from "@/context/AuthContext";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -31,9 +32,11 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${inter.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <AuthContextProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </AuthContextProvider>
       </body>
     </html>
   );
