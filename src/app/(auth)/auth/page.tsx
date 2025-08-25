@@ -72,14 +72,14 @@ const AuthPage = () => {
       params.set("type", "buyer");
     }
 
-    router.replace(`/auth?${params.toString()}`);
+    router.replace(`/auth?${params.toString()}`, { scroll: false });
   };
 
   const handleTypeChange = (type: "buyer" | "seller") => {
     setActiveType(type);
     const params = new URLSearchParams(searchParams.toString());
     params.set("type", type);
-    router.replace(`/auth?${params.toString()}`);
+    router.replace(`/auth?${params.toString()}`, { scroll: false });
   };
 
   const onBuyerSubmit = async (values: BuyerFormValues) => {
