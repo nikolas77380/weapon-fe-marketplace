@@ -1,13 +1,14 @@
-"use client";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useAuthContext } from "@/context/AuthContext";
+import type { UserProfile } from "@/lib/types";
 import React from "react";
 import BuyerActionCard from "./BuyerActionCard";
 
-const BuyerAccountHeader = () => {
-  const { currentUser } = useAuthContext();
+interface BuyerAccountHeaderProps {
+  currentUser: UserProfile;
+}
+
+const BuyerAccountHeader = ({ currentUser }: BuyerAccountHeaderProps) => {
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between">
@@ -33,9 +34,21 @@ const BuyerAccountHeader = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-4 mt-8">
-        <BuyerActionCard title="Active Inquiries" count={2} subTitle="Pending responses" />
-        <BuyerActionCard title="Saved Items" count={12} subTitle="In watchlist" />
-        <BuyerActionCard title="Completed deals" count={5} subTitle="This year" />
+        <BuyerActionCard
+          title="Active Inquiries"
+          count={2}
+          subTitle="Pending responses"
+        />
+        <BuyerActionCard
+          title="Saved Items"
+          count={12}
+          subTitle="In watchlist"
+        />
+        <BuyerActionCard
+          title="Completed deals"
+          count={5}
+          subTitle="This year"
+        />
       </div>
     </div>
   );

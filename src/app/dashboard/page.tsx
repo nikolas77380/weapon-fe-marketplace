@@ -1,36 +1,14 @@
-"use client";
+import { requireAuth } from "@/lib/server-auth";
+import { LogoutButton } from "@/components/auth/LogoutButton";
+import React from "react";
+import { redirect } from "next/navigation";
+import { isSeller } from "@/lib/utils";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { logout, getSessionTokenFromCookie } from "@/lib/auth";
-
-const DashboardPage = () => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Проверяем аутентификацию при загрузке страницы
-  useEffect(() => {
-    const sessionToken = getSessionTokenFromCookie();
-    if (!sessionToken) {
-      console.log("No session token found, redirecting to auth");
-      router.push("/auth?mode=login");
-    }
-  }, [router]);
-
-  const handleLogout = async () => {
-    setIsLoading(true);
-    try {
-      await logout();
-      console.log("Logout successful");
-      router.push("/auth?mode=login");
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+const DashboardPage = async () => {
+  const currentUser = await requireAuth();
+  if (isSeller(currentUser) && currentUser.metadata === null) {
+    redirect("/account");
+  }
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -41,14 +19,7 @@ const DashboardPage = () => {
               <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button
-                onClick={handleLogout}
-                disabled={isLoading}
-                variant="outline"
-                className="text-red-600 border-red-600 hover:bg-red-50"
-              >
-                {isLoading ? "Logging out..." : "Logout"}
-              </Button>
+              <LogoutButton />
             </div>
           </div>
         </div>
@@ -60,7 +31,7 @@ const DashboardPage = () => {
           <div className="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center">
             <div className="text-center">
               <h2 className="text-xl font-semibold text-gray-600 mb-4">
-                Welcome to your Dashboard
+                Welcome, {currentUser.displayName || currentUser.username}!
               </h2>
               <p className="text-gray-500">
                 This is your personal dashboard. Content will be added here

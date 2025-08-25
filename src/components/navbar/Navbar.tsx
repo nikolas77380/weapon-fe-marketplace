@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
-import BuyerNavbarAuth from "../buyer/navbar/BuyerNavbarAuth";
+import BuyerNavbar from "../buyer/navbar/BuyerNavbar";
 import { useAuthContext } from "@/context/AuthContext";
+import SellerNavbar from "../buyer/navbar/SellerNavbar";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
@@ -28,28 +29,28 @@ const Navbar = () => {
             className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer"
           />
         </div>
-        {!currentUserLoading && (
+        {!currentUserLoading && currentUser ? (
           <>
-            {currentUser && currentUser.storeRole === "buyer" ? (
-              <BuyerNavbarAuth user={currentUser} onLogout={handleLogout} />
+            {currentUser.role.name === "buyer" ? (
+              <BuyerNavbar user={currentUser} onLogout={handleLogout} />
             ) : (
-              <ul className="flex items-center gap-6">
-                <Link href="/auth?mode=login" className="">
-                  <li className="font-bold text-lg hover:text-black/80">
-                    Log In
-                  </li>
-                </Link>
-                <Link
-                  href="/auth?mode=register"
-                  className="p-2.5 bg-gray-primary rounded-md"
-                >
-                  <li className="font-bold text-lg hover:text-black/80">
-                    Register
-                  </li>
-                </Link>
-              </ul>
+              <SellerNavbar user={currentUser} onLogout={handleLogout} />
             )}
           </>
+        ) : (
+          <ul className="flex items-center gap-6">
+            <Link href="/auth?mode=login" className="">
+              <li className="font-bold text-lg hover:text-black/80">Log In</li>
+            </Link>
+            <Link
+              href="/auth?mode=register"
+              className="p-2.5 bg-gray-primary rounded-md"
+            >
+              <li className="font-bold text-lg hover:text-black/80">
+                Register
+              </li>
+            </Link>
+          </ul>
         )}
       </div>
     </nav>

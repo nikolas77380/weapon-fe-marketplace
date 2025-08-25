@@ -13,15 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { BuyerFormValues, buyerSchema } from "@/schemas/buyerSchema";
+import { RegisterFormValues, RegisterSchema } from "@/schemas/registerSchema";
 
-interface BuyerFormProps {
-  onSubmit: (values: BuyerFormValues) => void;
+interface RegisterFormProps {
+  onSubmit: (values: RegisterFormValues) => void;
 }
 
-const BuyerForm = ({ onSubmit }: BuyerFormProps) => {
-  const form = useForm<BuyerFormValues>({
-    resolver: zodResolver(buyerSchema),
+const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
       displayName: "",
       email: "",
@@ -142,4 +142,4 @@ const BuyerForm = ({ onSubmit }: BuyerFormProps) => {
   );
 };
 
-export default BuyerForm;
+export default RegisterForm;

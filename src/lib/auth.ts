@@ -1,6 +1,4 @@
-import { serialize } from "cookie";
-import { BuyerFormValues } from "@/schemas/buyerSchema";
-import { SellerFormValues } from "@/schemas/sellerSchema";
+import { RegisterFormValues } from "@/schemas/registerSchema";
 import { LoginFormValues } from "@/schemas/loginSchema";
 import { strapiFetch, strapiFetchAuth } from "./strapi";
 import { setClientCookie, deleteClientCookie } from "./cookies";
@@ -22,7 +20,7 @@ const clearSessionTokenCookie = () => {
 
 // Public authentication routes (no JWT required)
 export const registerBuyer = async (
-  values: BuyerFormValues
+  values: RegisterFormValues
 ): Promise<ApiResponse<AuthResponse>> => {
   const { displayName, email, password } = values;
   const response = await strapiFetch({
@@ -34,7 +32,7 @@ export const registerBuyer = async (
       password,
       displayName,
       provider: "local",
-      storeRole: "buyer",
+      role: "buyer",
     },
   });
 
@@ -48,19 +46,19 @@ export const registerBuyer = async (
 };
 
 export const registerSeller = async (
-  values: SellerFormValues
+  values: RegisterFormValues
 ): Promise<ApiResponse<AuthResponse>> => {
-  const { fullName, email, password } = values;
+  const { displayName, email, password } = values;
   const response = await strapiFetch({
     path: "/api/auth/local/register",
     method: "POST",
     body: {
-      username: fullName,
+      username: displayName,
       email,
       password,
-      displayName: fullName,
+      displayName: displayName,
       provider: "local",
-      storeRole: "seller",
+      role: "seller", // Use role instead of storeRole
     },
   });
 
@@ -68,6 +66,15 @@ export const registerSeller = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+
+    // Get full user data with metadata only for sellers
+    const fullUserData = await getCurrentUser(response.jwt);
+    if (fullUserData && "id" in fullUserData) {
+      return {
+        jwt: response.jwt,
+        user: fullUserData,
+      };
+    }
   }
 
   return response;
@@ -85,6 +92,17 @@ export const login = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+
+    // Get full user data with metadata only for sellers
+    if (response.user && response.user.role?.name === "seller") {
+      const fullUserData = await getCurrentUser(response.jwt);
+      if (fullUserData && "id" in fullUserData) {
+        return {
+          jwt: response.jwt,
+          user: fullUserData,
+        };
+      }
+    }
   }
 
   return response;
@@ -119,6 +137,17 @@ export const resetPassword = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+
+    // Get full user data with metadata only for sellers
+    if (response.user && response.user.role?.name === "seller") {
+      const fullUserData = await getCurrentUser(response.jwt);
+      if (fullUserData && "id" in fullUserData) {
+        return {
+          jwt: response.jwt,
+          user: fullUserData,
+        };
+      }
+    }
   }
 
   return response;
@@ -201,3 +230,22 @@ export const getCurrentUserFromCookie =
       return null;
     }
   };
+
+// Get user info from token
+export const getUserFromToken = async (token: string) => {
+  try {
+    const response = await strapiFetchAuth({
+      path: "/api/users/me",
+      method: "GET",
+      token,
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Get user error:", error);
+    throw error;
+  }
+};

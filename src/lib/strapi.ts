@@ -23,12 +23,6 @@ export const strapiFetch = async ({
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  console.log("Response status:", response.status);
-  console.log(
-    "Response headers:",
-    Object.fromEntries(response.headers.entries())
-  );
-
   if (!response.ok) {
     const errorText = await response.text();
     console.error("Response error:", errorText);
@@ -79,4 +73,58 @@ export const strapiFetchAuth = async ({
   const data = await response.json();
   console.log("Response data:", data);
   return data;
+};
+
+// Function to create seller meta data
+export const createSellerMeta = async ({
+  data,
+  token,
+}: {
+  data: {
+    specialisation: string;
+    sellerDescription: string;
+    companyName: string;
+    webSite: string;
+    phoneNumbers: string;
+    country: string;
+    address: string;
+  };
+  token: string;
+}) => {
+  return strapiFetchAuth({
+    path: "/api/seller-metas",
+    method: "POST",
+    body: {
+      data,
+    },
+    token,
+  });
+};
+
+// Function to update seller meta data
+export const updateSellerMeta = async ({
+  id,
+  data,
+  token,
+}: {
+  id: number;
+  data: {
+    specialisation?: string;
+    sellerDescription?: string;
+    companyName?: string;
+    webSite?: string;
+    phoneNumbers?: string;
+    country?: string;
+    address?: string;
+  };
+  token: string;
+}) => {
+  return strapiFetchAuth({
+    path: `/api/seller-metas/${id}`,
+    method: "PUT",
+    body: {
+      data,
+    },
+    token,
+  });
 };

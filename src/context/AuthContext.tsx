@@ -2,7 +2,14 @@
 
 import { getCurrentUserFromCookie, logout } from "@/lib/auth";
 import { UserProfile } from "@/lib/types";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { redirect } from "next/navigation";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface AuthContextContextValue {
   currentUser: UserProfile | null;
@@ -34,6 +41,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     await logout();
     setCurrentUser(null);
+    redirect("/auth");
   };
 
   useEffect(() => {
