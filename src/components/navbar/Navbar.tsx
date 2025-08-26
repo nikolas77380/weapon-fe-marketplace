@@ -13,11 +13,19 @@ const Navbar = () => {
   return (
     <nav className="w-full px-7 py-5.5 border-b border-gray-primary">
       <div className="h-16 flex justify-between items-center">
-        <Link href="/">
-          <h1 className="text-xl size-16 font-bold rounded-full border border-black flex items-center justify-center">
-            <span>WM</span>
-          </h1>
-        </Link>
+        {currentUser ? (
+          <Link href="/marketplace">
+            <h1 className="text-xl size-16 font-bold rounded-full border border-black flex items-center justify-center">
+              <span>WM</span>
+            </h1>
+          </Link>
+        ) : (
+          <Link href="/">
+            <h1 className="text-xl size-16 font-bold rounded-full border border-black flex items-center justify-center">
+              <span>WM</span>
+            </h1>
+          </Link>
+        )}
         <div className="relative">
           <Input
             placeholder="Search"
