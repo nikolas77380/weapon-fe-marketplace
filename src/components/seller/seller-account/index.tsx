@@ -1,20 +1,21 @@
 "use client";
 
 import { UserProfile } from "@/lib/types";
-import { redirect } from "next/navigation";
 import SellerActionCard from "./SellerActionCard";
 import { Box, Clock4, Eye, MessageSquare, Plus, Settings } from "lucide-react";
 import SellerAccountTabs from "./SellerTabs";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
+  const router = useRouter();
 
   const handleClickToSettings = () => {
-    redirect('/account/settings');
+    router.push("/account/settings");
   };
 
   const handleClickToAddProduct = () => {
-    redirect('/account/add-product');
+    router.push("/account/add-product");
   };
 
   return (
@@ -53,9 +54,7 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
           >
             <div className="flex items-center gap-2 py-2 px-3">
               <Settings size={16} className="text-black" />
-              <p className="text-xs font-semibold text-black">
-                Settings
-              </p>
+              <p className="text-xs font-semibold text-black">Settings</p>
             </div>
           </Button>
         </div>
