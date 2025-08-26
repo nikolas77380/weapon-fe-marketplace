@@ -1,4 +1,18 @@
 // API Response types
+export interface SellerMeta {
+  id: number;
+  UUID: string;
+  specialisation?: string;
+  sellerDescription?: string;
+  companyName?: string;
+  webSite?: string;
+  phoneNumbers?: string;
+  country?: string;
+  address?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthResponse {
   jwt: string;
   user: {
@@ -6,7 +20,6 @@ export interface AuthResponse {
     username: string;
     email: string;
     displayName?: string;
-    storeRole?: string;
     role: {
       id: number;
       name: string;
@@ -16,6 +29,7 @@ export interface AuthResponse {
     blocked: boolean;
     createdAt: string;
     updatedAt: string;
+    metadata?: SellerMeta;
   };
 }
 
@@ -33,7 +47,6 @@ export interface UserProfile {
   username: string;
   email: string;
   displayName?: string;
-  storeRole?: string;
   role: {
     id: number;
     name: string;
@@ -43,7 +56,18 @@ export interface UserProfile {
   blocked: boolean;
   createdAt: string;
   updatedAt: string;
+  metadata?: SellerMeta;
 }
 
 // Generic API response wrapper
 export type ApiResponse<T> = T | ErrorResponse;
+
+// Role constants
+export const USER_ROLES = {
+  SELLER: "seller",
+  BUYER: "buyer",
+  AUTHENTICATED: "authenticated",
+  PUBLIC: "public",
+} as const;
+
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
