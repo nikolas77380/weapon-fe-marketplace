@@ -1,97 +1,85 @@
 "use client";
 
 import { UserProfile } from "@/lib/types";
-import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
-import MetaForm from "./metaForm";
-import { SellerFormValues } from "@/schemas/sellerSchema";
-import { useState } from "react";
-import { toast } from "sonner";
 import { redirect } from "next/navigation";
-import { getSessionTokenFromCookie, getUserFromToken } from "@/lib/auth";
-import { isSeller } from "@/lib/utils";
+import SellerActionCard from "./SellerActionCard";
+import { Box, Clock4, Eye, MessageSquare, Plus, Settings } from "lucide-react";
+import SellerAccountTabs from "./SellerTabs";
+import { Button } from "@/components/ui/button";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
-  const { metadata } = currentUser;
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (values: SellerFormValues) => {
-    setIsLoading(true);
-    try {
-      // Get JWT token using utility function
-      const token = getSessionTokenFromCookie();
-
-      if (!token) {
-        throw new Error("No authentication token found");
-      }
-
-      if (!isSeller(currentUser)) {
-        throw new Error("Only sellers can create seller meta data");
-      }
-
-      console.log(
-        "Submitting seller data with token:",
-        token.substring(0, 20) + "..."
-      );
-      console.log("Seller data:", values);
-
-      if (metadata) {
-        // Update existing seller meta
-        const response = await updateSellerMeta({
-          id: metadata.id,
-          data: values,
-          token,
-        });
-        console.log("Update response:", response);
-        toast.success("Seller information updated successfully!");
-      } else {
-        // Create new seller meta
-        const response = await createSellerMeta({
-          data: values,
-          token,
-        });
-        console.log("Create response:", response);
-        toast.success("Seller information created successfully!");
-      }
-
-      // Optionally refresh the page or update the user data
-      redirect("/marketplace");
-    } catch (error: any) {
-      console.error("Error saving seller data:", error);
-
-      // More detailed error handling
-      if (error.message?.includes("403")) {
-        toast.error(
-          "Access denied. Please check your authentication and permissions."
-        );
-      } else if (error.message?.includes("401")) {
-        toast.error("Authentication required. Please log in again.");
-      } else if (error.message?.includes("400")) {
-        toast.error("Invalid data. Please check your form inputs.");
-      } else if (error.message?.includes("Only sellers can")) {
-        toast.error(error.message);
-      } else if (error.message?.includes("Invalid or expired token")) {
-        toast.error("Session expired. Please log in again.");
-      } else {
-        toast.error(
-          `Failed to save seller information: ${
-            error.message || "Unknown error"
-          }`
-        );
-      }
-    } finally {
-      setIsLoading(false);
-    }
+  const handleClickToSettings = () => {
+    redirect('/account/settings');
   };
 
-  if (metadata === null || metadata === undefined) {
-    return <MetaForm onSubmit={handleSubmit} isLoading={isLoading} />;
-  }
+  const handleClickToAddProduct = () => {
+    redirect('/account/add-product');
+  };
 
   return (
-    <div>
-      <h2>Seller Account</h2>
-      <p>Your seller information has been saved.</p>
-      {/* You can add a form to edit existing data here */}
+    <div className="w-full min-h-screen h-full">
+      <div className="container mx-auto mt-18 flex flex-col">
+        <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
+        {/* Right Buttons */}
+        <div className="flex items-center justify-end mb-8 gap-3.5">
+          <Button
+            className="border border-yellow-400 bg-[#FCF8D1] rounded-sm cursor-pointer duration-300 transition-all
+          hover:bg-yellow-200 px-1"
+          >
+            <div className="flex items-center gap-2 py-2 px-3">
+              <Clock4 size={16} className="text-orange-500" />
+              <p className="text-xs font-semibold text-orange-500">
+                Verification Pending
+              </p>
+            </div>
+          </Button>
+
+          <Button
+            className="border border-black bg-black rounded-sm cursor-pointer duration-300 transition-all
+          hover:bg-black/80 px-1"
+            onClick={handleClickToAddProduct}
+          >
+            <div className="flex items-center gap-2 py-2 px-3">
+              <Plus size={16} className="text-white" />
+              <p className="text-xs font-semibold text-white">Add product</p>
+            </div>
+          </Button>
+
+          <Button
+            className="border border-black bg-white rounded-sm cursor-pointer duration-300 transition-all
+          hover:bg-gray-100 px-1"
+            onClick={handleClickToSettings}
+          >
+            <div className="flex items-center gap-2 py-2 px-3">
+              <Settings size={16} className="text-black" />
+              <p className="text-xs font-semibold text-black">
+                Settings
+              </p>
+            </div>
+          </Button>
+        </div>
+        {/* Action Cards */}
+        <div className="flex items-center justify-between gap-12.5 mb-15">
+          <SellerActionCard
+            title="Active Listings"
+            count="2"
+            icon={<Box size={30} className="mr-1" />}
+          />
+          <SellerActionCard
+            title="Total views"
+            count="55"
+            icon={<Eye size={30} className="mr-1" />}
+          />
+          <SellerActionCard
+            title="Total views"
+            count="55"
+            icon={<MessageSquare size={30} className="mr-1" />}
+          />
+        </div>
+        {/* Seller Tabs */}
+        <SellerAccountTabs />
+      </div>
     </div>
   );
 };

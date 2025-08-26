@@ -9,6 +9,7 @@ export interface ShopCategory {
   seller: string;
   rating: number;
   status?: string;
+  createdAt?: string;
 }
 
 export const shopCategories = [
@@ -24,6 +25,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 2,
@@ -37,6 +39,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 3,
@@ -50,6 +53,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 4,
@@ -62,6 +66,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 5,
@@ -75,6 +80,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 6,
@@ -87,6 +93,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 7,
@@ -99,6 +106,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 8,
@@ -111,6 +119,7 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
   {
     id: 9,
@@ -123,5 +132,6 @@ export const shopCategories = [
     seller: "S",
     rating: 4.4,
     status: "Verifyed",
+    createdAt: "14/01/2025",
   },
 ];
