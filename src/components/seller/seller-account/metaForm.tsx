@@ -84,9 +84,6 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
         console.log("Create response:", response);
         toast.success("Seller information created successfully!");
       }
-
-      // Refresh the page to show updated data
-      window.location.reload();
     } catch (error: any) {
       console.error("Error saving seller data:", error);
 

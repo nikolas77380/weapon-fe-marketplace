@@ -5,8 +5,8 @@ import { setClientCookie, deleteClientCookie } from "./cookies";
 // @ts-ignore: './types' module is missing, so ignore type import errors for now
 import type { AuthResponse, UserProfile, ApiResponse } from "./types";
 
-const setSessionTokenCookie = (token: string) => {
-  setClientCookie("sessionToken", token, {
+const setSessionTokenCookie = (token: string, name?: string) => {
+  setClientCookie(name || "sessionToken", token, {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     path: "/",
     secure: process.env.NODE_ENV === "production",
@@ -92,6 +92,10 @@ export const login = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+    setSessionTokenCookie(
+      response.sendbirdSessionToken,
+      "sendbirdSessionToken"
+    );
 
     // Get full user data with metadata only for sellers
     if (response.user && response.user.role?.name === "seller") {
@@ -208,6 +212,17 @@ export const getSessionTokenFromCookie = (): string | null => {
 
   const value = `; ${document.cookie}`;
   const parts = value.split(`; sessionToken=`);
+  if (parts.length === 2) {
+    return parts.pop()?.split(";").shift() || null;
+  }
+  return null;
+};
+
+export const getSendbirdSessionTokenFromCookie = (): string | null => {
+  if (typeof window === "undefined") return null;
+
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; sendbirdSessionToken=`);
   if (parts.length === 2) {
     return parts.pop()?.split(";").shift() || null;
   }
