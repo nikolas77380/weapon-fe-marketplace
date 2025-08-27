@@ -9,6 +9,10 @@ export const addProductSchema = z.object({
   productCondition: z.string().min(1, "Product condition is required"),
   productPrice: z.number().min(1, "Price must be greater than 0"),
   productCount: z.number().min(1, "Count must be greater than 0"),
+  productImages: z
+    .array(z.instanceof(File))
+    .max(5, "Maximum 5 images allowed")
+    .optional(),
 });
 
 export type AddProductSchemaValues = z.infer<typeof addProductSchema>;

@@ -32,6 +32,7 @@ import {
   STORAGE_KEY,
 } from "@/lib/utils";
 import { toast } from "sonner";
+import ImagesDropzone from "@/components/ui/ImagesDropzone";
 
 const AddProductForms = () => {
   const [savedFormData, setSavedFormData, removeSavedFormData] =
@@ -48,6 +49,7 @@ const AddProductForms = () => {
       productCondition: "",
       productPrice: 0,
       productCount: 0,
+      productImages: undefined,
     },
   });
 
@@ -78,6 +80,8 @@ const AddProductForms = () => {
   const onSubmit = (values: AddProductSchemaValues) => {
     console.log("Form submitted successfully!");
     console.log("Product data:", values);
+    console.log("Product images:", values.productImages);
+    console.log("Images count:", values.productImages?.length || 0);
 
     removeSavedFormData();
 
@@ -328,6 +332,32 @@ const AddProductForms = () => {
                         if (e.target.value === "0") {
                           e.target.value = "";
                         }
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Images Dropzone */}
+          <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
+            <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
+              Images
+            </h2>
+            <FormField
+              control={form.control}
+              name="productImages"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ImagesDropzone
+                      maxFiles={5}
+                      maxSize={5 * 1024 * 1024}
+                      onFilesChange={(files) => {
+                        field.onChange(files);
+                        console.log("Images updated in form:", files);
                       }}
                     />
                   </FormControl>
