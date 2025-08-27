@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/landing/Footer";
 import { AuthContextProvider } from "@/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -29,12 +30,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.variable} ${inter.variable} antialiased`}
-      >
+      <body className={`${roboto.variable} ${inter.variable} antialiased`}>
         <AuthContextProvider>
           <Navbar />
           {children}
+          <Toaster />
           <Footer />
         </AuthContextProvider>
       </body>
