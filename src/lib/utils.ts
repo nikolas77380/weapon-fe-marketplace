@@ -349,6 +349,36 @@ export const SELLER_TYPES = [
   },
 ] as const;
 
+export const PRODUCT_CATEGORY_FORM = [
+  {
+    key: "armour",
+    label: "armour",
+  },
+  {
+    key: "weapons",
+    label: "weapons",
+  },
+  {
+    key: "accessories",
+    label: "accessories",
+  },
+] as const;
+
+export const PRODUCT_CONDITION_FORM = [
+  {
+    key: "new",
+    label: "New",
+  },
+  {
+    key: "in-stock",
+    label: "In Stock",
+  },
+  {
+    key: "pre-order",
+    label: "Pre-Order",
+  },
+] as const;
+
 // Role utilities
 export const isSeller = (user: any): boolean => {
   return user?.role?.name === "seller";
@@ -365,3 +395,5 @@ export const getUserRole = (user: any): string | null => {
 export const hasRole = (user: any, role: string): boolean => {
   return user?.role?.name === role;
 };
+
+export const STORAGE_KEY = "add-product-form-draft";
