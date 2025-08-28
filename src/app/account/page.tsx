@@ -10,7 +10,7 @@ const BuyerAccountPage = async () => {
 
   return (
     <main className=" w-full h-full min-h-screen mb-20">
-      <div className="container mx-auto mt-16">
+      <div className="container mx-auto">
         {isBuyer(currentUser) && (
           <>
             <BuyerAccountHeader currentUser={currentUser} />

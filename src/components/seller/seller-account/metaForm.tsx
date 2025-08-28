@@ -28,6 +28,9 @@ import { toast } from "sonner";
 
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
 import { getSessionTokenFromCookie } from "@/lib/auth";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ImagesDropzone from "@/components/ui/ImagesDropzone";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
@@ -78,7 +81,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
       } else {
         // Create new seller meta
         const response = await createSellerMeta({
-          data: values,
+          data: { ...values, webSite: values.webSite ?? "" },
           token,
         });
         console.log("Create response:", response);
@@ -113,162 +116,205 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {/* Specialisation */}
-        <FormField
-          name="specialisation"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Business Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Business Type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {SELLER_TYPES.map(({ key, label, description }) => (
-                    <SelectItem key={key} value={label}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="container mx-auto w-full">
+      <BreadcrumbComponent
+        currentUser={currentUser}
+        className="mt-4 mb-10"
+      />
+      <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
+        <Tabs defaultValue="companyDetails" className="w-full">
+          <TabsList className="bg-gray-primary gap-5 flex w-full">
+            <TabsTrigger value="companyDetails">Company Details</TabsTrigger>
+            <TabsTrigger value="certificates">Certificates</TabsTrigger>
+          </TabsList>
+          <TabsContent value="companyDetails" className="mt-10">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-6"
+              >
+                {/* Specialisation */}
+                <FormField
+                  name="specialisation"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Type</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Business Type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {SELLER_TYPES.map(({ key, label, description }) => (
+                            <SelectItem key={key} value={label}>
+                              {label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-        {/* Seller */}
-        <FormField
-          control={form.control}
-          name="sellerDescription"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter company description" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                {/* Seller */}
+                <FormField
+                  control={form.control}
+                  name="sellerDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Enter company description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-        {/* Password */}
-        <FormField
-          control={form.control}
-          name="companyName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Company Name</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter your company name"
-                  {...field}
+                {/* Password */}
+                <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter your company name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        {/* Web Site */}
-        <FormField
-          control={form.control}
-          name="webSite"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Web Site</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter company Web Site"
-                  {...field}
+                {/* Web Site */}
+                <FormField
+                  control={form.control}
+                  name="webSite"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Web Site</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter company Web Site"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* phoneNumbers */}
-        <FormField
-          control={form.control}
-          name="phoneNumbers"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Numbers</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter company phone numbers with coma separated values if multiple"
-                  {...field}
+                {/* phoneNumbers */}
+                <FormField
+                  control={form.control}
+                  name="phoneNumbers"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Numbers</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter company phone numbers with coma separated values if multiple"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* country */}
-        <FormField
-          name="country"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Country</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Country" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {COUNTRIES.map(({ name, iso2 }) => (
-                    <SelectItem key={iso2} value={name}>
-                      {name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* address */}
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address</FormLabel>
-              <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Enter company address"
-                  {...field}
+                {/* country */}
+                <FormField
+                  name="country"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Country</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Country" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {COUNTRIES.map(({ name, iso2 }) => (
+                            <SelectItem key={iso2} value={name}>
+                              {name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex items-center justify-center">
-          <Button
-            type="submit"
-            className="px-8.5 py-2.5 text-xl font-roboto font-medium"
-            disabled={isLoading}
-          >
-            {isLoading
-              ? "Saving..."
-              : metadata
-              ? "Update Company Details"
-              : "Submit Company Details"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+                {/* address */}
+                <FormField
+                  control={form.control}
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Enter company address"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex items-center justify-center">
+                  <Button
+                    type="submit"
+                    className="px-8.5 py-2.5 text-xl font-roboto font-medium"
+                    disabled={isLoading}
+                  >
+                    {isLoading
+                      ? "Saving..."
+                      : metadata
+                      ? "Update Company Details"
+                      : "Submit Company Details"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </TabsContent>
+          <TabsContent value="certificates" className="mt-10">
+            <h1 className="text-center text-2xl font-bold mb-10">
+              Download your certificate(s)
+            </h1>
+            <ImagesDropzone />
+            <div className="flex items-center justify-center mt-10">
+              <Button
+                type="submit"
+                className="px-8.5 py-2.5 text-xl font-roboto font-medium"
+                disabled={isLoading}
+              >
+                {isLoading ? "Saving..." : "Upload Certificate(s)"}
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   );
 };
 

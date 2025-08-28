@@ -2,13 +2,20 @@
 
 import { UserProfile } from "@/lib/types";
 import SellerActionCard from "./SellerActionCard";
-import { Box, Clock4, Eye, MessageSquare, Plus, Settings } from "lucide-react";
+import { Box, Eye, MessageSquare, Plus, Settings } from "lucide-react";
 import SellerAccountTabs from "./SellerTabs";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { VerificationStatus } from "@/types/seller-status";
+import { getStatusConfig } from "@/lib/verification-status";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
   const router = useRouter();
+
+  const [verificationStatus, setVerificationStatus] =
+    useState<VerificationStatus>("Not Verified");
 
   const handleClickToSettings = () => {
     router.push("/account/settings");
@@ -18,20 +25,37 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
     router.push("/account/add-product");
   };
 
+  const handleStatusChange = () => {
+    const statuses: VerificationStatus[] = [
+      "Not Verified",
+      "Verification Pending",
+      "Verified",
+    ];
+    const currentIndex = statuses.indexOf(verificationStatus);
+    const nextIndex = (currentIndex + 1) % statuses.length;
+    setVerificationStatus(statuses[nextIndex]);
+  };
+
+  const statusConfig = getStatusConfig(verificationStatus);
+
   return (
     <div className="w-full min-h-screen h-full">
-      <div className="container mx-auto mt-18 flex flex-col">
+      <div className="container mx-auto flex flex-col">
+        <BreadcrumbComponent
+          currentUser={currentUser}
+          className="mt-4 mb-10"
+        />
         <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
         {/* Right Buttons */}
         <div className="flex items-center justify-end mb-8 gap-3.5">
           <Button
-            className="border border-yellow-400 bg-[#FCF8D1] rounded-sm cursor-pointer duration-300 transition-all
-          hover:bg-yellow-200 px-1"
+            className={`border ${statusConfig.borderColor} ${statusConfig.bgColor} rounded-sm cursor-pointer duration-300 transition-all ${statusConfig.hoverColor} px-1`}
+            onClick={handleStatusChange}
           >
             <div className="flex items-center gap-2 py-2 px-3">
-              <Clock4 size={16} className="text-orange-500" />
-              <p className="text-xs font-semibold text-orange-500">
-                Verification Pending
+              {statusConfig.icon}
+              <p className={`text-xs font-semibold ${statusConfig.textColor}`}>
+                {statusConfig.text}
               </p>
             </div>
           </Button>

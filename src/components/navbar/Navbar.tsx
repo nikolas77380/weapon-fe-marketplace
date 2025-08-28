@@ -1,23 +1,22 @@
 "use client";
 
-import Link from "next/link";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import BuyerNavbar from "../buyer/navbar/BuyerNavbar";
 import { useAuthContext } from "@/context/AuthContext";
 import SellerNavbar from "../buyer/navbar/SellerNavbar";
+import Logo from "../ui/Logo";
+import Link from "next/link";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
 
+  const logoHref = currentUser ? "/marketplace" : "/";
+
   return (
     <nav className="w-full px-7 py-5.5 border-b border-gray-primary">
       <div className="h-16 flex justify-between items-center">
-        <Link href={currentUser ? "/marketplace" : "/"}>
-          <h1 className="text-xl size-16 font-bold rounded-full border border-black flex items-center justify-center">
-            <span>WM</span>
-          </h1>
-        </Link>
+        <Logo href={logoHref} />
         <div className="relative">
           <Input
             placeholder="Search"
