@@ -5,7 +5,7 @@ import { UserProfile } from "@/lib/types";
 import AddProductForms from "./AddProductForms";
 import MetadataRequiredDialog from "./MetadataRequiredDialog";
 
-const AddProductPageClient = ({
+const AddProductPageComponent = ({
   currentUser,
 }: {
   currentUser: UserProfile;
@@ -32,4 +32,4 @@ const AddProductPageClient = ({
   );
 };
 
-export default AddProductPageClient;
+export default AddProductPageComponent;

@@ -13,6 +13,18 @@ export interface SellerMeta {
   updatedAt: string;
 }
 
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  parent?: Category;
+  children?: Category[];
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthResponse {
   jwt: string;
   user: {
@@ -71,3 +83,57 @@ export const USER_ROLES = {
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
+
+export interface Product {
+  id: number;
+  title: string;
+  slug: string;
+  description?: string;
+  price: number;
+  currency: string;
+  sku?: string;
+  status: "available" | "reserved" | "sold" | "archived";
+  category?: Category;
+  tags?: Tag[];
+  seller?: {
+    id: number;
+    username: string;
+    email: string;
+  };
+  attributesJson?: any;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateProductData {
+  title: string;
+  description?: string;
+  price: number;
+  currency?: string;
+  category: number;
+  tags?: number[];
+  sku?: string;
+  status?: "available" | "reserved" | "sold" | "archived";
+  attributesJson?: any;
+}
+
+export interface UpdateProductData {
+  title?: string;
+  description?: string;
+  price?: number;
+  currency?: string;
+  category?: number;
+  tags?: number[];
+  sku?: string;
+  status?: "available" | "reserved" | "sold" | "archived";
+  attributesJson?: any;
+}

@@ -2,8 +2,10 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { shopCategories } from "@/mockup/shop";
 import SellerListenedCard from "./SellerListenedCard";
+import { useProducts } from "@/hooks/useProducts";
 
 const SellerAccountTabs = () => {
+  const { products } = useProducts();
   return (
     <div className="mt-9">
       <Tabs defaultValue="myInquiries">
@@ -19,8 +21,8 @@ const SellerAccountTabs = () => {
               Manage your product listings and inventory
             </p>
             <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
-              {shopCategories.map((category, index) => (
-                <SellerListenedCard key={index} category={category} />
+              {products.map((product, index) => (
+                <SellerListenedCard key={index} product={product} />
               ))}
             </div>
           </div>

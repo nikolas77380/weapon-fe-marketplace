@@ -26,22 +26,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  PRODUCT_CATEGORY_FORM,
-  PRODUCT_CONDITION_FORM,
-  STORAGE_KEY,
-} from "@/lib/utils";
+import { PRODUCT_CONDITION_FORM, STORAGE_KEY } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
+import { useCategories } from "@/hooks/useCategories";
+import CategorySelect from "@/components/ui/CategorySelect";
+import { useProductActions } from "@/hooks/useProducts";
 
 const AddProductForms = () => {
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
 
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useCategories();
+
+  const {
+    createProduct,
+    loading: createLoading,
+    error: createError,
+  } = useProductActions();
+
   const form = useForm<AddProductSchemaValues>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
       productName: "",
+      productSku: "",
       productDescription: "",
       productCategory: "",
       productManufacturer: "",
@@ -77,26 +89,61 @@ const AddProductForms = () => {
     return () => subscription.unsubscribe();
   }, [form, setSavedFormData]);
 
-  const onSubmit = (values: AddProductSchemaValues) => {
-    console.log("Form submitted successfully!");
-    console.log("Product data:", values);
-    console.log("Product images:", values.productImages);
-    console.log("Images count:", values.productImages?.length || 0);
+  useEffect(() => {
+    if (createError) {
+      toast.error(createError);
+    }
+  }, [createError]);
 
-    removeSavedFormData();
+  const onSubmit = async (values: AddProductSchemaValues) => {
+    try {
+      const selectedCategory = categories.find(
+        (cat) => cat.name === values.productCategory
+      );
 
-    form.reset({
-      productName: "",
-      productDescription: "",
-      productCategory: "",
-      productManufacturer: "",
-      productModel: "",
-      productCondition: "",
-      productPrice: 0,
-      productCount: 0,
-    });
+      if (!selectedCategory) {
+        toast.error("Please select a valid category");
+        return;
+      }
 
-    toast.success("Product added successfully!");
+      const productData = {
+        title: values.productName,
+        description: values.productDescription,
+        price: values.productPrice,
+        currency: "USD",
+        category: selectedCategory.id,
+        sku: values.productSku || undefined,
+        status: "available" as const,
+        attributesJson: {
+          manufacturer: values.productManufacturer,
+          model: values.productModel,
+          condition: values.productCondition,
+          count: values.productCount,
+        },
+      };
+
+      const createdProduct = await createProduct(productData);
+
+      removeSavedFormData();
+
+      form.reset({
+        productName: "",
+        productDescription: "",
+        productCategory: "",
+        productManufacturer: "",
+        productModel: "",
+        productCondition: "",
+        productPrice: 0,
+        productCount: 0,
+      });
+
+      toast.success("Product added successfully!");
+    } catch (error) {
+      console.error("Error creating product:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create product"
+      );
+    }
   };
 
   const clearDraft = () => {
@@ -143,7 +190,25 @@ const AddProductForms = () => {
                 </FormItem>
               )}
             />
-
+            {/* Product SKU */}
+            <FormField
+              control={form.control}
+              name="productSku"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Product SKU</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your product SKU"
+                      className="w-1/2"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {/* Product description */}
             <FormField
               control={form.control}
@@ -170,24 +235,22 @@ const AddProductForms = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    key={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Select Category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRODUCT_CATEGORY_FORM.map(({ key, label }) => (
-                        <SelectItem key={key} value={label}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <CategorySelect
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      categories={categories}
+                      loading={categoriesLoading}
+                      error={categoriesError}
+                      placeholder="Select Category"
+                      className="w-1/2"
+                    />
+                  </FormControl>
+                  {categoriesError && (
+                    <p className="text-sm text-red-500 mt-1">
+                      Failed to load categories. Please try again later.
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -381,9 +444,10 @@ const AddProductForms = () => {
             )}
             <Button
               type="submit"
+              disabled={createLoading}
               className="px-8.5 py-2.5 text-xl font-roboto font-medium"
             >
-              Submit
+              {createLoading ? "Creating..." : "Submit"}
             </Button>
           </div>
         </form>

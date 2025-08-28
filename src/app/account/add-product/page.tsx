@@ -1,5 +1,5 @@
 import BreadcrumbCustom from "@/components/ui/BreadcrumbCustom";
-import AddProductPageClient from "@/components/seller/add-product/AddProductPageClient";
+import AddProductPageComponent from "@/components/seller/add-product/AddProductPageComponent";
 import { requireAuth } from "@/lib/server-auth";
 
 const AddProductPage = async () => {
@@ -15,7 +15,7 @@ const AddProductPage = async () => {
           </p>
         </div>
         <div className="container mx-auto mt-12">
-          <AddProductPageClient currentUser={currentUser} />
+          <AddProductPageComponent currentUser={currentUser} />
         </div>
       </div>
     </div>
