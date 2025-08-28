@@ -28,9 +28,9 @@ import { toast } from "sonner";
 
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
 import { getSessionTokenFromCookie } from "@/lib/auth";
-import BreadcrumbCustomClient from "@/components/ui/BreadcrumbCustomClient";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
@@ -117,7 +117,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
 
   return (
     <div className="container mx-auto w-full">
-      <BreadcrumbCustomClient
+      <BreadcrumbComponent
         currentUser={currentUser}
         className="mt-4 mb-10"
       />
@@ -308,9 +308,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 className="px-8.5 py-2.5 text-xl font-roboto font-medium"
                 disabled={isLoading}
               >
-                {isLoading
-                  ? "Saving..."
-                  : "Upload Certificate(s)"}
+                {isLoading ? "Saving..." : "Upload Certificate(s)"}
               </Button>
             </div>
           </TabsContent>

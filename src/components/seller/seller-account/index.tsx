@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { VerificationStatus } from "@/types/seller-status";
 import { getStatusConfig } from "@/lib/verification-status";
-import BreadcrumbCustomClient from "@/components/ui/BreadcrumbCustomClient";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
   const router = useRouter();
@@ -41,7 +41,10 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
   return (
     <div className="w-full min-h-screen h-full">
       <div className="container mx-auto flex flex-col">
-        <BreadcrumbCustomClient currentUser={currentUser} className="mt-4 mb-10" />
+        <BreadcrumbComponent
+          currentUser={currentUser}
+          className="mt-4 mb-10"
+        />
         <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
         {/* Right Buttons */}
         <div className="flex items-center justify-end mb-8 gap-3.5">

@@ -19,7 +19,7 @@ interface BreadcrumbCustomClientProps {
   className?: string;
 }
 
-const BreadcrumbCustomClient = ({ currentUser, className }: BreadcrumbCustomClientProps) => {
+const BreadcrumbComponent = ({ currentUser, className }: BreadcrumbCustomClientProps) => {
   const pathname = usePathname();
   const crumbs = generateBreadcrumbs(pathname);
 
@@ -50,4 +50,4 @@ const BreadcrumbCustomClient = ({ currentUser, className }: BreadcrumbCustomClie
   );
 };
 
-export default BreadcrumbCustomClient;
+export default BreadcrumbComponent;
