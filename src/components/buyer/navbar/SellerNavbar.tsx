@@ -8,6 +8,7 @@ import {
   PackageSearch,
   Settings,
   LogOut,
+  Plus,
 } from "lucide-react";
 import {
   NavigationMenu,
@@ -32,6 +33,19 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
+        <NavigationMenuLink asChild>
+          <Link
+            href="/account/add-product"
+            className="border border-black bg-black rounded-sm cursor-pointer duration-300 transition-all
+          hover:bg-black/80 px-1"
+          >
+            <div className="flex items-center gap-2 py-2 px-3">
+              <Plus size={16} className="text-white" />
+              <p className="text-xs font-semibold text-white">Add product</p>
+            </div>
+          </Link>
+        </NavigationMenuLink>
+
         <NavigationMenuLink asChild className="p-3">
           <Link href="/messages" className="relative">
             <MessageCircle size={22} className="text-gray-400 cursor-pointer" />

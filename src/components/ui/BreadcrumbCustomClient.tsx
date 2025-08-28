@@ -14,13 +14,17 @@ import {
 import { generateBreadcrumbs } from "@/lib/breadcrumbs";
 import { UserProfile } from "@/lib/types";
 
+interface BreadcrumbCustomClientProps {
+  currentUser: UserProfile;
+  className?: string;
+}
 
-const BreadcrumbCustomClient = ({ currentUser }: { currentUser: UserProfile }) => {
+const BreadcrumbCustomClient = ({ currentUser, className }: BreadcrumbCustomClientProps) => {
   const pathname = usePathname();
   const crumbs = generateBreadcrumbs(pathname);
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className={className}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
