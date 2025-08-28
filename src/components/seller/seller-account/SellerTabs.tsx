@@ -98,7 +98,7 @@ const SellerAccountTabs = () => {
               <h2 className="font-roboto">Recent messages</h2>
 
               {/* Messages Cards */}
-              {messages.map((message) => (
+              {messages.slice(0, 3).map((message) => (
                 <div
                   key={message.id}
                   className={`border rounded-xl w-full flex gap-5 py-3 px-6 cursor-pointer transition-all duration-200 ${

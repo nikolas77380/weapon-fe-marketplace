@@ -19,9 +19,7 @@ const Logo = ({ href }: LogoProps) => {
           >
             <div className="relative flex items-center justify-center">
               <Shield className="size-10 text-gray-300" />
-              <span className="absolute font-bold text-white z-10">
-                E
-              </span>
+              <span className="absolute font-bold text-white z-10">E</span>
             </div>
           </div>
           <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20"></div>
