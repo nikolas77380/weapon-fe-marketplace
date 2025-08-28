@@ -32,12 +32,15 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
-        <NavigationMenuItem className="relative">
-          <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
-          <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] size-4.5 rounded-full">
-            3
-          </Badge>
-        </NavigationMenuItem>
+        <NavigationMenuLink asChild className="p-3">
+          <Link href="/messages" className="relative">
+            <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
+            <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] size-5 rounded-full">
+              3
+            </Badge>
+          </Link>
+        </NavigationMenuLink>
+
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
             <Avatar className="h-8 w-8 border border-gray-300 cursor-pointer">
