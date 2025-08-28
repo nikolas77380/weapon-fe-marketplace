@@ -1,3 +1,5 @@
+"use client";
+
 import { quickFilters } from "@/data/leftFilters";
 import { SlidersHorizontal } from "lucide-react";
 import React from "react";
@@ -12,8 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useCategories } from "@/hooks/useCategories";
 
 const Filters = () => {
+  const { categories, loading: categoriesLoading } = useCategories();
+
+  const mainCategories = categories.filter((category) => !category.parent);
+
   return (
     <div className="border border-[#D3D3D3] rounded-lg pl-10 pr-6 pt-5.5 flex flex-col gap-5.5">
       <div className="flex items-center gap-2">
@@ -38,15 +45,25 @@ const Filters = () => {
       <div className="border-b border-[#D3D3D3] pb-9">
         <h2 className="text-sm font-medium font-roboto">Category</h2>
         <div className="mt-3">
-          <Select>
+          <Select disabled={categoriesLoading}>
             <SelectTrigger className="w-[240px]">
-              <SelectValue placeholder="All Categories" />
+              <SelectValue
+                placeholder={
+                  categoriesLoading ? "Loading categories..." : "All Categories"
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Fruits</SelectLabel>
-                <SelectItem value="apple">Armor</SelectItem>
-                <SelectItem value="banana">Weapon</SelectItem>
+                <SelectLabel>Categories</SelectLabel>
+                {mainCategories.map((category) => (
+                  <SelectItem
+                    key={category.id}
+                    value={category.slug || `category-${category.id}`}
+                  >
+                    {category.name}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

@@ -397,3 +397,42 @@ export const hasRole = (user: any, role: string): boolean => {
 };
 
 export const STORAGE_KEY = "add-product-form-draft";
+
+// Date formatting utilities
+export const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+
+  // Check if date is valid
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+
+  const now = new Date();
+  const diffInMs = now.getTime() - date.getTime();
+  const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+  // If less than 1 day, show relative time
+  if (diffInDays === 0) {
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    if (diffInHours === 0) {
+      const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+      if (diffInMinutes === 0) {
+        return "Just now";
+      }
+      return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
+    }
+    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
+  }
+
+  // If less than 7 days, show "X days ago"
+  if (diffInDays < 7) {
+    return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
+  }
+
+  // Otherwise show formatted date
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};

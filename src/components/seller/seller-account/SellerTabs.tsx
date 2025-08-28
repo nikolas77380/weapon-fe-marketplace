@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { shopCategories } from "@/mockup/shop";
 import SellerListenedCard from "./SellerListenedCard";
+import { useProducts } from "@/hooks/useProducts";
 import { MessageSquare, Users } from "lucide-react";
 import { Message } from "@/types/message";
 import { mockMessages } from "@/mockup/messages";
 import Link from "next/link";
 
 const SellerAccountTabs = () => {
+  const { products } = useProducts();
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
   const markAsRead = (messageId: number) => {
@@ -33,8 +34,8 @@ const SellerAccountTabs = () => {
               Manage your product listings and inventory
             </p>
             <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
-              {shopCategories.map((category, index) => (
-                <SellerListenedCard key={index} category={category} />
+              {products.map((product, index) => (
+                <SellerListenedCard key={index} product={product} />
               ))}
             </div>
           </div>
@@ -43,8 +44,11 @@ const SellerAccountTabs = () => {
           <div className="mt-15">
             <div className="flex items-center justify-between">
               <h1 className="text-xl font-roboto">Customer messages</h1>
-              <Link href="/messages" className="bg-black py-1.5 px-4 rounded-md flex items-center gap-3 text-white
-              hover:bg-black/80 duration-300 transition-all">
+              <Link
+                href="/messages"
+                className="bg-black py-1.5 px-4 rounded-md flex items-center gap-3 text-white
+              hover:bg-black/80 duration-300 transition-all"
+              >
                 <MessageSquare size={20} />
                 <p className="text-xs font-semibold">Open Full Messenger</p>
               </Link>
