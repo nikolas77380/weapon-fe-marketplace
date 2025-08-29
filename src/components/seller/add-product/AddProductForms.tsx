@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { useForm } from "react-hook-form";
 import {
   addProductSchema,
@@ -18,7 +19,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   Select,
   SelectContent,
@@ -129,7 +130,7 @@ const AddProductForms = () => {
         },
       };
 
-      const createdProduct = await createProduct(productData);
+      await createProduct(productData);
 
       removeSavedFormData();
 
@@ -183,60 +184,31 @@ const AddProductForms = () => {
               Basic Info
             </h2>
             {/* Product name */}
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="productName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Enter your product name"
-                      className="w-1/2"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Product Name"
+              type="input"
+              placeholder="Enter your product name"
+              className="w-1/2"
             />
             {/* Product SKU */}
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="productSku"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product SKU</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="text"
-                      placeholder="Enter your product SKU"
-                      className="w-1/2"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Product SKU"
+              type="input"
+              placeholder="Enter your product SKU"
+              className="w-1/2"
             />
             {/* Product description */}
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="productDescription"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter product description"
-                      className="w-1/2"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Description"
+              type="textarea"
+              placeholder="Enter product description"
+              className="w-1/2"
             />
 
             {/* Product category */}
@@ -269,73 +241,37 @@ const AddProductForms = () => {
 
             <div className="flex w-full gap-4">
               {/* Product manufacturer */}
-              <FormField
+              <FormFieldComponent
                 control={form.control}
                 name="productManufacturer"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Manufacturer</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Enter your product manufacturer"
-                        className="w-full"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Manufacturer"
+                type="input"
+                placeholder="Enter your product manufacturer"
+                className="w-full"
+                itemClassName="flex-1"
               />
               {/* Product model */}
-              <FormField
+              <FormFieldComponent
                 control={form.control}
                 name="productModel"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Model</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        placeholder="Enter your product model"
-                        className="w-full"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Model"
+                type="input"
+                placeholder="Enter your product model"
+                className="w-full"
+                itemClassName="flex-1"
               />
             </div>
 
             {/* Product condition */}
-            <FormField
-              name="productCondition"
+            <FormFieldComponent
               control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Condition</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    key={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Select Condition" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRODUCT_CONDITION_FORM.map(({ key, label }) => (
-                        <SelectItem key={key} value={label}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="productCondition"
+              label="Condition"
+              type="select"
+              placeholder="Select Condition"
+              className="w-1/2"
+              options={PRODUCT_CONDITION_FORM}
+              selectValue={undefined}
             />
           </div>
 
@@ -346,60 +282,37 @@ const AddProductForms = () => {
             </h2>
             {/* Product Price */}
             <div className="flex w-full gap-4">
-              <FormField
+              <FormFieldComponent
                 control={form.control}
                 name="productPrice"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        className="w-1/2"
-                        min="1"
-                        step="1"
-                        {...field}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const numValue =
-                            value === "" ? 0 : Math.max(1, Number(value));
-                          field.onChange(numValue);
-                        }}
-                        onFocus={(e) => {
-                          if (e.target.value === "0") {
-                            e.target.value = "";
-                          }
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Price"
+                type="input"
+                inputType="number"
+                className="w-1/2"
+                min="1"
+                step="1"
+                itemClassName="flex-1"
+                customOnChange={(e, fieldOnChange) => {
+                  const value = e.target.value;
+                  const numValue =
+                    value === "" ? 0 : Math.max(1, Number(value));
+                  fieldOnChange(numValue);
+                }}
+                customOnFocus={(e) => {
+                  if (e.target.value === "0") {
+                    e.target.value = "";
+                  }
+                }}
               />
               {/* Product currency */}
-              <FormField
+              <FormFieldComponent
                 control={form.control}
                 name="productCurrency"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Currency</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select currency" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {PRODUCT_CURRENCY_FORM.map(({ key, label }) => (
-                          <SelectItem key={key} value={key}>
-                            {label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                label="Currency"
+                type="select"
+                placeholder="Select currency"
+                options={PRODUCT_CURRENCY_FORM}
+                itemClassName="flex-1"
               />
             </div>
           </div>
@@ -410,64 +323,35 @@ const AddProductForms = () => {
               Details
             </h2>
             {/* Product Price */}
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="productCount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Count</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      className="w-1/2"
-                      min="1"
-                      step="1"
-                      {...field}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        const numValue =
-                          value === "" ? 0 : Math.max(1, Number(value));
-                        field.onChange(numValue);
-                      }}
-                      onFocus={(e) => {
-                        if (e.target.value === "0") {
-                          e.target.value = "";
-                        }
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Count"
+              type="input"
+              inputType="number"
+              className="w-1/2"
+              min="1"
+              step="1"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue = value === "" ? 0 : Math.max(1, Number(value));
+                fieldOnChange(numValue);
+              }}
+              customOnFocus={(e) => {
+                if (e.target.value === "0") {
+                  e.target.value = "";
+                }
+              }}
             />
             {/* Product Status */}
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="productStatus"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    key={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-1/2">
-                        <SelectValue placeholder="Select Status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRODUCT_STATUS_FORM.map(({ key, label }) => (
-                        <SelectItem key={key} value={key}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Status"
+              type="select"
+              placeholder="Select Status"
+              className="w-1/2"
+              options={PRODUCT_STATUS_FORM}
             />
           </div>
 

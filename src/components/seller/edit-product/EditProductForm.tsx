@@ -1,30 +1,16 @@
 "use client";
 
 import React, { useEffect } from "react";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormLabel } from "@/components/ui/form";
+import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { useForm } from "react-hook-form";
 import {
   editProductSchema,
   EditProductSchemaValues,
 } from "@/schemas/editProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SelectItem } from "@/components/ui/select";
 import { PRODUCT_CONDITION_FORM, PRODUCT_CURRENCY_FORM } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
@@ -144,235 +130,134 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           </div>
 
           {/* Title */}
-          <FormField
+          <FormFieldComponent
             control={form.control}
             name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Product Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter product title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Product Title"
+            type="input"
+            placeholder="Enter product title"
           />
 
           {/* Description */}
-          <FormField
+          <FormFieldComponent
             control={form.control}
             name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Describe your product..."
-                    rows={4}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Description"
+            type="textarea"
+            placeholder="Describe your product..."
+            rows={4}
           />
 
           {/* Price and Currency */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="0.00"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Price"
+              type="input"
+              inputType="number"
+              placeholder="0.00"
+              customOnChange={(e, fieldOnChange) =>
+                fieldOnChange(Number(e.target.value))
+              }
             />
 
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="currency"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Currency</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select currency" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRODUCT_CURRENCY_FORM.map(({ key, label }) => (
-                        <SelectItem key={key} value={label}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Currency"
+              type="select"
+              placeholder="Select currency"
+              options={PRODUCT_CURRENCY_FORM}
             />
           </div>
 
           {/* Category */}
-          <FormField
+          <FormFieldComponent
             control={form.control}
             name="category"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={(value) => field.onChange(Number(value))}
-                  value={field.value?.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.id.toString()}
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Category"
+            type="select"
+            placeholder="Select category"
+            onValueChange={(value) => Number(value)}
+            selectValue={undefined}
+            customSelectOptions={
+              <>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </>
+            }
           />
 
           {/* SKU and Status */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="sku"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>SKU</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Product SKU" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="SKU"
+              type="input"
+              placeholder="Product SKU"
             />
 
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="available">Available</SelectItem>
-                      <SelectItem value="reserved">Reserved</SelectItem>
-                      <SelectItem value="sold">Sold</SelectItem>
-                      <SelectItem value="archived">Archived</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Status"
+              type="select"
+              placeholder="Select status"
+              options={[
+                { key: "available", label: "Available" },
+                { key: "reserved", label: "Reserved" },
+                { key: "sold", label: "Sold" },
+                { key: "archived", label: "Archived" },
+              ]}
             />
           </div>
 
           {/* Condition and Quantity */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="condition"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Condition</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select condition" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {PRODUCT_CONDITION_FORM.map((condition) => (
-                        <SelectItem key={condition.key} value={condition.key}>
-                          {condition.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Condition"
+              type="select"
+              placeholder="Select condition"
+              options={PRODUCT_CONDITION_FORM}
             />
 
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="quantity"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Quantity</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="1"
-                      placeholder="1"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Quantity"
+              type="input"
+              inputType="number"
+              min="1"
+              placeholder="1"
+              customOnChange={(e, fieldOnChange) =>
+                fieldOnChange(Number(e.target.value))
+              }
             />
           </div>
 
           {/* Manufacturer and Model */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="manufacturer"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Manufacturer</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter manufacturer" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Manufacturer"
+              type="input"
+              placeholder="Enter manufacturer"
             />
 
-            <FormField
+            <FormFieldComponent
               control={form.control}
               name="model"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Model</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter model" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              label="Model"
+              type="input"
+              placeholder="Enter model"
             />
           </div>
 
