@@ -6,9 +6,11 @@ import { MessageSquare, Users } from "lucide-react";
 import { Message } from "@/types/message";
 import { mockMessages } from "@/mockup/messages";
 import Link from "next/link";
+import { UserProfile } from "@/lib/types";
 
-const SellerAccountTabs = () => {
-  const { products, refetch } = useProducts();
+const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
+
+  const { products, refetch } = useProducts({ seller: currentUser.id });
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
   const handleProductDeleted = () => {

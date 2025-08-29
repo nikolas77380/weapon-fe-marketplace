@@ -17,16 +17,8 @@ import {
   AddProductSchemaValues,
 } from "@/schemas/addProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   PRODUCT_CONDITION_FORM,
   PRODUCT_CURRENCY_FORM,

@@ -44,11 +44,13 @@ export const strapiFetchAuth = async ({
   method,
   body,
   token,
+  cache,
 }: {
   path: string;
   method: string;
   body?: any;
   token: string;
+  cache?: number;
 }) => {
   const url = `${
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
@@ -57,14 +59,33 @@ export const strapiFetchAuth = async ({
   console.log(`Making authenticated ${method} request to:`, url);
   console.log("Request body:", body);
 
-  const response = await fetch(url, {
+  // Определяем настройки кеширования
+  let cacheConfig: RequestInit["cache"] | RequestInit["next"];
+
+  if (cache === undefined) {
+    cacheConfig = undefined;
+  } else if (cache === 0) {
+    cacheConfig = "no-store";
+  } else {
+    cacheConfig = { revalidate: cache };
+  }
+
+  const fetchOptions: RequestInit = {
     method,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: body ? JSON.stringify(body) : undefined,
-  });
+  };
+
+  if (cache === 0) {
+    fetchOptions.cache = cacheConfig as RequestCache;
+  } else if (cache && cache > 0) {
+    fetchOptions.next = cacheConfig as { revalidate: number };
+  }
+
+  const response = await fetch(url, fetchOptions);
 
   console.log("Response status:", response.status);
 
@@ -409,6 +430,9 @@ export const getProducts = async (params?: {
   const queryString = queryParams.toString();
   const path = `/api/products${queryString ? `?${queryString}` : ""}`;
 
+  console.log("🔍 getProducts params:", params);
+  console.log("🔍 getProducts path:", path);
+
   const token = getSessionTokenFromCookie();
   if (!token) {
     throw new Error("Authentication required");
@@ -417,6 +441,7 @@ export const getProducts = async (params?: {
     path,
     method: "GET",
     token,
+    cache: 0,
   });
 };
 
