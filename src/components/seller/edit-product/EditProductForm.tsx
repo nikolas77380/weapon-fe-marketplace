@@ -28,8 +28,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
 
   const {
     categories,
-    loading: categoriesLoading,
-    error: categoriesError,
   } = useCategories();
 
   const {
@@ -101,18 +99,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
       toast.error("Failed to update product. Please try again.");
     }
   };
-
-  if (categoriesLoading) {
-    return <div className="flex justify-center p-8">Loading categories...</div>;
-  }
-
-  if (categoriesError) {
-    return (
-      <div className="text-red-500 p-8">
-        Error loading categories: {categoriesError}
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 w-full">
