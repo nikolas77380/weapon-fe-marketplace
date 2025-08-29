@@ -299,7 +299,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           </TabsContent>
           <TabsContent value="certificates" className="mt-10">
             <h1 className="text-center text-2xl font-bold mb-10">
-              Download your certificate(s)
+              Upload  your certificate(s)
             </h1>
             <ImagesDropzone />
             <div className="flex items-center justify-center mt-10">

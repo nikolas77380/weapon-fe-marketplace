@@ -10,6 +10,10 @@ export const addProductSchema = z.object({
   productCondition: z.string().min(1, "Product condition is required"),
   productPrice: z.number().min(1, "Price must be greater than 0"),
   productCount: z.number().min(1, "Count must be greater than 0"),
+  productStatus: z.enum(["available", "reserved", "sold", "archived"], {
+    message: "Product status is required",
+  }),
+  productCurrency: z.string().min(1, "Product currency is required"),
   productImages: z
     .array(z.instanceof(File))
     .max(5, "Maximum 5 images allowed")

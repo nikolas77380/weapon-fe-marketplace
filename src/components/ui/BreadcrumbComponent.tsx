@@ -14,12 +14,15 @@ import {
 import { generateBreadcrumbs } from "@/lib/breadcrumbs";
 import { UserProfile } from "@/lib/types";
 
-interface BreadcrumbCustomClientProps {
+interface BreadcrumbComponentProps {
   currentUser: UserProfile;
   className?: string;
 }
 
-const BreadcrumbComponent = ({ currentUser, className }: BreadcrumbCustomClientProps) => {
+const BreadcrumbComponent = ({
+  currentUser,
+  className,
+}: BreadcrumbComponentProps) => {
   const pathname = usePathname();
   const crumbs = generateBreadcrumbs(pathname);
 
@@ -31,12 +34,14 @@ const BreadcrumbComponent = ({ currentUser, className }: BreadcrumbCustomClientP
             <Link href={currentUser ? "/marketplace" : "/"}>Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {crumbs.map(({ href, label, isLast }) => (
+        {crumbs.map(({ href, label, isLast, isClickable }) => (
           <React.Fragment key={href}>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {isLast ? (
-                <BreadcrumbPage>{label}</BreadcrumbPage>
+              {isLast || !isClickable ? (
+                <BreadcrumbPage className={!isClickable ? "text-gray-500" : ""}>
+                  {label}
+                </BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
                   <Link href={href}>{label}</Link>

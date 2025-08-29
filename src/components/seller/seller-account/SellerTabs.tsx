@@ -8,8 +8,12 @@ import { mockMessages } from "@/mockup/messages";
 import Link from "next/link";
 
 const SellerAccountTabs = () => {
-  const { products } = useProducts();
+  const { products, refetch } = useProducts();
   const [messages, setMessages] = useState<Message[]>(mockMessages);
+
+  const handleProductDeleted = () => {
+    refetch();
+  };
 
   const markAsRead = (messageId: number) => {
     setMessages((prev) =>
@@ -34,8 +38,12 @@ const SellerAccountTabs = () => {
               Manage your product listings and inventory
             </p>
             <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
-              {products.map((product, index) => (
-                <SellerListenedCard key={index} product={product} />
+              {products.map((product) => (
+                <SellerListenedCard
+                  key={product.id}
+                  product={product}
+                  onProductDeleted={handleProductDeleted}
+                />
               ))}
             </div>
           </div>

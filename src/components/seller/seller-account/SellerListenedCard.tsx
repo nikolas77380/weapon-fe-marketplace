@@ -1,14 +1,53 @@
 import { Product } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { Ellipsis, Eye, MessageSquare, SquarePen, Trash2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+
+import Link from "next/link";
+import { useProductActions } from "@/hooks/useProducts";
+import { toast } from "sonner";
 
 interface SellerListenedCardProps {
   product: Product;
+  onProductDeleted?: () => void;
 }
 
-const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
+const SellerListenedCard = ({
+  product,
+  onProductDeleted,
+}: SellerListenedCardProps) => {
+  const { deleteProduct, loading } = useProductActions();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const handleDeleteProduct = async () => {
+    try {
+      await deleteProduct(product.id);
+      toast.success("Product successfully removed!");
+      setIsDeleteDialogOpen(false);
+      if (onProductDeleted) {
+        onProductDeleted();
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("Error removing product");
+    }
+  };
   return (
     <div className="border border-gray-primary rounded-xl px-8 py-6 flex justify-between w-full">
       {/* 1 */}
@@ -45,8 +84,67 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           {product.status}
         </div>
         <div className="flex items-center gap-3">
-          <SquarePen size={20} className="cursor-pointer" />
-          <Trash2 size={20} className="cursor-pointer text-red-500" />
+          <Link href={`/account/edit-product/${product.slug}`}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SquarePen size={20} className="cursor-pointer" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Edit Product</p>
+              </TooltipContent>
+            </Tooltip>
+          </Link>
+          <Dialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Trash2
+                      size={20}
+                      className={`cursor-pointer text-red-500 ${
+                        loading
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:text-red-700"
+                      }`}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Delete Product</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Product</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete &ldquo;{product.title}&rdquo;?
+                  This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteDialogOpen(false)}
+                  disabled={loading}
+                  className="py-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleDeleteProduct}
+                  disabled={loading}
+                >
+                  {loading ? "Deleting..." : "Delete Product"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <Ellipsis size={20} className="cursor-pointer" />
         </div>
       </div>
