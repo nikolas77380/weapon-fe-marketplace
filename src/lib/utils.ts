@@ -379,6 +379,41 @@ export const PRODUCT_CONDITION_FORM = [
   },
 ] as const;
 
+export const PRODUCT_STATUS_FORM = [
+  {
+    key: "available",
+    label: "Available",
+  },
+  {
+    key: "reserved",
+    label: "Reserved",
+  },
+  {
+    key: "sold",
+    label: "Sold",
+  },
+  {
+    key: "archived",
+    label: "Archived",
+  },
+] as const;
+
+
+export const PRODUCT_CURRENCY_FORM = [
+  {
+    key: "usd",
+    label: "USD",
+  },
+  {
+    key: "eur",
+    label: "EUR",
+  },
+  {
+    key: "uah",
+    label: "UAH",
+  },
+] as const;
+
 // Role utilities
 export const isSeller = (user: any): boolean => {
   return user?.role?.name === "seller";

@@ -2,15 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { Button } from "@/components/ui/button";
 import { LoginFormValues, loginSchema } from "@/schemas/loginSchema";
 import Link from "next/link";
@@ -31,42 +24,24 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-8">
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="test@gmail.com"
-                  autoComplete="email"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Email"
+          type="input"
+          inputType="email"
+          placeholder="test@gmail.com"
+          autoComplete="email"
         />
 
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="password"
-                  autoComplete="current-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Password"
+          type="input"
+          inputType="password"
+          placeholder="password"
+          autoComplete="current-password"
         />
 
         <div className="flex items-center justify-center">

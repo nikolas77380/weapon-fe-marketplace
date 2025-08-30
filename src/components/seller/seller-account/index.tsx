@@ -41,10 +41,7 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
   return (
     <div className="w-full min-h-screen h-full">
       <div className="container mx-auto flex flex-col">
-        <BreadcrumbComponent
-          currentUser={currentUser}
-          className="mt-4 mb-10"
-        />
+        <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
         <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
         {/* Right Buttons */}
         <div className="flex items-center justify-end mb-8 gap-3.5">
@@ -101,7 +98,7 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
           />
         </div>
         {/* Seller Tabs */}
-        <SellerAccountTabs />
+        <SellerAccountTabs currentUser={currentUser} />
       </div>
     </div>
   );

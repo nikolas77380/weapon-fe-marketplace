@@ -2,17 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
+import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RegisterFormValues, RegisterSchema } from "@/schemas/registerSchema";
 
 interface RegisterFormProps {
@@ -35,98 +27,53 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Display name */}
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="displayName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Display name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your display name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Display name"
+          type="input"
+          placeholder="Enter your display name"
         />
 
         {/* Email */}
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  autoComplete="email"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Email"
+          type="input"
+          inputType="email"
+          placeholder="Enter your email"
+          autoComplete="email"
         />
 
         {/* Password */}
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  autoComplete="new-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Password"
+          type="input"
+          inputType="password"
+          placeholder="Enter your password"
+          autoComplete="new-password"
         />
 
         {/* Confirm Password */}
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Confirm your password"
-                  autoComplete="new-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Confirm Password"
+          type="input"
+          inputType="password"
+          placeholder="Confirm your password"
+          autoComplete="new-password"
         />
 
         {/* Terms */}
-        <FormField
+        <FormFieldComponent
           control={form.control}
           name="terms"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>Accept Terms and Conditions</FormLabel>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Accept Terms and Conditions"
+          type="checkbox"
         />
 
         <div className="flex items-center justify-center">

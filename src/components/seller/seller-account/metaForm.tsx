@@ -2,25 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import FormFieldComponent from "@/components/ui/FormFieldComponent";
+
 import { Button } from "@/components/ui/button";
 import { SellerFormValues, sellerSchema } from "@/schemas/sellerSchema";
-import { Textarea } from "@/components/ui/textarea";
+
 import { COUNTRIES, isSeller, SELLER_TYPES } from "@/lib/utils";
 import { UserProfile } from "@/lib/types";
 import { useState } from "react";
@@ -31,6 +17,7 @@ import { getSessionTokenFromCookie } from "@/lib/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
+import { Form } from "@/components/ui/form";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
@@ -117,10 +104,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
 
   return (
     <div className="container mx-auto w-full">
-      <BreadcrumbComponent
-        currentUser={currentUser}
-        className="mt-4 mb-10"
-      />
+      <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
       <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
         <Tabs defaultValue="companyDetails" className="w-full">
           <TabsList className="bg-gray-primary gap-5 flex w-full">
@@ -134,152 +118,75 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 className="space-y-6"
               >
                 {/* Specialisation */}
-                <FormField
-                  name="specialisation"
+                <FormFieldComponent
                   control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Business Type</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Business Type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {SELLER_TYPES.map(({ key, label, description }) => (
-                            <SelectItem key={key} value={label}>
-                              {label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  name="specialisation"
+                  label="Business Type"
+                  type="select"
+                  placeholder="Select Business Type"
+                  defaultValue={undefined}
+                  options={SELLER_TYPES.map(({ key, label }) => ({
+                    key,
+                    label,
+                    value: label,
+                  }))}
                 />
 
                 {/* Seller */}
-                <FormField
+                <FormFieldComponent
                   control={form.control}
                   name="sellerDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Enter company description"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Description"
+                  type="textarea"
+                  placeholder="Enter company description"
                 />
 
-                {/* Password */}
-                <FormField
+                {/* Company Name */}
+                <FormFieldComponent
                   control={form.control}
                   name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Company Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter your company name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Company Name"
+                  type="input"
+                  placeholder="Enter your company name"
                 />
 
                 {/* Web Site */}
-                <FormField
+                <FormFieldComponent
                   control={form.control}
                   name="webSite"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Web Site</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter company Web Site"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Web Site"
+                  type="input"
+                  placeholder="Enter company Web Site"
                 />
                 {/* phoneNumbers */}
-                <FormField
+                <FormFieldComponent
                   control={form.control}
                   name="phoneNumbers"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Numbers</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter company phone numbers with coma separated values if multiple"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Phone Numbers"
+                  type="input"
+                  placeholder="Enter company phone numbers with coma separated values if multiple"
                 />
                 {/* country */}
-                <FormField
-                  name="country"
+                <FormFieldComponent
                   control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Country" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {COUNTRIES.map(({ name, iso2 }) => (
-                            <SelectItem key={iso2} value={name}>
-                              {name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  name="country"
+                  label="Country"
+                  type="select"
+                  placeholder="Select Country"
+                  defaultValue={undefined}
+                  options={COUNTRIES.map(({ name, iso2 }) => ({
+                    key: iso2,
+                    label: name,
+                    value: name,
+                  }))}
                 />
                 {/* address */}
-                <FormField
+                <FormFieldComponent
                   control={form.control}
                   name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Enter company address"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Address"
+                  type="input"
+                  placeholder="Enter company address"
                 />
                 <div className="flex items-center justify-center">
                   <Button
@@ -299,7 +206,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           </TabsContent>
           <TabsContent value="certificates" className="mt-10">
             <h1 className="text-center text-2xl font-bold mb-10">
-              Download your certificate(s)
+              Upload your certificate(s)
             </h1>
             <ImagesDropzone />
             <div className="flex items-center justify-center mt-10">
