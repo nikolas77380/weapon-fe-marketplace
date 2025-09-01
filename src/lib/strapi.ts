@@ -70,13 +70,16 @@ export const strapiFetchAuth = async ({
     cacheConfig = { revalidate: cache };
   }
 
+  // Check if body is FormData to handle file uploads
+  const isFormData = body instanceof FormData;
+
   const fetchOptions: RequestInit = {
     method,
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       Authorization: `Bearer ${token}`,
     },
-    body: body ? JSON.stringify(body) : undefined,
+    body: body ? (isFormData ? body : JSON.stringify(body)) : undefined,
   };
 
   if (cache === 0) {
@@ -311,6 +314,7 @@ export const getCategoryById = async (id: number): Promise<Category> => {
 
 export const createProduct = async ({
   data,
+  images,
 }: {
   data: {
     title: string;
@@ -323,11 +327,36 @@ export const createProduct = async ({
     status?: "available" | "reserved" | "sold" | "archived";
     attributesJson?: any;
   };
+  images?: File[];
 }) => {
   const token = getSessionTokenFromCookie();
   if (!token) {
     throw new Error("Authentication required");
   }
+
+  // If images are provided, use FormData for file upload
+  if (images && images.length > 0) {
+    console.log("Creating product with images:", images);
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+
+    images.forEach((image, index) => {
+      console.log(`Adding image ${index}:`, image.name, image.size);
+      formData.append(`files.images`, image);
+    });
+
+    console.log("FormData created, sending to Strapi...");
+
+    return strapiFetchAuth({
+      path: "/api/products",
+      method: "POST",
+      body: formData,
+      token,
+    });
+  }
+
+  // Otherwise, use regular JSON request
+  console.log("Creating product without images");
   return strapiFetchAuth({
     path: "/api/products",
     method: "POST",
@@ -341,6 +370,7 @@ export const createProduct = async ({
 export const updateProduct = async ({
   id,
   data,
+  images,
 }: {
   id: number;
   data: {
@@ -354,11 +384,31 @@ export const updateProduct = async ({
     status?: "available" | "reserved" | "sold" | "archived";
     attributesJson?: any;
   };
+  images?: File[];
 }) => {
   const token = getSessionTokenFromCookie();
   if (!token) {
     throw new Error("Authentication required");
   }
+
+  // If images are provided, use FormData for file upload
+  if (images && images.length > 0) {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+
+    images.forEach((image, index) => {
+      formData.append(`files.images`, image);
+    });
+
+    return strapiFetchAuth({
+      path: `/api/products/${id}`,
+      method: "PUT",
+      body: formData,
+      token,
+    });
+  }
+
+  // Otherwise, use regular JSON request
   return strapiFetchAuth({
     path: `/api/products/${id}`,
     method: "PUT",
@@ -453,6 +503,146 @@ export const getProductById = async (id: number) => {
   return strapiFetchAuth({
     path: `/api/products/${id}?populate=*`,
     method: "GET",
+    token,
+  });
+};
+
+// Certificate API functions
+export const createCertificate = async ({
+  data,
+  files,
+}: {
+  data: {
+    title: string;
+    description?: string;
+    certificateType: "product" | "seller";
+    issuedBy: string;
+    issuedDate: string;
+    expiryDate?: string;
+    certificateNumber?: string;
+    status?: "active" | "expired" | "revoked";
+    product?: number;
+    seller?: number;
+  };
+  files?: File[];
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  // If files are provided, use FormData for file upload
+  if (files && files.length > 0) {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+
+    files.forEach((file, index) => {
+      formData.append(`files.certificateFile`, file);
+    });
+
+    return strapiFetchAuth({
+      path: "/api/certificates",
+      method: "POST",
+      body: formData,
+      token,
+    });
+  }
+
+  // Otherwise, use regular JSON request
+  return strapiFetchAuth({
+    path: "/api/certificates",
+    method: "POST",
+    body: {
+      data,
+    },
+    token,
+  });
+};
+
+export const getCertificates = async (params?: {
+  certificateType?: "product" | "seller";
+  product?: number;
+  seller?: number;
+  status?: "active" | "expired" | "revoked";
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.certificateType) {
+    queryParams.append("filters[certificateType][$eq]", params.certificateType);
+  }
+
+  if (params?.product) {
+    queryParams.append("filters[product][$eq]", params.product.toString());
+  }
+
+  if (params?.seller) {
+    queryParams.append("filters[seller][$eq]", params.seller.toString());
+  }
+
+  if (params?.status) {
+    queryParams.append("filters[status][$eq]", params.status);
+  }
+
+  queryParams.append("populate", "*");
+
+  const queryString = queryParams.toString();
+  const path = `/api/certificates${queryString ? `?${queryString}` : ""}`;
+
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  return strapiFetchAuth({
+    path,
+    method: "GET",
+    token,
+    cache: 0,
+  });
+};
+
+export const updateCertificate = async ({
+  id,
+  data,
+}: {
+  id: number;
+  data: {
+    title?: string;
+    description?: string;
+    certificateType?: "product" | "seller";
+    issuedBy?: string;
+    issuedDate?: string;
+    expiryDate?: string;
+    certificateNumber?: string;
+    status?: "active" | "expired" | "revoked";
+    product?: number;
+    seller?: number;
+  };
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  return strapiFetchAuth({
+    path: `/api/certificates/${id}`,
+    method: "PUT",
+    body: {
+      data,
+    },
+    token,
+  });
+};
+
+export const deleteCertificate = async ({ id }: { id: number }) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  return strapiFetchAuth({
+    path: `/api/certificates/${id}`,
+    method: "DELETE",
     token,
   });
 };

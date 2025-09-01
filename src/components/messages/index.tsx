@@ -5,7 +5,12 @@ import { App as SendbirdApp } from "@sendbird/uikit-react";
 import "@sendbird/uikit-react/dist/index.css";
 import { getSendbirdSessionTokenFromCookie } from "@/lib/auth";
 
-const Messages = ({ appId, userId }: { appId: string; userId: string }) => {
+interface MessagesProps {
+  appId: string;
+  userId: string;
+}
+
+const Messages = ({ appId, userId }: MessagesProps) => {
   return (
     <SendbirdApp
       appId={appId}

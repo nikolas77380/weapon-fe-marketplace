@@ -40,6 +40,13 @@ export const registerBuyer = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+    // Save sendbirdSessionToken if it exists in response
+    if (response.sendbirdSessionToken) {
+      setSessionTokenCookie(
+        response.sendbirdSessionToken,
+        "sendbirdSessionToken"
+      );
+    }
   }
 
   return response;
@@ -66,6 +73,13 @@ export const registerSeller = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+    // Save sendbirdSessionToken if it exists in response
+    if (response.sendbirdSessionToken) {
+      setSessionTokenCookie(
+        response.sendbirdSessionToken,
+        "sendbirdSessionToken"
+      );
+    }
 
     // Get full user data with metadata only for sellers
     const fullUserData = await getCurrentUser(response.jwt);
@@ -89,13 +103,17 @@ export const login = async (
     method: "POST",
     body: { identifier: values.email, password: values.password },
   });
+  console.log("login response:", response);
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
-    setSessionTokenCookie(
-      response.sendbirdSessionToken,
-      "sendbirdSessionToken"
-    );
+    // Save sendbirdSessionToken if it exists in response
+    if (response.sendbirdSessionToken) {
+      setSessionTokenCookie(
+        response.sendbirdSessionToken,
+        "sendbirdSessionToken"
+      );
+    }
 
     // Get full user data with metadata only for sellers
     if (response.user && response.user.role?.name === "seller") {
@@ -141,6 +159,13 @@ export const resetPassword = async (
 
   if (response && "jwt" in response) {
     setSessionTokenCookie(response.jwt);
+    // Save sendbirdSessionToken if it exists in response
+    if (response.sendbirdSessionToken) {
+      setSessionTokenCookie(
+        response.sendbirdSessionToken,
+        "sendbirdSessionToken"
+      );
+    }
 
     // Get full user data with metadata only for sellers
     if (response.user && response.user.role?.name === "seller") {
@@ -204,6 +229,7 @@ export const changePassword = async (
 
 export const logout = async (): Promise<ApiResponse<{ ok: boolean }>> => {
   clearSessionTokenCookie();
+  deleteClientCookie("sendbirdSessionToken");
   return { ok: true };
 };
 

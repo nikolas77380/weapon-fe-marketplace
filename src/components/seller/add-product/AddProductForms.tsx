@@ -122,7 +122,7 @@ const AddProductForms = () => {
         },
       };
 
-      await createProduct(productData);
+      await createProduct(productData, values.productImages);
 
       removeSavedFormData();
 
@@ -188,9 +188,9 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productSku"
-              label="Product SKU"
+              label="Product SKU (Optional)"
               type="input"
-              placeholder="Enter your product SKU"
+              placeholder="Enter your product SKU (optional)"
               className="w-1/2"
             />
             {/* Product description */}

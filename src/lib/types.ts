@@ -84,6 +84,26 @@ export const USER_ROLES = {
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
+export interface MediaFile {
+  id: number;
+  name: string;
+  alternativeText?: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+  formats?: any;
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl?: string;
+  provider: string;
+  provider_metadata?: any;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Product {
   id: number;
   title: string;
@@ -99,7 +119,10 @@ export interface Product {
     id: number;
     username: string;
     email: string;
+    metadata?: SellerMeta;
   };
+  images?: MediaFile[];
+  certificates?: Certificate[];
   attributesJson?: any;
   createdAt: string;
   updatedAt: string;
@@ -136,4 +159,55 @@ export interface UpdateProductData {
   sku?: string;
   status?: "available" | "reserved" | "sold" | "archived";
   attributesJson?: any;
+}
+
+export interface Certificate {
+  id: number;
+  title: string;
+  description?: string;
+  certificateType: "product" | "seller";
+  issuedBy: string;
+  issuedDate: string;
+  expiryDate?: string;
+  certificateNumber?: string;
+  status: "active" | "expired" | "revoked";
+  product?: {
+    id: number;
+    title: string;
+  };
+  seller?: {
+    id: number;
+    username: string;
+    displayName: string;
+  };
+  certificateFile?: MediaFile;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface CreateCertificateData {
+  title: string;
+  description?: string;
+  certificateType: "product" | "seller";
+  issuedBy: string;
+  issuedDate: string;
+  expiryDate?: string;
+  certificateNumber?: string;
+  status?: "active" | "expired" | "revoked";
+  product?: number;
+  seller?: number;
+}
+
+export interface UpdateCertificateData {
+  title?: string;
+  description?: string;
+  certificateType?: "product" | "seller";
+  issuedBy?: string;
+  issuedDate?: string;
+  expiryDate?: string;
+  certificateNumber?: string;
+  status?: "active" | "expired" | "revoked";
+  product?: number;
+  seller?: number;
 }
