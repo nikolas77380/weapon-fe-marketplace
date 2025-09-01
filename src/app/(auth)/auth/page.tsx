@@ -58,7 +58,7 @@ const AuthPage = () => {
     const sessionToken = getSessionTokenFromCookie();
     if (sessionToken) {
       console.log("User is already authenticated");
-      router.push("/dashboard");
+      router.push("/marketplace");
     }
   }, []);
 

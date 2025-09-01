@@ -1,3 +1,3 @@
-export const protectedRoutes = ["/dashboard"];
+export const protectedRoutes = ["/marketplace"];
 
 export const publicRoutes = ["/auth"];

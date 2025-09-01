@@ -112,7 +112,10 @@ export const useProductActions = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const createProductAction = async (data: CreateProductData) => {
+  const createProductAction = async (
+    data: CreateProductData,
+    images?: File[]
+  ) => {
     if (!token) {
       throw new Error("Authentication required");
     }
@@ -121,7 +124,7 @@ export const useProductActions = () => {
       setLoading(true);
       setError(null);
 
-      const response = await createProduct({ data });
+      const response = await createProduct({ data, images });
       return response.data;
     } catch (err) {
       const errorMessage =
@@ -133,7 +136,11 @@ export const useProductActions = () => {
     }
   };
 
-  const updateProductAction = async (id: number, data: UpdateProductData) => {
+  const updateProductAction = async (
+    id: number,
+    data: UpdateProductData,
+    images?: File[]
+  ) => {
     if (!token) {
       throw new Error("Authentication required");
     }
@@ -142,7 +149,7 @@ export const useProductActions = () => {
       setLoading(true);
       setError(null);
 
-      const response = await updateProduct({ id, data });
+      const response = await updateProduct({ id, data, images });
       return response.data;
     } catch (err) {
       const errorMessage =

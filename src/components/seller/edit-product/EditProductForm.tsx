@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Form, FormLabel } from "@/components/ui/form";
+import {
+  Form,
+  FormLabel,
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { useForm } from "react-hook-form";
 import {
@@ -26,9 +33,7 @@ interface EditProductFormProps {
 const EditProductForm = ({ product }: EditProductFormProps) => {
   const router = useRouter();
 
-  const {
-    categories,
-  } = useCategories();
+  const { categories } = useCategories();
 
   const {
     updateProduct,
@@ -50,6 +55,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
       quantity: product.attributesJson?.count || 1,
       manufacturer: product.attributesJson?.manufacturer || "",
       model: product.attributesJson?.model || "",
+      images: undefined,
     },
   });
 
@@ -68,6 +74,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         quantity: product.attributesJson?.count || 1,
         manufacturer: product.attributesJson?.manufacturer || "",
         model: product.attributesJson?.model || "",
+        images: undefined,
       });
     }
   }, [product, form]);
@@ -90,7 +97,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         },
       };
 
-      await updateProduct(product.id, updateData);
+      await updateProduct(product.id, updateData, values.images);
 
       toast.success("Product updated successfully!");
       router.push("/account");
@@ -110,10 +117,25 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Product Images */}
-          <div className="flex flex-col gap-2">
-            <FormLabel>Product Images</FormLabel>
-            <ImagesDropzone onFilesChange={() => {}} maxFiles={5} />
-          </div>
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Images</FormLabel>
+                <FormControl>
+                  <ImagesDropzone
+                    maxFiles={5}
+                    onFilesChange={(files) => {
+                      field.onChange(files);
+                      console.log("Images updated in form:", files);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           {/* Title */}
           <FormFieldComponent

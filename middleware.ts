@@ -6,6 +6,7 @@ export default async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutes.some((route) =>
     path.startsWith(route)
   );
+  console.log("Middleware - Is protected route:", isProtectedRoute);
   const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
 
   // 3. Get sessionToken from cookies
@@ -19,12 +20,12 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/auth", req.nextUrl));
   }
 
-  // 5. Redirect to /dashboard if the user is authenticated on auth page
+  // 5. Redirect to /marketplace if the user is authenticated on auth page
   if (path === "/auth" && sessionToken) {
     console.log(
-      "Middleware - Redirecting to /dashboard (already authenticated)"
+      "Middleware - Redirecting to /marketplace (already authenticated)"
     );
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    return NextResponse.redirect(new URL("/marketplace", req.nextUrl));
   }
 
   return NextResponse.next();
