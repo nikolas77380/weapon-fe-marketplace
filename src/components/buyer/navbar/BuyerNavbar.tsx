@@ -18,7 +18,6 @@ import {
   NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
 import { Avatar, AvatarFallback } from "../../ui/avatar";
-import { Badge } from "../../ui/badge";
 import { Separator } from "../../ui/separator";
 import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
@@ -75,7 +74,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   </Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild className="p-3">
-                  <Link href="#">
+                  <Link href="/messages">
                     <div className="flex items-center gap-3">
                       <MessageCircle size={18} />
                       <div className="flex items-center justify-between w-full">

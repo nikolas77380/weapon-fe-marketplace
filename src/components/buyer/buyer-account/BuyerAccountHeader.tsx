@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { UserProfile } from "@/lib/types";
 import React from "react";
 import BuyerActionCard from "./BuyerActionCard";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -11,6 +12,7 @@ interface BuyerAccountHeaderProps {
 const BuyerAccountHeader = ({ currentUser }: BuyerAccountHeaderProps) => {
   return (
     <div className="flex flex-col">
+      <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar className="h-12 w-12 border border-gray-300 cursor-pointer">
