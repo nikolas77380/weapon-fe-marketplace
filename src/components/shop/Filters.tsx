@@ -16,10 +16,12 @@ import {
 } from "../ui/select";
 import PriceRange from "./filters/PriceRange";
 import { Category } from "@/lib/types";
+import { Button } from "../ui/button";
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;
   onCategoryChange: (categoryId: number | null) => void;
+  onClearAll: () => void;
   availableCategories: Category[];
   selectedCategoryId: number | null;
   priceRange: { min: number; max: number };
@@ -28,6 +30,7 @@ interface FiltersProps {
 const Filters = ({
   onPriceChange,
   onCategoryChange,
+  onClearAll,
   availableCategories,
   selectedCategoryId,
   priceRange,
@@ -42,9 +45,14 @@ const Filters = ({
 
   return (
     <div className="border border-[#D3D3D3] rounded-lg pl-10 pr-6 pt-5.5 flex flex-col gap-5.5">
-      <div className="flex items-center gap-2">
-        <SlidersHorizontal size={20} className="text-black" />
-        <h2 className="text-sm font-medium font-roboto">Filters</h2>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal size={20} className="text-black" />
+          <h2 className="text-sm font-medium font-roboto">Filters</h2>
+        </div>
+        <Button variant="ghost" className="py-2" onClick={onClearAll}>
+          Clear All
+        </Button>
       </div>
 
       <div className="flex flex-col border-b border-[#D3D3D3] pb-3.5">

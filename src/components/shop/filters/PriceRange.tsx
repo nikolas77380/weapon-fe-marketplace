@@ -26,6 +26,12 @@ const PriceRange = ({
     onPriceChange?.(initialMin, initialMax);
   }, []);
 
+  // Sync with external prop changes (for Clear All functionality)
+  useEffect(() => {
+    setMinPrice(initialMin);
+    setMaxPrice(initialMax);
+  }, [initialMin, initialMax]);
+
   // Calculate percentages for slider positioning (we limit within the limits)
   const clampedMinPrice = useMemo(
     () => Math.max(minLimit, Math.min(minPrice, maxLimit)),

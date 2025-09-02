@@ -105,7 +105,7 @@ const FilteringContent = () => {
         ...prev,
         minPrice: min,
         maxPrice: max,
-        page: 1, // Reset to first page
+        page: 1,
         categoryId:
           prev.categoryId && availableCategoryIds.has(prev.categoryId)
             ? prev.categoryId
@@ -137,6 +137,18 @@ const FilteringContent = () => {
 
   const handleViewChange = (view: "grid" | "list") => {
     setFilters((prev) => ({ ...prev, view }));
+  };
+
+  const handleClearAll = () => {
+    setFilters({
+      minPrice: 1,
+      maxPrice: 500000,
+      categoryId: null,
+      search: "",
+      page: 1,
+      sort: "id:desc",
+      view: "grid",
+    });
   };
 
   return (
@@ -173,6 +185,7 @@ const FilteringContent = () => {
         <Filters
           onPriceChange={handlePriceChange}
           onCategoryChange={handleCategoryChange}
+          onClearAll={handleClearAll}
           availableCategories={availableCategories}
           selectedCategoryId={filters.categoryId}
           priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
