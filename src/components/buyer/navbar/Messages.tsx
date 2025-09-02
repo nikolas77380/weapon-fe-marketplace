@@ -4,19 +4,33 @@ import { Badge, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Messages = () => {
-  const { utils } = useSendbirdSDK();
+  const { utils, isReady } = useSendbirdSDK();
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+
   useEffect(() => {
+    // Проверяем, что SDK готов перед выполнением запросов
+    if (!isReady || !utils) {
+      return;
+    }
+
     const fetchUnreadMessagesCount = async () => {
-      const result = await utils?.getUnreadCount();
-      console.log(result);
-      if (result?.success) {
-        setUnreadMessagesCount(result.count);
+      try {
+        const result = await utils.getUnreadCount();
+        if (result?.success) {
+          setUnreadMessagesCount(result.count);
+        }
+      } catch (error) {
+        console.error("Error fetching unread messages count:", error);
       }
     };
+
     fetchUnreadMessagesCount();
-  }, [utils]);
-  console.log(unreadMessagesCount);
+
+    const interval = setInterval(fetchUnreadMessagesCount, 60000);
+
+    return () => clearInterval(interval);
+  }, [utils, isReady]);
+
   return (
     <NavigationMenuLink asChild className="p-3">
       <Link href="/messages" className="relative">
