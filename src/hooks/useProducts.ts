@@ -38,7 +38,9 @@ export const useProducts = (params?: {
       const response = await getProducts(params);
 
       if (response) {
-        setProducts(response);
+        const productsData = response.data || response;
+        setProducts(productsData);
+
         if (response.meta?.pagination) {
           setPagination(response.meta.pagination);
         }
