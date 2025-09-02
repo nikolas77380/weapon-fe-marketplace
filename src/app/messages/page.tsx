@@ -5,8 +5,6 @@ import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 
 const MessagesPage = async () => {
   const currentUser = await requireAuth();
-  console.log(currentUser);
-
   return (
     <main className="w-full h-screen mb-20">
       <BreadcrumbComponent
@@ -14,10 +12,11 @@ const MessagesPage = async () => {
         className="mt-4 mb-10 ml-10"
       />
       <div className="h-full">
-        <Messages
-          appId={process.env.NEXT_PUBLIC_SENDBIRD_APP_ID!}
-          userId={String(currentUser.id)}
-        />
+        <div className="container mx-auto p-4">
+          <div className="h-[600px]">
+            <Messages />
+          </div>
+        </div>
       </div>
     </main>
   );

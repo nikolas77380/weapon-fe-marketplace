@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import moment from "moment";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -398,7 +399,6 @@ export const PRODUCT_STATUS_FORM = [
   },
 ] as const;
 
-
 export const PRODUCT_CURRENCY_FORM = [
   {
     key: "usd",
@@ -470,4 +470,37 @@ export const formatDate = (dateString: string): string => {
     month: "short",
     day: "numeric",
   });
+};
+
+export const protectFromXSS = (text: string) => {
+  return text
+    .replace(/\&/g, "&amp;")
+    .replace(/\</g, "&lt;")
+    .replace(/\>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/\'/g, "&apos;");
+};
+
+export const timestampToTime = (timestamp: number) => {
+  const now = new Date().getTime();
+  const nowDate = moment
+    .unix(now.toString().length === 13 ? now / 1000 : now)
+    .format("MM/DD");
+  let date = moment
+    .unix(timestamp.toString().length === 13 ? timestamp / 1000 : timestamp)
+    .format("MM/DD");
+  if (date === "Invalid date") {
+    date = "";
+  }
+  return nowDate === date
+    ? moment
+        .unix(timestamp.toString().length === 13 ? timestamp / 1000 : timestamp)
+        .format("HH:mm")
+    : date;
+};
+
+export const handleEnterPress = (event: any, callback: () => void) => {
+  if (event.key === "Enter") {
+    callback();
+  }
 };

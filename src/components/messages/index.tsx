@@ -1,22 +1,28 @@
 "use client";
 
-import React from "react";
-import { App as SendbirdApp } from "@sendbird/uikit-react";
+import React, { useState } from "react";
 import "@sendbird/uikit-react/dist/index.css";
-import { getSendbirdSessionTokenFromCookie } from "@/lib/auth";
+import GroupChannelList from "@sendbird/uikit-react/GroupChannelList";
+import GroupChannel from "@sendbird/uikit-react/GroupChannel";
 
-interface MessagesProps {
-  appId: string;
-  userId: string;
-}
+const Messages = () => {
+  const [currentChannel, setCurrentChannel] = useState<any>(null);
+  const handleSelectChannel = (channel: any) => {
+    setCurrentChannel(channel);
+  };
 
-const Messages = ({ appId, userId }: MessagesProps) => {
   return (
-    <SendbirdApp
-      appId={appId}
-      userId={userId}
-      accessToken={getSendbirdSessionTokenFromCookie() as string}
-    />
+    <div className="channel-wrap flex h-full">
+      <div className="channel-list float-left">
+        <GroupChannelList
+          onChannelSelect={handleSelectChannel}
+          onChannelCreated={() => {}}
+        />
+      </div>
+      <div className="channel-chat w-[76%]">
+        <GroupChannel channelUrl={currentChannel?.url ?? ""} />
+      </div>
+    </div>
   );
 };
 

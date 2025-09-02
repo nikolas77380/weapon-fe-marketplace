@@ -19,10 +19,10 @@ import {
   NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
 import { Avatar, AvatarFallback } from "../../ui/avatar";
-import { Badge } from "../../ui/badge";
 import { Separator } from "../../ui/separator";
 import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
+import Messages from "./Messages";
 
 interface BuyerNavbarAuthProps {
   user: UserProfile;
@@ -46,14 +46,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           </Link>
         </NavigationMenuLink>
 
-        <NavigationMenuLink asChild className="p-3">
-          <Link href="/messages" className="relative">
-            <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
-            <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] size-5 rounded-full">
-              3
-            </Badge>
-          </Link>
-        </NavigationMenuLink>
+        <Messages />
 
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>

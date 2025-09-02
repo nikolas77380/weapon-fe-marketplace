@@ -25,13 +25,11 @@ export const AuthContext = createContext<AuthContextContextValue | null>(null);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [currentUserLoading, setCurrentUserLoading] = useState(true);
-
   const fetchUser = async () => {
     try {
       const userData = await getCurrentUserFromCookie();
       setCurrentUser(userData);
     } catch (error) {
-      console.error("Error fetching user:", error);
       setCurrentUser(null);
     } finally {
       setCurrentUserLoading(false);
@@ -47,7 +45,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     fetchUser();
   }, []);
-
   return (
     <AuthContext.Provider
       value={{
