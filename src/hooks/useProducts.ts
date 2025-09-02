@@ -62,7 +62,6 @@ export const useProducts = (params?: {
     params?.sort,
     params?.pagination?.page,
     params?.pagination?.pageSize,
-    JSON.stringify(params),
   ]);
 
   return {

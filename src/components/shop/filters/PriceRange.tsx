@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 interface PriceRangeProps {
   onPriceChange?: (min: number, max: number) => void;
@@ -27,60 +27,84 @@ const PriceRange = ({
   }, []);
 
   // Calculate percentages for slider positioning (we limit within the limits)
-  const clampedMinPrice = Math.max(minLimit, Math.min(minPrice, maxLimit));
-  const clampedMaxPrice = Math.max(minLimit, Math.min(maxPrice, maxLimit));
+  const clampedMinPrice = useMemo(
+    () => Math.max(minLimit, Math.min(minPrice, maxLimit)),
+    [minPrice, minLimit, maxLimit]
+  );
 
-  const minPercent =
-    ((clampedMinPrice - minLimit) / (maxLimit - minLimit)) * 100;
-  const maxPercent =
-    ((clampedMaxPrice - minLimit) / (maxLimit - minLimit)) * 100;
+  const clampedMaxPrice = useMemo(
+    () => Math.max(minLimit, Math.min(maxPrice, maxLimit)),
+    [maxPrice, minLimit, maxLimit]
+  );
+
+  const minPercent = useMemo(
+    () => ((clampedMinPrice - minLimit) / (maxLimit - minLimit)) * 100,
+    [clampedMinPrice, minLimit, maxLimit]
+  );
+
+  const maxPercent = useMemo(
+    () => ((clampedMaxPrice - minLimit) / (maxLimit - minLimit)) * 100,
+    [clampedMaxPrice, minLimit, maxLimit]
+  );
 
   // Handle range slider changes
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(Number(e.target.value), maxPrice - 100);
-    setMinPrice(value);
-    onPriceChange?.(value, maxPrice);
-  };
+  const handleMinChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = Math.min(Number(e.target.value), maxPrice - 100);
+      setMinPrice(value);
+      onPriceChange?.(value, maxPrice);
+    },
+    [maxPrice, onPriceChange]
+  );
 
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(Number(e.target.value), minPrice + 100);
-    setMaxPrice(value);
-    onPriceChange?.(minPrice, value);
-  };
+  const handleMaxChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = Math.max(Number(e.target.value), minPrice + 100);
+      setMaxPrice(value);
+      onPriceChange?.(minPrice, value);
+    },
+    [minPrice, onPriceChange]
+  );
 
   // Handle input changes
-  const handleMinInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+  const handleMinInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = e.target.value;
 
-    if (inputValue === "") {
-      setMinPrice(0);
-      return;
-    }
+      if (inputValue === "") {
+        setMinPrice(0);
+        return;
+      }
 
-    const numValue = Number(inputValue);
-    // Validation input on focus from field
-    if (!isNaN(numValue)) {
-      setMinPrice(numValue);
-    }
-  };
+      const numValue = Number(inputValue);
+      // Validation input on focus from field
+      if (!isNaN(numValue)) {
+        setMinPrice(numValue);
+      }
+    },
+    []
+  );
 
-  const handleMaxInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+  const handleMaxInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = e.target.value;
 
-    if (inputValue === "") {
-      setMaxPrice(0);
-      return;
-    }
+      if (inputValue === "") {
+        setMaxPrice(0);
+        return;
+      }
 
-    const numValue = Number(inputValue);
-    // Validation on focus from field
-    if (!isNaN(numValue)) {
-      setMaxPrice(numValue);
-    }
-  };
+      const numValue = Number(inputValue);
+      // Validation on focus from field
+      if (!isNaN(numValue)) {
+        setMaxPrice(numValue);
+      }
+    },
+    []
+  );
 
   // Validation on loss of focus
-  const handleMinBlur = () => {
+  const handleMinBlur = useCallback(() => {
     let finalValue = minPrice;
 
     if (minPrice < minLimit) {
@@ -91,9 +115,9 @@ const PriceRange = ({
 
     setMinPrice(finalValue);
     onPriceChange?.(finalValue, maxPrice);
-  };
+  }, [minPrice, minLimit, maxPrice, onPriceChange]);
 
-  const handleMaxBlur = () => {
+  const handleMaxBlur = useCallback(() => {
     let finalValue = maxPrice;
 
     if (maxPrice > maxLimit) {
@@ -104,7 +128,7 @@ const PriceRange = ({
 
     setMaxPrice(finalValue);
     onPriceChange?.(minPrice, finalValue);
-  };
+  }, [maxPrice, maxLimit, minPrice, onPriceChange]);
 
   return (
     <div>
