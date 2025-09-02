@@ -55,7 +55,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             alt={item.title}
             width={200}
             height={150}
-            className="w-[200px] h-[150px] object-cover rounded-l-lg"
+            className="w-[200px] h-full object-cover rounded-l-lg"
           />
           <div className="absolute top-2 left-2">
             <Badge

@@ -1,3 +1,8 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useSendbirdSDK } from "@/hooks/useSendbird";
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
 import { Badge, MessageCircle } from "lucide-react";
@@ -33,7 +38,15 @@ const Messages = () => {
   return (
     <NavigationMenuLink asChild className="p-3">
       <Link href="/messages" className="relative">
-        <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Messages</p>
+          </TooltipContent>
+        </Tooltip>
+
         {unreadMessagesCount > 0 && (
           <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] size-5 rounded-full">
             {unreadMessagesCount}
