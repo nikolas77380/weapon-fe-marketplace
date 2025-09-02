@@ -59,7 +59,6 @@ export const useSendbirdSDK = (): SendbirdContextValue & {
           sdk.groupChannel &&
           sdk.connectionState === "OPEN"
         );
-
         if (isSDKReady) {
           setIsReady(true);
         } else {
@@ -77,15 +76,6 @@ export const useSendbirdSDK = (): SendbirdContextValue & {
   const connectionState = state?.stores?.sdkStore?.sdk?.connectionState;
   const isConnected = connectionState === "OPEN";
 
-  // Убираем console.log, который выполняется при каждом рендере
-  // console.log("useSendbirdSDK: connection state", {
-  //   connectionState,
-  //   isConnected,
-  //   hasConnectMethod: !!sendbirdContext?.actions?.connect,
-  //   hasDisconnectMethod: !!sendbirdContext?.actions?.disconnect,
-  //   hasSDK: !!state?.stores?.sdkStore?.sdk,
-  //   hasGroupChannel: !!state?.stores?.sdkStore?.sdk?.groupChannel,
-  // });
 
   const utils = useMemo(() => {
     if (state?.stores?.sdkStore?.sdk) {

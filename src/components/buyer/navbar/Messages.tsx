@@ -30,7 +30,6 @@ const Messages = () => {
 
     return () => clearInterval(interval);
   }, [utils, isReady]);
-
   return (
     <NavigationMenuLink asChild className="p-3">
       <Link href="/messages" className="relative">
