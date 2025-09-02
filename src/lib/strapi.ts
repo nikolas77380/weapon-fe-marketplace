@@ -480,9 +480,6 @@ export const getProducts = async (params?: {
   const queryString = queryParams.toString();
   const path = `/api/products${queryString ? `?${queryString}` : ""}`;
 
-  console.log("🔍 getProducts params:", params);
-  console.log("🔍 getProducts path:", path);
-
   const token = getSessionTokenFromCookie();
   if (!token) {
     throw new Error("Authentication required");

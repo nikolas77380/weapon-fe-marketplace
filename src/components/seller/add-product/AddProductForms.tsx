@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
   Form,
@@ -46,6 +47,8 @@ const AddProductForms = () => {
     loading: createLoading,
     error: createError,
   } = useProductActions();
+
+  const router = useRouter();
 
   const form = useForm<AddProductSchemaValues>({
     resolver: zodResolver(addProductSchema),
@@ -140,6 +143,7 @@ const AddProductForms = () => {
       });
 
       toast.success("Product added successfully!");
+      router.push("/account");
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error(

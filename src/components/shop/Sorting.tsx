@@ -1,19 +1,56 @@
 "use client";
 
-import { ChevronDown, LayoutGrid, List } from "lucide-react";
-import React, { useState } from "react";
+import { LayoutGrid, List } from "lucide-react";
+import React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const Sorting = () => {
-  const [activeTab, setActiveTab] = useState<"grid" | "list">("grid");
+interface SortingProps {
+  onSortChange?: (sort: string) => void;
+  selectedSort?: string;
+  onViewChange?: (view: "grid" | "list") => void;
+  selectedView?: "grid" | "list";
+}
+
+const Sorting = ({
+  onSortChange,
+  selectedSort,
+  onViewChange,
+  selectedView,
+}: SortingProps) => {
+  const activeTab = selectedView || "grid";
+
+  const sortOptions = [
+    { value: "id:desc", label: "Newest First" },
+    { value: "id:asc", label: "Oldest First" },
+    { value: "price:asc", label: "Price: Low to High" },
+    { value: "price:desc", label: "Price: High to Low" },
+    { value: "title:asc", label: "Name: A to Z" },
+    { value: "title:desc", label: "Name: Z to A" },
+  ];
+
   return (
     <div className="flex items-center gap-22">
-      <div className="flex items-center text-[#B3B3B3] gap-5">
-        <h2 className="font-medium text-black">Newest First</h2>
-        <ChevronDown size={20} className="text-[#757575]" />
-      </div>
+      <Select value={selectedSort} onValueChange={onSortChange}>
+        <SelectTrigger className="w-[200px] border-transparent shadow-none focus:ring-0 focus:ring-offset-0">
+          <SelectValue placeholder="Newest First" />
+        </SelectTrigger>
+        <SelectContent>
+          {sortOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <div className="flex items-center gap-1">
         <div
-          onClick={() => setActiveTab("grid")}
+          onClick={() => onViewChange?.("grid")}
           className={`p-2 rounded-md cursor-pointer ${
             activeTab === "grid" ? "bg-black" : "bg-[#D9D9D9]"
           }`}
@@ -24,7 +61,7 @@ const Sorting = () => {
           />
         </div>
         <div
-          onClick={() => setActiveTab("list")}
+          onClick={() => onViewChange?.("list")}
           className={`p-2 rounded-md cursor-pointer ${
             activeTab === "list" ? "bg-black" : "bg-[#D9D9D9]"
           }`}
