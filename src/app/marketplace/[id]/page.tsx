@@ -1,6 +1,4 @@
 import DetailProductPageComponent from "@/components/shop/detail-page/DetailProductPageComponent";
-import { requireAuth } from "@/lib/server-auth";
-import { redirect } from "next/navigation";
 import React from "react";
 
 const DetailProductPage = async ({

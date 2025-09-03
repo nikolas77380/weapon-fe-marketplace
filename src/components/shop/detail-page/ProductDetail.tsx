@@ -6,8 +6,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
+import { useSellerData } from "@/hooks/useSellerData";
 
 const ProductDetail = ({ product }: { product: Product }) => {
+  const { sellerData } = useSellerData(product?.seller?.id);
+
   return (
     <div className="flex gap-9 w-full">
       {/* Images */}
@@ -48,10 +51,20 @@ const ProductDetail = ({ product }: { product: Product }) => {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <p className="font-medium text-xl">
-                {product?.seller?.username || "User"}
+              {/* Company name */}
+              {sellerData?.metadata?.companyName && (
+                <p className="text-sm text-gray-600">
+                  {sellerData.metadata.companyName}
+                </p>
+              )}
+              {/* Country */}
+              <p className="text-sm">
+                {sellerData?.metadata?.country ? (
+                  sellerData.metadata.country
+                ) : (
+                  <span className="text-gray-400">Country not available</span>
+                )}
               </p>
-              <p className="text-sm">{product?.seller?.metadata?.country}UK</p>
             </div>
           </div>
           <Link
