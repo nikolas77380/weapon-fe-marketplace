@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+
 import { getSessionTokenFromCookie } from "./auth";
 
 const API_BASE_URL =

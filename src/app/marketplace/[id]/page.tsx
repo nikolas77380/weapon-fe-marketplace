@@ -10,16 +10,7 @@ const DetailProductPage = async ({
 }) => {
   const { id } = await params;
 
-  const currentUser = await requireAuth();
-  
-    if (!currentUser) {
-      redirect("/auth?mode=login");
-    }
-  
-    if (currentUser.role.name !== "seller") {
-      redirect("/account");
-    }
-  return <DetailProductPageComponent currentUser={currentUser} productId={id} />;
+  return <DetailProductPageComponent productId={id} />;
 };
 
 export default DetailProductPage;

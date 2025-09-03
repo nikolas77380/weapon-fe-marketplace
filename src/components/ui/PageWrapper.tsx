@@ -8,7 +8,7 @@ interface PageWrapperProps {
   breadcrumbClassName?: string;
 }
 
-const EditPageWrapper = ({
+const PageWrapper = ({
   children,
   currentUser,
   breadcrumbClassName = "mt-4 mb-10",
@@ -28,4 +28,4 @@ const EditPageWrapper = ({
   );
 };
 
-export default EditPageWrapper;
+export default PageWrapper;
