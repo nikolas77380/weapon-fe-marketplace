@@ -51,7 +51,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       <div className="border border-[#D3D3D3] rounded-lg flex flex-row">
         <div className="relative overflow-hidden">
           <Image
-            src={"/gun.jpg"}
+            src={`${"http://localhost:1337"}${item.images?.[0].url}`}
             alt={item.title}
             width={200}
             height={150}
@@ -135,7 +135,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
     <div className="border border-[#D3D3D3] rounded-lg flex flex-col">
       <div className="relative border-b border-[#D3D3D3] overflow-hidden">
         <Image
-          src={"/gun.jpg"}
+          src={`${"http://localhost:1337"}${item.images?.[0].url}`}
           alt={item.title}
           width={300}
           height={200}
