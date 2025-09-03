@@ -53,7 +53,7 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
       ) : (
         <Heart
-          size={size === "sm" ? 16 : size === "md" ? 18 : 20}
+          size={size === "sm" ? 16 : size === "md" ? 18 : 48}
           className={cn(
             "transition-all duration-200",
             isFavourited(productId) && "fill-current"

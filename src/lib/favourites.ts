@@ -168,7 +168,7 @@ export const checkIfFavourited = async (
     }
 
     const response = await fetch(
-      `${API_BASE_URL}/api/favourite/check?productId=${productId}`,
+      `${API_BASE_URL}/api/favourites/check?productId=${productId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
