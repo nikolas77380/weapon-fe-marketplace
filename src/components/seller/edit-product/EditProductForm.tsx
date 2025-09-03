@@ -18,7 +18,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { SelectItem } from "@/components/ui/select";
-import { PRODUCT_CONDITION_FORM, PRODUCT_CURRENCY_FORM } from "@/lib/utils";
+import { PRODUCT_CONDITION_FORM } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
@@ -47,7 +47,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
       title: product.title || "",
       description: product.description || "",
       price: product.price || 0,
-      currency: product.currency || "USD",
       category: product.category?.id || 0,
       sku: product.sku || "",
       status: product.status || "available",
@@ -66,7 +65,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         title: product.title || "",
         description: product.description || "",
         price: product.price || 0,
-        currency: product.currency || "USD",
         category: product.category?.id || 0,
         sku: product.sku || "",
         status: product.status || "available",
@@ -85,7 +83,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         title: values.title,
         description: values.description,
         price: values.price,
-        currency: values.currency,
+        currency: "USD", // Always use USD
         category: values.category,
         sku: values.sku,
         status: values.status,
@@ -156,29 +154,19 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             rows={4}
           />
 
-          {/* Price and Currency */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormFieldComponent
-              control={form.control}
-              name="price"
-              label="Price"
-              type="input"
-              inputType="number"
-              placeholder="0.00"
-              customOnChange={(e, fieldOnChange) =>
-                fieldOnChange(Number(e.target.value))
-              }
-            />
-
-            <FormFieldComponent
-              control={form.control}
-              name="currency"
-              label="Currency"
-              type="select"
-              placeholder="Select currency"
-              options={PRODUCT_CURRENCY_FORM}
-            />
-          </div>
+          {/* Price */}
+          <FormFieldComponent
+            control={form.control}
+            name="price"
+            label="Price (USD)"
+            type="input"
+            inputType="number"
+            placeholder="0.00"
+            className="w-1/2"
+            customOnChange={(e, fieldOnChange) =>
+              fieldOnChange(Number(e.target.value))
+            }
+          />
 
           {/* Category */}
           <FormFieldComponent

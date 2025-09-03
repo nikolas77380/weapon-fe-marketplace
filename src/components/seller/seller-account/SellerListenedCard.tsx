@@ -15,13 +15,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
 import { useProductActions } from "@/hooks/useProducts";
 import { toast } from "sonner";
+import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
+import { updateStatus } from "@/mockup/status";
 
 interface SellerListenedCardProps {
   product: Product;
@@ -32,8 +40,9 @@ const SellerListenedCard = ({
   product,
   onProductDeleted,
 }: SellerListenedCardProps) => {
-  const { deleteProduct, loading } = useProductActions();
+  const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(product.status);
 
   const handleDeleteProduct = async () => {
     try {
@@ -48,15 +57,34 @@ const SellerListenedCard = ({
       toast.error("Error removing product");
     }
   };
+
+  const handleStatusUpdate = async (
+    newStatus: "available" | "reserved" | "sold" | "archived"
+  ) => {
+    try {
+      await updateProduct(product.id, { status: newStatus });
+      setCurrentStatus(newStatus);
+      toast.success(`Status updated to ${newStatus}`);
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  // Update the local status when changing status
+  useEffect(() => {
+    setCurrentStatus(product.status);
+  }, [product.status]);
   return (
     <div className="border border-gray-primary rounded-xl px-8 py-6 flex justify-between w-full">
-      {/* 1 */}
+      {/* Product info */}
       <div className="flex gap-2.5">
         <Image
-          src={"/gun.jpg"}
+          src={getBestImageUrl(product.images?.[0], "small") || "/shop/1.jpg"}
           alt={product.title}
           width={80}
           height={60}
+          onError={(e) => handleImageError(e, "/shop/1.jpg")}
           className="rounded-md object-cover aspect-square"
         />
         <div className="flex flex-col">
@@ -78,10 +106,10 @@ const SellerListenedCard = ({
           </div>
         </div>
       </div>
-      {/* 2 */}
+      {/* Action Buttons */}
       <div className="flex flex-col gap-8">
         <div className="bg-black text-white px-2.5 py-1 rounded-md text-sm font-medium self-start">
-          {product.status}
+          {currentStatus}
         </div>
         <div className="flex items-center gap-3">
           <Link href={`/account/edit-product/${product.slug}`}>
@@ -145,7 +173,34 @@ const SellerListenedCard = ({
             </DialogContent>
           </Dialog>
 
-          <Ellipsis size={20} className="cursor-pointer" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="text-gray-600 hover:text-gray-800 transition-colors">
+                <Ellipsis size={20} className="cursor-pointer" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              {updateStatus
+                .filter((status) => status.value !== currentStatus)
+                .map((status) => (
+                  <DropdownMenuItem
+                    key={status.value}
+                    onClick={() =>
+                      handleStatusUpdate(
+                        status.value as
+                          | "available"
+                          | "reserved"
+                          | "sold"
+                          | "archived"
+                      )
+                    }
+                    className="hover:bg-gray-100 cursor-pointer"
+                  >
+                    {status.label}
+                  </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
