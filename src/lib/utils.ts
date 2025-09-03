@@ -367,15 +367,15 @@ export const PRODUCT_CATEGORY_FORM = [
 
 export const PRODUCT_CONDITION_FORM = [
   {
-    key: "new",
+    key: "New",
     label: "New",
   },
   {
-    key: "in-stock",
+    key: "In-Stock",
     label: "In Stock",
   },
   {
-    key: "pre-order",
+    key: "Pre-Order",
     label: "Pre-Order",
   },
 ] as const;

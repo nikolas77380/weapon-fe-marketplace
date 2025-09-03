@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto } from "next/font/google";
+import { Inter, Roboto, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/landing/Footer";
@@ -19,6 +19,12 @@ const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
+const outfit = Outfit({
+  variable: "--font-outfit",
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
+
 export const metadata: Metadata = {
   title: "Esviem Defence",
   description: "Weapon Marketplace",
@@ -31,7 +37,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} ${inter.variable} antialiased`}>
+      <body className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}>
         <AuthContextProvider>
           <ProviderSendBird>
             <Navbar />
