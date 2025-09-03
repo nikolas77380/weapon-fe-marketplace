@@ -371,7 +371,7 @@ export const PRODUCT_CONDITION_FORM = [
     label: "New",
   },
   {
-    key: "In Stock",
+    key: "In-Stock",
     label: "In Stock",
   },
   {

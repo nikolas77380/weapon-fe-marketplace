@@ -18,7 +18,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const { currentUser } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleContactSeller = async () => {
+  const handleContactSeller = async (e: React.MouseEvent) => {
+    // Prevent event bubbling to parent Link
+    e.stopPropagation();
+    e.preventDefault();
+
     if (!currentUser) {
       // Redirect to login if user is not authenticated
       window.location.href = "/auth";
@@ -50,7 +54,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <Link href={`/marketplace/${item.id}`} className="border border-[#D3D3D3] rounded-lg flex flex-row">
+      <Link
+        href={`/marketplace/${item.id}`}
+        className="border border-[#D3D3D3] rounded-lg flex flex-row"
+      >
         <div className="relative overflow-hidden">
           <Image
             src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
@@ -119,7 +126,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </div>
             <Button
               className="flex items-center gap-2 py-2 px-4"
-              onClick={handleContactSeller}
+              onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               <MessageSquare size={15} />
@@ -135,7 +142,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <Link href={`/marketplace/${item.id}`} className="border border-[#D3D3D3] rounded-lg flex flex-col">
+    <Link
+      href={`/marketplace/${item.id}`}
+      className="border border-[#D3D3D3] rounded-lg flex flex-col"
+    >
       <div className="relative border-b border-[#D3D3D3] overflow-hidden">
         <Image
           src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
@@ -203,7 +213,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <div className="flex items-center justify-center">
             <Button
               className="flex items-center gap-2 py-2 w-2/3"
-              onClick={handleContactSeller}
+              onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               <MessageSquare size={15} />

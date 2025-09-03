@@ -29,6 +29,7 @@ import Link from "next/link";
 import { useProductActions } from "@/hooks/useProducts";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
+import { updateStatus } from "@/mockup/status";
 
 interface SellerListenedCardProps {
   product: Product;
@@ -76,7 +77,7 @@ const SellerListenedCard = ({
   }, [product.status]);
   return (
     <div className="border border-gray-primary rounded-xl px-8 py-6 flex justify-between w-full">
-      {/* 1 */}
+      {/* Product info */}
       <div className="flex gap-2.5">
         <Image
           src={getBestImageUrl(product.images?.[0], "small") || "/shop/1.jpg"}
@@ -105,7 +106,7 @@ const SellerListenedCard = ({
           </div>
         </div>
       </div>
-      {/* 2 */}
+      {/* Action Buttons */}
       <div className="flex flex-col gap-8">
         <div className="bg-black text-white px-2.5 py-1 rounded-md text-sm font-medium self-start">
           {currentStatus}
@@ -179,46 +180,25 @@ const SellerListenedCard = ({
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem
-                onClick={() => handleStatusUpdate("available")}
-                className={`${
-                  currentStatus === "available"
-                    ? "bg-blue-100 text-blue-700 font-medium"
-                    : ""
-                }`}
-              >
-                Available
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleStatusUpdate("reserved")}
-                className={`${
-                  currentStatus === "reserved"
-                    ? "bg-blue-100 text-blue-700 font-medium"
-                    : ""
-                }`}
-              >
-                Reserved
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleStatusUpdate("sold")}
-                className={`${
-                  currentStatus === "sold"
-                    ? "bg-blue-100 text-blue-700 font-medium"
-                    : ""
-                }`}
-              >
-                Sold
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleStatusUpdate("archived")}
-                className={`${
-                  currentStatus === "archived"
-                    ? "bg-blue-100 text-blue-700 font-medium"
-                    : ""
-                }`}
-              >
-                Archived
-              </DropdownMenuItem>
+              {updateStatus
+                .filter((status) => status.value !== currentStatus)
+                .map((status) => (
+                  <DropdownMenuItem
+                    key={status.value}
+                    onClick={() =>
+                      handleStatusUpdate(
+                        status.value as
+                          | "available"
+                          | "reserved"
+                          | "sold"
+                          | "archived"
+                      )
+                    }
+                    className="hover:bg-gray-100 cursor-pointer"
+                  >
+                    {status.label}
+                  </DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
