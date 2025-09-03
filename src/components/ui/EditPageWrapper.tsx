@@ -4,7 +4,7 @@ import { UserProfile } from "@/lib/types";
 
 interface PageWrapperProps {
   children: React.ReactNode;
-  currentUser: UserProfile;
+  currentUser?: UserProfile;
   breadcrumbClassName?: string;
 }
 
@@ -16,10 +16,12 @@ const EditPageWrapper = ({
   return (
     <div className="w-full min-h-screen h-full">
       <div className="container mx-auto flex flex-col">
-        <BreadcrumbComponent
-          currentUser={currentUser}
-          className={breadcrumbClassName}
-        />
+        {currentUser && (
+          <BreadcrumbComponent
+            currentUser={currentUser}
+            className={breadcrumbClassName}
+          />
+        )}
         {children}
       </div>
     </div>

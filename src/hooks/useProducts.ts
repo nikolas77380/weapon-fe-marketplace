@@ -85,8 +85,8 @@ export const useProduct = (id: number) => {
 
       const response = await getProductById(id);
 
-      if (response.data) {
-        setProduct(response.data);
+      if (response) {
+        setProduct(response);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch product");

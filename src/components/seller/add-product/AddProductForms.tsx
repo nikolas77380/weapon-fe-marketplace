@@ -22,7 +22,6 @@ import { Button } from "@/components/ui/button";
 
 import {
   PRODUCT_CONDITION_FORM,
-  PRODUCT_CURRENCY_FORM,
   PRODUCT_STATUS_FORM,
   STORAGE_KEY,
 } from "@/lib/utils";
@@ -74,6 +73,14 @@ const AddProductForms = () => {
       form.reset(savedFormData);
     }
   }, [savedFormData, form]);
+
+  // Очищаем localStorage при загрузке страницы, если пользователь пришел сюда заново
+  useEffect(() => {
+    // Если есть данные в localStorage, но форма пустая, значит пользователь пришел заново
+    if (savedFormData && !form.getValues("productName")) {
+      removeSavedFormData();
+    }
+  }, []);
 
   // Autosave when changing form
   useEffect(() => {
@@ -127,8 +134,10 @@ const AddProductForms = () => {
 
       await createProduct(productData, values.productImages);
 
+      // Очищаем localStorage и сбрасываем форму
       removeSavedFormData();
 
+      // Сбрасываем форму к начальным значениям
       form.reset({
         productName: "",
         productDescription: "",
@@ -277,40 +286,26 @@ const AddProductForms = () => {
               Pricing
             </h2>
             {/* Product Price */}
-            <div className="flex w-full gap-4">
-              <FormFieldComponent
-                control={form.control}
-                name="productPrice"
-                label="Price"
-                type="input"
-                inputType="number"
-                className="w-1/2"
-                min="1"
-                step="1"
-                itemClassName="flex-1"
-                customOnChange={(e, fieldOnChange) => {
-                  const value = e.target.value;
-                  const numValue =
-                    value === "" ? 0 : Math.max(1, Number(value));
-                  fieldOnChange(numValue);
-                }}
-                customOnFocus={(e) => {
-                  if (e.target.value === "0") {
-                    e.target.value = "";
-                  }
-                }}
-              />
-              {/* Product currency */}
-              <FormFieldComponent
-                control={form.control}
-                name="productCurrency"
-                label="Currency"
-                type="select"
-                placeholder="Select currency"
-                options={PRODUCT_CURRENCY_FORM}
-                itemClassName="flex-1"
-              />
-            </div>
+            <FormFieldComponent
+              control={form.control}
+              name="productPrice"
+              label="Price (USD)"
+              type="input"
+              inputType="number"
+              className="w-1/2"
+              min="1"
+              step="1"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue = value === "" ? 0 : Math.max(1, Number(value));
+                fieldOnChange(numValue);
+              }}
+              customOnFocus={(e) => {
+                if (e.target.value === "0") {
+                  e.target.value = "";
+                }
+              }}
+            />
           </div>
 
           {/* Product Details */}
@@ -318,7 +313,7 @@ const AddProductForms = () => {
             <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
               Details
             </h2>
-            {/* Product Price */}
+            {/* Product Count */}
             <FormFieldComponent
               control={form.control}
               name="productCount"

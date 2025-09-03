@@ -6,6 +6,8 @@ import { Product } from "@/lib/types";
 import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
+import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
+import Link from "next/link";
 
 interface ShopCardProps {
   item: Product;
@@ -48,13 +50,14 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-[#D3D3D3] rounded-lg flex flex-row">
+      <Link href={`/marketplace/${item.id}`} className="border border-[#D3D3D3] rounded-lg flex flex-row">
         <div className="relative overflow-hidden">
           <Image
-            src={`${"http://localhost:1337"}${item.images?.[0].url}`}
+            src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
             alt={item.title}
             width={200}
             height={150}
+            onError={(e) => handleImageError(e, "/shop/1.jpg")}
             className="w-[200px] h-full object-cover rounded-l-lg"
           />
           <div className="absolute top-2 left-2">
@@ -126,19 +129,20 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </Button>
           </div>
         </div>
-      </div>
+      </Link>
     );
   }
 
   // Grid view
   return (
-    <div className="border border-[#D3D3D3] rounded-lg flex flex-col">
+    <Link href={`/marketplace/${item.id}`} className="border border-[#D3D3D3] rounded-lg flex flex-col">
       <div className="relative border-b border-[#D3D3D3] overflow-hidden">
         <Image
-          src={`${"http://localhost:1337"}${item.images?.[0].url}`}
+          src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
           alt={item.title}
           width={300}
           height={200}
+          onError={(e) => handleImageError(e, "/shop/1.jpg")}
           className="w-full h-[125px] object-cover rounded-t-lg"
         />
         <div className="absolute top-2 left-2">
@@ -210,7 +214,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

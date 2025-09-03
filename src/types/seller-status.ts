@@ -1,1 +1,0 @@
-export type VerificationStatus = "Verification Pending" | "Verified" | "Not Verified";
