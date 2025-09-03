@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart } from "lucide-react";
+import FavouriteButton from "@/components/ui/FavouriteButton";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   return (
@@ -25,9 +26,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           <h1 className="text-[40px] font-medium">
             {product?.title || "Product"}
           </h1>
-          <div className="flex items-center justify-center rounded-full bg-red-100 p-2 cursor-pointer">
-            <Heart size={25} className="text-gray-500" />
-          </div>
+          <FavouriteButton productId={product.id} size="lg" />
         </div>
 
         <div className="flex items-center justify-between mt-5">
