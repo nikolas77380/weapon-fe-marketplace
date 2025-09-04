@@ -16,8 +16,12 @@ const DetailProductPageComponent = ({
 }: DetailProductPageComponentProps) => {
   const { product, loading, error } = useProduct(productId);
 
+  const customLabels = {
+    [productId.toString()]: product?.title || "Product",
+  };
+
   return (
-    <PageWrapper>
+    <PageWrapper customLabels={customLabels}>
       {loading && <LoadingState title="Loading product..." />}
 
       {error && <ErrorState title="Error loading product" message={error} />}

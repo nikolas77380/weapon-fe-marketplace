@@ -68,7 +68,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </div>
           </div>
           <Link
-            href={`/profile/${product?.seller?.id}`}
+            href={`/company/${product?.seller?.id}`}
             className="border border-gray-primary py-2.5 px-5"
           >
             <p>View profile</p>
@@ -80,7 +80,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
             <TabsList className="bg-gray-primary w-full">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews(3)</TabsTrigger>
             </TabsList>
             <TabsContent value="description">
               <p className="text-lg font-light">
@@ -171,7 +170,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 </div>
               </div>
             </TabsContent>
-            <TabsContent value="reviews"></TabsContent>
           </Tabs>
         </div>
       </div>

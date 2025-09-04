@@ -3,6 +3,7 @@
 import React from "react";
 import ShopCard from "./ShopCard";
 import { Product } from "@/lib/types";
+import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import {
   Pagination,
   PaginationContent,
@@ -23,6 +24,7 @@ interface ShopContentProps {
   };
   onPageChange?: (page: number) => void;
   viewMode?: "grid" | "list";
+  loading?: boolean;
 }
 
 const ShopContent = ({
@@ -30,8 +32,9 @@ const ShopContent = ({
   pagination,
   onPageChange,
   viewMode = "grid",
+  loading = false,
 }: ShopContentProps) => {
-  if (products.length === 0) {
+  if (!loading && products.length === 0) {
     return (
       <div className="mb-12">
         <h2 className="text-xl font-semibold">0 Results</h2>
@@ -44,10 +47,14 @@ const ShopContent = ({
 
   return (
     <div className="mb-12">
-      <h2 className="text-xl font-semibold mb-4">
-        {pagination?.total || products.length}{" "}
-        {(pagination?.total || products.length) === 1 ? "Result" : "Results"}
-      </h2>
+      {loading ? (
+        <SkeletonComponent type="title" />
+      ) : (
+        <h2 className="text-xl font-semibold mb-4">
+          {pagination?.total || products.length}{" "}
+          {(pagination?.total || products.length) === 1 ? "Result" : "Results"}
+        </h2>
+      )}
       <div
         className={
           viewMode === "grid"
@@ -55,13 +62,17 @@ const ShopContent = ({
             : "flex flex-col gap-4"
         }
       >
-        {products.map((item) => (
-          <ShopCard item={item} key={item.id} viewMode={viewMode} />
-        ))}
+        {loading ? (
+          <SkeletonComponent type="productCard" count={6} className="w-full" />
+        ) : (
+          products.map((item) => (
+            <ShopCard item={item} key={item.id} viewMode={viewMode} />
+          ))
+        )}
       </div>
 
       {/* Pagination */}
-      {pagination && pagination.pageCount > 1 && (
+      {!loading && pagination && pagination.pageCount > 1 && (
         <div className="mt-12.5 flex items-center justify-center">
           <Pagination>
             <PaginationContent>
