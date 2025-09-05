@@ -76,7 +76,7 @@ const FavouriteCard = ({
             </div>
             <Link
               href={`/marketplace/${product.id}`}
-              className="text-foreground border border-muted-foreground/20 py-2 px-4 rounded-md hover:bg-accent-foreground hover:text-white transition-all duration-300"
+              className="py-2 px-4 rounded-md bg-button-main text-white hover:bg-button-main/90 duration-300 transition-all"
             >
               View Details →
             </Link>
@@ -152,10 +152,10 @@ const FavouriteCard = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-center mt-2">
+          <div className="flex items-center justify-center mt-3">
             <Link
               href={`/marketplace/${product.id}`}
-              className="text-sm text-foreground border border-muted-foreground/20 py-1 px-3 rounded-md hover:bg-accent-foreground hover:text-white transition-all duration-300"
+              className="py-1.5 px-3.5 text-sm rounded-md bg-button-main text-white hover:bg-button-main/90 duration-300 transition-all"
             >
               View Details →
             </Link>
