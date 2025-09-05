@@ -20,7 +20,7 @@ const FavouriteCard = ({
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-muted-foreground/20 rounded-lg flex flex-row">
+      <div className="bg-[#E7E7E7] flex flex-row">
         <div className="relative overflow-hidden">
           <Image
             src={
@@ -32,7 +32,7 @@ const FavouriteCard = ({
             width={200}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-[200px] h-full object-cover rounded-l-lg"
+            className="w-[200px] h-full object-cover"
           />
           {/* Favourite indicator */}
           <div className="absolute top-2 right-2">

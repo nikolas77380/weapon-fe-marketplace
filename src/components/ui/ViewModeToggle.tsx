@@ -25,7 +25,7 @@ const ViewModeToggle = ({
         <div
           onClick={onGridClick}
           className={`p-2 rounded-md cursor-pointer transition-colors duration-200 ${
-            viewMode === "grid" ? "bg-black" : "bg-[#D9D9D9] hover:bg-gray-300"
+            viewMode === "grid" ? "bg-[#FE4819]" : "bg-transparent hover:bg-[#E7E7E7]/90"
           }`}
         >
           <LayoutGrid
@@ -36,7 +36,7 @@ const ViewModeToggle = ({
         <div
           onClick={onListClick}
           className={`p-2 rounded-md cursor-pointer transition-colors duration-200 ${
-            viewMode === "list" ? "bg-black" : "bg-[#D9D9D9] hover:bg-gray-300"
+            viewMode === "list" ? "bg-[#FE4819]" : "bg-transparent hover:bg-[#E7E7E7]/90"
           }`}
         >
           <List

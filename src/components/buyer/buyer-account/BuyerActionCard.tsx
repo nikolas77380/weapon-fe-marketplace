@@ -3,15 +3,17 @@ import React from "react";
 interface BuyerActionCardProps {
   title: string;
   count?: number | string;
-  subTitle?: string;
+  icons?: React.ReactNode;
 }
 
-const BuyerActionCard = ({ title, count, subTitle }: BuyerActionCardProps) => {
+const BuyerActionCard = ({ title, count, icons }: BuyerActionCardProps) => {
   return (
-    <div className="border border-gray-primary rounded-lg p-3.5 gap-2.5 flex flex-col">
-      <p className="font-roboto font-light">{title}</p>
-      <p className="font-roboto font-medium text-xl">{count}</p>
-      <p className="font-roboto text-sm font-thin">{subTitle}</p>
+    <div className="bg-[#E7E7E7] p-3.5 gap-3.5 flex items-center">
+      {icons ? icons : null}
+      <div className="flex flex-col">
+        <p className="font-roboto font-medium text-xl">{count}</p>
+        <p className="font-roboto font-light">{title}</p>
+      </div>
     </div>
   );
 };
