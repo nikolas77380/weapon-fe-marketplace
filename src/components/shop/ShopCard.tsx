@@ -121,7 +121,9 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
                 </p>
               </div>
               <div>
-                <p className="text-xs font-bold text-[#D3D3D3]">1040 views</p>
+                <p className="text-xs font-bold text-[#D3D3D3]">
+                  {item.viewsCount} {item.viewsCount === 1 ? "view" : "views"}
+                </p>
               </div>
             </div>
             <Button
@@ -205,7 +207,9 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </div>
 
             <div>
-              <p className="text-xs font-bold text-[#D3D3D3]">1040 views</p>
+              <p className="text-xs font-bold text-[#D3D3D3]">
+                {item.viewsCount} {item.viewsCount === 1 ? "view" : "views"}
+              </p>
             </div>
           </div>
 
