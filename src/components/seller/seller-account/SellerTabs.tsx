@@ -34,7 +34,6 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
           <TabsTrigger value="myInquiries">My listings</TabsTrigger>
           <TabsTrigger value="savedItems">Analytics</TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
-          <TabsTrigger value="favourites">Favourites</TabsTrigger>
         </TabsList>
         <TabsContent value="myInquiries">
           <div className="mt-15">
@@ -154,7 +153,6 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="favourites"></TabsContent>
       </Tabs>
     </div>
   );
