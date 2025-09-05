@@ -1,14 +1,25 @@
+"use client";
+
+import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFavourites } from "@/hooks/useFavourites";
+import { useViewMode } from "@/hooks/useViewMode";
 import { MessageSquare } from "lucide-react";
 import React from "react";
+import NotFavouriteState from "./NotFavouriteState";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
 
 const BuyerAccountTabs = () => {
+  const { favourites } = useFavourites();
+  const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   return (
     <div className="mt-9">
       <Tabs defaultValue="myInquiries">
-        <TabsList className="bg-gray-primary">
+        <TabsList className="w-full border border-muted-foreground/20">
           <TabsTrigger value="myInquiries">My Inquiries</TabsTrigger>
-          <TabsTrigger value="savedItems">Saved Items</TabsTrigger>
+          <TabsTrigger value="favourites">
+            Favourites({favourites.length || 0})
+          </TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
@@ -95,6 +106,38 @@ const BuyerAccountTabs = () => {
               <p className="mt-5.5 font-medium font-roboto text-sm">
                 Thank you for your purchase!
               </p>
+            </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="favourites">
+          <div className="mt-7.5">
+            <ViewModeToggle
+              viewMode={viewMode}
+              onGridClick={toggleToGrid}
+              onListClick={toggleToList}
+              count={favourites.length || 0}
+              title="My Favourites Product"
+            />
+
+            {/* Favourites Content */}
+            <div
+              className={
+                viewMode === "grid"
+                  ? "grid md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6"
+                  : "flex flex-col gap-4"
+              }
+            >
+              {favourites.length > 0 ? (
+                favourites.map((favourite) => (
+                  <FavouriteCard
+                    key={favourite.id}
+                    favourite={favourite}
+                    viewMode={viewMode}
+                  />
+                ))
+              ) : (
+                <NotFavouriteState />
+              )}
             </div>
           </div>
         </TabsContent>

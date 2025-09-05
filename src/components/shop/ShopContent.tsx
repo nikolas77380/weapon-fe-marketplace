@@ -4,6 +4,7 @@ import React from "react";
 import ShopCard from "./ShopCard";
 import { Product } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import {
   Pagination,
   PaginationContent,
@@ -24,7 +25,9 @@ interface ShopContentProps {
   };
   onPageChange?: (page: number) => void;
   viewMode?: "grid" | "list";
+  onViewModeChange?: (viewMode: "grid" | "list") => void;
   loading?: boolean;
+  showViewToggle?: boolean;
 }
 
 const ShopContent = ({
@@ -32,7 +35,9 @@ const ShopContent = ({
   pagination,
   onPageChange,
   viewMode = "grid",
+  onViewModeChange,
   loading = false,
+  showViewToggle = false,
 }: ShopContentProps) => {
   if (!loading && products.length === 0) {
     return (
@@ -47,7 +52,15 @@ const ShopContent = ({
 
   return (
     <div className="mb-12">
-      {loading ? (
+      {showViewToggle && onViewModeChange ? (
+        <ViewModeToggle
+          viewMode={viewMode}
+          onGridClick={() => onViewModeChange("grid")}
+          onListClick={() => onViewModeChange("list")}
+          count={pagination?.total || products.length}
+          title="Products"
+        />
+      ) : loading ? (
         <SkeletonComponent type="title" />
       ) : (
         <h2 className="text-xl font-semibold mb-4">
