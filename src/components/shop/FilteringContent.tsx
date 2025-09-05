@@ -168,7 +168,12 @@ const FilteringContent = () => {
           />
         </div>
         {/* Sorting */}
-        <Sorting onSortChange={handleSortChange} selectedSort={filters.sort} />
+        <Sorting
+          onSortChange={handleSortChange}
+          selectedSort={filters.sort}
+          onViewChange={setViewMode}
+          selectedView={viewMode}
+        />
       </div>
       {/* Shop Filtering Content */}
       <div className="mt-12 flex gap-12 h-full w-full">
@@ -188,9 +193,7 @@ const FilteringContent = () => {
             pagination={paginationData}
             onPageChange={handlePageChange}
             viewMode={viewMode}
-            onViewModeChange={setViewMode}
             loading={loading}
-            showViewToggle={true}
           />
         </div>
       </div>
