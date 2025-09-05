@@ -195,6 +195,19 @@ export const getCurrentUser = async (
   return response;
 };
 
+export const getUserById = async (
+  userId: number,
+  token: string
+): Promise<ApiResponse<UserProfile>> => {
+  const response = await strapiFetchAuth({
+    path: `/api/users/${userId}?populate[metadata]=true&populate[role]=true`,
+    method: "GET",
+    token,
+  });
+
+  return response;
+};
+
 export const updateProfile = async (
   token: string,
   data: Partial<UserProfile>

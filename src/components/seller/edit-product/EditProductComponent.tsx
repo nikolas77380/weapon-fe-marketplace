@@ -7,7 +7,7 @@ import { UserProfile } from "@/lib/types";
 import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
 import NotFoundState from "@/components/ui/NotFoundState";
-import EditPageWrapper from "@/components/ui/EditPageWrapper";
+import EditPageWrapper from "@/components/ui/PageWrapper";
 
 interface EditProductComponentProps {
   productSlug: string;

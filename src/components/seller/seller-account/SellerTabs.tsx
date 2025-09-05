@@ -7,10 +7,12 @@ import { Message } from "@/types/message";
 import { mockMessages } from "@/mockup/messages";
 import Link from "next/link";
 import { UserProfile } from "@/lib/types";
+import SkeletonComponent from "@/components/ui/SkeletonComponent";
 
 const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
-
-  const { products, refetch } = useProducts({ seller: currentUser.id });
+  const { products, loading, refetch } = useProducts({
+    seller: currentUser.id,
+  });
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
   const handleProductDeleted = () => {
@@ -28,10 +30,11 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
   return (
     <div className="mt-9">
       <Tabs defaultValue="myInquiries">
-        <TabsList className="bg-gray-primary gap-5">
+        <TabsList className="border border-muted-foreground/20 w-full">
           <TabsTrigger value="myInquiries">My listings</TabsTrigger>
           <TabsTrigger value="savedItems">Analytics</TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="favourites">Favourites</TabsTrigger>
         </TabsList>
         <TabsContent value="myInquiries">
           <div className="mt-15">
@@ -40,13 +43,17 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
               Manage your product listings and inventory
             </p>
             <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
-              {products.map((product) => (
-                <SellerListenedCard
-                  key={product.id}
-                  product={product}
-                  onProductDeleted={handleProductDeleted}
-                />
-              ))}
+              {loading ? (
+                <SkeletonComponent type="sellerCard" count={3} className="w-full" />
+              ) : (
+                products.map((product) => (
+                  <SellerListenedCard
+                    key={product.id}
+                    product={product}
+                    onProductDeleted={handleProductDeleted}
+                  />
+                ))
+              )}
             </div>
           </div>
         </TabsContent>
@@ -147,6 +154,7 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
             </div>
           </div>
         </TabsContent>
+        <TabsContent value="favourites"></TabsContent>
       </Tabs>
     </div>
   );

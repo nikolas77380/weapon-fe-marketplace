@@ -6,12 +6,14 @@ interface PageWrapperProps {
   children: React.ReactNode;
   currentUser?: UserProfile;
   breadcrumbClassName?: string;
+  customLabels?: Record<string, string>;
 }
 
-const EditPageWrapper = ({
+const PageWrapper = ({
   children,
   currentUser,
   breadcrumbClassName = "mt-4 mb-10",
+  customLabels = {},
 }: PageWrapperProps) => {
   return (
     <div className="w-full min-h-screen h-full">
@@ -22,10 +24,15 @@ const EditPageWrapper = ({
             className={breadcrumbClassName}
           />
         )}
+        <BreadcrumbComponent
+          currentUser={currentUser}
+          className={breadcrumbClassName}
+          customLabels={customLabels}
+        />
         {children}
       </div>
     </div>
   );
 };
 
-export default EditPageWrapper;
+export default PageWrapper;

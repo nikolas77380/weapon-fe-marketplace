@@ -30,7 +30,7 @@ const FilteringContent = () => {
     view: "grid",
   });
 
-  const { products: allProducts } = useProducts({
+  const { products: allProducts, loading } = useProducts({
     search: filters.search !== "" ? filters.search : undefined,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
   });
@@ -197,6 +197,7 @@ const FilteringContent = () => {
             pagination={paginationData}
             onPageChange={handlePageChange}
             viewMode={filters.view}
+            loading={loading}
           />
         </div>
       </div>

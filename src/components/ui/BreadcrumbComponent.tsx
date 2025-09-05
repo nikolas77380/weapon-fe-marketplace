@@ -15,23 +15,25 @@ import { generateBreadcrumbs } from "@/lib/breadcrumbs";
 import { UserProfile } from "@/lib/types";
 
 interface BreadcrumbComponentProps {
-  currentUser: UserProfile;
+  currentUser?: UserProfile;
   className?: string;
+  customLabels?: Record<string, string>; // Для кастомных названий сегментов
 }
 
 const BreadcrumbComponent = ({
   currentUser,
   className,
+  customLabels = {},
 }: BreadcrumbComponentProps) => {
   const pathname = usePathname();
-  const crumbs = generateBreadcrumbs(pathname);
+  const crumbs = generateBreadcrumbs(pathname, customLabels);
 
   return (
     <Breadcrumb className={className}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href={currentUser ? "/marketplace" : "/"}>Home</Link>
+            <Link href="/marketplace">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map(({ href, label, isLast, isClickable }) => (

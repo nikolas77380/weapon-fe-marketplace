@@ -1,26 +1,27 @@
 "use client";
 
-import EditPageWrapper from "@/components/ui/EditPageWrapper";
 import ErrorState from "@/components/ui/ErrorState";
 import LoadingState from "@/components/ui/LoadingState";
 import NotFoundState from "@/components/ui/NotFoundState";
 import { useProduct } from "@/hooks/useProducts";
-import { UserProfile } from "@/lib/types";
 import ProductDetail from "./ProductDetail";
+import PageWrapper from "@/components/ui/PageWrapper";
 
 interface DetailProductPageComponentProps {
   productId: number;
-  currentUser: UserProfile;
 }
 
 const DetailProductPageComponent = ({
   productId,
-  currentUser,
 }: DetailProductPageComponentProps) => {
   const { product, loading, error } = useProduct(productId);
 
+  const customLabels = {
+    [productId.toString()]: product?.title || "Product",
+  };
+
   return (
-    <EditPageWrapper currentUser={currentUser}>
+    <PageWrapper customLabels={customLabels}>
       {loading && <LoadingState title="Loading product..." />}
 
       {error && <ErrorState title="Error loading product" message={error} />}
@@ -33,7 +34,7 @@ const DetailProductPageComponent = ({
       )}
 
       {!loading && !error && product && <ProductDetail product={product} />}
-    </EditPageWrapper>
+    </PageWrapper>
   );
 };
 

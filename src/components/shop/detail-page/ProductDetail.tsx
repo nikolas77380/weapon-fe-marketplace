@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart } from "lucide-react";
 import FavouriteButton from "@/components/ui/FavouriteButton";
+import { useSellerData } from "@/hooks/useSellerData";
 
 const ProductDetail = ({ product }: { product: Product }) => {
+  const { sellerData } = useSellerData(product?.seller?.id);
+
   return (
     <div className="flex gap-9 w-full">
       {/* Images */}
@@ -49,14 +51,24 @@ const ProductDetail = ({ product }: { product: Product }) => {
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <p className="font-medium text-xl">
-                {product?.seller?.username || "User"}
+              {/* Company name */}
+              {sellerData?.metadata?.companyName && (
+                <p className="text-sm text-gray-600">
+                  {sellerData.metadata.companyName}
+                </p>
+              )}
+              {/* Country */}
+              <p className="text-sm">
+                {sellerData?.metadata?.country ? (
+                  sellerData.metadata.country
+                ) : (
+                  <span className="text-gray-400">Country not available</span>
+                )}
               </p>
-              <p className="text-sm">{product?.seller?.metadata?.country}UK</p>
             </div>
           </div>
           <Link
-            href={`/profile/${product?.seller?.id}`}
+            href={`/company/${product?.seller?.id}`}
             className="border border-gray-primary py-2.5 px-5"
           >
             <p>View profile</p>
@@ -68,7 +80,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
             <TabsList className="bg-gray-primary w-full">
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews(3)</TabsTrigger>
             </TabsList>
             <TabsContent value="description">
               <p className="text-lg font-light">
@@ -159,7 +170,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 </div>
               </div>
             </TabsContent>
-            <TabsContent value="reviews"></TabsContent>
           </Tabs>
         </div>
       </div>
