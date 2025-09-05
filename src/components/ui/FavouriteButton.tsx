@@ -3,6 +3,12 @@
 import React from "react";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useFavourites } from "@/hooks/useFavourites";
 
@@ -32,35 +38,46 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
     lg: "h-12 w-12",
   };
 
+  const tooltipText = isFavourited(productId)
+    ? "Remove from Favourites"
+    : "Add to Favourite";
+
   return (
-    <Button
-      variant={variant}
-      size="sm"
-      className={cn(
-        "rounded-full transition-all duration-200",
-        sizeClasses[size],
-        isFavourited(productId) && "text-red-500 hover:text-red-600",
-        !isFavourited(productId) && "text-gray-400 hover:text-red-500",
-        className
-      )}
-      onClick={handleToggleFavourite}
-      disabled={loading}
-      aria-label={
-        isFavourited(productId) ? "Remove from favourites" : "Add to favourites"
-      }
-    >
-      {loading ? (
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
-      ) : (
-        <Heart
-          size={size === "sm" ? 16 : size === "md" ? 18 : 48}
-          className={cn(
-            "transition-all duration-200",
-            isFavourited(productId) && "fill-current"
-          )}
-        />
-      )}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant={variant}
+            size="sm"
+            className={cn(
+              "rounded-full transition-all duration-200",
+              sizeClasses[size],
+              isFavourited(productId) && "text-red-500 hover:text-red-600",
+              !isFavourited(productId) && "text-gray-400 hover:text-red-500",
+              className
+            )}
+            onClick={handleToggleFavourite}
+            disabled={loading}
+            aria-label={tooltipText}
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+            ) : (
+              <Heart
+                size={size === "sm" ? 16 : size === "md" ? 18 : 48}
+                className={cn(
+                  "transition-all duration-200",
+                  isFavourited(productId) && "fill-current"
+                )}
+              />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{tooltipText}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
