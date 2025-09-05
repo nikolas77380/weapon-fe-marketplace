@@ -5,6 +5,7 @@ import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
+import { useViewMode } from "@/hooks/useViewMode";
 import Sorting from "./Sorting";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
@@ -16,10 +17,10 @@ interface FilterState {
   search: string;
   page: number;
   sort: string;
-  view: "grid" | "list";
 }
 
 const FilteringContent = () => {
+  const { viewMode, setViewMode } = useViewMode("grid");
   const [filters, setFilters] = useState<FilterState>({
     minPrice: 1,
     maxPrice: 500000,
@@ -27,7 +28,6 @@ const FilteringContent = () => {
     search: "",
     page: 1,
     sort: "id:desc",
-    view: "grid",
   });
 
   const { products: allProducts, loading } = useProducts({
@@ -135,10 +135,6 @@ const FilteringContent = () => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
   };
 
-  const handleViewChange = (view: "grid" | "list") => {
-    setFilters((prev) => ({ ...prev, view }));
-  };
-
   const handleClearAll = () => {
     setFilters({
       minPrice: 1,
@@ -147,8 +143,8 @@ const FilteringContent = () => {
       search: "",
       page: 1,
       sort: "id:desc",
-      view: "grid",
     });
+    setViewMode("grid");
   };
 
   return (
@@ -175,8 +171,8 @@ const FilteringContent = () => {
         <Sorting
           onSortChange={handleSortChange}
           selectedSort={filters.sort}
-          onViewChange={handleViewChange}
-          selectedView={filters.view}
+          onViewChange={setViewMode}
+          selectedView={viewMode}
         />
       </div>
       {/* Shop Filtering Content */}
@@ -196,7 +192,7 @@ const FilteringContent = () => {
             products={paginatedProducts}
             pagination={paginationData}
             onPageChange={handlePageChange}
-            viewMode={filters.view}
+            viewMode={viewMode}
             loading={loading}
           />
         </div>

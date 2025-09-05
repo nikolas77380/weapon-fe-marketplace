@@ -14,6 +14,7 @@ import Sorting from "../shop/Sorting";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
+import { useViewMode } from "@/hooks/useViewMode";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -24,6 +25,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     sellerData.id
   );
 
+  // View mode hook
+  const { viewMode, setViewMode } = useViewMode("grid");
+
   // Filters state for products tab
   const [filters, setFilters] = useState({
     minPrice: 1,
@@ -32,7 +36,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     search: "",
     page: 1,
     sort: "id:desc",
-    view: "grid" as "grid" | "list",
   });
 
   // Local loading state for products tab
@@ -178,10 +181,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
   };
 
-  const handleViewChange = (view: "grid" | "list") => {
-    setFilters((prev) => ({ ...prev, view }));
-  };
-
   const handleClearAll = () => {
     setFilters({
       minPrice: 1,
@@ -190,8 +189,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       search: "",
       page: 1,
       sort: "id:desc",
-      view: "grid",
     });
+    setViewMode("grid");
   };
 
   // Tab switching handler
@@ -430,8 +429,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       <Sorting
                         onSortChange={handleSortChange}
                         selectedSort={filters.sort}
-                        onViewChange={handleViewChange}
-                        selectedView={filters.view}
+                        onViewChange={setViewMode}
+                        selectedView={viewMode}
                       />
                     </>
                   )}
@@ -480,7 +479,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           products={paginatedProducts}
                           pagination={paginationData}
                           onPageChange={handlePageChange}
-                          viewMode={filters.view}
+                          viewMode={viewMode}
                           loading={false}
                         />
                       </div>

@@ -7,6 +7,7 @@ import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
+import { formatPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 
 interface ShopCardProps {
@@ -95,7 +96,9 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               <div className="px-2.5 py-0.5 bg-[#D9D9D9] rounded-sm">
                 <p className="text-xs">{item.category?.name}</p>
               </div>
-              <p className="text-lg font-semibold">{item.price}$</p>
+              <p className="text-lg font-semibold">
+                {formatPrice(item.price, "$")}
+              </p>
             </div>
             <p className="font-extrabold text-lg mb-2">{item.title}</p>
             <p className="font-light text-sm text-gray-600 mb-4">
@@ -184,7 +187,9 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <div className="px-2.5 py-0.5 bg-[#D9D9D9] rounded-sm">
             <p className="text-xs">{item.category?.name}</p>
           </div>
-          <p className="text-sm font-semibold">{item.price}$</p>
+          <p className="text-sm font-semibold">
+            {formatPrice(item.price, "$")}
+          </p>
         </div>
 
         <div className="flex flex-col gap-2 mt-6.5">

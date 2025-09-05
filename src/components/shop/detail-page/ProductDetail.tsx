@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
+import { formatPrice } from "@/lib/formatUtils";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const { sellerData } = useSellerData(product?.seller?.id);
@@ -34,7 +35,9 @@ const ProductDetail = ({ product }: { product: Product }) => {
         <div className="flex items-center justify-between mt-5">
           {/* Price */}
           {product.price && (
-            <span className="font-medium text-[25px]">${product?.price}</span>
+            <span className="font-medium text-[25px]">
+              {formatPrice(product.price, "$")}
+            </span>
           )}
           {/* Contact Seller */}
           <Button className="py-3 px-6 bg-black text-white rounded-md">
