@@ -9,7 +9,7 @@ interface ViewModeToggleProps {
   title?: string;
 }
 
-const ViewFavouriteModeToggle = ({
+const ViewModeToggle = ({
   viewMode,
   onGridClick,
   onListClick,
@@ -49,4 +49,4 @@ const ViewFavouriteModeToggle = ({
   );
 };
 
-export default ViewFavouriteModeToggle;
+export default ViewModeToggle;

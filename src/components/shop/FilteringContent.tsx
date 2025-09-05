@@ -135,10 +135,6 @@ const FilteringContent = () => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
   };
 
-  const handleViewChange = (view: "grid" | "list") => {
-    setViewMode(view);
-  };
-
   const handleClearAll = () => {
     setFilters({
       minPrice: 1,
@@ -172,12 +168,7 @@ const FilteringContent = () => {
           />
         </div>
         {/* Sorting */}
-        <Sorting
-          onSortChange={handleSortChange}
-          selectedSort={filters.sort}
-          onViewChange={handleViewChange}
-          selectedView={viewMode}
-        />
+        <Sorting onSortChange={handleSortChange} selectedSort={filters.sort} />
       </div>
       {/* Shop Filtering Content */}
       <div className="mt-12 flex gap-12 h-full w-full">
@@ -197,7 +188,9 @@ const FilteringContent = () => {
             pagination={paginationData}
             onPageChange={handlePageChange}
             viewMode={viewMode}
+            onViewModeChange={setViewMode}
             loading={loading}
+            showViewToggle={true}
           />
         </div>
       </div>

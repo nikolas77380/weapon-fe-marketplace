@@ -7,7 +7,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import { MessageSquare } from "lucide-react";
 import React from "react";
 import NotFavouriteState from "./NotFavouriteState";
-import ViewFavouriteModeToggle from "@/components/ui/ViewFavouriteModeToggle";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
 
 const BuyerAccountTabs = () => {
   const { favourites } = useFavourites();
@@ -111,7 +111,7 @@ const BuyerAccountTabs = () => {
         </TabsContent>
         <TabsContent value="favourites">
           <div className="mt-7.5">
-            <ViewFavouriteModeToggle
+            <ViewModeToggle
               viewMode={viewMode}
               onGridClick={toggleToGrid}
               onListClick={toggleToList}
