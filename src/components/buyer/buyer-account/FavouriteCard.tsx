@@ -20,7 +20,7 @@ const FavouriteCard = ({
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-muted-foreground/20 rounded-lg flex flex-row">
+      <div className="bg-[#E7E7E7] flex flex-row">
         <div className="relative overflow-hidden">
           <Image
             src={
@@ -32,7 +32,7 @@ const FavouriteCard = ({
             width={200}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-[200px] h-full object-cover rounded-l-lg"
+            className="w-[200px] h-full object-cover"
           />
           {/* Favourite indicator */}
           <div className="absolute top-2 right-2">
@@ -76,7 +76,7 @@ const FavouriteCard = ({
             </div>
             <Link
               href={`/marketplace/${product.id}`}
-              className="text-foreground border border-muted-foreground/20 py-2 px-4 rounded-md hover:bg-accent-foreground hover:text-white transition-all duration-300"
+              className="py-2 px-4 rounded-md bg-button-main text-white hover:bg-button-main/90 duration-300 transition-all"
             >
               View Details →
             </Link>
@@ -152,10 +152,10 @@ const FavouriteCard = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-center mt-2">
+          <div className="flex items-center justify-center mt-3">
             <Link
               href={`/marketplace/${product.id}`}
-              className="text-sm text-foreground border border-muted-foreground/20 py-1 px-3 rounded-md hover:bg-accent-foreground hover:text-white transition-all duration-300"
+              className="py-1.5 px-3.5 text-sm rounded-md bg-button-main text-white hover:bg-button-main/90 duration-300 transition-all"
             >
               View Details →
             </Link>

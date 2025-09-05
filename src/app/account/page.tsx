@@ -1,6 +1,6 @@
-import BuyerAccountHeader from "@/components/buyer/buyer-account/BuyerAccountHeader";
 import BuyerAccountTabs from "@/components/buyer/buyer-account/BuyerAccountTabs";
 import SellerAccount from "@/components/seller/seller-account";
+import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { requireAuth } from "@/lib/server-auth";
 import { isBuyer, isSeller } from "@/lib/utils";
 import React from "react";
@@ -13,8 +13,11 @@ const BuyerAccountPage = async () => {
       <div className="container mx-auto">
         {isBuyer(currentUser) && (
           <>
-            <BuyerAccountHeader currentUser={currentUser} />
-            <BuyerAccountTabs />
+            <BreadcrumbComponent
+              currentUser={currentUser}
+              className="mt-4 mb-10"
+            />
+            <BuyerAccountTabs currentUser={currentUser} />
           </>
         )}
         {isSeller(currentUser) && (
