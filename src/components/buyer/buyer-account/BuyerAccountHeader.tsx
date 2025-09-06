@@ -18,12 +18,12 @@ const BuyerAccountHeader = ({
 }: BuyerAccountHeaderProps) => {
   return (
     <div className="flex flex-col">
-      <div className="flex items-center justify-between border-l-2 border-button-main">
+      <div className="flex items-center justify-between border-l-2 border-gold-main">
         <p className="text-2xl font-medium ml-5">Buyer Details</p>
         <div>
           <Link
             href={"/marketplace"}
-            className="p-2.5 px-5 text-xl font-medium rounded-none bg-button-main text-white hover:bg-button-main/90
+            className="p-2.5 px-5 text-xl font-medium rounded-none bg-gold-main text-white hover:bg-gold-main/90
             duration-300 transition-all"
           >
             Browse marketplace

@@ -1,5 +1,7 @@
 "use client";
 
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 interface AuthSwitcherProps {
   authMode: "login" | "register";
   onAuthModeChange: (mode: "login" | "register") => void;
@@ -7,18 +9,24 @@ interface AuthSwitcherProps {
 
 const AuthSwitcher = ({ authMode, onAuthModeChange }: AuthSwitcherProps) => {
   return (
-    <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-      <input
-        type="checkbox"
-        id="filter"
-        checked={authMode === "register"}
-        onChange={(e) =>
-          onAuthModeChange(e.target.checked ? "register" : "login")
+    <div className="px-3.5">
+      <Tabs
+        value={authMode}
+        onValueChange={(value) =>
+          onAuthModeChange(value as "login" | "register")
         }
-      />
-      <span>Login</span>
-      <span>Register</span>
-    </label>
+        className="w-full mt-6 border border-border-foreground "
+      >
+        <TabsList className="grid w-full h-11 grid-cols-2 bg-gray-primary">
+          <TabsTrigger value="login" className="text-lg font-normal">
+            Login
+          </TabsTrigger>
+          <TabsTrigger value="register" className="text-lg font-normal">
+            Register
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+    </div>
   );
 };
 
