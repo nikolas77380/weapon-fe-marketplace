@@ -530,12 +530,31 @@ export const createCertificate = async ({
 
   // If files are provided, use FormData for file upload
   if (files && files.length > 0) {
+    console.log("Creating certificate with files:", files);
     const formData = new FormData();
-    formData.append("data", JSON.stringify(data));
 
-    files.forEach((file, index) => {
-      formData.append(`files.certificateFile`, file);
-    });
+    // Create the data object with proper structure
+    const certificateData = {
+      title: data.title,
+      description: data.description,
+      certificateType: data.certificateType,
+      issuedBy: data.issuedBy,
+      issuedDate: data.issuedDate,
+      expiryDate: data.expiryDate,
+      certificateNumber: data.certificateNumber,
+      status: data.status || "active",
+      product: data.product,
+    };
+
+    formData.append("data", JSON.stringify(certificateData));
+
+    // Since certificateFile is single file (not multiple), we only take the first file
+    const file = files[0];
+    console.log(`Adding certificate file:`, file.name, file.size);
+    formData.append(`files.certificateFile`, file);
+
+    console.log("FormData created, sending to Strapi...");
+    console.log("Certificate data:", certificateData);
 
     return strapiFetchAuth({
       path: "/api/certificates",
@@ -546,11 +565,25 @@ export const createCertificate = async ({
   }
 
   // Otherwise, use regular JSON request
+  const certificateData = {
+    title: data.title,
+    description: data.description,
+    certificateType: data.certificateType,
+    issuedBy: data.issuedBy,
+    issuedDate: data.issuedDate,
+    expiryDate: data.expiryDate,
+    certificateNumber: data.certificateNumber,
+    status: data.status || "active",
+    product: data.product,
+  };
+
+  console.log("Creating certificate with JSON:", certificateData);
+
   return strapiFetchAuth({
     path: "/api/certificates",
     method: "POST",
     body: {
-      data,
+      data: certificateData,
     },
     token,
   });
