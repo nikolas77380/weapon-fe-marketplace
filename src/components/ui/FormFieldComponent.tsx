@@ -29,7 +29,7 @@ interface SelectOption {
 interface FormFieldComponentProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
-  label: string;
+  label: string | React.ReactNode;
   type?: FieldType;
   placeholder?: string;
   className?: string;
@@ -76,21 +76,26 @@ function FormFieldComponent<T extends FieldValues>({
     switch (type) {
       case "input":
         return (
-          <Input
-            type={inputType}
-            placeholder={placeholder}
-            className={className}
-            min={min}
-            step={step}
-            autoComplete={autoComplete}
-            {...field}
-            onChange={
-              customOnChange
-                ? (e) => customOnChange(e, field.onChange)
-                : field.onChange
-            }
-            onFocus={customOnFocus}
-          />
+          <div className="relative">
+            <label className="absolute bg-primary-foreground px-2 left-2 -top-3 text-sm">
+              {label}
+            </label>
+            <Input
+              type={inputType}
+              placeholder={placeholder}
+              className={className}
+              min={min}
+              step={step}
+              autoComplete={autoComplete}
+              {...field}
+              onChange={
+                customOnChange
+                  ? (e) => customOnChange(e, field.onChange)
+                  : field.onChange
+              }
+              onFocus={customOnFocus}
+            />
+          </div>
         );
 
       case "textarea":
@@ -140,7 +145,7 @@ function FormFieldComponent<T extends FieldValues>({
               htmlFor={String(name)}
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
-              {label}
+              {typeof label === "string" ? label : label}
             </label>
           </div>
         );
@@ -156,7 +161,9 @@ function FormFieldComponent<T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className={itemClassName}>
-          {type !== "checkbox" && <FormLabel>{label}</FormLabel>}
+          {type !== "checkbox" && type !== "input" && (
+            <FormLabel>{label}</FormLabel>
+          )}
           <FormControl>{renderField(field)}</FormControl>
           <FormMessage />
         </FormItem>

@@ -256,7 +256,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
               </p>
             </div>
           </div>
-          <Button className="border py-2.5 px-5 rounded-none bg-button-main hover:bg-button-main/80 duration-300 transition-colors">
+          <Button className="border py-2.5 px-5 rounded-none bg-gold-main hover:bg-gold-main/80 duration-300 transition-colors">
             Contact Seller
           </Button>
         </div>

@@ -4,7 +4,6 @@ import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { RegisterFormValues } from "@/schemas/registerSchema";
-import { SellerFormValues } from "@/schemas/sellerSchema";
 import { LoginFormValues } from "@/schemas/loginSchema";
 import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
@@ -20,6 +19,8 @@ import {
 } from "@/lib/auth";
 import { useAuthContext } from "@/context/AuthContext";
 import { isSeller } from "@/lib/utils";
+import Logo from "@/components/ui/Logo";
+import { Tag, User } from "lucide-react";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
@@ -60,7 +61,7 @@ const AuthPage = () => {
       console.log("User is already authenticated");
       router.push("/marketplace");
     }
-  }, []);
+  }, [router]);
 
   const handleAuthMode = (mode: "login" | "register") => {
     setAuthMode(mode);
@@ -136,84 +137,109 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="h-full w-full mb-20">
-      <div className="max-w-xl mx-auto">
+    <div className="min-h-screen h-full w-full relative pt-30 pb-22 z-1">
+      <div className="absolute inset-0 z-[-1] bg-[#e7e7e7]">
+        <Image
+          src="/auth/bg.png"
+          alt="bg"
+          fill
+          className="object-cover mix-blend-exclusion w-full h-full"
+        />
+      </div>
+      <div className="container mx-auto flex items-start">
         {/* Breadcrumb */}
         <Breadcrumb />
-        <div className="border border-black mt-5 flex flex-col py-7 px-12 rounded-3xl">
-          <div className="flex flex-col items-center justify-center text-center">
-            <h1
-              className="text-xl size-16 font-bold rounded-full border border-black flex items-center 
-              justify-center"
-            >
-              <span>WM</span>
-            </h1>
-            <h2 className="font-semibold text-2xl font-roboto mt-8">Join WM</h2>
-            <p className="mt-3.5 font-roboto text-xl text-[#B1ADAD] max-w-[310px] text-center">
-              access the premier marketplace for weapon
-            </p>
+
+        <div className="mx-auto max-w-170">
+          <div className="flex justify-center">
+            <Logo href="/" />
           </div>
-          {/* Switcher */}
-          <AuthSwitcher authMode={authMode} onAuthModeChange={handleAuthMode} />
-          {/* Content */}
-          {authMode === "register" && (
-            <>
-              <Label className="mt-11">Account type</Label>
-              <div className="flex items-center justify-between gap-11 mt-5">
-                {/* Buyer */}
-                <div
-                  onClick={() => handleTypeChange("buyer")}
-                  className={`border flex flex-col items-center justify-center pt-2.5 pb-4.5 px-2.5 rounded-md cursor-pointer transition-colors
+          <div
+            className={`border border-border-foreground ${
+              authMode === "login" ? "mt-41" : "mt-6"
+            } flex flex-col bg-primary-foreground w-170`}
+          >
+            <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground">
+              <h2 className="font-medium text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
+                Join Esviem Defence
+              </h2>
+              <p className="mt-2.5 mb-3.5 font-light text-center">
+                Access the premier marketplace for weapon
+              </p>
+            </div>
+            <div className="w-full">
+              {/* Switcher */}
+              <AuthSwitcher
+                authMode={authMode}
+                onAuthModeChange={handleAuthMode}
+              />
+              {/* Content */}
+              {authMode === "register" && (
+                <>
+                  <div className="flex flex-col px-3.5">
+                    <Label className="mt-6 font-light">Account type</Label>
+                    <div className="flex mt-3.5 w-full">
+                      {/* Buyer */}
+                      <div
+                        onClick={() => handleTypeChange("buyer")}
+                        className={`border w-full flex flex-col items-center justify-center py-2.5 px-3.5 cursor-pointer transition-colors
                     ${
                       activeType === "buyer"
-                        ? "border-black bg-gray-primary"
-                        : "border-[#D3D3D3] bg-transparent"
+                        ? "bg-gold-main text-white"
+                        : "border-border-foreground bg-transparent text-muted-foreground"
                     }`}
-                >
-                  <Image
-                    src="/auth/user-auth.svg"
-                    alt="user-auth"
-                    width={50}
-                    height={50}
-                    className="size-8"
-                  />
-                  <h1 className="mt-1 font-bold">Buyer</h1>
-                  <p className="mt-3.5 text-[10px] max-w-[166px] text-center">
-                    Law enforcement, military, security professionals
-                  </p>
-                </div>
-                {/* Seller */}
-                <div
-                  onClick={() => handleTypeChange("seller")}
-                  className={`border flex flex-col items-center justify-center pt-2.5 pb-4.5 px-2.5 rounded-md cursor-pointer transition-colors
+                      >
+                        <User className="size-8" strokeWidth={0.5} />
+                        <h1 className="mt-2.5 font-lg">Buyer</h1>
+                        <p className="mt-1 text-sm text-center font-light max-w-73">
+                          Law enforcement, military, security professionals
+                        </p>
+                      </div>
+                      {/* Seller */}
+                      <div
+                        onClick={() => handleTypeChange("seller")}
+                        className={`border w-full flex flex-col items-center justify-center py-2.5 px-3.5 cursor-pointer transition-colors
                     ${
                       activeType === "seller"
-                        ? "border-black bg-gray-primary"
-                        : "border-[#D3D3D3] bg-transparent"
+                        ? "bg-gold-main text-white"
+                        : "border-border-foreground bg-transparent text-muted-foreground"
                     }`}
-                >
-                  <Image
-                    src="/auth/briefcase.svg"
-                    alt="user-auth"
-                    width={50}
-                    height={50}
-                    className="size-8"
-                  />
-                  <h1 className="mt-1 font-bold">Seller</h1>
-                  <p className="mt-3.5 text-[10px] max-w-[166px] text-center">
-                    Licensed dealers, manufacturers, suppliers
-                  </p>
-                </div>
-              </div>
+                      >
+                        <Tag className="size-8 rotate-90" strokeWidth={0.5} />
+                        <h1 className="mt-2.5 font-lg">Seller</h1>
+                        <p className="mt-1 text-sm text-center font-light max-w-73">
+                          Law enforcement, military, security professionals
+                        </p>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Forms */}
-              <div className="mt-8">
-                <RegisterForm onSubmit={onRegistrationSubmit} />
-              </div>
-            </>
-          )}
+                  {/* Forms */}
+                  <div className="mt-6">
+                    <RegisterForm onSubmit={onRegistrationSubmit} />
+                    <div className="text-center flex items-center justify-center py-3.5 border-t border-border-foreground w-full">
+                      <p className="text-xs font-light">
+                        By creating an account, you agree to comply with all
+                        federal, state, and local laws regarding the sale and
+                        transfer of tactical equipment.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
 
-          {authMode === "login" && <LoginForm onSubmit={onLoginSubmit} />}
+              {authMode === "login" && (
+                <>
+                  <LoginForm onSubmit={onLoginSubmit} />
+                  <div className="text-center flex items-center justify-center border-t border-border-foreground w-full">
+                    <p className="text-sm font-light flex py-3.5">
+                      Secure authentication with industry-standard encryption
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

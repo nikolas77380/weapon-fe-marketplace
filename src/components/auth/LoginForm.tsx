@@ -22,44 +22,48 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-8">
-        <FormFieldComponent
-          control={form.control}
-          name="email"
-          label="Email"
-          type="input"
-          inputType="email"
-          placeholder="test@gmail.com"
-          autoComplete="email"
-        />
+    <div className="select-none mb-6 px-3.5">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-8">
+          <FormFieldComponent
+            control={form.control}
+            name="email"
+            label="Email"
+            type="input"
+            inputType="email"
+            placeholder="example@gmail.com"
+            autoComplete="email"
+            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
 
-        <FormFieldComponent
-          control={form.control}
-          name="password"
-          label="Password"
-          type="input"
-          inputType="password"
-          placeholder="password"
-          autoComplete="current-password"
-        />
+          <FormFieldComponent
+            control={form.control}
+            name="password"
+            label="Password"
+            type="input"
+            inputType="password"
+            placeholder="********"
+            autoComplete="current-password"
+            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+          />
 
-        <div className="flex items-center justify-center">
-          <Button
-            type="submit"
-            className="px-19 py-2.5 font-medium font-roboto text-xl"
-          >
-            Sign In
-          </Button>
-        </div>
+          <div className="w-full flex justify-end">
+            <Link href="#" className="underline font-light text-sm">
+              Forgot password
+            </Link>
+          </div>
 
-        <div className="text-center">
-          <Link href="#" className="text-blue-600 hover:underline">
-            Forgot password
-          </Link>
-        </div>
-      </form>
-    </Form>
+          <div className="flex items-center justify-center">
+            <Button
+              type="submit"
+              className="w-full font-medium py-3 rounded-none text-white bg-gold-main hover:bg-gold-main/90 duration-300 transition-all"
+            >
+              Sign In
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 };
 
