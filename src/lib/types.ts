@@ -127,6 +127,7 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  viewsCount: number;
 }
 
 export interface Tag {
