@@ -1,4 +1,4 @@
-import { Product } from "@/lib/types";
+import { ImageType, Product } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { Ellipsis, Eye, MessageSquare, SquarePen, Trash2 } from "lucide-react";
 import {
@@ -80,7 +80,10 @@ const SellerListenedCard = ({
       {/* Product info */}
       <div className="flex gap-2.5">
         <Image
-          src={getBestImageUrl(product.images?.[0], "small") || "/shop/1.jpg"}
+          src={
+            getBestImageUrl(product.images?.[0] as ImageType, "small") ||
+            "/shop/1.jpg"
+          }
           alt={product.title}
           width={80}
           height={60}

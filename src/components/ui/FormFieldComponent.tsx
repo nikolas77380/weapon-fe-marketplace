@@ -46,7 +46,7 @@ interface FormFieldComponentProps<T extends FieldValues> {
   customSelectOptions?: React.ReactNode;
   customOnChange?: (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldOnChange: (value: any) => void
+    fieldOnChange: (value: unknown) => void
   ) => void;
   customOnFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -72,7 +72,11 @@ function FormFieldComponent<T extends FieldValues>({
   customOnFocus,
   customSelectOptions,
 }: FormFieldComponentProps<T>) {
-  const renderField = (field: any) => {
+  const renderField = (field: {
+    value: unknown;
+    onChange: (value: unknown) => void;
+    onBlur: () => void;
+  }) => {
     switch (type) {
       case "input":
         return (
@@ -88,6 +92,7 @@ function FormFieldComponent<T extends FieldValues>({
               step={step}
               autoComplete={autoComplete}
               {...field}
+              value={String(field.value || "")}
               onChange={
                 customOnChange
                   ? (e) => customOnChange(e, field.onChange)
@@ -105,6 +110,7 @@ function FormFieldComponent<T extends FieldValues>({
             className={className}
             rows={rows}
             {...field}
+            value={String(field.value || "")}
           />
         );
 
@@ -112,9 +118,9 @@ function FormFieldComponent<T extends FieldValues>({
         return (
           <Select
             onValueChange={onValueChange || field.onChange}
-            value={selectValue || field.value}
+            value={selectValue || String(field.value || "")}
             defaultValue={defaultValue}
-            key={field.value}
+            key={String(field.value || "")}
           >
             <FormControl>
               <SelectTrigger className={className}>
@@ -137,7 +143,7 @@ function FormFieldComponent<T extends FieldValues>({
           <div className="flex items-center space-x-2">
             <Checkbox
               id={String(name)}
-              checked={field.value}
+              checked={Boolean(field.value)}
               onCheckedChange={field.onChange}
               className={className}
             />

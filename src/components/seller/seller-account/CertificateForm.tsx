@@ -20,7 +20,7 @@ interface CertificateFormProps {
   onSuccess?: () => void;
 }
 
-const CertificateForm = ({ currentUser, onSuccess }: CertificateFormProps) => {
+const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { createCertificate } = useCertificateActions();
@@ -68,22 +68,36 @@ const CertificateForm = ({ currentUser, onSuccess }: CertificateFormProps) => {
       if (onSuccess) {
         onSuccess();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error uploading certificate:", error);
       console.error("Error details:", {
-        message: error.message,
-        stack: error.stack,
-        response: error.response,
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        response: (error as { response?: unknown })?.response,
       });
 
       // More detailed error handling
       let errorMessage = "Unknown error";
-      if (error.message) {
+      if (error instanceof Error) {
         errorMessage = error.message;
-      } else if (error.response?.data?.error?.message) {
-        errorMessage = error.response.data.error.message;
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
+      } else if (
+        (
+          error as {
+            response?: {
+              data?: { error?: { message?: string }; message?: string };
+            };
+          }
+        )?.response?.data?.error?.message
+      ) {
+        errorMessage = (
+          error as { response: { data: { error: { message: string } } } }
+        ).response.data.error.message;
+      } else if (
+        (error as { response?: { data?: { message?: string } } })?.response
+          ?.data?.message
+      ) {
+        errorMessage = (error as { response: { data: { message: string } } })
+          .response.data.message;
       }
 
       toast.error(`Failed to upload certificate: ${errorMessage}`);

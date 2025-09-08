@@ -7,7 +7,7 @@ interface BestSellingCardProps {
   image: string;
 }
 
-const BestSellingCard = ({ id, title, image }: BestSellingCardProps) => {
+const BestSellingCard = ({ title, image }: BestSellingCardProps) => {
   return (
     <div className="border border-black rounded-2xl pb-8.5 bg-white">
       <div className="h-[330px] rounded-t-2xl overflow-hidden border-b border-black">
@@ -23,8 +23,10 @@ const BestSellingCard = ({ id, title, image }: BestSellingCardProps) => {
         <h1 className="mt-7.5 font-bold text-3xl text-center max-w-[280px] w-full min-h-[76px]">
           {title}
         </h1>
-        <Button className="mt-7.5 h-17 w-53 bg-gray-primary font-bold text-2xl text-black 
-        hover:bg-gray-primary/80 cursor-pointer">
+        <Button
+          className="mt-7.5 h-17 w-53 bg-gray-primary font-bold text-2xl text-black 
+        hover:bg-gray-primary/80 cursor-pointer"
+        >
           Contact seller
         </Button>
       </div>

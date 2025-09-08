@@ -1,5 +1,5 @@
 import { SellerFormValues } from "@/schemas/sellerSchema";
-import { Category } from "./types";
+import { Category, CreateProductData, UpdateProductData } from "./types";
 import { getSessionTokenFromCookie } from "./auth";
 
 // Base Strapi API client for public requests (without JWT)
@@ -10,7 +10,7 @@ export const strapiFetch = async ({
 }: {
   path: string;
   method: string;
-  body?: any;
+  body?: unknown;
 }) => {
   const url = `${
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
@@ -48,7 +48,7 @@ export const strapiFetchAuth = async ({
 }: {
   path: string;
   method: string;
-  body?: any;
+  body?: unknown;
   token: string;
   cache?: number;
 }) => {
@@ -194,37 +194,67 @@ export const getCategories = async (): Promise<Category[]> => {
       throw new Error("Invalid response format from categories API");
     }
 
-    const categories: Category[] = data.data.map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      slug: item.slug,
-      description: item.description,
-      order: item.order,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-      parent: item.parent
-        ? {
-            id: item.parent.id,
-            name: item.parent.name,
-            slug: item.parent.slug,
-            description: item.parent.description,
-            order: item.parent.order,
-            createdAt: item.parent.createdAt,
-            updatedAt: item.parent.updatedAt,
-          }
-        : undefined,
-      children: item.children
-        ? item.children.map((child: any) => ({
-            id: child.id,
-            name: child.name,
-            slug: child.slug,
-            description: child.description,
-            order: child.order,
-            createdAt: child.createdAt,
-            updatedAt: child.updatedAt,
-          }))
-        : undefined,
-    }));
+    const categories: Category[] = data.data.map((item: unknown) => {
+      const typedItem = item as {
+        id: number;
+        name: string;
+        slug: string;
+        description: string;
+        order: number;
+        createdAt: string;
+        updatedAt: string;
+        parent?: {
+          id: number;
+          name: string;
+          slug: string;
+          description: string;
+          order: number;
+          createdAt: string;
+          updatedAt: string;
+        };
+        children?: Array<{
+          id: number;
+          name: string;
+          slug: string;
+          description: string;
+          order: number;
+          createdAt: string;
+          updatedAt: string;
+        }>;
+      };
+
+      return {
+        id: typedItem.id,
+        name: typedItem.name,
+        slug: typedItem.slug,
+        description: typedItem.description,
+        order: typedItem.order,
+        createdAt: typedItem.createdAt,
+        updatedAt: typedItem.updatedAt,
+        parent: typedItem.parent
+          ? {
+              id: typedItem.parent.id,
+              name: typedItem.parent.name,
+              slug: typedItem.parent.slug,
+              description: typedItem.parent.description,
+              order: typedItem.parent.order,
+              createdAt: typedItem.parent.createdAt,
+              updatedAt: typedItem.parent.updatedAt,
+            }
+          : undefined,
+        children: typedItem.children
+          ? typedItem.children.map((child) => ({
+              id: child.id,
+              name: child.name,
+              slug: child.slug,
+              description: child.description,
+              order: child.order,
+              createdAt: child.createdAt,
+              updatedAt: child.updatedAt,
+            }))
+          : undefined,
+      };
+    });
 
     console.log("Transformed categories:", categories);
     return categories;
@@ -293,15 +323,26 @@ export const getCategoryById = async (id: number): Promise<Category> => {
           }
         : undefined,
       children: data.data.children
-        ? data.data.children.map((child: any) => ({
-            id: child.id,
-            name: child.name,
-            slug: child.slug,
-            description: child.description,
-            order: child.order,
-            createdAt: child.createdAt,
-            updatedAt: child.updatedAt,
-          }))
+        ? data.data.children.map((child: unknown) => {
+            const typedChild = child as {
+              id: number;
+              name: string;
+              slug: string;
+              description: string;
+              order: number;
+              createdAt: string;
+              updatedAt: string;
+            };
+            return {
+              id: typedChild.id,
+              name: typedChild.name,
+              slug: typedChild.slug,
+              description: typedChild.description,
+              order: typedChild.order,
+              createdAt: typedChild.createdAt,
+              updatedAt: typedChild.updatedAt,
+            };
+          })
         : undefined,
     };
 
@@ -316,17 +357,7 @@ export const createProduct = async ({
   data,
   images,
 }: {
-  data: {
-    title: string;
-    description?: string;
-    price: number;
-    currency?: string;
-    category: number;
-    tags?: number[];
-    sku?: string;
-    status?: "available" | "reserved" | "sold" | "archived";
-    attributesJson?: any;
-  };
+  data: CreateProductData;
   images?: File[];
 }) => {
   const token = getSessionTokenFromCookie();
@@ -373,17 +404,7 @@ export const updateProduct = async ({
   images,
 }: {
   id: number;
-  data: {
-    title?: string;
-    description?: string;
-    price?: number;
-    currency?: string;
-    category?: number;
-    tags?: number[];
-    sku?: string;
-    status?: "available" | "reserved" | "sold" | "archived";
-    attributesJson?: any;
-  };
+  data: UpdateProductData;
   images?: File[];
 }) => {
   const token = getSessionTokenFromCookie();
@@ -396,7 +417,7 @@ export const updateProduct = async ({
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
 
-    images.forEach((image, index) => {
+    images.forEach((image) => {
       formData.append(`files.images`, image);
     });
 

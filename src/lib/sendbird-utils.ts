@@ -1,7 +1,7 @@
 export class SendbirdUtils {
-  private state: any;
+  private state: unknown;
 
-  constructor(state: any) {
+  constructor(state: unknown) {
     this.state = state;
   }
 
@@ -11,12 +11,19 @@ export class SendbirdUtils {
   async createChannel(name: string, userIds: string[], isDistinct = false) {
     try {
       // Используем SDK через stores если доступен
-      const sdk = this.state?.stores?.sdkStore?.sdk;
-      if (!sdk?.groupChannel) {
+      const sdk = (this.state as { stores?: { sdkStore?: { sdk?: unknown } } })
+        ?.stores?.sdkStore?.sdk;
+      if (!(sdk as { groupChannel?: unknown })?.groupChannel) {
         return { success: false, error: "SDK not available" };
       }
 
-      const channel = await sdk.groupChannel.createChannel({
+      const channel = await (
+        sdk as {
+          groupChannel: {
+            createChannel: (params: unknown) => Promise<unknown>;
+          };
+        }
+      ).groupChannel.createChannel({
         name,
         userIds,
         isDistinct,
@@ -33,12 +40,17 @@ export class SendbirdUtils {
    */
   async getUnreadCount() {
     try {
-      const sdk = this.state?.stores?.sdkStore?.sdk;
-      if (!sdk?.groupChannel) {
+      const sdk = (this.state as { stores?: { sdkStore?: { sdk?: unknown } } })
+        ?.stores?.sdkStore?.sdk;
+      if (!(sdk as { groupChannel?: unknown })?.groupChannel) {
         return { success: false, error: "SDK not available" };
       }
 
-      const count = await sdk.groupChannel.getTotalUnreadChannelCount();
+      const count = await (
+        sdk as {
+          groupChannel: { getTotalUnreadChannelCount: () => Promise<unknown> };
+        }
+      ).groupChannel.getTotalUnreadChannelCount();
       return { success: true, count };
     } catch (error) {
       console.error("Error getting unread count:", error);
@@ -51,12 +63,17 @@ export class SendbirdUtils {
    */
   async sendMessage(channelUrl: string, message: string) {
     try {
-      const sdk = this.state?.stores?.sdkStore?.sdk;
-      if (!sdk?.groupChannel) {
+      const sdk = (this.state as { stores?: { sdkStore?: { sdk?: unknown } } })
+        ?.stores?.sdkStore?.sdk;
+      if (!(sdk as { groupChannel?: unknown })?.groupChannel) {
         return { success: false, error: "SDK not available" };
       }
 
-      const result = await sdk.groupChannel.sendMessage({
+      const result = await (
+        sdk as {
+          groupChannel: { sendMessage: (params: unknown) => Promise<unknown> };
+        }
+      ).groupChannel.sendMessage({
         channelUrl,
         message,
       });
@@ -72,12 +89,19 @@ export class SendbirdUtils {
    */
   async getChannels() {
     try {
-      const sdk = this.state?.stores?.sdkStore?.sdk;
-      if (!sdk?.groupChannel) {
+      const sdk = (this.state as { stores?: { sdkStore?: { sdk?: unknown } } })
+        ?.stores?.sdkStore?.sdk;
+      if (!(sdk as { groupChannel?: unknown })?.groupChannel) {
         return { success: false, error: "SDK not available" };
       }
 
-      const channels = await sdk.groupChannel.getMyGroupChannels({
+      const channels = await (
+        sdk as {
+          groupChannel: {
+            getMyGroupChannels: (params: unknown) => Promise<unknown>;
+          };
+        }
+      ).groupChannel.getMyGroupChannels({
         limit: 20,
       });
       return { success: true, channels };
@@ -90,7 +114,7 @@ export class SendbirdUtils {
   /**
    * Подключается к Sendbird
    */
-  async connect(userId: string) {
+  async connect() {
     try {
       return {
         success: false,
@@ -121,12 +145,18 @@ export class SendbirdUtils {
    * Получает статус готовности SDK
    */
   getSDKStatus() {
-    const sdk = this.state?.stores?.sdkStore?.sdk;
+    const sdk = (this.state as { stores?: { sdkStore?: { sdk?: unknown } } })
+      ?.stores?.sdkStore?.sdk;
     return {
       hasSDK: !!sdk,
-      hasGroupChannel: !!sdk?.groupChannel,
-      connectionState: sdk?.connectionState,
-      isReady: !!(sdk && sdk.groupChannel && sdk.connectionState === "OPEN"),
+      hasGroupChannel: !!(sdk as { groupChannel?: unknown })?.groupChannel,
+      connectionState: (sdk as { connectionState?: string })?.connectionState,
+      isReady: !!(
+        sdk &&
+        (sdk as { groupChannel?: unknown; connectionState?: string })
+          .groupChannel &&
+        (sdk as { connectionState?: string }).connectionState === "OPEN"
+      ),
     };
   }
 }

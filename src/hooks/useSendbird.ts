@@ -9,47 +9,18 @@ import { useMemo, useState, useEffect } from "react";
 export const useSendbirdSDK = (): SendbirdContextValue & {
   utils: SendbirdUtils | null;
   isReady: boolean;
-  sdkStatus: any;
+  sdkStatus: unknown;
 } => {
   const authContext = useAuthContext();
   const [isReady, setIsReady] = useState(false);
 
-  let sendbirdContext = null;
-  let state = null;
+  // Всегда вызываем хуки
+  const sendbirdContext = useSendbird();
+  const state = useSendbirdStateContext();
 
-  try {
-    sendbirdContext = useSendbird();
-    state = useSendbirdStateContext();
-  } catch (error) {
-    console.log("Sendbird context not available yet:", error);
-  }
+  const sendbird = sendbirdContext?.actions ? sendbirdContext : null;
 
-  const sendbird = sendbirdContext?.actions?.connect ? sendbirdContext : null;
-
-  if (!authContext || authContext.currentUserLoading) {
-    return {
-      sendbird: null,
-      currentUser: null,
-      isConnected: false,
-      connectionState: undefined,
-      utils: null,
-      isReady: false,
-      sdkStatus: null,
-    };
-  }
-
-  if (!authContext.currentUser) {
-    return {
-      sendbird: null,
-      currentUser: null,
-      isConnected: false,
-      connectionState: undefined,
-      utils: null,
-      isReady: false,
-      sdkStatus: null,
-    };
-  }
-
+  // Всегда вызываем useEffect и useMemo
   useEffect(() => {
     if (sendbird && state) {
       const checkSDKReady = () => {
@@ -76,7 +47,6 @@ export const useSendbirdSDK = (): SendbirdContextValue & {
   const connectionState = state?.stores?.sdkStore?.sdk?.connectionState;
   const isConnected = connectionState === "OPEN";
 
-
   const utils = useMemo(() => {
     if (state?.stores?.sdkStore?.sdk) {
       return new SendbirdUtils(state);
@@ -86,9 +56,36 @@ export const useSendbirdSDK = (): SendbirdContextValue & {
 
   const sdkStatus = utils?.getSDKStatus() || null;
 
+  if (!authContext || authContext.currentUserLoading) {
+    return {
+      sendbird: null,
+      currentUser: null,
+      isConnected: false,
+      connectionState: undefined,
+      utils: null,
+      isReady: false,
+      sdkStatus: null,
+    };
+  }
+
+  if (!authContext.currentUser) {
+    return {
+      sendbird: null,
+      currentUser: null,
+      isConnected: false,
+      connectionState: undefined,
+      utils: null,
+      isReady: false,
+      sdkStatus: null,
+    };
+  }
+
   return {
     sendbird,
-    currentUser: authContext.currentUser,
+    currentUser: authContext.currentUser as unknown as {
+      id: number;
+      [key: string]: unknown;
+    },
     isConnected,
     connectionState,
     utils,

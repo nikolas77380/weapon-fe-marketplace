@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import { useProducts } from "@/hooks/useProducts";

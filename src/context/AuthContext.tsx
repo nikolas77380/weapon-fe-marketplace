@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     try {
       const userData = await getCurrentUserFromCookie();
       setCurrentUser(userData);
-    } catch (error) {
+    } catch {
       setCurrentUser(null);
     } finally {
       setCurrentUserLoading(false);

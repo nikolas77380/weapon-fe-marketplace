@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
 import { getSessionTokenFromCookie } from "@/lib/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
@@ -24,7 +23,7 @@ import CertificatesList from "./CertificatesList";
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
   const [isLoading, setIsLoading] = useState(false);
-  const [refreshCertificates, setRefreshCertificates] = useState(0);
+  const [, setRefreshCertificates] = useState(0);
 
   const form = useForm<SellerFormValues>({
     resolver: zodResolver(sellerSchema),
@@ -77,28 +76,26 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
         console.log("Create response:", response);
         toast.success("Seller information created successfully!");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving seller data:", error);
 
       // More detailed error handling
-      if (error.message?.includes("403")) {
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes("403")) {
         toast.error(
           "Access denied. Please check your authentication and permissions."
         );
-      } else if (error.message?.includes("401")) {
+      } else if (errorMessage.includes("401")) {
         toast.error("Authentication required. Please log in again.");
-      } else if (error.message?.includes("400")) {
+      } else if (errorMessage.includes("400")) {
         toast.error("Invalid data. Please check your form inputs.");
-      } else if (error.message?.includes("Only sellers can")) {
-        toast.error(error.message);
-      } else if (error.message?.includes("Invalid or expired token")) {
+      } else if (errorMessage.includes("Only sellers can")) {
+        toast.error(errorMessage);
+      } else if (errorMessage.includes("Invalid or expired token")) {
         toast.error("Session expired. Please log in again.");
       } else {
-        toast.error(
-          `Failed to save seller information: ${
-            error.message || "Unknown error"
-          }`
-        );
+        toast.error(`Failed to save seller information: ${errorMessage}`);
       }
     } finally {
       setIsLoading(false);

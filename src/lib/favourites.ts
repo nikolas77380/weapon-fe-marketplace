@@ -1,4 +1,3 @@
-
 import { getSessionTokenFromCookie } from "./auth";
 
 const API_BASE_URL =
@@ -32,7 +31,7 @@ export interface RemoveFromFavouritesRequest {
 // Добавить продукт в избранное
 export const addToFavourites = async (
   productId: number
-): Promise<{ success: boolean; data?: any; error?: string }> => {
+): Promise<{ success: boolean; data?: unknown; error?: string }> => {
   try {
     const token = getSessionTokenFromCookie();
 

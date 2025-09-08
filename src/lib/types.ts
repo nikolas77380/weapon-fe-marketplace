@@ -50,7 +50,7 @@ export interface ErrorResponse {
     status: number;
     name: string;
     message: string;
-    details?: any;
+    details?: unknown;
   };
 }
 
@@ -84,6 +84,13 @@ export const USER_ROLES = {
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
+type AttributesJson = {
+  condition?: string;
+  model?: string;
+  manufacturer?: string;
+  count?: number;
+};
+
 export interface MediaFile {
   id: number;
   name: string;
@@ -91,7 +98,7 @@ export interface MediaFile {
   caption?: string;
   width?: number;
   height?: number;
-  formats?: any;
+  formats?: unknown;
   hash: string;
   ext: string;
   mime: string;
@@ -99,7 +106,7 @@ export interface MediaFile {
   url: string;
   previewUrl?: string;
   provider: string;
-  provider_metadata?: any;
+  provider_metadata?: unknown;
   createdAt: string;
   updatedAt: string;
 }
@@ -123,7 +130,7 @@ export interface Product {
   };
   images?: MediaFile[];
   certificates?: Certificate[];
-  attributesJson?: any;
+  attributesJson?: AttributesJson;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -147,7 +154,7 @@ export interface CreateProductData {
   tags?: number[];
   sku?: string;
   status?: "available" | "reserved" | "sold" | "archived";
-  attributesJson?: any;
+  attributesJson?: AttributesJson;
 }
 
 export interface UpdateProductData {
@@ -159,7 +166,7 @@ export interface UpdateProductData {
   tags?: number[];
   sku?: string;
   status?: "available" | "reserved" | "sold" | "archived";
-  attributesJson?: any;
+  attributesJson?: AttributesJson;
 }
 
 export interface Certificate {
@@ -212,3 +219,8 @@ export interface UpdateCertificateData {
   product?: number;
   seller?: number;
 }
+
+export type ImageType = {
+  url?: string;
+  formats?: Record<string, { url?: string }>;
+};

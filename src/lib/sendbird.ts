@@ -53,7 +53,7 @@ export async function createSendBirdChannel(product: Product) {
   }
 }
 
-export function redirectToMessages(channelUrl: string): void {
+export function redirectToMessages(): void {
   // For now, just redirect to messages page
   // The user will see the newly created channel in their channel list
   window.location.href = `/messages`;
