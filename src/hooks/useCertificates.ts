@@ -85,6 +85,7 @@ export const useCertificates = (params?: {
     params?.product,
     params?.seller,
     params?.status,
+    fetchCertificates,
   ]);
 
   return {

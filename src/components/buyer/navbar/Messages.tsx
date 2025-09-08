@@ -22,7 +22,7 @@ const Messages = () => {
       try {
         const result = await utils.getUnreadCount();
         if (result?.success) {
-          setUnreadMessagesCount(result.count);
+          setUnreadMessagesCount(Number(result.count) || 0);
         }
       } catch (error) {
         console.error("Error fetching unread messages count:", error);

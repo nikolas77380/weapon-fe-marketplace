@@ -78,6 +78,7 @@ export const useProducts = (params?: {
     params?.priceRange?.max,
     params?.pagination?.page,
     params?.pagination?.pageSize,
+    fetchProducts,
   ]);
 
   return {
@@ -115,7 +116,7 @@ export const useProduct = (id: number) => {
     if (id) {
       fetchProduct();
     }
-  }, [id]);
+  }, [id, fetchProduct]);
 
   return {
     product,

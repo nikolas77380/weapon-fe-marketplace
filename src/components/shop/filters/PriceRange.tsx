@@ -24,7 +24,7 @@ const PriceRange = ({
   // Initial values
   useEffect(() => {
     onPriceChange?.(initialMin, initialMax);
-  }, []);
+  }, [initialMin, initialMax, onPriceChange]);
 
   // Sync with external prop changes (for Clear All functionality)
   useEffect(() => {
