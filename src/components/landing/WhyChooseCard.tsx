@@ -1,21 +1,23 @@
-import Image from "next/image";
+import { getIcon, IconName } from "@/lib/iconUtils";
 
 interface WhyChooseCardProps {
-  icon: string;
+  icon: IconName;
   title: string;
   description: string;
 }
 
 const WhyChooseCard = ({ icon, title, description }: WhyChooseCardProps) => {
   return (
-    <div className="border border-black rounded-2xl px-5 pt-10 pb-16">
-      <div className="flex items-center justify-center gap-15">
-        <Image src={icon} alt="icon" width={50} height={50} />
-        <h1 className="max-w-[150px] w-full font-roboto text-xl text-center font-semibold">
+    <div className="p-7.5 border border-border-foreground bg-[#e4c6ba]/50 w-full flex flex-col">
+      <div className="flex items-center gap-3.5">
+        <div className="size-10 flex items-center justify-center">
+          {getIcon(icon)}
+        </div>
+        <h1 className="text-2xl font-medium bg-gradient-to-b from-gold-main to-gray-secondary bg-clip-text text-transparent">
           {title}
         </h1>
       </div>
-      <p className="mt-12 font-light text-[32px] text-center">{description}</p>
+      <p className="mt-6 font-light">{description}</p>
     </div>
   );
 };

@@ -1,23 +1,32 @@
+import { getIcon, IconName } from "@/lib/iconUtils";
+
 interface HowItWorksCardProps {
   id: number;
   title: string;
   description: string;
+  iconName: IconName;
 }
 
-const HowItWorksCard = ({ id, title, description }: HowItWorksCardProps) => {
+const HowItWorksCard = ({
+  id,
+  title,
+  description,
+  iconName,
+}: HowItWorksCardProps) => {
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-[255px]">
-      <div className="rounded-full items-center justify-center flex bg-black size-16">
-        <span className="text-white font-bold text-2xl">{id}</span>
+    <div className="relative flex flex-col w-full">
+      <div className="absolute top-0 right-0 text-[150px] font-bold bg-gradient-to-b from-gold-main via-[#e4c6ba]/50 to-transparent bg-clip-text text-transparent select-none pointer-events-none z-0 leading-none">
+        {id}
       </div>
-      <h1 className="mt-5.5 font-bold text-2xl">
+      <div className="size-10 flex items-center justify-center">
+        {getIcon(iconName)}
+      </div>
+      <h1 className="relative z-10 mt-5 font-bold text-2xl bg-gradient-to-b from-[#c29e8a] to-gray-secondary bg-clip-text text-transparent">
         {title}
       </h1>
-      <p className="mt-5.5 font-roboto text-xl text-center">
-        {description}
-      </p>
+      <p className="font-light mt-5">{description}</p>
     </div>
-  )
-}
+  );
+};
 
-export default HowItWorksCard
+export default HowItWorksCard;

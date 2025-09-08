@@ -16,13 +16,18 @@ export default function ConditionalLayout({
   // List of paths where Navbar and Footer should NOT be shown
   const hideNavbarFooterPaths = ["/auth"];
 
+  // Landing page path
+  const isLandingPage = pathname === "/";
+
   const shouldHideNavbarFooter = hideNavbarFooterPaths.some((path) =>
     pathname.startsWith(path)
   );
 
   return (
     <>
-      {!shouldHideNavbarFooter && <Navbar />}
+      <div className="relative">
+        {!shouldHideNavbarFooter && <Navbar isLandingPage={isLandingPage} />}
+      </div>
       {children}
       {!shouldHideNavbarFooter && <Footer />}
     </>
