@@ -15,6 +15,10 @@ export const useProducts = (params?: {
   status?: string;
   search?: string;
   sort?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
   pagination?: {
     page?: number;
     pageSize?: number;
@@ -25,7 +29,7 @@ export const useProducts = (params?: {
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     pageCount: 0,
     total: 0,
   });
@@ -36,13 +40,23 @@ export const useProducts = (params?: {
       setError(null);
 
       const response = await getProducts(params);
-
       if (response) {
-        const productsData = response.data || response;
-        setProducts(productsData);
+        if (response.data && Array.isArray(response.data)) {
+          setProducts(response.data);
+        } else if (Array.isArray(response)) {
+          setProducts(response);
+        }
 
+        // Обновляем пагинацию из мета-данных
         if (response.meta?.pagination) {
           setPagination(response.meta.pagination);
+        } else {
+          setPagination({
+            page: params?.pagination?.page || 1,
+            pageSize: params?.pagination?.pageSize || 5,
+            pageCount: 1,
+            total: response.data?.length || 0,
+          });
         }
       }
     } catch (err) {
@@ -60,6 +74,8 @@ export const useProducts = (params?: {
     params?.status,
     params?.search,
     params?.sort,
+    params?.priceRange?.min,
+    params?.priceRange?.max,
     params?.pagination?.page,
     params?.pagination?.pageSize,
   ]);
