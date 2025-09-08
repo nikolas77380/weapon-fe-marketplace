@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import moment from "moment";
+import { UserProfile } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -415,19 +416,19 @@ export const PRODUCT_CURRENCY_FORM = [
 ] as const;
 
 // Role utilities
-export const isSeller = (user: any): boolean => {
+export const isSeller = (user: UserProfile): boolean => {
   return user?.role?.name === "seller";
 };
 
-export const isBuyer = (user: any): boolean => {
+export const isBuyer = (user: UserProfile): boolean => {
   return user?.role?.name === "buyer";
 };
 
-export const getUserRole = (user: any): string | null => {
+export const getUserRole = (user: UserProfile): string | null => {
   return user?.role?.name || null;
 };
 
-export const hasRole = (user: any, role: string): boolean => {
+export const hasRole = (user: UserProfile, role: string): boolean => {
   return user?.role?.name === role;
 };
 
@@ -499,7 +500,10 @@ export const timestampToTime = (timestamp: number) => {
     : date;
 };
 
-export const handleEnterPress = (event: any, callback: () => void) => {
+export const handleEnterPress = (
+  event: React.KeyboardEvent,
+  callback: () => void
+) => {
   if (event.key === "Enter") {
     callback();
   }

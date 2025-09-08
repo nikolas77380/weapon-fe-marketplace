@@ -4,8 +4,7 @@ import { getSendbirdSessionTokenFromCookie } from "@/lib/auth";
 import { useAuthContext } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 
-// Динамический импорт для избежания проблем с SSR
-let SendbirdProvider: any = null;
+let SendbirdProvider: unknown = null;
 
 export function ProviderSendBird({ children }: { children: React.ReactNode }) {
   const { currentUser, currentUserLoading } = useAuthContext();
@@ -13,12 +12,13 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [isProviderLoaded, setIsProviderLoaded] = useState(false);
 
-  // Загружаем SendbirdProvider динамически
   useEffect(() => {
     const loadSendbirdProvider = async () => {
       try {
-        const module = await import("@sendbird/uikit-react/SendbirdProvider");
-        SendbirdProvider = module.default;
+        const sendbirdModule = await import(
+          "@sendbird/uikit-react/SendbirdProvider"
+        );
+        SendbirdProvider = sendbirdModule.default;
         setIsProviderLoaded(true);
         console.log("SendbirdProvider: provider loaded successfully");
       } catch (error) {
@@ -45,13 +45,11 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
       setSessionToken(token ?? "");
       setIsInitialized(true);
     } else if (!currentUser && !currentUserLoading) {
-      // Пользователь не авторизован
       console.log("SendbirdProvider: user not authenticated");
       setIsInitialized(true);
     }
   }, [currentUser, currentUserLoading]);
 
-  // Проверяем наличие необходимых переменных окружения
   const appId = process.env.NEXT_PUBLIC_SENDBIRD_APP_ID;
   if (!appId) {
     console.error("SendbirdProvider: NEXT_PUBLIC_SENDBIRD_APP_ID not set");
@@ -63,7 +61,6 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Если пользователь не загружен или не авторизован, показываем children без Sendbird
   if (currentUserLoading) {
     console.log("SendbirdProvider: still loading user");
     return (
@@ -80,7 +77,6 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // Если провайдер еще не загружен, показываем загрузку
   if (!isProviderLoaded) {
     console.log("SendbirdProvider: provider not loaded yet");
     return (
@@ -91,7 +87,6 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Если не инициализирован, показываем загрузку
   if (!isInitialized) {
     console.log("SendbirdProvider: not initialized yet");
     return (
@@ -111,7 +106,6 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
     currentUserExists: !!currentUser,
   });
 
-  // Проверяем, что все необходимые данные есть
   if (!appId) {
     console.error("SendbirdProvider: appId is missing");
     return (
@@ -130,8 +124,21 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
     );
   }
 
+  const SendbirdProviderComponent = SendbirdProvider as React.ComponentType<{
+    appId: string;
+    userId: string;
+    accessToken: string;
+    theme: string;
+    config: {
+      enableAutoPushTokenRegistration: boolean;
+      enableChannelListTypingIndicator: boolean;
+      enableChannelListMessageReceiptStatus: boolean;
+    };
+    children: React.ReactNode;
+  }>;
+
   return (
-    <SendbirdProvider
+    <SendbirdProviderComponent
       appId={appId}
       userId={currentUser.id.toString()}
       accessToken={sessionToken}
@@ -143,6 +150,6 @@ export function ProviderSendBird({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </SendbirdProvider>
+    </SendbirdProviderComponent>
   );
 }

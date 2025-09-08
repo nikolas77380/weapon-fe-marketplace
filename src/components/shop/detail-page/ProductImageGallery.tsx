@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
-import { MediaFile } from "@/lib/types";
+import { ImageType, MediaFile } from "@/lib/types";
 
 interface ProductImageGalleryProps {
   images?: MediaFile[];
@@ -55,7 +55,10 @@ const ProductImageGallery = ({
 
         {selectedImage ? (
           <Image
-            src={getBestImageUrl(selectedImage, "large") || "/shop/1.jpg"}
+            src={
+              getBestImageUrl(selectedImage as ImageType, "large") ||
+              "/shop/1.jpg"
+            }
             alt={selectedImage.name || productTitle}
             fill
             className="object-contain aspect-square"
@@ -87,7 +90,10 @@ const ProductImageGallery = ({
               onClick={() => handleImageClick(index)}
             >
               <Image
-                src={getBestImageUrl(image, "thumbnail") || "/shop/1.jpg"}
+                src={
+                  getBestImageUrl(image as ImageType, "thumbnail") ||
+                  "/shop/1.jpg"
+                }
                 alt={image.name || productTitle}
                 fill
                 className="object-contain aspect-square"

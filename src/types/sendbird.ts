@@ -1,12 +1,12 @@
 export interface SendbirdContextValue {
-  sendbird: any | null;
+  sendbird: unknown | null;
   currentUser: {
     id: number;
-    [key: string]: any;
+    [key: string]: unknown;
   } | null;
   isConnected: boolean;
   connectionState: string | undefined;
-  utils: any | null;
+  utils: unknown | null;
   isReady: boolean;
 }
 

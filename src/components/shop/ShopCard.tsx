@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { MessageSquare, Star } from "lucide-react";
 import { Button } from "../ui/button";
-import { Product } from "@/lib/types";
+import { ImageType, Product } from "@/lib/types";
 import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
@@ -42,7 +42,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
       if (response.success) {
         // Redirect to messages page with the channel URL
-        redirectToMessages(response.channel.channelUrl);
+        redirectToMessages();
       }
     } catch (error) {
       console.error("Error creating channel:", error);
@@ -61,7 +61,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       >
         <div className="relative overflow-hidden">
           <Image
-            src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
+            src={
+              getBestImageUrl(item.images?.[0] as ImageType, "small") ||
+              "/shop/1.jpg"
+            }
             alt={item.title}
             width={200}
             height={150}
@@ -153,7 +156,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
     >
       <div className="relative border-b border-[#D3D3D3] overflow-hidden">
         <Image
-          src={getBestImageUrl(item.images?.[0], "small") || "/shop/1.jpg"}
+          src={
+            getBestImageUrl(item.images?.[0] as ImageType, "small") ||
+            "/shop/1.jpg"
+          }
           alt={item.title}
           width={300}
           height={200}
@@ -220,11 +226,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
           <div className="flex items-center justify-center">
             <Button
-              className="flex items-center gap-2 py-2 w-2/3"
+              className="flex items-center gap-2 py-2 w-2/3 bg-gold-main cursor-pointer"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
-              <MessageSquare size={15} />
+              {/* <MessageSquare size={15} /> */}
               <p className="text-xs font-semibold">
                 {isLoading ? "Creating..." : "Contact Seller"}
               </p>

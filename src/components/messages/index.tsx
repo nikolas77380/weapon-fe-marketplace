@@ -6,8 +6,8 @@ import GroupChannelList from "@sendbird/uikit-react/GroupChannelList";
 import GroupChannel from "@sendbird/uikit-react/GroupChannel";
 
 const Messages = () => {
-  const [currentChannel, setCurrentChannel] = useState<any>(null);
-  const handleSelectChannel = (channel: any) => {
+  const [currentChannel, setCurrentChannel] = useState<unknown>(null);
+  const handleSelectChannel = (channel: unknown) => {
     setCurrentChannel(channel);
   };
 
@@ -20,7 +20,9 @@ const Messages = () => {
         />
       </div>
       <div className="channel-chat w-[76%]">
-        <GroupChannel channelUrl={currentChannel?.url ?? ""} />
+        <GroupChannel
+          channelUrl={(currentChannel as { url?: string })?.url ?? ""}
+        />
       </div>
     </div>
   );

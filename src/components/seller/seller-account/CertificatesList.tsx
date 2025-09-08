@@ -8,7 +8,6 @@ import { Trash2, Download, Eye } from "lucide-react";
 import {
   useCertificates,
   useCertificateActions,
-  Certificate,
 } from "@/hooks/useCertificates";
 import { UserProfile } from "@/lib/types";
 import { toast } from "sonner";
@@ -42,11 +41,11 @@ const CertificatesList = ({
       if (onRefresh) {
         onRefresh();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting certificate:", error);
-      toast.error(
-        `Failed to delete certificate: ${error.message || "Unknown error"}`
-      );
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      toast.error(`Failed to delete certificate: ${errorMessage}`);
     } finally {
       setDeletingId(null);
     }

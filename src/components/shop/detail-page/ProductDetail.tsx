@@ -110,35 +110,40 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 </div>
 
                 {/* Additional Attributes */}
-                {product?.attributesJson && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-700 mb-3">
-                      Additional Specifications
-                    </h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      {product.attributesJson.condition && (
-                        <div>
-                          <span className="font-medium text-gray-600">
-                            Condition:
-                          </span>
-                          <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                            {product.attributesJson.condition}
-                          </span>
+                {(() => {
+                  const attrs = product?.attributesJson || null;
+                  return (
+                    attrs && (
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <h4 className="font-semibold text-gray-700 mb-3">
+                          Additional Specifications
+                        </h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          {attrs.condition && (
+                            <div>
+                              <span className="font-medium text-gray-600">
+                                Condition:
+                              </span>
+                              <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                {attrs.condition}
+                              </span>
+                            </div>
+                          )}
+                          {attrs.manufacturer && (
+                            <div>
+                              <span className="font-medium text-gray-600">
+                                Manufacturer:
+                              </span>
+                              <span className="ml-2 text-gray-800">
+                                {attrs.manufacturer}
+                              </span>
+                            </div>
+                          )}
                         </div>
-                      )}
-                      {product.attributesJson.manufacturer && (
-                        <div>
-                          <span className="font-medium text-gray-600">
-                            Manufacturer:
-                          </span>
-                          <span className="ml-2 text-gray-800">
-                            {product.attributesJson.manufacturer}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
+                      </div>
+                    )
+                  );
+                })()}
 
                 {/* Product Details */}
                 <div className="bg-gray-50 p-4 rounded-lg">

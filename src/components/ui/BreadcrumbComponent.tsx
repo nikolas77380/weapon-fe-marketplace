@@ -21,7 +21,6 @@ interface BreadcrumbComponentProps {
 }
 
 const BreadcrumbComponent = ({
-  currentUser,
   className,
   customLabels = {},
 }: BreadcrumbComponentProps) => {

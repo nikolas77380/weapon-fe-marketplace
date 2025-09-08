@@ -2,7 +2,6 @@ import { RegisterFormValues } from "@/schemas/registerSchema";
 import { LoginFormValues } from "@/schemas/loginSchema";
 import { strapiFetch, strapiFetchAuth } from "./strapi";
 import { setClientCookie, deleteClientCookie } from "./cookies";
-// @ts-ignore: './types' module is missing, so ignore type import errors for now
 import type { AuthResponse, UserProfile, ApiResponse } from "./types";
 
 const setSessionTokenCookie = (token: string, name?: string) => {

@@ -13,12 +13,8 @@ export const useSendbirdConnection = () => {
   const connectionAttempts = useRef(0);
   const maxConnectionAttempts = 3;
 
-  let sendbirdContext = null;
-  try {
-    sendbirdContext = useSendbird();
-  } catch (error) {
-    console.log("Sendbird context not available:", error);
-  }
+  // Всегда вызываем хук
+  const sendbirdContext = useSendbird();
 
   const connect = useCallback(async () => {
     if (
@@ -90,7 +86,7 @@ export const useSendbirdConnection = () => {
 
   useEffect(() => {
     if (
-      sendbirdContext?.actions?.connect &&
+      sendbirdContext?.actions &&
       !isConnected &&
       !isConnecting &&
       isReady &&
