@@ -14,7 +14,7 @@ const Logo = ({ href, className }: LogoProps) => {
         <div className="relative">
           <div
             className="w-12 h-12 bg-gradient-to-br from-gold-main to-gray-secondary rounded-lg 
-            flex items-center justify-center shadow-xl shadow-gold-main/50
+            flex items-center justify-center shadow-lg shadow-gold-main/50
             border border-gold-main/50 
             before:absolute before:inset-1 before:bg-gradient-to-br before:from-white/10 before:to-transparent before:rounded-md
             after:absolute after:inset-0 after:bg-gradient-to-t after:from-black/20 after:to-transparent after:rounded-lg"

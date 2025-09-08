@@ -1,26 +1,31 @@
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 
 const GetStarted = () => {
   return (
-    <section className="bg-gray-primary pt-11 pb-16 flex flex-col justify-center items-center">
-      <div className="flex flex-col text-center gap-7">
-        <h1 className="flex flex-col items-center font-bold text-4xl font-roboto">
-          Ready to get started?
+    <section className="w-full h-[473px] relative">
+      <div className="absolute z-[-1] inset-0 w-full h-full">
+        <Image
+          src="/landing/bg-started.png"
+          alt="bg started"
+          fill
+          priority
+          className="object-cover w-full h-full"
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <h1 className="text-center max-w-[918px] font-bold text-5xl bg-gradient-to-b from-[#f0f0e5] to-gray-secondary bg-clip-text text-transparent">
+          Join professionals already using our platform to buy and sell weapon
+          prototypes.
         </h1>
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-xl w-full max-w-[410px] text-center">
-            Join professionals already using our platform to buy and sell weapon
-            prototypes.
-          </p>
-          <Link
-            href="/auth?mode=register"
-            className="bg-white rounded-xl mt-10 font-bold text-2xl p-5 border border-black 
-            hover:bg-white/80 hover:border-black/80 duration-300 transition-all"
-          >
-            Create Account
-          </Link>
-        </div>
+        <Link
+          href={"/auth?mode=register"}
+          className="mt-10 py-3 px-6 bg-gold-main rounded-none hover:bg-gold-main/90 
+        duration-300 transition-all text-white"
+        >
+          Create Account
+        </Link>
       </div>
     </section>
   );
