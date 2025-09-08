@@ -30,88 +30,36 @@ const FilteringContent = () => {
     sort: "id:desc",
   });
 
-  const { products: allProducts, loading } = useProducts({
+  const {
+    products: allProducts,
+    pagination,
+    loading,
+  } = useProducts({
+    category: filters.categoryId || undefined,
     search: filters.search !== "" ? filters.search : undefined,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
+    priceRange: {
+      min: filters.minPrice,
+      max: filters.maxPrice,
+    },
+    pagination: {
+      page: filters.page,
+      pageSize: 5,
+    },
   });
-
   const { categories } = useCategories();
 
-  // All filtered products (by price and category)
-  const filteredProducts = useMemo(() => {
-    return allProducts.filter((product) => {
-      // Filter by price
-      const priceMatch =
-        product.price >= filters.minPrice && product.price <= filters.maxPrice;
+  const paginatedProducts = allProducts;
 
-      // Filter by category
-      const categoryMatch =
-        filters.categoryId === null ||
-        product.category?.id === filters.categoryId;
-
-      return priceMatch && categoryMatch;
-    });
-  }, [allProducts, filters.minPrice, filters.maxPrice, filters.categoryId]);
-
-  // Products filtered by price only (for category synchronization)
-  const priceFilteredProducts = useMemo(() => {
-    return allProducts.filter(
-      (product) =>
-        product.price >= filters.minPrice && product.price <= filters.maxPrice
-    );
-  }, [allProducts, filters.minPrice, filters.maxPrice]);
-
-  // Available categories based on price filter
-  const availableCategories = useMemo(() => {
-    const categoryIds = new Set(
-      priceFilteredProducts
-        .map((product) => product.category?.id)
-        .filter((id): id is number => id !== undefined)
-    );
-    return categories.filter((category) => categoryIds.has(category.id));
-  }, [categories, priceFilteredProducts]);
-
-  // Client-side pagination of filtered products
-  const pageSize = 6;
-  const startIndex = (filters.page - 1) * pageSize;
-  const paginatedProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + pageSize
-  );
-
-  // Pagination data for filtered products
-  const paginationData = {
-    page: filters.page,
-    pageSize: pageSize,
-    pageCount: Math.ceil(filteredProducts.length / pageSize),
-    total: filteredProducts.length,
-  };
+  const availableCategories = categories;
 
   const handlePriceChange = (min: number, max: number) => {
-    setFilters((prev) => {
-      // Get products filtered by new price
-      const newPriceProducts = allProducts.filter(
-        (product) => product.price >= min && product.price <= max
-      );
-
-      // Extract available categories from filtered products
-      const availableCategoryIds = new Set(
-        newPriceProducts
-          .map((product) => product.category?.id)
-          .filter((id): id is number => id !== undefined)
-      );
-
-      return {
-        ...prev,
-        minPrice: min,
-        maxPrice: max,
-        page: 1,
-        categoryId:
-          prev.categoryId && availableCategoryIds.has(prev.categoryId)
-            ? prev.categoryId
-            : null,
-      };
-    });
+    setFilters((prev) => ({
+      ...prev,
+      minPrice: min,
+      maxPrice: max,
+      page: 1,
+    }));
   };
 
   const handleCategoryChange = (categoryId: number | null) => {
@@ -190,7 +138,7 @@ const FilteringContent = () => {
         <div className="w-full h-full">
           <ShopContent
             products={paginatedProducts}
-            pagination={paginationData}
+            pagination={pagination}
             onPageChange={handlePageChange}
             viewMode={viewMode}
             loading={loading}

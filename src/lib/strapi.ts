@@ -437,6 +437,10 @@ export const getProducts = async (params?: {
   status?: string;
   search?: string;
   sort?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
   pagination?: {
     page?: number;
     pageSize?: number;
@@ -460,20 +464,29 @@ export const getProducts = async (params?: {
     queryParams.append("filters[title][$containsi]", params.search);
   }
 
+  if (params?.priceRange?.min !== undefined) {
+    queryParams.append(
+      "filters[priceRange][min]",
+      params.priceRange.min.toString()
+    );
+  }
+
+  if (params?.priceRange?.max !== undefined) {
+    queryParams.append(
+      "filters[priceRange][max]",
+      params.priceRange.max.toString()
+    );
+  }
+
   if (params?.sort) {
     queryParams.append("sort", params.sort);
   }
 
-  if (params?.pagination?.page) {
-    queryParams.append("pagination[page]", params.pagination.page.toString());
-  }
+  const page = params?.pagination?.page || 1;
+  const pageSize = params?.pagination?.pageSize || 5;
 
-  if (params?.pagination?.pageSize) {
-    queryParams.append(
-      "pagination[pageSize]",
-      params.pagination.pageSize.toString()
-    );
-  }
+  queryParams.append("pagination[page]", page.toString());
+  queryParams.append("pagination[pageSize]", pageSize.toString());
 
   queryParams.append("populate", "*");
 
