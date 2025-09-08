@@ -80,7 +80,7 @@ const AddProductForms = () => {
     if (savedFormData && !form.getValues("productName")) {
       removeSavedFormData();
     }
-  }, []);
+  }, [form, removeSavedFormData, savedFormData]);
 
   // Autosave when changing form
   useEffect(() => {
