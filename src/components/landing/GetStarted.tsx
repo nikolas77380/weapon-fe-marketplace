@@ -19,8 +19,11 @@ const GetStarted = () => {
           Join professionals already using our platform to buy and sell weapon
           prototypes.
         </h1>
-        <Link href={"/auth?mode=register"} className="mt-10 py-3 px-6 bg-gold-main rounded-none hover:bg-gold-main/90 
-        duration-300 transition-all text-white">
+        <Link
+          href={"/auth?mode=register"}
+          className="mt-10 py-3 px-6 bg-gold-main rounded-none hover:bg-gold-main/90 
+        duration-300 transition-all text-white"
+        >
           Create Account
         </Link>
       </div>
