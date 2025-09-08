@@ -18,10 +18,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { Form } from "@/components/ui/form";
+import CertificateForm from "./CertificateForm";
+import CertificatesList from "./CertificatesList";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshCertificates, setRefreshCertificates] = useState(0);
 
   const form = useForm<SellerFormValues>({
     resolver: zodResolver(sellerSchema),
@@ -205,18 +208,19 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
             </Form>
           </TabsContent>
           <TabsContent value="certificates" className="mt-10">
-            <h1 className="text-center text-2xl font-bold mb-10">
-              Upload your certificate(s)
-            </h1>
-            <ImagesDropzone />
-            <div className="flex items-center justify-center mt-10">
-              <Button
-                type="submit"
-                className="px-8.5 py-2.5 text-xl font-roboto font-medium"
-                disabled={isLoading}
-              >
-                {isLoading ? "Saving..." : "Upload Certificate(s)"}
-              </Button>
+            <div className="space-y-8">
+              {/* Existing Certificates List */}
+              <div className="border-t pt-8">
+                <CertificatesList
+                  currentUser={currentUser}
+                  onRefresh={() => setRefreshCertificates((prev) => prev + 1)}
+                />
+              </div>
+              {/* Upload New Certificate Form */}
+              <CertificateForm
+                currentUser={currentUser}
+                onSuccess={() => setRefreshCertificates((prev) => prev + 1)}
+              />
             </div>
           </TabsContent>
         </Tabs>
