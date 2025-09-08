@@ -6,10 +6,10 @@ const Breadcrumb = () => {
   return (
     <Link
       href="/"
-      className="flex items-center mt-24 gap-2 cursor-pointer hover:text-black/70"
+      className="flex items-center gap-2 cursor-pointer hover:text-black/70 border-b border-border-secondary pb-1"
     >
       <ChevronLeft size={20} className="text-black" />
-      <h1 className="text-xl font-medium">Back to home</h1>
+      <h1 className="font-medium">Back to home</h1>
     </Link>
   );
 };

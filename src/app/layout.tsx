@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Roboto, Outfit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar/Navbar";
-import Footer from "@/components/landing/Footer";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { ProviderSendBird } from "@/context/SendbirdProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -37,13 +36,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}>
+      <body
+        className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}
+      >
         <AuthContextProvider>
           <ProviderSendBird>
-            <Navbar />
-            {children}
+            <ConditionalLayout>{children}</ConditionalLayout>
             <Toaster />
-            <Footer />
           </ProviderSendBird>
         </AuthContextProvider>
       </body>
