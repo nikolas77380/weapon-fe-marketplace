@@ -120,7 +120,6 @@ function FormFieldComponent<T extends FieldValues>({
             onValueChange={onValueChange || field.onChange}
             value={selectValue || String(field.value || "")}
             defaultValue={defaultValue}
-            key={String(field.value || "")}
           >
             <FormControl>
               <SelectTrigger className={className}>

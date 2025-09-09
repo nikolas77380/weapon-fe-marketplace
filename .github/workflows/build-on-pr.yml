@@ -1,0 +1,99 @@
+name: Build on Pull Request
+
+on:
+  pull_request:
+    branches: [ main, master, develop ]
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linter
+      run: npm run lint
+
+    - name: Build application
+      run: npm run build
+
+    - name: Check build output
+      run: |
+        if [ -d ".next" ]; then
+          echo "✅ Build successful - .next directory exists"
+          ls -la .next/
+        else
+          echo "❌ Build failed - .next directory not found"
+          exit 1
+        fi
+
+  test-build:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build application
+      run: npm run build
+
+    - name: Test build artifacts
+      run: |
+        echo "Testing build artifacts..."
+        
+        # Check if main build files exist
+        if [ -f ".next/static/chunks/pages/_app.js" ] || [ -f ".next/static/chunks/pages/_app.js.map" ]; then
+          echo "✅ Main app bundle found"
+        else
+          echo "⚠️  Main app bundle not found (this might be normal for some Next.js versions)"
+        fi
+        
+        # Check if build manifest exists
+        if [ -f ".next/build-manifest.json" ]; then
+          echo "✅ Build manifest found"
+        else
+          echo "❌ Build manifest not found"
+          exit 1
+        fi
+        
+        # Check if static files exist
+        if [ -d ".next/static" ]; then
+          echo "✅ Static files directory found"
+          echo "Static files count: $(find .next/static -type f | wc -l)"
+        else
+          echo "❌ Static files directory not found"
+          exit 1
+        fi
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-artifacts-${{ github.sha }}
+        path: .next/
+        retention-days: 7

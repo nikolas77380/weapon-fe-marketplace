@@ -34,6 +34,17 @@ export const useProducts = (params?: {
     total: 0,
   });
 
+  // Create a stable key for the params to avoid infinite loops
+  const paramsKey = JSON.stringify({
+    category: params?.category,
+    seller: params?.seller,
+    status: params?.status,
+    search: params?.search,
+    sort: params?.sort,
+    priceRange: params?.priceRange,
+    pagination: params?.pagination,
+  });
+
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
@@ -64,22 +75,11 @@ export const useProducts = (params?: {
     } finally {
       setLoading(false);
     }
-  }, [params]);
+  }, [paramsKey]);
 
   useEffect(() => {
     fetchProducts();
-  }, [
-    params?.category,
-    params?.seller,
-    params?.status,
-    params?.search,
-    params?.sort,
-    params?.priceRange?.min,
-    params?.priceRange?.max,
-    params?.pagination?.page,
-    params?.pagination?.pageSize,
-    fetchProducts,
-  ]);
+  }, [fetchProducts]);
 
   return {
     products,
