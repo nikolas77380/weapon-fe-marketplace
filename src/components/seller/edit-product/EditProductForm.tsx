@@ -75,7 +75,19 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         images: undefined,
       });
     }
-  }, [product, form]);
+  }, [
+    product.id,
+    product.title,
+    product.description,
+    product.price,
+    product.category?.id,
+    product.sku,
+    product.status,
+    product.attributesJson?.condition,
+    product.attributesJson?.count,
+    product.attributesJson?.manufacturer,
+    product.attributesJson?.model,
+  ]);
 
   const onSubmit = async (values: EditProductSchemaValues) => {
     try {

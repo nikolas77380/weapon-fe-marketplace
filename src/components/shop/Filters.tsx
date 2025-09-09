@@ -97,18 +97,30 @@ const Filters = ({
       <div className="border-b border-[#D3D3D3] pb-9">
         <h2 className="text-sm font-medium font-roboto">Condition</h2>
         <div className="mt-3">
-          <Select>
+          <Select defaultValue="all">
             <SelectTrigger className="w-[240px]">
               <SelectValue placeholder="All Conditions" />
             </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Conditions</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="used">Used</SelectItem>
+              <SelectItem value="refurbished">Refurbished</SelectItem>
+            </SelectContent>
           </Select>
         </div>
         <h2 className="text-sm font-medium font-roboto mt-6.5">Availability</h2>
         <div className="mt-3">
-          <Select>
+          <Select defaultValue="all">
             <SelectTrigger className="w-[240px]">
               <SelectValue placeholder="All Availability" />
             </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Availability</SelectItem>
+              <SelectItem value="available">Available</SelectItem>
+              <SelectItem value="reserved">Reserved</SelectItem>
+              <SelectItem value="sold">Sold</SelectItem>
+            </SelectContent>
           </Select>
         </div>
       </div>
@@ -124,10 +136,17 @@ const Filters = ({
       <div>
         <h2 className="text-sm font-medium font-roboto mt-6.5">Location</h2>
         <div className="mt-3">
-          <Select>
+          <Select defaultValue="all">
             <SelectTrigger className="w-[240px]">
               <SelectValue placeholder="All Locations" />
             </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Locations</SelectItem>
+              <SelectItem value="us">United States</SelectItem>
+              <SelectItem value="uk">United Kingdom</SelectItem>
+              <SelectItem value="ca">Canada</SelectItem>
+              <SelectItem value="au">Australia</SelectItem>
+            </SelectContent>
           </Select>
         </div>
       </div>

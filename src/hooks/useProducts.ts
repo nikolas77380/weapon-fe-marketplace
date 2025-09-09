@@ -34,59 +34,70 @@ export const useProducts = (params?: {
     total: 0,
   });
 
-  const fetchProducts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await getProducts(params);
-      if (response) {
-        if (response.data && Array.isArray(response.data)) {
-          setProducts(response.data);
-        } else if (Array.isArray(response)) {
-          setProducts(response);
-        }
-
-        // Обновляем пагинацию из мета-данных
-        if (response.meta?.pagination) {
-          setPagination(response.meta.pagination);
-        } else {
-          setPagination({
-            page: params?.pagination?.page || 1,
-            pageSize: params?.pagination?.pageSize || 5,
-            pageCount: 1,
-            total: response.data?.length || 0,
-          });
-        }
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch products");
-    } finally {
-      setLoading(false);
-    }
-  }, [params]);
+  // Create a stable key for the params to avoid infinite loops
+  const paramsKey = JSON.stringify({
+    category: params?.category,
+    seller: params?.seller,
+    status: params?.status,
+    search: params?.search,
+    sort: params?.sort,
+    priceRange: params?.priceRange,
+    pagination: params?.pagination,
+  });
 
   useEffect(() => {
+    let isCancelled = false;
+
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await getProducts(params);
+        if (!isCancelled && response) {
+          if (response.data && Array.isArray(response.data)) {
+            setProducts(response.data);
+          } else if (Array.isArray(response)) {
+            setProducts(response);
+          }
+
+          // Обновляем пагинацию из мета-данных
+          if (response.meta?.pagination) {
+            setPagination(response.meta.pagination);
+          } else {
+            setPagination({
+              page: params?.pagination?.page || 1,
+              pageSize: params?.pagination?.pageSize || 5,
+              pageCount: 1,
+              total: response.data?.length || 0,
+            });
+          }
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setError(
+            err instanceof Error ? err.message : "Failed to fetch products"
+          );
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchProducts();
-  }, [
-    params?.category,
-    params?.seller,
-    params?.status,
-    params?.search,
-    params?.sort,
-    params?.priceRange?.min,
-    params?.priceRange?.max,
-    params?.pagination?.page,
-    params?.pagination?.pageSize,
-    fetchProducts,
-  ]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [paramsKey]);
 
   return {
     products,
     loading,
     error,
     pagination,
-    refetch: fetchProducts,
   };
 };
 
