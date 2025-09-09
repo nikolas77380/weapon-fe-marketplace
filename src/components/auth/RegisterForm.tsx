@@ -6,12 +6,15 @@ import { Form } from "@/components/ui/form";
 import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { Button } from "@/components/ui/button";
 import { RegisterFormValues, RegisterSchema } from "@/schemas/registerSchema";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 interface RegisterFormProps {
-  onSubmit: (values: RegisterFormValues) => void;
+  onSubmit: (values: RegisterFormValues) => Promise<void>;
 }
 
 const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -23,10 +26,22 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     },
   });
 
+  const handleRegister = async (values: RegisterFormValues) => {
+    setIsLoading(true);
+    try {
+      await onSubmit(values);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="select-none mb-6 px-3.5">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(handleRegister)}
+          className="space-y-6"
+        >
           {/* Display name */}
           <FormFieldComponent
             control={form.control}
@@ -95,9 +110,19 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <div className="flex items-center justify-center">
             <Button
               type="submit"
-              className="font-medium rounded-none w-full py-3 bg-gold-main hover:bg-gold-main/90 text-white duration-300 transition-all"
+              disabled={isLoading}
+              className="font-medium rounded-none w-full py-3 bg-gold-main hover:bg-gold-main/90 
+              text-white duration-300 transition-all disabled:bg-gray-500 disabled:text-gray-100 
+              disabled:cursor-not-allowed disabled:hover:bg-gray-400"
             >
-              Create Account
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Creating Account...
+                </div>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </div>
         </form>

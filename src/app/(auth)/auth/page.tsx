@@ -22,6 +22,7 @@ import { isSeller } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
 import { Tag, User } from "lucide-react";
 import { UserProfile } from "@/lib/types";
+import { toast } from "sonner";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
@@ -85,7 +86,9 @@ const AuthPage = () => {
     router.replace(`/auth?${params.toString()}`, { scroll: false });
   };
 
-  const onRegistrationSubmit = async (values: RegisterFormValues) => {
+  const onRegistrationSubmit = async (
+    values: RegisterFormValues
+  ): Promise<void> => {
     console.log("Attempting registration with:", values);
     try {
       let response;
@@ -98,7 +101,7 @@ const AuthPage = () => {
       }
 
       if (response && "jwt" in response) {
-        console.log("Buyer registration successful! JWT cookie set");
+        console.log("Registration successful! JWT cookie set");
         await fetchUser();
         if (isSeller(response.user)) {
           router.push("/account");
@@ -106,14 +109,16 @@ const AuthPage = () => {
           router.push("/marketplace");
         }
       } else {
-        console.error("Buyer registration failed:", response);
+        console.error("Registration failed:", response);
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Buyer registration error:", error);
+      console.error("Registration error:", error);
+      toast.error("Registration failed. Please try again.");
     }
   };
 
-  const onLoginSubmit = async (values: LoginFormValues) => {
+  const onLoginSubmit = async (values: LoginFormValues): Promise<void> => {
     try {
       console.log("Attempting login with:", values);
       const response = await login(values);
@@ -131,14 +136,16 @@ const AuthPage = () => {
         }
       } else {
         console.error("Login failed - no JWT in response:", response);
+        toast.error("Invalid email or password");
       }
     } catch (error) {
       console.error("Login error:", error);
+      toast.error("Login failed. Please try again.");
     }
   };
 
   return (
-    <div className="min-h-screen h-full w-full relative pt-30 pb-22 z-1">
+    <div className="min-h-screen h-full w-full relative pt-6 z-1">
       <div className="absolute inset-0 z-[-1] bg-[#e7e7e7]">
         <Image
           src="/auth/bg.png"
