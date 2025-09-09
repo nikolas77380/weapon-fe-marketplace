@@ -1,4 +1,4 @@
-import MetaForm from "@/components/seller/seller-account/MetaForm";
+import { MetaForm } from "@/components/seller/seller-account";
 import { requireAuth } from "@/lib/server-auth";
 import { isBuyer, isSeller } from "@/lib/utils";
 import React from "react";
