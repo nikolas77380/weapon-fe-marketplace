@@ -45,59 +45,48 @@ export const useProducts = (params?: {
     pagination: params?.pagination,
   });
 
-  useEffect(() => {
-    let isCancelled = false;
+  const fetchProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const response = await getProducts(params);
-        if (!isCancelled && response) {
-          if (response.data && Array.isArray(response.data)) {
-            setProducts(response.data);
-          } else if (Array.isArray(response)) {
-            setProducts(response);
-          }
-
-          // Обновляем пагинацию из мета-данных
-          if (response.meta?.pagination) {
-            setPagination(response.meta.pagination);
-          } else {
-            setPagination({
-              page: params?.pagination?.page || 1,
-              pageSize: params?.pagination?.pageSize || 5,
-              pageCount: 1,
-              total: response.data?.length || 0,
-            });
-          }
+      const response = await getProducts(params);
+      if (response) {
+        if (response.data && Array.isArray(response.data)) {
+          setProducts(response.data);
+        } else if (Array.isArray(response)) {
+          setProducts(response);
         }
-      } catch (err) {
-        if (!isCancelled) {
-          setError(
-            err instanceof Error ? err.message : "Failed to fetch products"
-          );
-        }
-      } finally {
-        if (!isCancelled) {
-          setLoading(false);
+
+        // Обновляем пагинацию из мета-данных
+        if (response.meta?.pagination) {
+          setPagination(response.meta.pagination);
+        } else {
+          setPagination({
+            page: params?.pagination?.page || 1,
+            pageSize: params?.pagination?.pageSize || 5,
+            pageCount: 1,
+            total: response.data?.length || 0,
+          });
         }
       }
-    };
-
-    fetchProducts();
-
-    return () => {
-      isCancelled = true;
-    };
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch products");
+    } finally {
+      setLoading(false);
+    }
   }, [paramsKey]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   return {
     products,
     loading,
     error,
     pagination,
+    refetch: fetchProducts,
   };
 };
 

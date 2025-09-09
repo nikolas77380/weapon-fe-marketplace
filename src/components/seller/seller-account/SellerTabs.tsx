@@ -43,7 +43,11 @@ const SellerAccountTabs = ({ currentUser }: { currentUser: UserProfile }) => {
             </p>
             <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
               {loading ? (
-                <SkeletonComponent type="sellerCard" count={3} className="w-full" />
+                <SkeletonComponent
+                  type="sellerCard"
+                  count={3}
+                  className="w-full"
+                />
               ) : (
                 products.map((product) => (
                   <SellerListenedCard
