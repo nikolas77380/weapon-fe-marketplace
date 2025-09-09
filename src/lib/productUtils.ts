@@ -6,3 +6,4 @@ export const calculateTotalViews = (products: Product[]): number => {
     return sum + views;
   }, 0);
 };
+
