@@ -103,7 +103,6 @@ const AuthPage = () => {
       if (response && "jwt" in response) {
         console.log("Registration successful! JWT cookie set");
         await fetchUser();
-        toast.success("Account created successfully!");
         if (isSeller(response.user)) {
           router.push("/account");
         } else {
@@ -111,11 +110,11 @@ const AuthPage = () => {
         }
       } else {
         console.error("Registration failed:", response);
-        throw new Error("Registration failed");
+        toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Registration error:", error);
-      throw error;
+      toast.error("Registration failed. Please try again.");
     }
   };
 
@@ -130,7 +129,6 @@ const AuthPage = () => {
         console.log("Login successful! JWT cookie set");
         await fetchUser();
         console.log("response.user", response.user);
-        toast.success("Successfully logged in!");
         if (isSeller(currentUser as UserProfile)) {
           router.push("/account");
         } else {
@@ -138,11 +136,11 @@ const AuthPage = () => {
         }
       } else {
         console.error("Login failed - no JWT in response:", response);
-        throw new Error("Login failed");
+        toast.error("Invalid email or password");
       }
     } catch (error) {
       console.error("Login error:", error);
-      throw error;
+      toast.error("Login failed. Please try again.");
     }
   };
 
