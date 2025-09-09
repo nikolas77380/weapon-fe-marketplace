@@ -22,6 +22,10 @@ const BuyerAccountPage = async () => {
         )}
         {isSeller(currentUser) && (
           <>
+            <BreadcrumbComponent
+              currentUser={currentUser}
+              className="mt-4 mb-10"
+            />
             <SellerAccount currentUser={currentUser} />
           </>
         )}

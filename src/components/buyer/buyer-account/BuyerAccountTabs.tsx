@@ -25,28 +25,28 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
       orientation="vertical"
       className="w-full flex-row gap-10"
     >
-      <TabsList className="flex-col w-64 h-45">
+      <TabsList className="flex-col w-64 h-45 border border-border-foreground">
         <TabsTrigger
           value="myInquiries"
-          className="w-full text-lg text-muted-foreground"
+          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
         >
           My Inquiries
         </TabsTrigger>
         <TabsTrigger
           value="favourites"
-          className="w-full text-lg text-muted-foreground"
+          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
         >
           Favourites({favourites.length || 0})
         </TabsTrigger>
         <TabsTrigger
           value="messages"
-          className="w-full text-lg text-muted-foreground"
+          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
         >
           Messages
         </TabsTrigger>
         <TabsTrigger
           value="settings"
-          className="w-full text-lg text-muted-foreground"
+          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
         >
           Settings
         </TabsTrigger>
