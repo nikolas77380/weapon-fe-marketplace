@@ -74,3 +74,4 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
 };
 
 export default SellerAccount;
+export { default as MetaForm } from "./MetaForm";
