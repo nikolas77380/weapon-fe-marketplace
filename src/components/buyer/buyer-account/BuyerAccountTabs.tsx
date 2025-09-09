@@ -10,6 +10,7 @@ import NotFavouriteState from "./NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import BuyerAccountHeader from "./BuyerAccountHeader";
 import { UserProfile } from "@/lib/types";
+import { cn, triggerClasses } from "@/lib/utils";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -28,25 +29,25 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
       <TabsList className="flex-col w-64 h-45 border border-border-foreground">
         <TabsTrigger
           value="myInquiries"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           My Inquiries
         </TabsTrigger>
         <TabsTrigger
           value="favourites"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           Favourites({favourites.length || 0})
         </TabsTrigger>
         <TabsTrigger
           value="messages"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           Messages
         </TabsTrigger>
         <TabsTrigger
           value="settings"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           Settings
         </TabsTrigger>

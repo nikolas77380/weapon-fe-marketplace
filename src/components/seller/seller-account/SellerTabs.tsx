@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
+import { cn, triggerClasses } from "@/lib/utils";
 
 const SellerAccountTabs = ({
   products,
@@ -43,19 +44,19 @@ const SellerAccountTabs = ({
       <TabsList className="flex-col w-64 h-45 border border-border-foreground">
         <TabsTrigger
           value="myInquiries"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           My listings
         </TabsTrigger>
         <TabsTrigger
           value="savedItems"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           Analytics
         </TabsTrigger>
         <TabsTrigger
           value="messages"
-          className="w-full text-lg text-muted-foreground flex justify-start px-3.5"
+          className={cn(triggerClasses)}
         >
           Messages
         </TabsTrigger>
