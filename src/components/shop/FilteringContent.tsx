@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import { useProducts } from "@/hooks/useProducts";
@@ -53,18 +53,18 @@ const FilteringContent = () => {
 
   const availableCategories = categories;
 
-  const handlePriceChange = (min: number, max: number) => {
+  const handlePriceChange = useCallback((min: number, max: number) => {
     setFilters((prev) => ({
       ...prev,
       minPrice: min,
       maxPrice: max,
       page: 1,
     }));
-  };
+  }, []);
 
-  const handleCategoryChange = (categoryId: number | null) => {
+  const handleCategoryChange = useCallback((categoryId: number | null) => {
     setFilters((prev) => ({ ...prev, categoryId, page: 1 }));
-  };
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((prev) => ({
@@ -79,9 +79,9 @@ const FilteringContent = () => {
     setFilters((prev) => ({ ...prev, page }));
   };
 
-  const handleSortChange = (sort: string) => {
+  const handleSortChange = useCallback((sort: string) => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
-  };
+  }, []);
 
   const handleClearAll = () => {
     setFilters({
