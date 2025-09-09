@@ -21,6 +21,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { isSeller } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
 import { Tag, User } from "lucide-react";
+import { UserProfile } from "@/lib/types";
 
 const AuthPage = () => {
   const searchParams = useSearchParams();
@@ -123,7 +124,7 @@ const AuthPage = () => {
         console.log("Login successful! JWT cookie set");
         await fetchUser();
         console.log("response.user", response.user);
-        if (isSeller(currentUser)) {
+        if (isSeller(currentUser as UserProfile)) {
           router.push("/account");
         } else {
           router.push("/marketplace");
