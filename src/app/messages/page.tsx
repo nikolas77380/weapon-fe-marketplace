@@ -6,7 +6,7 @@ import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 const MessagesPage = async () => {
   const currentUser = await requireAuth();
   return (
-    <main className="w-full h-screen mb-20">
+    <main className="w-full h-screen mb-20 bg-[#E8E8E8]">
       <BreadcrumbComponent
         currentUser={currentUser}
         className="mt-4 mb-10 ml-10"

@@ -1,8 +1,42 @@
+import { CreateChannelResponse } from "./sendbird";
+
 export class SendbirdUtils {
   private state: unknown;
 
   constructor(state: unknown) {
     this.state = state;
+  }
+
+  /**
+   * Форматирует timestamp в читаемый формат даты
+   * @param timestamp - timestamp в миллисекундах
+   * @returns отформатированная дата в формате "20 Aug, 2025 09:36"
+   */
+  static formatTimestamp(timestamp: number): string {
+    const date = new Date(timestamp);
+
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+
+    return `${day} ${month}, ${year} ${hours}:${minutes}`;
   }
 
   /**
@@ -17,7 +51,7 @@ export class SendbirdUtils {
         return { success: false, error: "SDK not available" };
       }
 
-      const channel = await (
+      const channel = (await (
         sdk as {
           groupChannel: {
             createChannel: (params: unknown) => Promise<unknown>;
@@ -27,7 +61,8 @@ export class SendbirdUtils {
         name,
         userIds,
         isDistinct,
-      });
+      })) as CreateChannelResponse["channel"];
+      await this.sendMessage(channel.channelUrl, "Hello!");
       return { success: true, channel };
     } catch (error) {
       console.error("Error creating channel:", error);
