@@ -1,5 +1,5 @@
 import { UserProfile } from "@/lib/types";
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -109,6 +109,10 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
   // Available categories based on price filter
   const availableCategories = useMemo(() => {
+    if (!priceFilteredProducts.length || !categories.length) {
+      return [];
+    }
+
     const categoryIds = new Set(
       priceFilteredProducts
         .map((product) => product.category?.id)
@@ -116,6 +120,17 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     );
     return categories.filter((category) => categoryIds.has(category.id));
   }, [categories, priceFilteredProducts]);
+
+  // Category counts for all seller products
+  const categoryCounts = useMemo(() => {
+    const counts: { [key: number]: number } = {};
+    sellerProducts.forEach((product) => {
+      if (product.category?.id) {
+        counts[product.category.id] = (counts[product.category.id] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [sellerProducts]);
 
   // Client-side pagination for filtered products
   const pageSize = 6;
@@ -133,55 +148,61 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     total: filteredProducts.length,
   };
 
-  const handlePriceChange = (min: number, max: number) => {
-    setFilters((prev) => {
-      // Get products filtered by new price
-      const newPriceProducts = sellerProducts.filter(
-        (product) => product.price >= min && product.price <= max
-      );
+  const handlePriceChange = useCallback(
+    (min: number, max: number) => {
+      setFilters((prev) => {
+        // Get products filtered by new price
+        const newPriceProducts = sellerProducts.filter(
+          (product) => product.price >= min && product.price <= max
+        );
 
-      // Extract available categories from filtered products
-      const availableCategoryIds = new Set(
-        newPriceProducts
-          .map((product) => product.category?.id)
-          .filter((id): id is number => id !== undefined)
-      );
+        // Extract available categories from filtered products
+        const availableCategoryIds = new Set(
+          newPriceProducts
+            .map((product) => product.category?.id)
+            .filter((id): id is number => id !== undefined)
+        );
 
-      return {
-        ...prev,
-        minPrice: min,
-        maxPrice: max,
-        page: 1,
-        categoryId:
-          prev.categoryId && availableCategoryIds.has(prev.categoryId)
-            ? prev.categoryId
-            : null,
-      };
-    });
-  };
+        return {
+          ...prev,
+          minPrice: min,
+          maxPrice: max,
+          page: 1,
+          categoryId:
+            prev.categoryId && availableCategoryIds.has(prev.categoryId)
+              ? prev.categoryId
+              : null,
+        };
+      });
+    },
+    [sellerProducts]
+  );
 
-  const handleCategoryChange = (categoryId: number | null) => {
+  const handleCategoryChange = useCallback((categoryId: number | null) => {
     setFilters((prev) => ({ ...prev, categoryId, page: 1 }));
-  };
+  }, []);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFilters((prev) => ({
-      ...prev,
-      search: e.target.value,
-      categoryId: null,
-      page: 1,
-    }));
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFilters((prev) => ({
+        ...prev,
+        search: e.target.value,
+        categoryId: null,
+        page: 1,
+      }));
+    },
+    []
+  );
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = useCallback((page: number) => {
     setFilters((prev) => ({ ...prev, page }));
-  };
+  }, []);
 
-  const handleSortChange = (sort: string) => {
+  const handleSortChange = useCallback((sort: string) => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
-  };
+  }, []);
 
-  const handleClearAll = () => {
+  const handleClearAll = useCallback(() => {
     setFilters({
       minPrice: 1,
       maxPrice: 500000,
@@ -191,36 +212,29 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       sort: "id:desc",
     });
     setViewMode("grid");
-  };
+  }, [setViewMode]);
 
   // Tab switching handler
-  const handleTabChange = (value: string) => {
-    if (value === "products" && activeTab !== "products") {
-      setProductsTabLoading(true);
-      // Show skeletons while images are loading
-      setTimeout(() => {
-        setProductsTabLoading(false);
-      }, 800);
-    } else if (value === "overview" && activeTab === "products") {
-      // Show skeletons when switching from products to overview
-      setProductsTabLoading(true);
-      setTimeout(() => {
-        setProductsTabLoading(false);
-      }, 800);
-    }
-    setActiveTab(value);
-  };
+  const handleTabChange = useCallback(
+    (value: string) => {
+      setActiveTab(value);
 
-  // Show skeletons on first load of products tab
-  useEffect(() => {
-    if (activeTab === "products" && sellerProducts.length > 0) {
-      setProductsTabLoading(true);
-      const timer = setTimeout(() => {
-        setProductsTabLoading(false);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [activeTab, sellerProducts.length]);
+      if (value === "products" && activeTab !== "products") {
+        setProductsTabLoading(true);
+        // Show skeletons while images are loading
+        setTimeout(() => {
+          setProductsTabLoading(false);
+        }, 800);
+      } else if (value === "overview" && activeTab === "products") {
+        // Show skeletons when switching from products to overview
+        setProductsTabLoading(true);
+        setTimeout(() => {
+          setProductsTabLoading(false);
+        }, 800);
+      }
+    },
+    [activeTab]
+  );
 
   return (
     <div className="w-full min-h-screen mb-20">
@@ -472,6 +486,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           min: filters.minPrice,
                           max: filters.maxPrice,
                         }}
+                        categoryCounts={categoryCounts}
                       />
                       {/* Shop content */}
                       <div className="w-full h-full">

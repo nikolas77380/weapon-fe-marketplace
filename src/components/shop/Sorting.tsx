@@ -1,6 +1,5 @@
 "use client";
 
-import { LayoutGrid, List } from "lucide-react";
 import React from "react";
 import {
   Select,
@@ -9,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
 
 interface SortingProps {
   onSortChange?: (sort: string) => void;
@@ -35,9 +35,9 @@ const Sorting = ({
   ];
 
   return (
-    <div className="flex items-center gap-22">
+    <div className="flex items-center gap-7.5">
       <Select value={selectedSort} onValueChange={onSortChange}>
-        <SelectTrigger className="w-[200px] border-transparent shadow-none focus:ring-0 focus:ring-offset-0">
+        <SelectTrigger className="w-[200px] rounded-none shadow-none focus:ring-0 focus:ring-offset-0">
           <SelectValue placeholder="Newest First" />
         </SelectTrigger>
         <SelectContent>
@@ -48,30 +48,12 @@ const Sorting = ({
           ))}
         </SelectContent>
       </Select>
-      <div className="flex items-center gap-1">
-        <div
-          onClick={() => onViewChange?.("grid")}
-          className={`p-2 rounded-md cursor-pointer ${
-            activeTab === "grid" ? "bg-black" : "bg-[#D9D9D9]"
-          }`}
-        >
-          <LayoutGrid
-            size={20}
-            className={activeTab === "grid" ? "text-white" : "text-black"}
-          />
-        </div>
-        <div
-          onClick={() => onViewChange?.("list")}
-          className={`p-2 rounded-md cursor-pointer ${
-            activeTab === "list" ? "bg-black" : "bg-[#D9D9D9]"
-          }`}
-        >
-          <List
-            size={20}
-            className={activeTab === "list" ? "text-white" : "text-black"}
-          />
-        </div>
-      </div>
+      <ViewModeToggle
+        viewMode={activeTab}
+        onGridClick={() => onViewChange?.("grid")}
+        onListClick={() => onViewChange?.("list")}
+        showTitle={false}
+      />
     </div>
   );
 };

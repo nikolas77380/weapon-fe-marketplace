@@ -6,6 +6,7 @@ import ShopContent from "./ShopContent";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
+import { useCategoryCounts } from "@/hooks/useCategoryCounts";
 import Sorting from "./Sorting";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
@@ -48,6 +49,7 @@ const FilteringContent = () => {
     },
   });
   const { categories } = useCategories();
+  const { categoryCounts } = useCategoryCounts();
 
   const paginatedProducts = allProducts;
 
@@ -98,21 +100,22 @@ const FilteringContent = () => {
   return (
     <>
       <div
-        className="mt-12 border border-[#D3D3D3] rounded-lg h-21 flex items-center justify-between
-        px-6 w-full"
+        className="mt-12 border border-border-foreground h-26 flex items-center justify-between
+        px-6 w-full bg-primary-foreground"
       >
         {/* <Search /> */}
         <div className="relative w-2/3">
           <Input
-            placeholder="Search weapons, armour, accessories ..."
+            placeholder="Search..."
             value={filters.search}
             onChange={handleSearchChange}
             className="pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
-            placeholder:text-[#B3B3B3] h-10 w-1/2 border-transparent shadow-none"
+            placeholder:text-foreground/40 h-10 w-1/2 rounded-none border-border-secondary shadow-none text-foreground"
           />
           <Search
             size={14}
-            className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#B3B3B3]"
+            strokeWidth={0.5}
+            className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer text-foreground"
           />
         </div>
         {/* Sorting */}
@@ -124,7 +127,7 @@ const FilteringContent = () => {
         />
       </div>
       {/* Shop Filtering Content */}
-      <div className="mt-12 flex gap-12 h-full w-full">
+      <div className="mt-10 flex gap-7.5 h-full w-full">
         {/* Filters */}
         <Filters
           onPriceChange={handlePriceChange}
@@ -133,6 +136,7 @@ const FilteringContent = () => {
           availableCategories={availableCategories}
           selectedCategoryId={filters.categoryId}
           priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
+          categoryCounts={categoryCounts}
         />
         {/* Shop Content */}
         <div className="w-full h-full">
