@@ -2,7 +2,7 @@ import { Product } from "./types";
 import { getSessionTokenFromCookie } from "./auth";
 import { strapiFetchAuth } from "./strapi";
 
-interface CreateChannelResponse {
+export interface CreateChannelResponse {
   success: boolean;
   order: {
     id: number;
