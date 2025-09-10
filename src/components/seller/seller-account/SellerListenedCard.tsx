@@ -100,7 +100,7 @@ const SellerListenedCard = ({
           <div className="mt-1 flex items-center gap-6 font-roboto font-medium text-sm text-gray-primary">
             <div className="flex items-center gap-1.5">
               <Eye size={18} />
-              <p>15 views</p>
+              <p>{product.viewsCount || 0} views</p>
             </div>
             <div className="flex items-center gap-1.5">
               <MessageSquare size={18} />

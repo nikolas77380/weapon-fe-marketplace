@@ -508,3 +508,5 @@ export const handleEnterPress = (
     callback();
   }
 };
+
+export const triggerClasses = "w-full text-lg text-muted-foreground flex justify-start px-3.5";
