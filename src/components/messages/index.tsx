@@ -10,27 +10,43 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { cn } from "@/lib/utils";
 import { SendbirdUtils } from "@/lib/sendbird-utils";
 import { useSendbirdSDK } from "@/hooks/useSendbird";
-import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 
+// Types for Sendbird
+interface SendbirdMessage {
+  message: {
+    customType?: string;
+    sender?: {
+      userId: string;
+      nickname: string;
+    };
+    messageType: string;
+    message: string;
+    createdAt: number;
+    plainProfileUrl?: string;
+    plainUrl?: string;
+    name?: string;
+  };
+}
+
 const Messages = () => {
-  const [currentChannel, setCurrentChannel] = useState<unknown>(null);
+  const [currentChannel, setCurrentChannel] = useState<any>(null);
   const [search, setSearch] = useState("");
   const [messageInput, setMessageInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const sdk = useSendbirdSDK();
   const myUserId = sdk.currentUser?.id.toString();
-  const handleSelectChannel = (channel: unknown) => {
+  const handleSelectChannel = (channel: any) => {
     setCurrentChannel(channel);
   };
 
   const handleAttachFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file || !(currentChannel as any)?.sendFileMessage) return;
+    if (!file || !currentChannel?.sendFileMessage) return;
 
-    (currentChannel as any).sendFileMessage(
+    currentChannel.sendFileMessage(
       { file },
-      (message: any, error: any) => {
+      (message: unknown, error: unknown) => {
         if (error) {
           console.error("Send file error:", error);
           return;
@@ -41,12 +57,11 @@ const Messages = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!messageInput.trim() || !(currentChannel as any)?.sendUserMessage)
-      return;
+    if (!messageInput.trim() || !currentChannel?.sendUserMessage) return;
 
-    (currentChannel as any).sendUserMessage(
+    currentChannel.sendUserMessage(
       { message: messageInput },
-      (message: any, error: any) => {
+      (message: unknown, error: unknown) => {
         if (error) {
           console.error("Send message error:", error);
           return;
@@ -78,14 +93,14 @@ const Messages = () => {
               />
             </div>
           )}
-          renderChannelPreview={(channel) => (
+          renderChannelPreview={(channel: any) => (
             <div
               className={cn(
                 "flex items-center my-3.5 h-[90px] w-[444px] bg-[#DBDBDB] gap-2 cursor-pointer",
-                (currentChannel as any)?.url === channel.channel.url &&
+                currentChannel?.url === channel.channel.url &&
                   "bg-[#A1703526] border border-[#A1703580]"
               )}
-              onClick={() => handleSelectChannel(channel)}
+              onClick={() => handleSelectChannel(channel.channel)}
             >
               <Avatar className="ml-7 rounded-full">
                 <AvatarImage
@@ -114,9 +129,9 @@ const Messages = () => {
       </div>
       <div className="channel-chat w-[76%] flex">
         <GroupChannel
-          channelUrl={(currentChannel as { url?: string })?.url ?? ""}
+          channelUrl={currentChannel?.url ?? ""}
           renderChannelHeader={() => <></>}
-          renderMessage={(message: any) => {
+          renderMessage={(message: SendbirdMessage) => {
             if (message.message.customType) return <></>;
             return (
               <div
