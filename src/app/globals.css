@@ -300,3 +300,21 @@ input:not(:-webkit-autofill)::-moz-selection {
 .switch > input:checked ~ span:last-of-type {
   opacity: 1;
 }
+
+/* Sendbird */
+.sendbird-channel-list__body,
+.sendbird-channel-list__header,
+.sendbird-ui-header {
+  background-color: #e8e8e8;
+  width: 500px;
+  font-family: var(--font-outfit);
+}
+
+.sendbird-conversation {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.75),
+      rgba(255, 255, 255, 0.75)
+    ),
+    url("/messages/message-bg.jpg") center/cover no-repeat;
+  color: #000;
+}
