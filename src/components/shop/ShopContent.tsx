@@ -71,7 +71,7 @@ const ShopContent = ({
       <div
         className={
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-13"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7.5"
             : "flex flex-col gap-4"
         }
       >
@@ -86,11 +86,12 @@ const ShopContent = ({
 
       {/* Pagination */}
       {!loading && pagination && pagination.pageCount > 1 && (
-        <div className="mt-12.5 flex items-center justify-center">
-          <Pagination>
+        <div className="mt-12.5 w-full flex items-center justify-center">
+          <Pagination className="w-full flex">
             <PaginationContent>
               {/* Previous Button */}
-              {pagination.page > 1 && (
+              <div>
+                {pagination.page > 1 && (
                 <PaginationItem>
                   <PaginationPrevious
                     onClick={() => onPageChange?.(pagination.page - 1)}
@@ -98,8 +99,10 @@ const ShopContent = ({
                   />
                 </PaginationItem>
               )}
+              </div>
 
-              {/* Page Numbers */}
+              <div className="flex items-center">
+                {/* Page Numbers */}
               {Array.from(
                 { length: pagination.pageCount },
                 (_, i) => i + 1
@@ -138,8 +141,10 @@ const ShopContent = ({
                   </PaginationItem>
                 );
               })}
+              </div>
 
-              {/* Next Button */}
+              <div>
+                {/* Next Button */}
               {pagination.page < pagination.pageCount && (
                 <PaginationItem>
                   <PaginationNext
@@ -148,6 +153,7 @@ const ShopContent = ({
                   />
                 </PaginationItem>
               )}
+              </div>
             </PaginationContent>
           </Pagination>
         </div>

@@ -13,7 +13,6 @@ interface NavbarProps {
 
 const Navbar = ({ isLandingPage = false }: NavbarProps) => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
-
   const logoHref = currentUser ? "/marketplace" : "/";
 
   const navbarClasses = isLandingPage

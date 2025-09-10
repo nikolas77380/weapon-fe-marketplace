@@ -138,8 +138,8 @@ const PriceRange = ({
 
   return (
     <div>
-      <h2 className="text-sm font-medium font-roboto">Price range</h2>
-      <div className="mt-3 w-[240px]">
+      <h2 className="text-sm font-medium font-roboto mb-3">Price Range</h2>
+      <div className="w-[240px]">
         <div className="flex flex-col gap-4">
           {/* Range Slider */}
           <div className="relative h-4">
@@ -165,7 +165,7 @@ const PriceRange = ({
               style={{
                 zIndex: clampedMinPrice > clampedMaxPrice - 200 ? 2 : 1,
               }}
-              className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-transparent appearance-none pointer-events-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-gold-main [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:duration-75"
+              className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-transparent appearance-none pointer-events-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-gold-main [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:duration-75"
             />
 
             {/* Max Range Input */}
@@ -178,14 +178,14 @@ const PriceRange = ({
               style={{
                 zIndex: clampedMaxPrice < clampedMinPrice + 200 ? 2 : 1,
               }}
-              className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-transparent appearance-none pointer-events-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-gold-main [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:duration-75"
+              className="absolute top-1/2 transform -translate-y-1/2 w-full h-1 bg-transparent appearance-none pointer-events-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-gold-main [&::-webkit-slider-thumb]:bg-background [&::-webkit-slider-thumb]:rounded-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:duration-75"
             />
           </div>
 
           {/* Min/Max Inputs */}
           <div className="flex justify-between gap-3">
             <div className="relative">
-              <span className="absolute left-6 top-0 px-1 bg-white transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
+              <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
                 Min
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
@@ -196,12 +196,12 @@ const PriceRange = ({
                 value={minPrice === 0 ? "" : minPrice}
                 onChange={handleMinInputChange}
                 onBlur={handleMinBlur}
-                className="w-full pl-6 pr-2 py-2 border border-gray-300 rounded text-sm [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                className="outline-none w-full pl-6 pr-2 py-2 border border-gray-300 rounded text-sm font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
             <div className="relative">
-              <span className="absolute left-6 top-0 px-1 bg-white transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                Max
+              <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
+                <p>Max</p>
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                 $
@@ -211,7 +211,7 @@ const PriceRange = ({
                 value={maxPrice === 0 ? "" : maxPrice}
                 onChange={handleMaxInputChange}
                 onBlur={handleMaxBlur}
-                className="w-full pl-6 pr-2 py-2 border border-gray-300 rounded text-sm [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                className="outline-none w-full pl-6 pr-2 py-2 border border-gray-300 rounded text-sm font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
           </div>

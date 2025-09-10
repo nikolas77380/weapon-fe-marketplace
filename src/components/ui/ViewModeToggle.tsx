@@ -7,6 +7,7 @@ interface ViewModeToggleProps {
   onListClick: () => void;
   count?: number;
   title?: string;
+  showTitle?: boolean;
 }
 
 const ViewModeToggle = ({
@@ -15,36 +16,49 @@ const ViewModeToggle = ({
   onListClick,
   count,
   title,
+  showTitle = true,
 }: ViewModeToggleProps) => {
+  const toggleButtons = (
+    <div className="flex items-center gap-1">
+      <div
+        onClick={onGridClick}
+        className={`p-2 cursor-pointer transition-colors duration-200 ${
+          viewMode === "grid"
+            ? "bg-[#FE4819]"
+            : "bg-transparent hover:bg-[#E7E7E7]/90"
+        }`}
+      >
+        <LayoutGrid
+          size={20}
+          className={viewMode === "grid" ? "text-white" : "text-black"}
+        />
+      </div>
+      <div
+        onClick={onListClick}
+        className={`p-2 cursor-pointer transition-colors duration-200 ${
+          viewMode === "list"
+            ? "bg-[#FE4819]"
+            : "bg-transparent hover:bg-[#E7E7E7]/90"
+        }`}
+      >
+        <List
+          size={20}
+          className={viewMode === "list" ? "text-white" : "text-black"}
+        />
+      </div>
+    </div>
+  );
+
+  if (!showTitle) {
+    return toggleButtons;
+  }
+
   return (
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-lg font-semibold">
         {title} {count !== undefined && `(${count})`}
       </h3>
-      <div className="flex items-center gap-1">
-        <div
-          onClick={onGridClick}
-          className={`p-2 rounded-md cursor-pointer transition-colors duration-200 ${
-            viewMode === "grid" ? "bg-[#FE4819]" : "bg-transparent hover:bg-[#E7E7E7]/90"
-          }`}
-        >
-          <LayoutGrid
-            size={20}
-            className={viewMode === "grid" ? "text-white" : "text-black"}
-          />
-        </div>
-        <div
-          onClick={onListClick}
-          className={`p-2 rounded-md cursor-pointer transition-colors duration-200 ${
-            viewMode === "list" ? "bg-[#FE4819]" : "bg-transparent hover:bg-[#E7E7E7]/90"
-          }`}
-        >
-          <List
-            size={20}
-            className={viewMode === "list" ? "text-white" : "text-black"}
-          />
-        </div>
-      </div>
+      {toggleButtons}
     </div>
   );
 };
