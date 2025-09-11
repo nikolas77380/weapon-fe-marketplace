@@ -11,7 +11,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   const { slug } = await params;
 
   return (
-    <div className="border-t border-[#D3D3D3] mb-20">
+    <div className="mb-20">
       <div className="container mx-auto">
         <FilteringContent categorySlug={slug} />
       </div>

@@ -5,53 +5,28 @@ import { useAuthContext } from "@/context/AuthContext";
 import SellerNavbar from "../buyer/navbar/SellerNavbar";
 import Logo from "../ui/Logo";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
 import { User } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-interface NavbarProps {
-  isLandingPage?: boolean;
-}
-
-const Navbar = ({ isLandingPage = false }: NavbarProps) => {
+const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
-  const logoHref = currentUser ? "/marketplace" : "/";
-
-  const navbarClasses = isLandingPage
-    ? "w-full px-15 py-5.5 bg-transparent absolute z-50"
-    : "w-full px-15 py-5.5 bg-transparent relative";
 
   const NavbarContent = () => (
-    <div className="h-16 flex justify-between items-center">
-      <motion.div
-        initial={isLandingPage ? { x: -50, opacity: 0 } : false}
-        animate={isLandingPage ? { x: 0, opacity: 1 } : false}
-        transition={isLandingPage ? { duration: 0.8, delay: 0.2 } : {}}
-      >
-        <Logo href={logoHref} />
-      </motion.div>
-
-      {!currentUserLoading && currentUser ? (
-        <motion.div
-          initial={isLandingPage ? { x: 50, opacity: 0 } : false}
-          animate={isLandingPage ? { x: 0, opacity: 1 } : false}
-          transition={isLandingPage ? { duration: 0.8, delay: 0.4 } : {}}
-        >
-          {currentUser.role.name === "buyer" ? (
-            <BuyerNavbar user={currentUser} onLogout={handleLogout} />
-          ) : (
-            <SellerNavbar user={currentUser} onLogout={handleLogout} />
-          )}
-        </motion.div>
-      ) : (
-        <motion.ul
-          className="flex items-center gap-6"
-          initial={isLandingPage ? { x: 50, opacity: 0 } : false}
-          animate={isLandingPage ? { x: 0, opacity: 1 } : false}
-          transition={isLandingPage ? { duration: 0.8, delay: 0.4 } : {}}
-        >
-          {/* <div className="relative">
+    <div className="h-16">
+      <div className="container mx-auto flex justify-between items-center">
+        <Logo />
+        {!currentUserLoading && currentUser ? (
+          <>
+            {currentUser.role.name === "buyer" ? (
+              <BuyerNavbar user={currentUser} onLogout={handleLogout} />
+            ) : (
+              <SellerNavbar user={currentUser} onLogout={handleLogout} />
+            )}
+          </>
+        ) : (
+          <ul className="flex items-center gap-6">
+            {/* <div className="relative">
             <Input
               placeholder="Search"
               className="border-white/20 pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
@@ -62,39 +37,30 @@ const Navbar = ({ isLandingPage = false }: NavbarProps) => {
               className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground"
             />
           </div> */}
-          <LanguageSwitcher />
+            <LanguageSwitcher />
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="/auth?mode=login"
-                className="border-2 border-gray-secondary rounded-full p-2 flex items-center justify-center"
-              >
-                <User size={18} className="text-gold-main" />
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Login/Register</p>
-            </TooltipContent>
-          </Tooltip>
-        </motion.ul>
-      )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  href="/auth?mode=login"
+                  className="border-2 border-gray-secondary rounded-full p-2 flex items-center justify-center"
+                >
+                  <User size={18} className="text-gold-main" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Login/Register</p>
+              </TooltipContent>
+            </Tooltip>
+          </ul>
+        )}
+      </div>
     </div>
   );
 
   return (
-    <nav className={navbarClasses}>
-      {isLandingPage ? (
-        <motion.div
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          <NavbarContent />
-        </motion.div>
-      ) : (
-        <NavbarContent />
-      )}
+    <nav className="w-full px-15 py-5.5 bg-transparent relative">
+      <NavbarContent />
     </nav>
   );
 };

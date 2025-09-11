@@ -61,7 +61,7 @@ const AuthPage = () => {
     const sessionToken = getSessionTokenFromCookie();
     if (sessionToken) {
       console.log("User is already authenticated");
-      router.push("/marketplace");
+      router.push("/");
     }
   }, [router]);
 
@@ -160,7 +160,7 @@ const AuthPage = () => {
 
         <div className="mx-auto max-w-170">
           <div className="flex justify-center">
-            <Logo href="/" />
+            <Logo />
           </div>
           <div
             className={`border border-border-foreground ${

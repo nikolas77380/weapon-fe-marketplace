@@ -17,7 +17,7 @@ import { UserProfile } from "@/lib/types";
 interface BreadcrumbComponentProps {
   currentUser?: UserProfile;
   className?: string;
-  customLabels?: Record<string, string>; // Для кастомных названий сегментов
+  customLabels?: Record<string, string>;
 }
 
 const BreadcrumbComponent = ({
@@ -32,7 +32,7 @@ const BreadcrumbComponent = ({
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/marketplace">Home</Link>
+            <Link href="/">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map(({ href, label, isLast, isClickable }) => (

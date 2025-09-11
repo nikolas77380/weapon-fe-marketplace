@@ -56,10 +56,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div
-        className="border border-border-foreground bg-primary-foreground flex flex-row"
-      >
-        <Link href={`/marketplace/${item.id}`} className="relative overflow-hidden">
+      <div className="border border-border-foreground bg-primary-foreground flex flex-row">
+        <Link
+          href={`/marketplace/${item.id}`}
+          className="relative overflow-hidden"
+        >
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
@@ -71,10 +72,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
             className="w-[200px] h-full object-cover"
           />
+
           {/* Badge */}
-        <div className="absolute top-2 left-0">
-          <Badge
-            className={`
+          <div className="absolute top-2 left-0">
+            <Badge
+              className={`
               text-xs font-semibold rounded-none
               ${
                 item.attributesJson?.condition === "New" &&
@@ -89,10 +91,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
                 "bg-blue-500 text-white"
               }
             `}
-          >
-            {item.attributesJson?.condition}
-          </Badge>
-        </div>
+            >
+              {item.attributesJson?.condition}
+            </Badge>
+          </div>
         </Link>
         <div className="flex flex-col justify-between p-4 flex-1">
           <div>
@@ -140,11 +142,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <Link
-      href={`/marketplace/${item.id}`}
-      className="border border-border-foreground flex flex-col bg-primary-foreground"
-    >
-      <div className="relative overflow-hidden">
+    <div className="border border-border-foreground flex flex-col bg-primary-foreground">
+      <Link
+        href={`/marketplace/${item.id}`}
+        className="relative overflow-hidden min-h-[200px] max-h-[200px]"
+      >
         <Image
           src={
             getBestImageUrl(item.images?.[0] as ImageType, "small") ||
@@ -178,16 +180,25 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             {item.attributesJson?.condition}
           </Badge>
         </div>
-      </div>
-      <div className="flex flex-col p-7.5">
+      </Link>
+      <div className="flex flex-col p-3">
         <div className="flex flex-col gap-2">
-          <p className="font-medium text-xl">{item.title}</p>
-
+          <Link
+            href={`/marketplace/${item.id}`}
+            className="font-medium text-xl hover:text-gold-main transition-colors duration-300 w-fit"
+          >
+            {item.title}
+          </Link>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 <p className="text-sm text-foreground/50">Seller:</p>
-                <p className="text-sm underline">{item.seller?.username}</p>
+                <Link
+                  href={`/company/${item?.seller?.id}`}
+                  className="text-sm underline hover:text-gold-main transition-colors duration-300"
+                >
+                  {item.seller?.username}
+                </Link>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -197,23 +208,24 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           </div>
 
           <div className="flex items-center justify-between mt-5">
-            <p className="text-xl font-medium text-gold-main">
+            <p className="text-lg font-medium text-gold-main">
               {formatPrice(item.price, "$")}
             </p>
             <Button
-              className="rounded-none py-2.5 px-5 bg-gold-main hover:bg-gold-main/90 text-white"
+              className="rounded-none bg-transparent px-0 py-0 shadow-none text-gold-main
+              hover:bg-transparent hover:text-gold-main/90 hover:shadow-none group"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               {/* <MessageSquare size={15} /> */}
-              <p className="text-xs font-semibold">
+              <p className="font-semibold group-hover:underline">
                 {isLoading ? "Creating..." : "Contact Seller"}
               </p>
             </Button>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
