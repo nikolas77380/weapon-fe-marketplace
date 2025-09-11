@@ -17,7 +17,7 @@ export default function ConditionalLayout({
   const hideNavbarFooterPaths = ["/auth"];
 
   // Landing page path
-  const isLandingPage = pathname === "/";
+  const isLandingPage = false;
 
   const shouldHideNavbarFooter = hideNavbarFooterPaths.some((path) =>
     pathname.startsWith(path)

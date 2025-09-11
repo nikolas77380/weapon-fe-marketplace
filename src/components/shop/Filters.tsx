@@ -22,6 +22,7 @@ interface FiltersProps {
   selectedCategoryId: number | null;
   priceRange: { min: number; max: number };
   categoryCounts?: { [key: number]: number };
+  hideCategoryFilter?: boolean;
 }
 
 const Filters = ({
@@ -32,6 +33,7 @@ const Filters = ({
   selectedCategoryId,
   priceRange,
   categoryCounts = {},
+  hideCategoryFilter = false,
 }: FiltersProps) => {
   return (
     <div className="border border-border-foreground h-fit p-5 flex flex-col gap-3.5">
@@ -64,54 +66,56 @@ const Filters = ({
         </div>
       </div>
 
-      <div className="border-b border-border-foreground pb-3.5">
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="category" className="border-none">
-            <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">Category</h2>
-            </AccordionTrigger>
-            <AccordionContent className="pt-3">
-              <div className="flex flex-col gap-2">
-                {availableCategories.map((category) => (
-                  <div key={category.id} className="flex items-center gap-3">
-                    <Checkbox
-                      id={`category-${category.id}`}
-                      checked={selectedCategoryId === category.id}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          onCategoryChange(category.id);
-                        } else {
-                          onCategoryChange(null);
-                        }
-                      }}
-                      className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
-                    />
-                    <Label
-                      htmlFor={`category-${category.id}`}
-                      className={`text-sm font-light flex-1 cursor-pointer ${
-                        selectedCategoryId === category.id
-                          ? "text-foreground"
-                          : "text-foreground/80"
-                      }`}
-                    >
-                      {category.name}
-                    </Label>
-                    <span
-                      className={`text-sm ${
-                        selectedCategoryId === category.id
-                          ? "text-gray-500"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      ({categoryCounts[category.id] || 0})
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
+      {!hideCategoryFilter && (
+        <div className="border-b border-border-foreground pb-3.5">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="category" className="border-none">
+              <AccordionTrigger className="py-0 hover:no-underline">
+                <h2 className="text-sm font-medium font-roboto">Category</h2>
+              </AccordionTrigger>
+              <AccordionContent className="pt-3">
+                <div className="flex flex-col gap-2">
+                  {availableCategories.map((category) => (
+                    <div key={category.id} className="flex items-center gap-3">
+                      <Checkbox
+                        id={`category-${category.id}`}
+                        checked={selectedCategoryId === category.id}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            onCategoryChange(category.id);
+                          } else {
+                            onCategoryChange(null);
+                          }
+                        }}
+                        className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                      />
+                      <Label
+                        htmlFor={`category-${category.id}`}
+                        className={`text-sm font-light flex-1 cursor-pointer ${
+                          selectedCategoryId === category.id
+                            ? "text-foreground"
+                            : "text-foreground/80"
+                        }`}
+                      >
+                        {category.name}
+                      </Label>
+                      <span
+                        className={`text-sm ${
+                          selectedCategoryId === category.id
+                            ? "text-gray-500"
+                            : "text-gray-500"
+                        }`}
+                      >
+                        ({categoryCounts[category.id] || 0})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      )}
 
       <div className="border-b border-border-foreground pb-3.5">
         <Accordion type="single" collapsible className="w-full">

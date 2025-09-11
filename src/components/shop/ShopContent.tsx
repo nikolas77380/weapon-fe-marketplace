@@ -92,67 +92,67 @@ const ShopContent = ({
               {/* Previous Button */}
               <div>
                 {pagination.page > 1 && (
-                <PaginationItem>
-                  <PaginationPrevious
-                    onClick={() => onPageChange?.(pagination.page - 1)}
-                    className="cursor-pointer"
-                  />
-                </PaginationItem>
-              )}
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => onPageChange?.(pagination.page - 1)}
+                      className="cursor-pointer"
+                    />
+                  </PaginationItem>
+                )}
               </div>
 
               <div className="flex items-center">
                 {/* Page Numbers */}
-              {Array.from(
-                { length: pagination.pageCount },
-                (_, i) => i + 1
-              ).map((pageNum) => {
-                // Show first page, last page, current page, and pages around current
-                const showPage =
-                  pageNum === 1 ||
-                  pageNum === pagination.pageCount ||
-                  Math.abs(pageNum - pagination.page) <= 1;
+                {Array.from(
+                  { length: pagination.pageCount },
+                  (_, i) => i + 1
+                ).map((pageNum) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    pageNum === 1 ||
+                    pageNum === pagination.pageCount ||
+                    Math.abs(pageNum - pagination.page) <= 1;
 
-                if (!showPage) {
-                  // Show ellipsis if there's a gap
-                  if (
-                    (pageNum === 2 && pagination.page > 4) ||
-                    (pageNum === pagination.pageCount - 1 &&
-                      pagination.page < pagination.pageCount - 3)
-                  ) {
-                    return (
-                      <PaginationItem key={pageNum}>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    );
+                  if (!showPage) {
+                    // Show ellipsis if there's a gap
+                    if (
+                      (pageNum === 2 && pagination.page > 4) ||
+                      (pageNum === pagination.pageCount - 1 &&
+                        pagination.page < pagination.pageCount - 3)
+                    ) {
+                      return (
+                        <PaginationItem key={pageNum}>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      );
+                    }
+                    return null;
                   }
-                  return null;
-                }
 
-                return (
-                  <PaginationItem key={pageNum}>
-                    <PaginationLink
-                      onClick={() => onPageChange?.(pageNum)}
-                      isActive={pageNum === pagination.page}
-                      className="cursor-pointer"
-                    >
-                      {pageNum}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              })}
+                  return (
+                    <PaginationItem key={pageNum}>
+                      <PaginationLink
+                        onClick={() => onPageChange?.(pageNum)}
+                        isActive={pageNum === pagination.page}
+                        className="cursor-pointer"
+                      >
+                        {pageNum}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
               </div>
 
               <div>
                 {/* Next Button */}
-              {pagination.page < pagination.pageCount && (
-                <PaginationItem>
-                  <PaginationNext
-                    onClick={() => onPageChange?.(pagination.page + 1)}
-                    className="cursor-pointer"
-                  />
-                </PaginationItem>
-              )}
+                {pagination.page < pagination.pageCount && (
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => onPageChange?.(pagination.page + 1)}
+                      className="cursor-pointer"
+                    />
+                  </PaginationItem>
+                )}
               </div>
             </PaginationContent>
           </Pagination>
