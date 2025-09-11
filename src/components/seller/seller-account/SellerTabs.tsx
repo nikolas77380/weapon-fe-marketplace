@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
-import { cn, triggerClasses } from "@/lib/utils";
+import { cn, sellerTabs, triggerClasses } from "@/lib/utils";
 
 const SellerAccountTabs = ({
   products,
@@ -23,9 +23,7 @@ const SellerAccountTabs = ({
 }) => {
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
-  const handleProductDeleted = () => {
-    refetch();
-  };
+  // No need for handleProductDeleted anymore - TanStack Query will auto-refetch
 
   const markAsRead = (messageId: number) => {
     setMessages((prev) =>
@@ -42,24 +40,15 @@ const SellerAccountTabs = ({
       className="w-full flex-row gap-10"
     >
       <TabsList className="flex-col w-64 h-45 border border-border-foreground">
-        <TabsTrigger
-          value="myInquiries"
-          className={cn(triggerClasses)}
-        >
-          My listings
-        </TabsTrigger>
-        <TabsTrigger
-          value="savedItems"
-          className={cn(triggerClasses)}
-        >
-          Analytics
-        </TabsTrigger>
-        <TabsTrigger
-          value="messages"
-          className={cn(triggerClasses)}
-        >
-          Messages
-        </TabsTrigger>
+        {sellerTabs.map((tab) => (
+          <TabsTrigger
+            key={tab.value}
+            value={tab.value}
+            className={cn(triggerClasses)}
+          >
+            {tab.label}
+          </TabsTrigger>
+        ))}
       </TabsList>
       <div className="grow w-full">
         <SellerAccountHeader products={products} currentUser={currentUser} />
@@ -79,11 +68,7 @@ const SellerAccountTabs = ({
                   />
                 ) : (
                   products.map((product) => (
-                    <SellerListenedCard
-                      key={product.id}
-                      product={product}
-                      onProductDeleted={handleProductDeleted}
-                    />
+                    <SellerListenedCard key={product.id} product={product} />
                   ))
                 )}
               </div>

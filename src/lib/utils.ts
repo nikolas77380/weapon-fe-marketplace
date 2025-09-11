@@ -509,4 +509,20 @@ export const handleEnterPress = (
   }
 };
 
-export const triggerClasses = "w-full text-lg text-muted-foreground flex justify-start px-3.5";
+export const triggerClasses =
+  "w-full text-lg text-muted-foreground flex justify-start px-3.5";
+
+export const sellerTabs = [
+  {
+    label: "My listings",
+    value: "myInquiries",
+  },
+  {
+    label: "Analytics",
+    value: "savedItems",
+  },
+  {
+    label: "Messages",
+    value: "messages",
+  },
+];

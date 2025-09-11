@@ -1,0 +1,153 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "@/lib/strapi";
+import { Product, CreateProductData, UpdateProductData } from "@/lib/types";
+import { queryKeys } from "@/lib/query-keys";
+import { getSessionTokenFromCookie } from "@/lib/auth";
+
+export interface ProductsQueryParams {
+  category?: number;
+  seller?: number;
+  status?: string;
+  search?: string;
+  sort?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+}
+
+// Query hooks
+export const useProductsQuery = (params?: ProductsQueryParams) => {
+  return useQuery({
+    queryKey: queryKeys.products.list(params),
+    queryFn: () => getProducts(params),
+    enabled: !!getSessionTokenFromCookie(),
+  });
+};
+
+export const useProductQuery = (id: number) => {
+  return useQuery({
+    queryKey: queryKeys.products.detail(id),
+    queryFn: () => getProductById(id),
+    enabled: !!id && !!getSessionTokenFromCookie(),
+  });
+};
+
+export const useSellerProductsQuery = (sellerId?: number) => {
+  return useQuery({
+    queryKey: queryKeys.products.seller(sellerId || 0),
+    queryFn: () =>
+      getProducts({
+        seller: sellerId,
+        pagination: {
+          page: 1,
+          pageSize: 6,
+        },
+      }),
+    enabled: !!sellerId && !!getSessionTokenFromCookie(),
+  });
+};
+
+// Mutation hooks
+export const useCreateProductMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      data,
+      images,
+    }: {
+      data: CreateProductData;
+      images?: File[];
+    }) => createProduct({ data, images }),
+    onSuccess: (newProduct) => {
+      // Invalidate and refetch products lists
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
+
+      // If the product has a seller, invalidate seller products
+      if (newProduct?.data?.seller?.id) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.products.seller(newProduct.data.seller.id),
+        });
+      }
+    },
+  });
+};
+
+export const useUpdateProductMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data,
+      images,
+    }: {
+      id: number;
+      data: UpdateProductData;
+      images?: File[];
+    }) => updateProduct({ id, data, images }),
+    onSuccess: (updatedProduct, variables) => {
+      // Update the specific product in cache
+      queryClient.setQueryData(
+        queryKeys.products.detail(variables.id),
+        updatedProduct
+      );
+
+      // Invalidate all product lists to refetch with updated data
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
+
+      // If the product has a seller, invalidate seller products
+      if (updatedProduct?.data?.seller?.id) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.products.seller(updatedProduct.data.seller.id),
+        });
+      }
+    },
+  });
+};
+
+export const useDeleteProductMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => deleteProduct({ id }),
+    onSuccess: (_, deletedId) => {
+      // Remove the product from cache
+      queryClient.removeQueries({
+        queryKey: queryKeys.products.detail(deletedId.id),
+      });
+
+      // Invalidate all product lists to refetch without the deleted product
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
+    },
+  });
+};
+
+// Combined hook for backward compatibility
+export const useProductActions = () => {
+  const createMutation = useCreateProductMutation();
+  const updateMutation = useUpdateProductMutation();
+  const deleteMutation = useDeleteProductMutation();
+
+  return {
+    createProduct: createMutation.mutateAsync,
+    updateProduct: updateMutation.mutateAsync,
+    deleteProduct: deleteMutation.mutateAsync,
+    loading:
+      createMutation.isPending ||
+      updateMutation.isPending ||
+      deleteMutation.isPending,
+    error: createMutation.error || updateMutation.error || deleteMutation.error,
+  };
+};
