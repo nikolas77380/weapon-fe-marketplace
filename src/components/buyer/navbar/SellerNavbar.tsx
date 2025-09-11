@@ -23,6 +23,8 @@ import { Separator } from "../../ui/separator";
 import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
 import Messages from "./Messages";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 interface BuyerNavbarAuthProps {
   user: UserProfile;
@@ -30,9 +32,13 @@ interface BuyerNavbarAuthProps {
 }
 
 const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
+  const t = useTranslations('Navbar');
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
+        <NavigationMenuLink asChild>
+          <LanguageSwitcher />
+        </NavigationMenuLink>
         <NavigationMenuLink asChild>
           <Link
             href="/account/add-product"
@@ -41,7 +47,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           >
             <div className="flex items-center gap-2 py-2 px-3">
               <Plus size={16} className="text-white" />
-              <p className="text-xs font-semibold text-white">Add product</p>
+              <p className="text-xs font-semibold text-white">{t('addProduct')}</p>
             </div>
           </Link>
         </NavigationMenuLink>

@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { publicRoutes, protectedRoutes } from "@/lib/routes";
+import createMiddleware from "next-intl/middleware";
+import { locales } from "@/i18n/config";
+
+export const middlewareLocale = createMiddleware({
+  locales,
+  defaultLocale: "en",
+});
+
 export default async function middleware(req: NextRequest) {
   // 2. Check if the current route is protected or public
   const path = req.nextUrl.pathname;

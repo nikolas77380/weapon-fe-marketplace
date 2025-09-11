@@ -1,42 +1,23 @@
-"use client";
-
 import React from "react";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import Logo from "../ui/Logo";
-import { motion } from "framer-motion";
-import {
-  containerFooterVariants,
-  footerColumnVariants,
-} from "@/lib/animationVariants";
 
 const Footer = () => {
   return (
-    <motion.div
-      className="py-7 bg-[#f0f0e5]"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: false, amount: 0.3 }}
-      transition={{ duration: 0.8 }}
-    >
+    <div className="py-7 bg-[#f0f0e5]">
       <div className="container mx-auto flex flex-col items-center">
-        <motion.div
-          className="flex justify-between w-full"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
-          variants={containerFooterVariants}
-        >
-          <motion.ul variants={footerColumnVariants}>
+        <div className="flex justify-between w-full">
+          <ul>
             <li className="font-bold text-2xl mb-5">
               <Logo href="/" />
             </li>
             <li className="font-light w-full max-w-52">
               The trusted marketplace for weapon and armour
             </li>
-          </motion.ul>
+          </ul>
 
-          <motion.ul variants={footerColumnVariants}>
+          <ul>
             <h1 className="font-medium text-xl mb-3.5">Legal</h1>
             <Link
               href="/faq"
@@ -48,9 +29,9 @@ const Footer = () => {
             <li className="text-sm mb-1">Seller Dashboard</li>
             <li className="text-sm mb-1">Verification</li>
             <li className="text-sm">Support</li>
-          </motion.ul>
+          </ul>
 
-          <motion.ul variants={footerColumnVariants}>
+          <ul>
             <h1 className="font-medium text-xl mb-3.5">Contact</h1>
             <Link
               href="/contact"
@@ -61,34 +42,23 @@ const Footer = () => {
             </Link>
             <li className="text-sm mb-1">1-800-WEAPONS</li>
             <li className="text-sm">24/7 Support</li>
-          </motion.ul>
-        </motion.div>
+          </ul>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
+        <div>
           <Separator
             orientation="horizontal"
             className="w-full mt-20 bg-gray-primary"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="my-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
+        <div className="my-6">
           <h2 className="font-light text-2xl">
             © 2025 WM. All rights reserved.
           </h2>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

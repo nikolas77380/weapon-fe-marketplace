@@ -56,11 +56,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <Link
-        href={`/marketplace/${item.id}`}
+      <div
         className="border border-border-foreground bg-primary-foreground flex flex-row"
       >
-        <div className="relative overflow-hidden">
+        <Link href={`/marketplace/${item.id}`} className="relative overflow-hidden">
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
@@ -94,7 +93,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             {item.attributesJson?.condition}
           </Badge>
         </div>
-        </div>
+        </Link>
         <div className="flex flex-col justify-between p-4 flex-1">
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -135,7 +134,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </Button>
           </div>
         </div>
-      </Link>
+      </div>
     );
   }
 
