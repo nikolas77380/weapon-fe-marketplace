@@ -11,6 +11,7 @@ import { getSessionTokenFromCookie } from "@/lib/auth";
 
 export const useProducts = (params?: {
   category?: number;
+  categorySlug?: string;
   seller?: number;
   status?: string;
   search?: string;
@@ -37,6 +38,7 @@ export const useProducts = (params?: {
   // Create a stable key for the params to avoid infinite loops
   const paramsKey = JSON.stringify({
     category: params?.category,
+    categorySlug: params?.categorySlug,
     seller: params?.seller,
     status: params?.status,
     search: params?.search,
@@ -58,7 +60,6 @@ export const useProducts = (params?: {
           setProducts(response);
         }
 
-        // Обновляем пагинацию из мета-данных
         if (response.meta?.pagination) {
           setPagination(response.meta.pagination);
         } else {

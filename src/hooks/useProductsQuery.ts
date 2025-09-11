@@ -6,12 +6,12 @@ import {
   updateProduct,
   deleteProduct,
 } from "@/lib/strapi";
-import { Product, CreateProductData, UpdateProductData } from "@/lib/types";
+import { CreateProductData, UpdateProductData } from "@/lib/types";
 import { queryKeys } from "@/lib/query-keys";
-import { getSessionTokenFromCookie } from "@/lib/auth";
 
 export interface ProductsQueryParams {
   category?: number;
+  categorySlug?: string;
   seller?: number;
   status?: string;
   search?: string;
@@ -31,7 +31,6 @@ export const useProductsQuery = (params?: ProductsQueryParams) => {
   return useQuery({
     queryKey: queryKeys.products.list(params),
     queryFn: () => getProducts(params),
-    enabled: !!getSessionTokenFromCookie(),
   });
 };
 
@@ -39,7 +38,7 @@ export const useProductQuery = (id: number) => {
   return useQuery({
     queryKey: queryKeys.products.detail(id),
     queryFn: () => getProductById(id),
-    enabled: !!id && !!getSessionTokenFromCookie(),
+    enabled: !!id,
   });
 };
 
@@ -54,7 +53,7 @@ export const useSellerProductsQuery = (sellerId?: number) => {
           pageSize: 6,
         },
       }),
-    enabled: !!sellerId && !!getSessionTokenFromCookie(),
+    enabled: !!sellerId,
   });
 };
 

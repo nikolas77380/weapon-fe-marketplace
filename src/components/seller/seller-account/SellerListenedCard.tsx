@@ -71,7 +71,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary rounded-xl px-8 py-6 flex justify-between w-full">
+    <div className="border border-gray-primary px-8 py-6 flex justify-between w-full bg-[#E7E7E7]">
       {/* Product info */}
       <div className="flex gap-2.5">
         <Image
@@ -106,7 +106,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
       </div>
       {/* Action Buttons */}
       <div className="flex flex-col gap-8">
-        <div className="bg-black text-white px-2.5 py-1 rounded-md text-sm font-medium self-start">
+        <div className="bg-black text-white px-2.5 py-1 text-sm font-medium self-start">
           {currentStatus}
         </div>
         <div className="flex items-center gap-3">

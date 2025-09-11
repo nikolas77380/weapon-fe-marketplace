@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
-import { useCategories } from "@/hooks/useCategories";
+import { useCategories, useCategoryBySlug } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useCategoryCounts } from "@/hooks/useCategoryCounts";
 import Sorting from "./Sorting";
@@ -20,7 +20,7 @@ interface FilterState {
   sort: string;
 }
 
-const FilteringContent = () => {
+const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const { viewMode, setViewMode } = useViewMode("grid");
   const [filters, setFilters] = useState<FilterState>({
     minPrice: 1,
@@ -33,6 +33,7 @@ const FilteringContent = () => {
 
   const { data: response, isLoading } = useProductsQuery({
     category: filters.categoryId || undefined,
+    categorySlug: categorySlug || undefined,
     search: filters.search !== "" ? filters.search : undefined,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
     priceRange: {
@@ -50,6 +51,7 @@ const FilteringContent = () => {
   const loading = isLoading;
   const { categories } = useCategories();
   const { categoryCounts } = useCategoryCounts();
+  const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
   const paginatedProducts = allProducts;
 
@@ -99,6 +101,18 @@ const FilteringContent = () => {
 
   return (
     <>
+      {currentCategory && (
+        <div className="mt-12 mb-6">
+          <h1 className="text-3xl font-bold text-foreground">
+            {currentCategory.name}
+          </h1>
+          {currentCategory.description && (
+            <p className="text-muted-foreground mt-2">
+              {currentCategory.description}
+            </p>
+          )}
+        </div>
+      )}
       <div
         className="mt-12 border border-border-foreground h-26 flex items-center justify-between
         px-6 w-full bg-primary-foreground"
@@ -133,10 +147,11 @@ const FilteringContent = () => {
           onPriceChange={handlePriceChange}
           onCategoryChange={handleCategoryChange}
           onClearAll={handleClearAll}
-          availableCategories={availableCategories}
+          availableCategories={categorySlug ? [] : availableCategories}
           selectedCategoryId={filters.categoryId}
           priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
           categoryCounts={categoryCounts}
+          hideCategoryFilter={!!categorySlug}
         />
         {/* Shop Content */}
         <div className="w-full h-full">

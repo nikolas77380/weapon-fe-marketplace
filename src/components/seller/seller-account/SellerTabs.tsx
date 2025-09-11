@@ -53,7 +53,10 @@ const SellerAccountTabs = ({
       <div className="grow w-full">
         <SellerAccountHeader products={products} currentUser={currentUser} />
         <div className="mt-9 overflow-hidden">
-          <TabsContent value="myInquiries">
+          <TabsContent
+            value="myInquiries"
+            className="bg-[#DBDBDB] px-6 pt-2 pb-4"
+          >
             <div className="mt-7.5">
               <h1 className="text-xl font-roboto">My Inquiries</h1>
               <p className="text-sm font-medium text-[#C4C2C2] mt-2">
