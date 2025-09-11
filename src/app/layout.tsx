@@ -6,6 +6,8 @@ import { AuthContextProvider } from "@/context/AuthContext";
 import { ProviderSendBird } from "@/context/SendbirdProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/lib/query-client";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -35,18 +37,22 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}
       >
         <QueryProvider>
-          <AuthContextProvider>
-            <ProviderSendBird>
-              <ConditionalLayout>{children}</ConditionalLayout>
-              <Toaster />
-            </ProviderSendBird>
-          </AuthContextProvider>
+          <NextIntlClientProvider messages={messages}>
+            <AuthContextProvider>
+              <ProviderSendBird>
+                <ConditionalLayout>{children}</ConditionalLayout>
+                <Toaster />
+              </ProviderSendBird>
+            </AuthContextProvider>
+          </NextIntlClientProvider>
         </QueryProvider>
       </body>
     </html>
