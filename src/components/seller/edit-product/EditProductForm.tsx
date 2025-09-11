@@ -22,7 +22,7 @@ import { PRODUCT_CONDITION_FORM } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
-import { useProductActions } from "@/hooks/useProducts";
+import { useProductActions } from "@/hooks/useProductsQuery";
 import { Product, UpdateProductData } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
@@ -107,7 +107,11 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         },
       };
 
-      await updateProduct(product.id, updateData, values.images);
+      await updateProduct({
+        id: product.id,
+        data: updateData,
+        images: values.images,
+      });
 
       toast.success("Product updated successfully!");
       router.push("/account");
@@ -292,7 +296,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           {/* Temporary debugging */}
           {updateError && (
             <div className="text-red-500 text-sm mt-2">
-              Error: {updateError}
+              Error: {updateError.message || "Failed to update product"}
             </div>
           )}
         </form>

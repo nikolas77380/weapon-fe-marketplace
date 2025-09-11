@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import SellerActionCard from "./SellerActionCard";
 import { Box, Eye, MessageSquare, Plus, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,18 +11,24 @@ interface SellerAccountHeaderProps {
   products: Product[];
 }
 
-const SellerAccountHeader = ({ currentUser, products }: SellerAccountHeaderProps) => {
+const SellerAccountHeader = ({
+  currentUser,
+  products,
+}: SellerAccountHeaderProps) => {
   const router = useRouter();
-
   const totalViews = calculateTotalViews(products);
+  const activeListings = useMemo(
+    () => products.filter((product) => product.status === "available").length,
+    [products]
+  );
 
   const handleClickToSettings = () => {
-      router.push("/account/settings");
-    };
-  
-    const handleClickToAddProduct = () => {
-      router.push("/account/add-product");
-    };
+    router.push("/account/settings");
+  };
+
+  const handleClickToAddProduct = () => {
+    router.push("/account/add-product");
+  };
   return (
     <div>
       <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
@@ -54,7 +60,7 @@ const SellerAccountHeader = ({ currentUser, products }: SellerAccountHeaderProps
       <div className="flex items-center justify-between gap-12.5 mb-15">
         <SellerActionCard
           title="Active Listings"
-          count="2"
+          count={activeListings}
           icon={<Box size={30} className="mr-1" />}
         />
         <SellerActionCard
@@ -63,8 +69,8 @@ const SellerAccountHeader = ({ currentUser, products }: SellerAccountHeaderProps
           icon={<Eye size={30} className="mr-1" />}
         />
         <SellerActionCard
-          title="Total messages"
-          count="55"
+          title="Unread chats"
+          count={0}
           icon={<MessageSquare size={30} className="mr-1" />}
         />
       </div>

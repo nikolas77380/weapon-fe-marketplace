@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useProducts } from "@/hooks/useProducts";
+import { useSellerProductsQuery } from "@/hooks/useProductsQuery";
 import EditProductForm from "./EditProductForm";
 import { UserProfile } from "@/lib/types";
 import LoadingState from "@/components/ui/LoadingState";
@@ -18,7 +18,13 @@ const EditProductComponent = ({
   productSlug,
   currentUser,
 }: EditProductComponentProps) => {
-  const { products, loading, error } = useProducts({ seller: currentUser.id });
+  const {
+    data: response,
+    isLoading,
+    error,
+  } = useSellerProductsQuery(currentUser.id);
+  const products = response?.data || [];
+  const loading = isLoading;
   const product = products.find((p) => p.slug === productSlug);
 
   return (

@@ -26,32 +26,26 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
-import { useProductActions } from "@/hooks/useProducts";
+import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { updateStatus } from "@/mockup/status";
 
 interface SellerListenedCardProps {
   product: Product;
-  onProductDeleted?: () => void;
 }
 
-const SellerListenedCard = ({
-  product,
-  onProductDeleted,
-}: SellerListenedCardProps) => {
+const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(product.status);
 
   const handleDeleteProduct = async () => {
     try {
-      await deleteProduct(product.id);
+      await deleteProduct({ id: product.id });
       toast.success("Product successfully removed!");
       setIsDeleteDialogOpen(false);
-      if (onProductDeleted) {
-        onProductDeleted();
-      }
+      // TanStack Query will automatically refetch the data
     } catch (error) {
       console.error("Error deleting product:", error);
       toast.error("Error removing product");
@@ -62,9 +56,10 @@ const SellerListenedCard = ({
     newStatus: "available" | "reserved" | "sold" | "archived"
   ) => {
     try {
-      await updateProduct(product.id, { status: newStatus });
+      await updateProduct({ id: product.id, data: { status: newStatus } });
       setCurrentStatus(newStatus);
       toast.success(`Status updated to ${newStatus}`);
+      // TanStack Query will automatically refetch the data and update the UI
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status");

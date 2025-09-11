@@ -5,6 +5,7 @@ import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { ProviderSendBird } from "@/context/SendbirdProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { QueryProvider } from "@/lib/query-client";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -39,12 +40,14 @@ export default async function RootLayout({
       <body
         className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}
       >
-        <AuthContextProvider>
-          <ProviderSendBird>
-            <ConditionalLayout>{children}</ConditionalLayout>
-            <Toaster />
-          </ProviderSendBird>
-        </AuthContextProvider>
+        <QueryProvider>
+          <AuthContextProvider>
+            <ProviderSendBird>
+              <ConditionalLayout>{children}</ConditionalLayout>
+              <Toaster />
+            </ProviderSendBird>
+          </AuthContextProvider>
+        </QueryProvider>
       </body>
     </html>
   );

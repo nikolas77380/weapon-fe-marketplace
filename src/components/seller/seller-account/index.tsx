@@ -2,12 +2,18 @@
 
 import { UserProfile } from "@/lib/types";
 import SellerAccountTabs from "./SellerTabs";
-import { useProducts } from "@/hooks/useProducts";
+import { useSellerProductsQuery } from "@/hooks/useProductsQuery";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
-  const { products, loading, refetch } = useProducts({
-    seller: currentUser.id,
-  });
+  const {
+    data: response,
+    isLoading,
+    error,
+    refetch,
+  } = useSellerProductsQuery(currentUser.id);
+
+  const products = response?.data || [];
+  const loading = isLoading;
 
   return (
     <div className="w-full min-h-screen h-full">

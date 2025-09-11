@@ -29,7 +29,7 @@ import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
 import CategorySelect from "@/components/ui/CategorySelect";
-import { useProductActions } from "@/hooks/useProducts";
+import { useProductActions } from "@/hooks/useProductsQuery";
 
 const AddProductForms = () => {
   const [savedFormData, setSavedFormData, removeSavedFormData] =
@@ -101,7 +101,7 @@ const AddProductForms = () => {
 
   useEffect(() => {
     if (createError) {
-      toast.error(createError);
+      toast.error(createError.message || "Failed to create product");
     }
   }, [createError]);
 
@@ -132,7 +132,7 @@ const AddProductForms = () => {
         },
       };
 
-      await createProduct(productData, values.productImages);
+      await createProduct({ data: productData, images: values.productImages });
 
       // Очищаем localStorage и сбрасываем форму
       removeSavedFormData();

@@ -3,7 +3,7 @@
 import React, { useCallback, useState } from "react";
 import Filters from "./Filters";
 import ShopContent from "./ShopContent";
-import { useProducts } from "@/hooks/useProducts";
+import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useCategoryCounts } from "@/hooks/useCategoryCounts";
@@ -31,11 +31,7 @@ const FilteringContent = () => {
     sort: "id:desc",
   });
 
-  const {
-    products: allProducts,
-    pagination,
-    loading,
-  } = useProducts({
+  const { data: response, isLoading } = useProductsQuery({
     category: filters.categoryId || undefined,
     search: filters.search !== "" ? filters.search : undefined,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
@@ -48,6 +44,10 @@ const FilteringContent = () => {
       pageSize: 5,
     },
   });
+
+  const allProducts = response?.data || [];
+  const pagination = response?.meta?.pagination;
+  const loading = isLoading;
   const { categories } = useCategories();
   const { categoryCounts } = useCategoryCounts();
 
