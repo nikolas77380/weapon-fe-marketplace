@@ -31,7 +31,9 @@ const SellerAccountHeader = ({
   };
   return (
     <div>
-      <h2 className="font-medium">Weclome back, {currentUser.username}</h2>
+      <h2 className="font-medium text-2xl">
+        Weclome back, {currentUser.username}
+      </h2>
       {/* Right Buttons */}
       <div className="flex items-center justify-end mb-8 gap-3.5">
         <Button

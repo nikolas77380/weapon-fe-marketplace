@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Category } from "@/lib/types";
-import { getCategories } from "@/lib/strapi";
+import { getCategories, getCategoryBySlug } from "@/lib/strapi";
 
 // Fallback категории на случай, если API недоступен
 const fallbackCategories: Category[] = [
@@ -95,6 +95,60 @@ export const useCategories = () => {
             err instanceof Error ? err.message : "Failed to fetch categories"
           );
           setCategories(fallbackCategories);
+        })
+        .finally(() => setLoading(false));
+    },
+  };
+};
+
+export const useCategoryBySlug = (slug: string) => {
+  const [category, setCategory] = useState<Category | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!slug) {
+      setCategory(null);
+      setLoading(false);
+      return;
+    }
+
+    const fetchCategory = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await getCategoryBySlug(slug);
+        setCategory(data);
+      } catch (err) {
+        console.error("Error fetching category by slug:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch category"
+        );
+        setCategory(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategory();
+  }, [slug]);
+
+  return {
+    category,
+    loading,
+    error,
+    refetch: () => {
+      if (!slug) return;
+      setLoading(true);
+      setError(null);
+      getCategoryBySlug(slug)
+        .then(setCategory)
+        .catch((err) => {
+          console.error("Error refetching category by slug:", err);
+          setError(
+            err instanceof Error ? err.message : "Failed to fetch category"
+          );
+          setCategory(null);
         })
         .finally(() => setLoading(false));
     },

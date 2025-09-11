@@ -353,6 +353,115 @@ export const getCategoryById = async (id: number): Promise<Category> => {
   }
 };
 
+export const getCategoryBySlug = async (slug: string): Promise<Category> => {
+  try {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
+    const url = `${baseUrl}/api/categories/public/slug/${slug}?populate=*`;
+    console.log("Fetching category by slug from:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      signal: AbortSignal.timeout(10000),
+    });
+
+    console.log("Response status:", response.status);
+    console.log("Response ok:", response.ok);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error response:", errorText);
+
+      if (response.status === 404) {
+        throw new Error(
+          "Category not found. Please check if the category slug is correct."
+        );
+      } else if (response.status === 500) {
+        throw new Error(
+          "Internal server error. Please check Strapi server logs."
+        );
+      } else {
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${errorText}`
+        );
+      }
+    }
+
+    const data = await response.json();
+
+    if (!data.data) {
+      console.error("Invalid data structure:", data);
+      throw new Error("Invalid response format from category API");
+    }
+
+    const category: Category = {
+      id: data.data.id,
+      name: data.data.name,
+      slug: data.data.slug,
+      description: data.data.description,
+      order: data.data.order,
+      createdAt: data.data.createdAt,
+      updatedAt: data.data.updatedAt,
+      parent: data.data.parent
+        ? {
+            id: data.data.parent.id,
+            name: data.data.parent.name,
+            slug: data.data.parent.slug,
+            description: data.data.parent.description,
+            order: data.data.parent.order,
+            createdAt: data.data.parent.createdAt,
+            updatedAt: data.data.parent.updatedAt,
+          }
+        : undefined,
+      children: data.data.children
+        ? data.data.children.map((child: unknown) => {
+            const typedChild = child as {
+              id: number;
+              name: string;
+              slug: string;
+              description: string;
+              order: number;
+              createdAt: string;
+              updatedAt: string;
+            };
+            return {
+              id: typedChild.id,
+              name: typedChild.name,
+              slug: typedChild.slug,
+              description: typedChild.description,
+              order: typedChild.order,
+              createdAt: typedChild.createdAt,
+              updatedAt: typedChild.updatedAt,
+            };
+          })
+        : undefined,
+    };
+
+    console.log("Transformed category:", category);
+    return category;
+  } catch (error) {
+    console.error("Error fetching category by slug:", error);
+
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error(
+        "Network error. Please check if Strapi server is running at " +
+          (process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337")
+      );
+    }
+
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        "Request timeout. Strapi server might be slow or unavailable."
+      );
+    }
+
+    throw error;
+  }
+};
+
 export const createProduct = async ({
   data,
   images,
@@ -454,6 +563,7 @@ export const deleteProduct = async ({ id }: { id: number }) => {
 
 export const getProducts = async (params?: {
   category?: number;
+  categorySlug?: string;
   seller?: number;
   status?: string;
   search?: string;
@@ -471,6 +581,10 @@ export const getProducts = async (params?: {
 
   if (params?.category) {
     queryParams.append("filters[category][$eq]", params.category.toString());
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("filters[categorySlug]", params.categorySlug);
   }
 
   if (params?.seller) {
@@ -512,29 +626,19 @@ export const getProducts = async (params?: {
   queryParams.append("populate", "*");
 
   const queryString = queryParams.toString();
-  const path = `/api/products${queryString ? `?${queryString}` : ""}`;
+  const path = `/api/products/public${queryString ? `?${queryString}` : ""}`;
 
-  const token = getSessionTokenFromCookie();
-  if (!token) {
-    throw new Error("Authentication required");
-  }
-  return strapiFetchAuth({
+  return strapiFetch({
     path,
     method: "GET",
-    token,
-    cache: 0,
   });
 };
 
 export const getProductById = async (id: number) => {
-  const token = getSessionTokenFromCookie();
-  if (!token) {
-    throw new Error("Authentication required");
-  }
-  return strapiFetchAuth({
-    path: `/api/products/${id}?populate=*`,
+  // Используем публичный endpoint без авторизации
+  return strapiFetch({
+    path: `/api/products/public/${id}?populate=*`,
     method: "GET",
-    token,
   });
 };
 
@@ -708,5 +812,50 @@ export const deleteCertificate = async ({ id }: { id: number }) => {
     path: `/api/certificates/${id}`,
     method: "DELETE",
     token,
+  });
+};
+
+// Seller Meta API functions (public)
+export const getSellerMetas = async (params?: {
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const page = params?.pagination?.page || 1;
+  const pageSize = params?.pagination?.pageSize || 10;
+
+  queryParams.append("pagination[page]", page.toString());
+  queryParams.append("pagination[pageSize]", pageSize.toString());
+
+  const queryString = queryParams.toString();
+  const path = `/api/seller-metas/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+export const getSellerMetaById = async (id: number) => {
+  return strapiFetch({
+    path: `/api/seller-metas/public/${id}`,
+    method: "GET",
+  });
+};
+
+export const getSellerMetaBySellerId = async (sellerId: number) => {
+  return strapiFetch({
+    path: `/api/seller-metas/public/seller/${sellerId}`,
+    method: "GET",
   });
 };
