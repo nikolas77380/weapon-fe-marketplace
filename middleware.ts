@@ -1,21 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { publicRoutes, protectedRoutes } from "@/lib/routes";
 import createMiddleware from "next-intl/middleware";
-import { locales } from "@/i18n/config";
+import { locales, defaultLocale } from "@/i18n/config";
 
-export const middlewareLocale = createMiddleware({
+const intlMiddleware = createMiddleware({
   locales,
-  defaultLocale: "en",
+  defaultLocale,
 });
 
 export default async function middleware(req: NextRequest) {
   // 2. Check if the current route is protected or public
+  const intlResponse = intlMiddleware(req);
+
+  if (intlResponse.status === 307 || intlResponse.status === 308) {
+    return intlResponse;
+  }
+
   const path = req.nextUrl.pathname;
+  const pathWithoutLocale = path.replace(/^\/[a-z]{2}(?=\/|$)/, "") || "/";
+
   const isProtectedRoute = protectedRoutes.some((route) =>
-    path.startsWith(route)
+    pathWithoutLocale.startsWith(route)
   );
   console.log("Middleware - Is protected route:", isProtectedRoute);
-  const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
+  const isPublicRoute = publicRoutes.some((route) =>
+    pathWithoutLocale.startsWith(route)
+  );
 
   // 3. Get sessionToken from cookies
   const sessionToken = req.cookies.get("sessionToken")?.value;
@@ -25,18 +35,22 @@ export default async function middleware(req: NextRequest) {
   // 4. Redirect to /auth if the user is not authenticated on protected routes
   if (isProtectedRoute && !sessionToken) {
     console.log("Middleware - Redirecting to /auth (not authenticated)");
-    return NextResponse.redirect(new URL("/auth", req.nextUrl));
+    const locale = path.split("/")[1] || defaultLocale;
+    return NextResponse.redirect(new URL(`/${locale}/auth`, req.nextUrl));
   }
 
   // 5. Redirect to /marketplace if the user is authenticated on auth page
-  if (path === "/auth" && sessionToken) {
+  if (pathWithoutLocale === "/auth" && sessionToken) {
     console.log(
       "Middleware - Redirecting to /marketplace (already authenticated)"
     );
-    return NextResponse.redirect(new URL("/marketplace", req.nextUrl));
+    const locale = path.split("/")[1] || defaultLocale;
+    return NextResponse.redirect(
+      new URL(`/${locale}/marketplace`, req.nextUrl)
+    );
   }
 
-  return NextResponse.next();
+  return intlResponse;
 }
 
 // Routes Middleware should not run on

@@ -5,51 +5,58 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useViewMode } from "@/hooks/useViewMode";
 import { MessageSquare } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import NotFavouriteState from "./NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import BuyerAccountHeader from "./BuyerAccountHeader";
 import { UserProfile } from "@/lib/types";
 import { cn, triggerClasses } from "@/lib/utils";
+import SkeletonComponent from "@/components/ui/SkeletonComponent";
+import { useTranslations } from "next-intl";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
 }
 
 const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
-  const { favourites } = useFavourites();
+  const t = useTranslations("BuyerAccountTabs");
+
+  const { favourites, loading } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
+  const [activeTab, setActiveTab] = useState("myInquiries");
+
+  useEffect(() => {
+    // Check if we should open favourites tab or another tabs - without hash in URL
+    const savedTab = sessionStorage.getItem("accountTab");
+    if (savedTab === "favourites") {
+      setActiveTab("favourites");
+      sessionStorage.removeItem("accountTab");
+    }
+  }, []);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   return (
     <Tabs
-      defaultValue="myInquiries"
+      value={activeTab}
+      onValueChange={handleTabChange}
       orientation="vertical"
       className="w-full flex-row gap-10"
     >
       <TabsList className="flex-col w-64 h-45 border border-border-foreground">
-        <TabsTrigger
-          value="myInquiries"
-          className={cn(triggerClasses)}
-        >
-          My Inquiries
+        <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
+          {t('tabMyInquiries.titleTabMyInquiries')}
         </TabsTrigger>
-        <TabsTrigger
-          value="favourites"
-          className={cn(triggerClasses)}
-        >
-          Favourites({favourites.length || 0})
+        <TabsTrigger value="favourites" className={cn(triggerClasses)}>
+          {t('tabFavourites.titleFavourites')} ({favourites.length || 0})
         </TabsTrigger>
-        <TabsTrigger
-          value="messages"
-          className={cn(triggerClasses)}
-        >
-          Messages
+        <TabsTrigger value="messages" className={cn(triggerClasses)}>
+          {t('tabMessage.titleMessages')}
         </TabsTrigger>
-        <TabsTrigger
-          value="settings"
-          className={cn(triggerClasses)}
-        >
-          Settings
+        <TabsTrigger value="settings" className={cn(triggerClasses)}>
+          {t('tabSettings.titleSettings')}
         </TabsTrigger>
       </TabsList>
       <div className="grow w-full">
@@ -57,7 +64,7 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
         <div className="mt-9 overflow-hidden">
           <TabsContent value="myInquiries">
             <div className="bg-primary-foreground p-5">
-              <p className="font-roboto text-xl mb-8">My Inquiries</p>
+              <p className="font-roboto text-xl mb-8">{t('tabMyInquiries.titleTabMyInquiries')}</p>
               {/* Card 1 */}
               <div className="bg-[#E7E7E7] p-5 flex flex-col">
                 <div className="flex items-center justify-between">
@@ -144,13 +151,13 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
             </div>
           </TabsContent>
           <TabsContent value="favourites">
-            <div className="mt-7.5 bg-primary-foreground p-5">
+            <div className="bg-primary-foreground p-5">
               <ViewModeToggle
                 viewMode={viewMode}
                 onGridClick={toggleToGrid}
                 onListClick={toggleToList}
                 count={favourites.length || 0}
-                title="My Favourites Product"
+                title={t('tabFavourites.titleMyFavouritesProduct')}
               />
 
               {/* Favourites Content */}
@@ -161,7 +168,13 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
                     : "flex flex-col gap-4"
                 }
               >
-                {favourites.length > 0 ? (
+                {loading ? (
+                  <SkeletonComponent
+                    type="favouriteCard"
+                    count={6}
+                    className={viewMode === "grid" ? "" : "w-full"}
+                  />
+                ) : favourites.length > 0 ? (
                   favourites.map((favourite) => (
                     <FavouriteCard
                       key={favourite.id}
@@ -177,14 +190,14 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
           </TabsContent>
           <TabsContent value="messages">
             <div className="border border-gray-primary rounded-xl p-7">
-              <p className="font-roboto text-xl mb-8">Messages</p>
-              <p className="text-gray-500">No messages yet</p>
+              <p className="font-roboto text-xl mb-8">{t('tabMessage.titleMessages')}</p>
+              <p className="text-gray-500">{t('tabMessage.titleNoMessagesYet')}</p>
             </div>
           </TabsContent>
           <TabsContent value="settings">
             <div className="border border-gray-primary rounded-xl p-7">
-              <p className="font-roboto text-xl mb-8">Settings</p>
-              <p className="text-gray-500">Settings content will be here</p>
+              <p className="font-roboto text-xl mb-8">{t('tabSettings.titleSettings')}</p>
+              <p className="text-gray-500">{t('tabSettings.titleContentSettings')}</p>
             </div>
           </TabsContent>
         </div>

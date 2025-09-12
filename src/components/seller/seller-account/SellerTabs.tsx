@@ -9,6 +9,7 @@ import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
 import { cn, sellerTabs, triggerClasses } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const SellerAccountTabs = ({
   products,
@@ -21,6 +22,8 @@ const SellerAccountTabs = ({
   refetch: () => void;
   currentUser: UserProfile;
 }) => {
+  const t = useTranslations("SellerAccountTabs.tabs");
+
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
   // No need for handleProductDeleted anymore - TanStack Query will auto-refetch
@@ -46,7 +49,7 @@ const SellerAccountTabs = ({
             value={tab.value}
             className={cn(triggerClasses)}
           >
-            {tab.label}
+            {t(tab.key)}
           </TabsTrigger>
         ))}
       </TabsList>

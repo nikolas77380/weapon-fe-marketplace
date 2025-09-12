@@ -1,5 +1,56 @@
 {
   "Navbar": {
-    "addProduct": "Додати продукт"
+    "logRegTooltip": "Вхід/Реєстрація",
+    "sellerNavbar": {
+      "titleAddProduct": "Додати продукт",
+      "titleUserName": "Ім'я користувача",
+      "titleMyAccount": "Мій обліковий запис",
+      "titleBrowseProducts": "Переглянути товари",
+      "titlAddNewProduct": "Додати новий продукт",
+      "titleMessages": "Повідомлення",
+      "titleSettings": "Налаштування",
+      "titleSignOut": "Вийти"
+    },
+    "buyerNavbar": {
+      "titleUserName": "Ім'я користувача",
+      "titleMyAccount": "Мій обліковий запис",
+      "titleFavourites": "Обране",
+      "titleMessages": "Повідомлення",
+      "titleSettings": "Налаштування",
+      "titleSignOut": "Вийти"
+    }
+  },
+  "SellerAccountTabs": {
+    "tabs": {
+      "titleTabMyInquiries": "Мої оголошення",
+      "titleTabAnalytics": "Аналітика",
+      "titleTabMessages": "Повідомлення"
+    }
+  },
+  "BuyerAccountHeader": {
+    "titleUserDetails": "Відомості про користувача",
+    "titleBrowseMarketplace": "Перейти на майданчик",
+    "titleEmail": "Пошта",
+    "titlePhone": "Телефон",
+    "titleActiveInquiries": "Активні запити",
+    "titleSavedProducts": "Збережені товари",
+    "titleCompletedDeals": "Завершені угоди"
+  },
+  "BuyerAccountTabs": {
+    "tabMyInquiries": {
+      "titleTabMyInquiries": "Мої запити"
+    },
+    "tabFavourites": {
+      "titleMyFavouritesProduct": "Мій обраний товар",
+      "titleFavourites": "Обране"
+    },
+    "tabMessage": {
+      "titleMessages": "Повідомлення",
+      "titleNoMessagesYet": "Поки що немає повідомлень"
+    },
+    "tabSettings": {
+      "titleSettings": "Налаштування",
+      "titleContentSettings": "Тут буде вміст налаштувань"
+    }
   }
 }

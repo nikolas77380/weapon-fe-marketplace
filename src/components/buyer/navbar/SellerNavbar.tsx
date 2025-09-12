@@ -32,7 +32,7 @@ interface BuyerNavbarAuthProps {
 }
 
 const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
-  const t = useTranslations('Navbar');
+  const t = useTranslations('Navbar.sellerNavbar');
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
@@ -47,7 +47,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           >
             <div className="flex items-center gap-2 py-2 px-3">
               <Plus size={16} className="text-white" />
-              <p className="text-xs font-semibold text-white">{t('addProduct')}</p>
+              <p className="text-xs font-semibold text-white">{t('titleAddProduct')}</p>
             </div>
           </Link>
         </NavigationMenuLink>
@@ -57,7 +57,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
             <Avatar className="h-8 w-8 border border-gray-300 cursor-pointer">
-              <AvatarFallback className="bg-black text-white text-sm">
+              <AvatarFallback className="bg-black text-white text-sm uppercase">
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
             </Avatar>
@@ -71,7 +71,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           <NavigationMenuContent>
             <ul className="grid w-[200px] gap-1">
               <div className="flex flex-col px-3 pt-2">
-                <p className="font-semibold">User Name</p>
+                <p className="font-semibold">{t('titleUserName')}</p>
                 <p className="text-muted-foreground text-sm">
                   {user.displayName || user.username}
                 </p>
@@ -82,7 +82,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="/account">
                     <div className="flex items-center gap-3">
                       <User size={18} />
-                      <p className="font-semibold">My Account</p>
+                      <p className="font-semibold">{t('titleMyAccount')}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -90,7 +90,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="#">
                     <div className="flex items-center gap-3">
                       <PackageSearch size={18} />
-                      <p className="font-semibold">Browse Products</p>
+                      <p className="font-semibold">{t('titleBrowseProducts')}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -98,7 +98,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="/account/add-product">
                     <div className="flex items-center gap-3">
                       <PackageSearch size={18} />
-                      <p className="font-semibold">Add new product</p>
+                      <p className="font-semibold">{t('titlAddNewProduct')}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -107,7 +107,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                     <div className="flex items-center gap-3">
                       <MessageCircle size={18} />
                       <div className="flex items-center justify-between w-full">
-                        <p className="font-semibold">Messages</p>
+                        <p className="font-semibold">{t('titleMessages')}</p>
                         <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
                           3
                         </div>
@@ -119,7 +119,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="/account/settings">
                     <div className="flex items-center gap-3">
                       <Settings size={18} />
-                      <p className="font-semibold">Settings</p>
+                      <p className="font-semibold">{t('titleSettings')}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -131,7 +131,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   >
                     <div className="flex items-center gap-3">
                       <LogOut size={18} />
-                      <p className="font-semibold text-red-600">Sign Out</p>
+                      <p className="font-semibold text-red-600">{t('titleSignOut')}</p>
                     </div>
                   </Button>
                 </NavigationMenuLink>

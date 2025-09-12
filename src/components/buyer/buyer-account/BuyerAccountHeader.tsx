@@ -5,6 +5,7 @@ import BuyerActionCard from "./BuyerActionCard";
 import { FavouriteProduct } from "@/lib/favourites";
 import Link from "next/link";
 import { FileText, HandHelping, Heart } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -15,17 +16,18 @@ const BuyerAccountHeader = ({
   currentUser,
   favourites,
 }: BuyerAccountHeaderProps) => {
+  const t = useTranslations('BuyerAccountHeader');
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between border-l-2 border-gold-main">
-        <p className="text-2xl font-medium ml-5">Buyer Details</p>
+        <p className="text-2xl font-medium ml-5">{t('titleUserDetails')}</p>
         <div>
           <Link
-            href={"/marketplace"}
+            href={"/"}
             className="p-2.5 px-5 text-xl font-medium rounded-none bg-gold-main text-white hover:bg-gold-main/90
             duration-300 transition-all"
           >
-            Browse marketplace
+            {t('titleBrowseMarketplace')}
           </Link>
         </div>
       </div>
@@ -45,12 +47,12 @@ const BuyerAccountHeader = ({
               </p>
               <div className="flex items-center gap-10">
                 <div className="flex flex-col mt-3.5">
-                  <p className="text-muted-foreground">Email</p>
+                  <p className="text-muted-foreground">{t('titleEmail')}</p>
                   <p>{currentUser?.email}</p>
                 </div>
                 {currentUser?.metadata?.phoneNumbers && (
                   <div className="flex flex-col mt-3.5">
-                    <p className="text-muted-foreground">Phone</p>
+                    <p className="text-muted-foreground">{t('titlePhone')}</p>
                     <p>{currentUser?.metadata?.phoneNumbers}</p>
                   </div>
                 )}
@@ -59,17 +61,17 @@ const BuyerAccountHeader = ({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
             <BuyerActionCard
-              title="Active Inquiries"
+              title={t('titleActiveInquiries')}
               count={2}
               icons={<FileText className="size-10" strokeWidth={0.5} />}
             />
             <BuyerActionCard
-              title="Saved Items"
+              title={t('titleSavedProducts')}
               count={favourites.length || 0}
               icons={<Heart className="size-10" strokeWidth={0.5} />}
             />
             <BuyerActionCard
-              title="Completed deals"
+              title={t('titleCompletedDeals')}
               count={5}
               icons={<HandHelping className="size-10" strokeWidth={0.5} />}
             />

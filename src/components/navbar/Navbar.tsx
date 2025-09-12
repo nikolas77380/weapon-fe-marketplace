@@ -8,9 +8,11 @@ import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
 import { User } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useTranslations } from "next-intl";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
+  const t = useTranslations('Navbar');
 
   const NavbarContent = () => (
     <div className="h-16">
@@ -49,7 +51,7 @@ const Navbar = () => {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Login/Register</p>
+                <p>{t('logRegTooltip')}</p>
               </TooltipContent>
             </Tooltip>
           </ul>
