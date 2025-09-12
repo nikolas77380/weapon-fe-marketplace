@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Eye, MessageSquare } from "lucide-react";
 import { Button } from "../ui/button";
-import { ImageType, Product } from "@/lib/types";
+import { ImageType, Product, SellerMeta } from "@/lib/types";
 import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
@@ -10,6 +10,8 @@ import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { formatPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import ContactModal from "./ContactModal";
+import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 
 interface ShopCardProps {
   item: Product;
@@ -18,21 +20,16 @@ interface ShopCardProps {
 
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const { currentUser } = useAuthContext();
+  const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { sellerMeta } = useSellerMetaBySeller(item.seller?.id as number);
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
 
-    if (!currentUser) {
-      // Redirect to login if user is not authenticated
-      window.location.href = "/auth";
-      return;
-    }
-
-    if (currentUser.role.name !== "buyer") {
-      alert("Only buyers can contact sellers");
+    if (currentUser?.role.name !== "buyer" || !currentUser) {
+      setOpen(true);
       return;
     }
 
@@ -56,10 +53,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div
-        className="border border-border-foreground bg-primary-foreground flex flex-row"
-      >
-        <Link href={`/marketplace/${item.id}`} className="relative overflow-hidden">
+      <div className="border border-border-foreground bg-primary-foreground flex flex-row">
+        <Link
+          href={`/marketplace/${item.id}`}
+          className="relative overflow-hidden"
+        >
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
@@ -72,7 +70,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             className="w-[200px] h-full object-cover"
           />
           {/* Badge */}
-        <div className="absolute top-2 left-0">
+          {/* <div className="absolute top-2 left-0">
           <Badge
             className={`
               text-xs font-semibold rounded-none
@@ -92,7 +90,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           >
             {item.attributesJson?.condition}
           </Badge>
-        </div>
+        </div> */}
         </Link>
         <div className="flex flex-col justify-between p-4 flex-1">
           <div>
@@ -123,7 +121,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               </div>
             </div>
             <Button
-              className="flex items-center gap-2 rounded-none py-2.5 px-5 bg-gold-main hover:bg-gold-main/90 text-white"
+              className="flex items-center gap-2 rounded-none py-2.5 px-5 hover:underline bg-transparent hover:bg-transparent border-none shadow-none text-gold-main"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
@@ -140,24 +138,22 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <Link
-      href={`/marketplace/${item.id}`}
-      className="border border-border-foreground flex flex-col bg-primary-foreground"
-    >
-      <div className="relative overflow-hidden">
-        <Image
-          src={
-            getBestImageUrl(item.images?.[0] as ImageType, "small") ||
-            "/shop/1.jpg"
-          }
-          alt={item.title}
-          width={266}
-          height={200}
-          onError={(e) => handleImageError(e, "/shop/1.jpg")}
-          className="w-full h-full object-cover"
-        />
-        {/* Badge */}
-        <div className="absolute top-2 left-0">
+    <div className="border border-border-foreground flex flex-col bg-primary-foreground">
+      <Link href={`/marketplace/${item.id}`}>
+        <div className="relative overflow-hidden h-[200px] min-h-[200px] max-h-[200px] p-3">
+          <Image
+            src={
+              getBestImageUrl(item.images?.[0] as ImageType, "small") ||
+              "/shop/1.jpg"
+            }
+            alt={item.title}
+            width={266}
+            height={200}
+            onError={(e) => handleImageError(e, "/shop/1.jpg")}
+            className="w-full h-full object-cover"
+          />
+          {/* Badge */}
+          {/* <div className="absolute top-2 left-0">
           <Badge
             className={`
               text-xs font-semibold rounded-none
@@ -177,8 +173,9 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           >
             {item.attributesJson?.condition}
           </Badge>
+        </div> */}
         </div>
-      </div>
+      </Link>
       <div className="flex flex-col p-7.5">
         <div className="flex flex-col gap-2">
           <p className="font-medium text-xl">{item.title}</p>
@@ -186,8 +183,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <p className="text-sm text-foreground/50">Seller:</p>
-                <p className="text-sm underline">{item.seller?.username}</p>
+                <Link
+                  href={`/company/${item.seller?.id}`}
+                  className="text-sm hover:underline cursor-pointer"
+                >
+                  {item.seller?.username}
+                </Link>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -201,7 +202,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               {formatPrice(item.price, "$")}
             </p>
             <Button
-              className="rounded-none py-2.5 px-5 bg-gold-main hover:bg-gold-main/90 text-white"
+              className="rounded-none py-2.5 pl-5 hover:underline text-gold-main text-2xl bg-transparent hover:bg-transparent border-none shadow-none"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
@@ -212,8 +213,13 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </Button>
           </div>
         </div>
+        <ContactModal
+          open={open}
+          onOpenChange={setOpen}
+          sellerData={sellerMeta}
+        />
       </div>
-    </Link>
+    </div>
   );
 };
 

@@ -29,8 +29,6 @@ export const useFavourites = () => {
           statuses[fav.product.id] = true;
         });
         setFavouriteStatuses(statuses);
-      } else {
-        toast.error(result.error || "Failed to fetch favourites");
       }
     } catch (error) {
       console.error("Error loading favourites:", error);

@@ -116,7 +116,7 @@ export const getFavourites = async (): Promise<{
     const token = getSessionTokenFromCookie();
 
     if (!token) {
-      return { success: false, error: "Authentication required" };
+      return { success: false, error: "" };
     }
 
     const response = await fetch(
