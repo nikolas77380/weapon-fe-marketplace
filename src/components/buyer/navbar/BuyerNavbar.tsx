@@ -23,6 +23,8 @@ import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
 import Messages from "./Messages";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import { useTranslations } from "next-intl";
+import { useFavourites } from "@/hooks/useFavourites";
 
 interface BuyerNavbarAuthProps {
   user: UserProfile;
@@ -30,6 +32,8 @@ interface BuyerNavbarAuthProps {
 }
 
 const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
+  const t = useTranslations("Navbar.buyerNavbar");
+  const { favourites } = useFavourites();
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
@@ -52,7 +56,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           <NavigationMenuContent>
             <ul className="grid w-[200px] gap-1">
               <div className="flex flex-col px-3 pt-2">
-                <p className="font-semibold">User Name</p>
+                <p className="font-semibold">{t("titleUserName")}</p>
                 <p className="text-muted-foreground text-sm">
                   {user.displayName || user.username}
                 </p>
@@ -63,15 +67,25 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="/account">
                     <div className="flex items-center gap-3">
                       <User size={18} />
-                      <p className="font-semibold">My Account</p>
+                      <p className="font-semibold">{t("titleMyAccount")}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild className="p-3">
-                  <Link href="#">
+                  <Link
+                    href="/account"
+                    onClick={() =>
+                      sessionStorage.setItem("accountTab", "favourites")
+                    }
+                  >
                     <div className="flex items-center gap-3">
                       <PackageSearch size={18} />
-                      <p className="font-semibold">Browse Products</p>
+                      <div className="flex items-center justify-between w-full">
+                        <p className="font-semibold">{t("titleFavourites")}</p>
+                        <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
+                          {favourites.length || 0}
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -80,7 +94,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                     <div className="flex items-center gap-3">
                       <MessageCircle size={18} />
                       <div className="flex items-center justify-between w-full">
-                        <p className="font-semibold">Messages</p>
+                        <p className="font-semibold">{t("titleMessages")}</p>
                         <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
                           3
                         </div>
@@ -92,7 +106,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   <Link href="#">
                     <div className="flex items-center gap-3">
                       <Settings size={18} />
-                      <p className="font-semibold">Settings</p>
+                      <p className="font-semibold">{t("titleSettings")}</p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
@@ -104,7 +118,9 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                   >
                     <div className="flex items-center gap-3">
                       <LogOut size={18} />
-                      <p className="font-semibold text-red-600">Sign Out</p>
+                      <p className="font-semibold text-red-600">
+                        {t("titleSignOut")}
+                      </p>
                     </div>
                   </Button>
                 </NavigationMenuLink>

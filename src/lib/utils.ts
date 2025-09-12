@@ -510,19 +510,10 @@ export const handleEnterPress = (
 };
 
 export const triggerClasses =
-  "w-full text-lg text-muted-foreground flex justify-start px-3.5";
+  "w-full text-lg font-medium text-muted-foreground flex justify-start px-3.5";
 
 export const sellerTabs = [
-  {
-    label: "My listings",
-    value: "myInquiries",
-  },
-  {
-    label: "Analytics",
-    value: "savedItems",
-  },
-  {
-    label: "Messages",
-    value: "messages",
-  },
+  { key: "myInquiries", value: "myInquiries" },
+  { key: "analytics", value: "savedItems" },
+  { key: "messages", value: "messages" },
 ];

@@ -1,5 +1,56 @@
 {
   "Navbar": {
-    "addProduct": "Add product"
+    "logRegTooltip": "Login/Register",
+    "sellerNavbar": {
+      "titleAddProduct": "Add product",
+      "titleUserName": "User name",
+      "titleMyAccount": "My account",
+      "titleBrowseProducts": "Browse products",
+      "titlAddNewProduct": "Add new product",
+      "titleMessages": "Messages",
+      "titleSettings": "Settings",
+      "titleSignOut": "Sign Out"
+    },
+    "buyerNavbar": {
+      "titleUserName": "User name",
+      "titleMyAccount": "My account",
+      "titleFavourites": "Favourites",
+      "titleMessages": "Messages",
+      "titleSettings": "Settings",
+      "titleSignOut": "Sign Out"
+    }
+  },
+  "SellerAccountTabs": {
+    "tabs": {
+      "titleTabMyInquiries": "My listings",
+      "titleTabAnalytics": "Analytics",
+      "titleTabMessages": "Messages"
+    }
+  },
+  "BuyerAccountHeader": {
+    "titleUserDetails": "User Details",
+    "titleBrowseMarketplace": "Browse marketplace",
+    "titleEmail": "Email",
+    "titlePhone": "Phone",
+    "titleActiveInquiries": "Active inquiries",
+    "titleSavedProducts": "Saved product",
+    "titleCompletedDeals": "Completed deals"
+  },
+  "BuyerAccountTabs": {
+    "tabMyInquiries": {
+      "titleTabMyInquiries": "My inquiries"
+    },
+    "tabFavourites": {
+      "titleMyFavouritesProduct": "My Favourites Product",
+      "titleFavourites": "Favourites"
+    },
+    "tabMessage": {
+      "titleMessages": "Messages",
+      "titleNoMessagesYet": "No messages yet"
+    },
+    "tabSettings": {
+      "titleSettings": "Settings",
+      "titleContentSettings": "Settings content will be here"
+    }
   }
 }
