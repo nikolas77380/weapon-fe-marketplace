@@ -69,6 +69,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
             className="w-[200px] h-full object-cover"
           />
+
           {/* Badge */}
           {/* <div className="absolute top-2 left-0">
           <Badge
@@ -178,8 +179,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       </Link>
       <div className="flex flex-col p-7.5">
         <div className="flex flex-col gap-2">
-          <p className="font-medium text-xl">{item.title}</p>
-
+          <Link
+            href={`/marketplace/${item.id}`}
+            className="font-medium text-xl hover:text-gold-main transition-colors duration-300 w-fit"
+          >
+            {item.title}
+          </Link>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
@@ -198,7 +203,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           </div>
 
           <div className="flex items-center justify-between mt-5">
-            <p className="text-xl font-medium text-gold-main">
+            <p className="text-lg font-medium text-gold-main">
               {formatPrice(item.price, "$")}
             </p>
             <Button
@@ -207,7 +212,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               disabled={isLoading}
             >
               {/* <MessageSquare size={15} /> */}
-              <p className="text-xs font-semibold">
+              <p className="font-semibold group-hover:underline">
                 {isLoading ? "Creating..." : "Contact Seller"}
               </p>
             </Button>

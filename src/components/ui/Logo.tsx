@@ -3,13 +3,12 @@ import { Shield } from "lucide-react";
 import Link from "next/link";
 
 interface LogoProps {
-  href: string;
   className?: string;
 }
 
-const Logo = ({ href, className }: LogoProps) => {
+const Logo = ({ className }: LogoProps) => {
   return (
-    <Link href={href}>
+    <Link href="/">
       <div className={cn("flex items-center gap-2", className)}>
         <div className="relative">
           <div

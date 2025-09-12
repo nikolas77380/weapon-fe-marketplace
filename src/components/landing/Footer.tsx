@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="flex justify-between w-full">
           <ul>
             <li className="font-bold text-2xl mb-5">
-              <Logo href="/" />
+              <Logo />
             </li>
             <li className="font-light w-full max-w-52">
               The trusted marketplace for weapon and armour

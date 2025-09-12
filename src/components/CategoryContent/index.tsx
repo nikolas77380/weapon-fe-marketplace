@@ -25,7 +25,7 @@ const FilteringContent = () => {
   const availableCategories = categories;
 
   return (
-    <div className="mt-10 flex gap-7.5 h-full w-full">
+    <div className="flex gap-7.5 h-full w-full">
       {/* Filters */}
       <div className="flex flex-col gap-2">
         {availableCategories.map((category) => (
