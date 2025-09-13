@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
-import { cn, sellerTabs, triggerClasses } from "@/lib/utils";
+import { cn, triggerClasses } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 const SellerAccountTabs = ({
@@ -22,7 +22,7 @@ const SellerAccountTabs = ({
   refetch: () => void;
   currentUser: UserProfile;
 }) => {
-  const t = useTranslations("SellerAccountTabs.tabs");
+  const t = useTranslations("SellerAccountTabs");
 
   const [messages, setMessages] = useState<Message[]>(mockMessages);
 
@@ -42,16 +42,13 @@ const SellerAccountTabs = ({
       orientation="vertical"
       className="w-full flex-row gap-10"
     >
-      <TabsList className="flex-col w-64 h-45 border border-border-foreground">
-        {sellerTabs.map((tab) => (
-          <TabsTrigger
-            key={tab.value}
-            value={tab.value}
-            className={cn(triggerClasses)}
-          >
-            {t(tab.key)}
-          </TabsTrigger>
-        ))}
+      <TabsList className="flex-col w-64 h-23 border border-border-foreground">
+        <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
+          {t("tabMyInquiries.titleTabMyInquiries")}
+        </TabsTrigger>
+        <TabsTrigger value="messages" className={cn(triggerClasses)}>
+          {t("tabMessage.titleMessages")}
+        </TabsTrigger>
       </TabsList>
       <div className="grow w-full">
         <SellerAccountHeader products={products} currentUser={currentUser} />
@@ -61,9 +58,9 @@ const SellerAccountTabs = ({
             className="bg-[#DBDBDB] px-6 pt-2 pb-4"
           >
             <div className="mt-7.5">
-              <h1 className="text-xl font-roboto">My Inquiries</h1>
+              <h1 className="text-xl font-roboto">{t('tabMyInquiries.titleTabMyInquiries')}</h1>
               <p className="text-sm font-medium text-[#C4C2C2] mt-2">
-                Manage your product listings and inventory
+                {t('tabMyInquiries.descriptionManageProducts')}
               </p>
               <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
                 {loading ? (
@@ -83,18 +80,18 @@ const SellerAccountTabs = ({
           <TabsContent value="messages">
             <div className="mt-7.5">
               <div className="flex items-center justify-between">
-                <h1 className="text-xl font-roboto">Customer messages</h1>
+                <h1 className="text-xl font-roboto">{t('tabMessage.titleCustomerMessages')}</h1>
                 <Link
                   href="/messages"
                   className="bg-black py-1.5 px-4 rounded-md flex items-center gap-3 text-white
               hover:bg-black/80 duration-300 transition-all"
                 >
                   <MessageSquare size={20} />
-                  <p className="text-xs font-semibold">Open Full Messenger</p>
+                  <p className="text-xs font-semibold">{t('tabMessage.titleOpenFullMessenger')}</p>
                 </Link>
               </div>
               <p className="text-sm font-medium text-[#C4C2C2] mt-2">
-                Manage inquires and customer communications
+                {t('tabMessage.descriptionCustomerMessages')}
               </p>
               {/* Message Activities */}
               <div className="flex items-center justify-between gap-16 w-full mt-5">

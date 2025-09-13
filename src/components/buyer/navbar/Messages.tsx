@@ -6,9 +6,12 @@ import {
 import { useSendbirdSDK } from "@/hooks/useSendbird";
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
 import { Badge, MessageCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const Messages = () => {
+  const t = useTranslations('Navbar');
+
   const { utils, isReady } = useSendbirdSDK();
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
@@ -43,7 +46,7 @@ const Messages = () => {
             <MessageCircle size={22} className="text-gray-400 cursor-pointer" />
           </TooltipTrigger>
           <TooltipContent>
-            <p>Messages</p>
+            <p>{t('messagesToogle')}</p>
           </TooltipContent>
         </Tooltip>
 

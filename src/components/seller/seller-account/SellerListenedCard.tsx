@@ -30,12 +30,15 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { updateStatus } from "@/mockup/status";
+import { useTranslations } from "next-intl";
 
 interface SellerListenedCardProps {
   product: Product;
 }
 
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
+  const t = useTranslations("SellerAccountTabs");
+
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(product.status);
@@ -116,7 +119,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 <SquarePen size={20} className="cursor-pointer" />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Edit Product</p>
+                <p>{t('tabMyInquiries.titleToogleEditProduct')}</p>
               </TooltipContent>
             </Tooltip>
           </Link>
@@ -138,17 +141,17 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                     />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Delete Product</p>
+                    <p>{t('tabMyInquiries.titleToogleDeleteCard')}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Delete Product</DialogTitle>
+                <DialogTitle>{t('tabMyInquiries.titleToogleDeleteCard')}</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to delete &ldquo;{product.title}&rdquo;?
-                  This action cannot be undone.
+                  {t('tabMyInquiries.descriptionModalDeleteProduct1')} &ldquo;{product.title}&rdquo;?{" "}
+                  {t('tabMyInquiries.descriptionModalDeleteProduct2')}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -158,14 +161,14 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                   disabled={loading}
                   className="py-2"
                 >
-                  Cancel
+                  {t('tabMyInquiries.descriptionModalCancel')}
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleDeleteProduct}
                   disabled={loading}
                 >
-                  {loading ? "Deleting..." : "Delete Product"}
+                  {loading ? t('tabMyInquiries.descriptionModalDeleting') : t('tabMyInquiries.titleToogleDeleteCard')}
                 </Button>
               </DialogFooter>
             </DialogContent>

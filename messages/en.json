@@ -1,6 +1,7 @@
 {
   "Navbar": {
     "logRegTooltip": "Login/Register",
+    "messagesToogle": "Messages",
     "sellerNavbar": {
       "titleAddProduct": "Add product",
       "titleUserName": "User name",
@@ -18,13 +19,6 @@
       "titleMessages": "Messages",
       "titleSettings": "Settings",
       "titleSignOut": "Sign Out"
-    }
-  },
-  "SellerAccountTabs": {
-    "tabs": {
-      "titleTabMyInquiries": "My listings",
-      "titleTabAnalytics": "Analytics",
-      "titleTabMessages": "Messages"
     }
   },
   "BuyerAccountHeader": {
@@ -52,5 +46,32 @@
       "titleSettings": "Settings",
       "titleContentSettings": "Settings content will be here"
     }
+  },
+  "SellerAccountTabs": {
+    "tabMyInquiries": {
+      "titleTabMyInquiries": "My inquiries",
+      "descriptionManageProducts": "Manage your product listings",
+      "titleToogleEditProduct": "Edit Product",
+      "titleToogleDeleteCard": "Delete Product",
+      "descriptionModalDeleteProduct1": "Are you sure you want to delete",
+      "descriptionModalDeleteProduct2": "This action cannot be undone.",
+      "descriptionModalDeleting": "Deleting...",
+      "descriptionModalCancel": "Cancel"
+    },
+    "tabMessage": {
+      "titleMessages": "Messages",
+      "titleNoMessagesYet": "No messages yet",
+      "titleCustomerMessages": "Customer messages",
+      "titleOpenFullMessenger": "Open Messenger",
+      "descriptionCustomerMessages": "Manage inquires and customer communications"
+    }
+  },
+  "SellerAccountHeader": {
+    "titleWelcome": "Weclome back",
+    "titleAddProduct": "Add product",
+    "titleSettings": "Settings",
+    "titleActiveListings": "Active listings",
+    "titleTotalViews": "Total views",
+    "titleUnreadChats": "Unread messages"
   }
 }

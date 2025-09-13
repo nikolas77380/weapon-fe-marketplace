@@ -1,6 +1,7 @@
 {
   "Navbar": {
     "logRegTooltip": "Вхід/Реєстрація",
+    "messagesToogle": "Повідомлення",
     "sellerNavbar": {
       "titleAddProduct": "Додати продукт",
       "titleUserName": "Ім'я користувача",
@@ -18,13 +19,6 @@
       "titleMessages": "Повідомлення",
       "titleSettings": "Налаштування",
       "titleSignOut": "Вийти"
-    }
-  },
-  "SellerAccountTabs": {
-    "tabs": {
-      "titleTabMyInquiries": "Мої оголошення",
-      "titleTabAnalytics": "Аналітика",
-      "titleTabMessages": "Повідомлення"
     }
   },
   "BuyerAccountHeader": {
@@ -52,5 +46,32 @@
       "titleSettings": "Налаштування",
       "titleContentSettings": "Тут буде вміст налаштувань"
     }
+  },
+  "SellerAccountTabs": {
+    "tabMyInquiries": {
+      "titleTabMyInquiries": "Мої запити",
+      "descriptionManageProducts": "Керуйте своїми списками товарів",
+      "titleToogleEditProduct": "Редагувати товар",
+      "titleToogleDeleteCard": "Видалити товар",
+      "descriptionModalDeleteProduct1": "Ви впевнені, що хочете видалити",
+      "descriptionModalDeleteProduct2": "Цю дію не можна скасувати.",
+      "descriptionModalDeleting": "Видалення...",
+      "descriptionModalCancel": "Скасувати"
+    },
+    "tabMessage": {
+      "titleMessages": "Повідомлення",
+      "titleNoMessagesYet": "Поки що немає повідомлень",
+      "titleCustomerMessages": "Ваші повідомлення",
+      "titleOpenFullMessenger": "Відкрити Месенджер",
+      "descriptionCustomerMessages": "Керувати запитами та комунікувати з продавцями"
+    }
+  },
+  "SellerAccountHeader": {
+    "titleWelcome": "З поверненням",
+    "titleAddProduct": "Додати товар",
+    "titleSettings": "Налаштування",
+    "titleActiveListings": "Активні списки",
+    "titleTotalViews": "Всього переглядів",
+    "titleUnreadChats": "Непрочитаних повідомлень"
   }
 }

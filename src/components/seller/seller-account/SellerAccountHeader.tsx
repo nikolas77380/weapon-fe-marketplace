@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { calculateTotalViews } from "@/lib/productUtils";
 import { Product, UserProfile } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface SellerAccountHeaderProps {
   currentUser: UserProfile;
@@ -15,6 +16,8 @@ const SellerAccountHeader = ({
   currentUser,
   products,
 }: SellerAccountHeaderProps) => {
+  const t = useTranslations("SellerAccountHeader");
+
   const router = useRouter();
   const totalViews = calculateTotalViews(products);
   const activeListings = useMemo(
@@ -32,7 +35,7 @@ const SellerAccountHeader = ({
   return (
     <div>
       <h2 className="font-medium text-2xl">
-        Weclome back, {currentUser.username}
+        {t('titleWelcome')}, {currentUser.username}
       </h2>
       {/* Right Buttons */}
       <div className="flex items-center justify-end mb-8 gap-3.5">
@@ -43,7 +46,7 @@ const SellerAccountHeader = ({
         >
           <div className="flex items-center gap-2 py-2 px-3">
             <Plus size={16} className="text-white" />
-            <p className="text-xs font-semibold text-white">Add product</p>
+            <p className="text-xs font-semibold text-white">{t('titleAddProduct')}</p>
           </div>
         </Button>
 
@@ -54,24 +57,24 @@ const SellerAccountHeader = ({
         >
           <div className="flex items-center gap-2 py-2 px-3">
             <Settings size={16} className="text-black" />
-            <p className="text-xs font-semibold text-black">Settings</p>
+            <p className="text-xs font-semibold text-black">{t('titleSettings')}</p>
           </div>
         </Button>
       </div>
       {/* Action Cards */}
       <div className="flex items-center justify-between gap-12.5 mb-15">
         <SellerActionCard
-          title="Active Listings"
+          title={t('titleActiveListings')}
           count={activeListings}
           icon={<Box size={30} className="mr-1" />}
         />
         <SellerActionCard
-          title="Total views"
+          title={t('titleTotalViews')}
           count={totalViews.toString()}
           icon={<Eye size={30} className="mr-1" />}
         />
         <SellerActionCard
-          title="Unread chats"
+          title={t('titleUnreadChats')}
           count={0}
           icon={<MessageSquare size={30} className="mr-1" />}
         />
