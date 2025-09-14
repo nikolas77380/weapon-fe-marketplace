@@ -8,12 +8,15 @@ import { Button } from "@/components/ui/button";
 import { RegisterFormValues, RegisterSchema } from "@/schemas/registerSchema";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface RegisterFormProps {
   onSubmit: (values: RegisterFormValues) => Promise<void>;
 }
 
 const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+  const t = useTranslations("Auth.register");
+
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterSchema),
@@ -46,9 +49,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="displayName"
-            label="Display name"
+            label={t("labelDisplayName")}
             type="input"
-            placeholder="Enter your display name"
+            placeholder={t("placeholderDisplayName")}
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
@@ -56,10 +59,10 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="email"
-            label="Email"
+            label={t("labelEmail")}
             type="input"
             inputType="email"
-            placeholder="Enter your email"
+            placeholder={t("placeholderEmail")}
             autoComplete="email"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -68,10 +71,10 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="password"
-            label="Password"
+            label={t("labelPassword")}
             type="input"
             inputType="password"
-            placeholder="Enter your password"
+            placeholder={t("placeholderPassword")}
             autoComplete="new-password"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -80,10 +83,10 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="confirmPassword"
-            label="Confirm Password"
+            label={t("labelConfirmPassword")}
             type="input"
             inputType="password"
-            placeholder="Confirm your password"
+            placeholder={t("placeholderConfirmPassword")}
             autoComplete="new-password"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
@@ -95,12 +98,14 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             label={
               <p className="text-sm">
                 <span className="font-light opacity-60">
-                  I{"’"}ve read and accept the
+                  {t("termsPolicy1")}
                 </span>{" "}
-                <span className="underline font-normal opacity-100">Terms</span>{" "}
+                <span className="underline font-normal opacity-100">
+                  {t("termsPolicy2")}
+                </span>{" "}
                 <span className="font-light opacity-60">&</span>{" "}
                 <span className="underline font-normal opacity-100">
-                  Privacy Policy
+                  {t("termsPolicy3")}
                 </span>
               </p>
             }
@@ -118,10 +123,12 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Creating Account...
+                  {t("creatingAccount")}
                 </div>
               ) : (
-                "Create Account"
+                <>
+                  {t("createAccount")}
+                </>
               )}
             </Button>
           </div>

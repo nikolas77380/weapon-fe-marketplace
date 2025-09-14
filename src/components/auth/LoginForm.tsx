@@ -9,12 +9,15 @@ import { LoginFormValues, loginSchema } from "@/schemas/loginSchema";
 import { useState } from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface LoginFormProps {
   onSubmit: (values: LoginFormValues) => Promise<void>;
 }
 
 const LoginForm = ({ onSubmit }: LoginFormProps) => {
+  const t = useTranslations("Auth.login");
+
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -43,7 +46,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="email"
-            label="Email"
+            label={t('labelEmail')}
             type="input"
             inputType="email"
             placeholder="example@gmail.com"
@@ -54,7 +57,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="password"
-            label="Password"
+            label={t('labelPassword')}
             type="input"
             inputType="password"
             placeholder="********"
@@ -64,7 +67,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 
           <div className="w-full flex justify-end">
             <Link href="#" className="underline font-light text-sm">
-              Forgot password
+              {t('forgotPassword')}
             </Link>
           </div>
 
@@ -79,10 +82,12 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Signing In...
+                  {t('signingIn')}
                 </div>
               ) : (
-                "Sign In"
+                <>
+                  {t('signgIn')}
+                </>
               )}
             </Button>
           </div>

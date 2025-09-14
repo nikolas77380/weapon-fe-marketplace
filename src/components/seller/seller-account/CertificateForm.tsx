@@ -14,6 +14,7 @@ import {
 } from "@/schemas/certificateSchema";
 import { useCertificateActions } from "@/hooks/useCertificates";
 import { UserProfile } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface CertificateFormProps {
   currentUser: UserProfile;
@@ -21,6 +22,8 @@ interface CertificateFormProps {
 }
 
 const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
+  const t = useTranslations("Settings.certificatesForm");
+
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { createCertificate } = useCertificateActions();
@@ -39,13 +42,13 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
   const handleSubmit = async (values: CertificateFormValues) => {
     if (selectedFiles.length === 0) {
-      toast.error("Please select at least one certificate file");
+      toast.error(t('toastErrorSelectFile1'));
       return;
     }
 
     // Validate that we have exactly one file (as per schema)
     if (selectedFiles.length > 1) {
-      toast.error("Please select only one certificate file");
+      toast.error(t('toastErrorSelectFile2'));
       return;
     }
 
@@ -59,7 +62,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
       await createCertificate(certificateData, selectedFiles);
 
-      toast.success("Certificate uploaded successfully!");
+      toast.success(t('toastSuccessUpload'));
 
       // Reset form
       form.reset();
@@ -100,7 +103,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
           .response.data.message;
       }
 
-      toast.error(`Failed to upload certificate: ${errorMessage}`);
+      toast.error(`t('toastErrorUpload') ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +111,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">Upload New Certificate</h2>
+      <h2 className="text-xl font-semibold mb-6">{t('titleUploadCertificate')}</h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -116,62 +119,62 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="title"
-            label="Certificate Title"
+            label={t('labelCertificateTitle')}
             type="input"
-            placeholder="Enter certificate title"
+            placeholder={t('placeholderCertificateTitle')}
           />
 
           {/* Description */}
           <FormFieldComponent
             control={form.control}
             name="description"
-            label="Description"
+            label={t('labelDescription')}
             type="textarea"
-            placeholder="Enter certificate description (optional)"
+            placeholder={t('placeholderDescription')}
           />
 
           {/* Issued By */}
           <FormFieldComponent
             control={form.control}
             name="issuedBy"
-            label="Issued By"
+            label={t('labelIssuedBy')}
             type="input"
-            placeholder="Enter issuing organization"
+            placeholder={t('placeholderIssuedBy')}
           />
 
           {/* Issued Date */}
           <FormFieldComponent
             control={form.control}
             name="issuedDate"
-            label="Issued Date"
+            label={t('labelIssuedDate')}
             type="input"
             inputType="date"
-            placeholder="Select issued date"
+            placeholder={t('placeholderIssuedDate')}
           />
 
           {/* Expiry Date */}
           <FormFieldComponent
             control={form.control}
             name="expiryDate"
-            label="Expiry Date"
+            label={t('labelExpiryDate')}
             type="input"
             inputType="date"
-            placeholder="Select expiry date (optional)"
+            placeholder={t('placeholderExpiryDate')}
           />
 
           {/* Certificate Number */}
           <FormFieldComponent
             control={form.control}
             name="certificateNumber"
-            label="Certificate Number"
+            label={t('labelCertificateNumber')}
             type="input"
-            placeholder="Enter certificate number (optional)"
+            placeholder={t('placeholderCertificateNumber')}
           />
 
           {/* File Upload */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
-              Certificate File *
+              {t('labelCertificateFile')} *
             </label>
             <ImagesDropzone
               maxFiles={1}
@@ -185,7 +188,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
               onFilesChange={setSelectedFiles}
             />
             <p className="text-xs text-gray-500">
-              Upload one PDF, JPEG, JPG, or PNG file (max 10MB)
+              {t('titlenUploadOne')} PDF, JPEG, JPG, or PNG file ({t('descMax')} 10MB)
             </p>
           </div>
 
@@ -196,7 +199,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
               className="px-8 py-2.5 text-xl font-roboto font-medium"
               disabled={isLoading || selectedFiles.length === 0}
             >
-              {isLoading ? "Uploading..." : "Upload Certificate"}
+              {isLoading ? t('buttonUploading') : t('buttonUpload')}
             </Button>
           </div>
         </form>

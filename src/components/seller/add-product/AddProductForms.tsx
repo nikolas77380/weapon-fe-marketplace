@@ -30,8 +30,11 @@ import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
 import CategorySelect from "@/components/ui/CategorySelect";
 import { useProductActions } from "@/hooks/useProductsQuery";
+import { useTranslations } from "next-intl";
 
 const AddProductForms = () => {
+  const t = useTranslations('AddProduct.addProductForm');
+
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
 
@@ -151,12 +154,12 @@ const AddProductForms = () => {
         productStatus: "available",
       });
 
-      toast.success("Product added successfully!");
+      toast.success(t('toastSuccessAdd'));
       router.push("/account");
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create product"
+        error instanceof Error ? error.message : t('toastErrorAdd')
       );
     }
   };
@@ -185,34 +188,36 @@ const AddProductForms = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
           {/* Product Basic Info Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
-              Basic Info
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+              {t('titleBasicInfo')}
             </h2>
             {/* Product name */}
             <FormFieldComponent
               control={form.control}
               name="productName"
-              label="Product Name"
+              label={t('labelProductName')}
               type="input"
-              placeholder="Enter your product name"
+              placeholder={t('placeholderProductName')}
               className="w-1/2"
+              classNameLabel="bg-background"
             />
             {/* Product SKU */}
             <FormFieldComponent
               control={form.control}
               name="productSku"
-              label="Product SKU (Optional)"
+              label={t('labelSku')}
               type="input"
-              placeholder="Enter your product SKU (optional)"
+              placeholder={t('placeholderSku')}
               className="w-1/2"
+              classNameLabel="bg-background"
             />
             {/* Product description */}
             <FormFieldComponent
               control={form.control}
               name="productDescription"
-              label="Description"
+              label={t('labelDescription')}
               type="textarea"
-              placeholder="Enter product description"
+              placeholder={t('placeholderDescription')}
               className="w-1/2"
             />
 
@@ -222,7 +227,7 @@ const AddProductForms = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>{t('labelCategory')}</FormLabel>
                   <FormControl>
                     <CategorySelect
                       value={field.value}
@@ -230,13 +235,13 @@ const AddProductForms = () => {
                       categories={categories}
                       loading={categoriesLoading}
                       error={categoriesError}
-                      placeholder="Select Category"
+                      placeholder={t('placeholderCategory')}
                       className="w-1/2"
                     />
                   </FormControl>
                   {categoriesError && (
                     <p className="text-sm text-red-500 mt-1">
-                      Failed to load categories. Please try again later.
+                      {t('errorCategories')}
                     </p>
                   )}
                   <FormMessage />
@@ -249,21 +254,23 @@ const AddProductForms = () => {
               <FormFieldComponent
                 control={form.control}
                 name="productManufacturer"
-                label="Manufacturer"
+                label={t('labelManufacturer')}
                 type="input"
-                placeholder="Enter your product manufacturer"
+                placeholder={t('placeholderManufacturer')}
                 className="w-full"
                 itemClassName="flex-1"
+                classNameLabel="bg-background"
               />
               {/* Product model */}
               <FormFieldComponent
                 control={form.control}
                 name="productModel"
-                label="Model"
+                label={t('labelModel')}
                 type="input"
-                placeholder="Enter your product model"
+                placeholder={t('placeholderModel')}
                 className="w-full"
                 itemClassName="flex-1"
+                classNameLabel="bg-background"
               />
             </div>
 
@@ -271,9 +278,9 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productCondition"
-              label="Condition"
+              label={t('labelCondition')}
               type="select"
-              placeholder="Select Condition"
+              placeholder={t('placeholderCondition')}
               className="w-1/2"
               options={PRODUCT_CONDITION_FORM}
               selectValue={undefined}
@@ -282,17 +289,18 @@ const AddProductForms = () => {
 
           {/* Product Pricing Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
               Pricing
             </h2>
             {/* Product Price */}
             <FormFieldComponent
               control={form.control}
               name="productPrice"
-              label="Price (USD)"
+              label={t('labelPrice')}
               type="input"
               inputType="number"
               className="w-1/2"
+              classNameLabel="bg-background"
               min="1"
               step="1"
               customOnChange={(e, fieldOnChange) => {
@@ -310,17 +318,18 @@ const AddProductForms = () => {
 
           {/* Product Details */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
-              Details
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+              {t('titleDetails')}
             </h2>
             {/* Product Count */}
             <FormFieldComponent
               control={form.control}
               name="productCount"
-              label="Count"
+              label={t('labelCount')}
               type="input"
               inputType="number"
               className="w-1/2"
+              classNameLabel="bg-background"
               min="1"
               step="1"
               customOnChange={(e, fieldOnChange) => {
@@ -338,9 +347,9 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productStatus"
-              label="Status"
+              label={t('labelStatus')}
               type="select"
-              placeholder="Select Status"
+              placeholder={t('placeholderStatus')}
               className="w-1/2"
               options={PRODUCT_STATUS_FORM}
             />
@@ -348,8 +357,8 @@ const AddProductForms = () => {
 
           {/* Images Dropzone */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-white px-2 text-lg font-bold text-gray-700">
-              Images
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+              {t('titleImages')}
             </h2>
             <FormField
               control={form.control}
@@ -379,17 +388,17 @@ const AddProductForms = () => {
                 type="button"
                 variant="outline"
                 onClick={clearDraft}
-                className="px-6 py-2.5 text-lg font-roboto font-medium"
+                className="px-6 py-2.5 text-lg font-medium"
               >
-                Clear Draft
+                {t('buttonClear')}
               </Button>
             )}
             <Button
               type="submit"
               disabled={createLoading}
-              className="px-8.5 py-2.5 text-xl font-roboto font-medium"
+              className="px-8.5 py-2.5 text-xl font-medium"
             >
-              {createLoading ? "Creating..." : "Submit"}
+              {createLoading ? t('buttonCreating') : t('buttonSubmit')}
             </Button>
           </div>
         </form>

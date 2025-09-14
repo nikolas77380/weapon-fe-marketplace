@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface MetadataRequiredDialogProps {
   open: boolean;
@@ -19,22 +20,22 @@ const MetadataRequiredDialog = ({
   open,
   onOpenChange,
 }: MetadataRequiredDialogProps) => {
+  const t = useTranslations('AddProduct.metadataRequiredDialog');
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Company Details Required</DialogTitle>
+          <DialogTitle>{t('dialogTitle')}</DialogTitle>
           <DialogDescription>
-            You cannot add a product until you complete your company
-            information. Please fill out your company details first.
+            {t('dialogDescription')}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end space-x-3 mt-6">
           <Button variant="outline" onClick={() => onOpenChange(false)} className="py-2.5 px-6">
-            Cancel
+            {t('buttonCancel')}
           </Button>
           <Link href="/account/settings">
-            <Button className="py-2.5 px-6">Complete Company Details</Button>
+            <Button className="py-2.5 px-6">{t('buttonComplete')}</Button>
           </Link>
         </div>
       </DialogContent>

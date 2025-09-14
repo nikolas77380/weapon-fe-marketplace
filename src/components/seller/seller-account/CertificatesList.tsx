@@ -11,6 +11,7 @@ import {
 } from "@/hooks/useCertificates";
 import { UserProfile } from "@/lib/types";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface CertificatesListProps {
   currentUser: UserProfile;
@@ -21,6 +22,8 @@ const CertificatesList = ({
   currentUser,
   onRefresh,
 }: CertificatesListProps) => {
+  const t = useTranslations("Settings.certificatesList");
+
   const { certificates, loading, error, refetch } = useCertificates({
     certificateType: "seller",
     seller: currentUser.id,
@@ -29,14 +32,14 @@ const CertificatesList = ({
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this certificate?")) {
+    if (!confirm(t('confirmDelete'))) {
       return;
     }
 
     setDeletingId(id);
     try {
       await deleteCertificate(id);
-      toast.success("Certificate deleted successfully!");
+      toast.success(t('toastSuccessDelete'));
       refetch();
       if (onRefresh) {
         onRefresh();
@@ -45,7 +48,7 @@ const CertificatesList = ({
       console.error("Error deleting certificate:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
-      toast.error(`Failed to delete certificate: ${errorMessage}`);
+      toast.error(`t('toastErrorDelete') ${errorMessage}`);
     } finally {
       setDeletingId(null);
     }
@@ -71,7 +74,7 @@ const CertificatesList = ({
   if (loading) {
     return (
       <div className="flex justify-center items-center py-8">
-        <div className="text-gray-500">Loading certificates...</div>
+        <div className="text-gray-500">{t("loadingCertificates")}</div>
       </div>
     );
   }
@@ -79,7 +82,7 @@ const CertificatesList = ({
   if (error) {
     return (
       <div className="flex justify-center items-center py-8">
-        <div className="text-red-500">Error loading certificates: {error}</div>
+        <div className="text-red-500">{t("errorLoadingCertificate")} {error}</div>
       </div>
     );
   }
@@ -87,7 +90,7 @@ const CertificatesList = ({
   if (certificates.length === 0) {
     return (
       <div className="text-center py-8">
-        <div className="text-gray-500">No certificates uploaded yet.</div>
+        <div className="text-gray-500">{t("noCertificates")}</div>
       </div>
     );
   }
@@ -95,7 +98,7 @@ const CertificatesList = ({
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">
-        Your Certificates ({certificates.length})
+        {t("titleCertificates")} ({certificates.length})
       </h3>
       <div className="grid gap-4">
         {certificates.map((certificate) => (
@@ -117,18 +120,18 @@ const CertificatesList = ({
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="font-medium">Issued by:</span>
+                  <span className="font-medium">{t("titleIssuedBy")}</span>
                   <p className="text-gray-600">{certificate.issuedBy}</p>
                 </div>
                 <div>
-                  <span className="font-medium">Issued date:</span>
+                  <span className="font-medium">{t("titleIssuedDate")}</span>
                   <p className="text-gray-600">
                     {formatDate(certificate.issuedDate)}
                   </p>
                 </div>
                 {certificate.expiryDate && (
                   <div>
-                    <span className="font-medium">Expiry date:</span>
+                    <span className="font-medium">{t("titleExpiryDate")}</span>
                     <p className="text-gray-600">
                       {formatDate(certificate.expiryDate)}
                     </p>
@@ -136,7 +139,7 @@ const CertificatesList = ({
                 )}
                 {certificate.certificateNumber && (
                   <div>
-                    <span className="font-medium">Certificate #:</span>
+                    <span className="font-medium">{t("titleCertificate")}</span>
                     <p className="text-gray-600">
                       {certificate.certificateNumber}
                     </p>
@@ -154,7 +157,7 @@ const CertificatesList = ({
                     }
                   >
                     <Eye className="h-4 w-4 mr-1" />
-                    View
+                    {t("buttonView")}
                   </Button>
                   <Button
                     variant="outline"
@@ -168,7 +171,7 @@ const CertificatesList = ({
                     }}
                   >
                     <Download className="h-4 w-4 mr-1" />
-                    Download
+                    {t("buttonUpload")}
                   </Button>
                   <Button
                     variant="destructive"
@@ -177,7 +180,7 @@ const CertificatesList = ({
                     disabled={deletingId === certificate.id}
                   >
                     <Trash2 className="h-4 w-4 mr-1" />
-                    {deletingId === certificate.id ? "Deleting..." : "Delete"}
+                    {deletingId === certificate.id ? t('buttonDeleting') : t('buttonDelete')}
                   </Button>
                 </div>
               )}

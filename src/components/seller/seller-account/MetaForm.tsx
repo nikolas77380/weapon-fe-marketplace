@@ -19,8 +19,11 @@ import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
 import CertificatesList from "./CertificatesList";
+import { useTranslations } from "next-intl";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
+  const t = useTranslations("Settings");
+
   const { metadata } = currentUser;
   const [isLoading, setIsLoading] = useState(false);
   const [, setRefreshCertificates] = useState(0);
@@ -66,7 +69,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           token,
         });
         console.log("Update response:", response);
-        toast.success("Seller information updated successfully!");
+        toast.success(t("toastUpdate"));
       } else {
         // Create new seller meta
         const response = await createSellerMeta({
@@ -74,7 +77,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           token,
         });
         console.log("Create response:", response);
-        toast.success("Seller information created successfully!");
+        toast.success(t("toastCreate"));
       }
     } catch (error: unknown) {
       console.error("Error saving seller data:", error);
@@ -108,8 +111,8 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
       <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
         <Tabs defaultValue="companyDetails" className="w-full">
           <TabsList className="bg-gray-primary gap-5 flex w-full">
-            <TabsTrigger value="companyDetails">Company Details</TabsTrigger>
-            <TabsTrigger value="certificates">Certificates</TabsTrigger>
+            <TabsTrigger value="companyDetails">{t("titleCompanyDetails")}</TabsTrigger>
+            <TabsTrigger value="certificates">{t("titleCertificates")}</TabsTrigger>
           </TabsList>
           <TabsContent value="companyDetails" className="mt-10">
             <Form {...form}>
@@ -121,9 +124,9 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 <FormFieldComponent
                   control={form.control}
                   name="specialisation"
-                  label="Business Type"
+                  label={t("labelBusinessType")}
                   type="select"
-                  placeholder="Select Business Type"
+                  placeholder={t("placeholderBusinessType")}
                   defaultValue={undefined}
                   options={SELLER_TYPES.map(({ key, label }) => ({
                     key,
@@ -136,43 +139,43 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 <FormFieldComponent
                   control={form.control}
                   name="sellerDescription"
-                  label="Description"
+                  label={t("labelDescription")}
                   type="textarea"
-                  placeholder="Enter company description"
+                  placeholder={t("placeholderDescription")}
                 />
 
                 {/* Company Name */}
                 <FormFieldComponent
                   control={form.control}
                   name="companyName"
-                  label="Company Name"
+                  label={t("labelCompanyName")}
                   type="input"
-                  placeholder="Enter your company name"
+                  placeholder={t("placeholderCompanyName")}
                 />
 
                 {/* Web Site */}
                 <FormFieldComponent
                   control={form.control}
                   name="webSite"
-                  label="Web Site"
+                  label={t("labelWebSite")}
                   type="input"
-                  placeholder="Enter company Web Site"
+                  placeholder={t("placeholderWebSite")}
                 />
                 {/* phoneNumbers */}
                 <FormFieldComponent
                   control={form.control}
                   name="phoneNumbers"
-                  label="Phone Numbers"
+                  label={t("labelPhoneNumbers")}
                   type="input"
-                  placeholder="Enter company phone numbers with coma separated values if multiple"
+                  placeholder={t("placeholderPhoneNumbers")}
                 />
                 {/* country */}
                 <FormFieldComponent
                   control={form.control}
                   name="country"
-                  label="Country"
+                  label={t("labelCountry")}
                   type="select"
-                  placeholder="Select Country"
+                  placeholder={t("placeholderCountry")}
                   defaultValue={undefined}
                   options={COUNTRIES.map(({ name, iso2 }) => ({
                     key: iso2,
@@ -184,9 +187,9 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 <FormFieldComponent
                   control={form.control}
                   name="address"
-                  label="Address"
+                  label={t("labelAddress")}
                   type="input"
-                  placeholder="Enter company address"
+                  placeholder={t("placeholderAddress")}
                 />
                 <div className="flex items-center justify-center">
                   <Button
@@ -195,10 +198,10 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                     disabled={isLoading}
                   >
                     {isLoading
-                      ? "Saving..."
+                      ? t('buttonSaving')
                       : metadata
-                      ? "Update Company Details"
-                      : "Submit Company Details"}
+                      ? t('buttonUpdate')
+                      : t('buttonSubmit')}
                   </Button>
                 </div>
               </form>
