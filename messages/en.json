@@ -248,5 +248,16 @@
     "buttonCancel": "Cancel",
     "error": "Error:",
     "errorDescription": "Failed to update product"
+  },
+  "NotFound": {
+    "titleNotFound": "Page Not Found",
+    "descriptionNotFound": "Sorry, this page does not exist",
+    "descriptionNotFound2": "It may have been moved, deleted, or you entered an incorrect address",
+    "buttonGoHome": "Go Home",
+    "searchSuggestion": "Can not find what you are looking for?",
+    "currentUserDescription": "Go to the product catalog",
+    "notCurrentUserDescription": "Go to the product catalog or sign in to view products",
+    "buttonProductCatalog": "Product Catalog",
+    "buttonLogReg": "Login / Register"
   }
 }

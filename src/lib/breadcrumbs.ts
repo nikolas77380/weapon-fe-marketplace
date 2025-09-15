@@ -21,14 +21,14 @@ function formatLabel(segment: string, customLabels?: Record<string, string>) {
 }
 
 // Segments that should be hidden from breadcrumbs (intermediate routes for dynamic pages)
-const HIDDEN_SEGMENTS = ["company", "edit-product", "marketplace"];
+const HIDDEN_SEGMENTS = ["company", "edit-product", "marketplace", "category"];
 
 function shouldHideSegment(segment: string, segments: string[], index: number) {
   // If this is an intermediate route for a dynamic route, hide it.
   if (HIDDEN_SEGMENTS.includes(segment)) {
-    // Check that the next segment looks like ID (numbers)
+    // Check that the next segment exists (for dynamic routes)
     const nextSegment = segments[index + 1];
-    if (nextSegment && /^\d+$/.test(nextSegment)) {
+    if (nextSegment) {
       return true;
     }
   }
