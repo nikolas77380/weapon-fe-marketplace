@@ -10,6 +10,7 @@ import { useCategoryCounts } from "@/hooks/useCategoryCounts";
 import Sorting from "./Sorting";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
+import BreadcrumbComponent from "../ui/BreadcrumbComponent";
 
 interface FilterState {
   minPrice: number;
@@ -101,8 +102,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
   return (
     <>
+    <BreadcrumbComponent />
       {currentCategory && (
-        <div className="mt-12 mb-6">
+        <div className="mt-5 mb-6">
           <h1 className="text-3xl font-bold text-foreground">
             {currentCategory.name}
           </h1>
@@ -114,11 +116,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         </div>
       )}
       <div
-        className="mt-12 border border-border-foreground h-26 flex items-center justify-between
-        px-6 w-full bg-primary-foreground"
+        className="flex items-center justify-between w-full"
       >
         {/* <Search /> */}
-        <div className="relative w-2/3">
+        {/* <div className="relative w-2/3">
           <Input
             placeholder="Search..."
             value={filters.search}
@@ -131,7 +132,14 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
             strokeWidth={0.5}
             className="absolute left-3 top-1/2 -translate-y-1/2 cursor-pointer text-foreground"
           />
-        </div>
+        </div> */}
+
+        {/* Results */}
+        <h2>
+          Found {pagination?.total || paginatedProducts.length}{" "}
+          {(pagination?.total || paginatedProducts.length) === 1 ? "Result" : "Results"}
+        </h2>
+
         {/* Sorting */}
         <Sorting
           onSortChange={handleSortChange}
@@ -141,7 +149,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         />
       </div>
       {/* Shop Filtering Content */}
-      <div className="mt-10 flex gap-7.5 h-full w-full">
+      <div className="flex gap-7.5 h-full w-full mt-3">
         {/* Filters */}
         <Filters
           onPriceChange={handlePriceChange}

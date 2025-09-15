@@ -60,14 +60,7 @@ const ShopContent = ({
           count={pagination?.total || products.length}
           title="Products"
         />
-      ) : loading ? (
-        <SkeletonComponent type="title" />
-      ) : (
-        <h2 className="text-xl font-semibold mb-4">
-          {pagination?.total || products.length}{" "}
-          {(pagination?.total || products.length) === 1 ? "Result" : "Results"}
-        </h2>
-      )}
+      ) : null}
       <div
         className={
           viewMode === "grid"

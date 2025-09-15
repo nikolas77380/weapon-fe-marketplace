@@ -20,7 +20,7 @@ const FavouriteCard = ({
   if (viewMode === "list") {
     // List view
     return (
-      <div className="bg-[#E7E7E7] flex flex-row">
+      <div className="flex flex-row border border-border-foreground">
         <div className="relative overflow-hidden">
           <Image
             src={
@@ -88,8 +88,8 @@ const FavouriteCard = ({
 
   // Grid view
   return (
-    <div className="border border-[#D3D3D3] rounded-lg flex flex-col">
-      <div className="relative border-b border-[#D3D3D3] overflow-hidden">
+    <div className="border border-primary-foreground flex flex-col">
+      <div className="relative overflow-hidden">
         <Image
           src={
             typeof product.images?.[0] === "string"
@@ -100,7 +100,7 @@ const FavouriteCard = ({
           width={300}
           height={200}
           onError={(e) => handleImageError(e, "/shop/1.jpg")}
-          className="w-full h-[125px] object-cover rounded-t-lg"
+          className="w-full h-[125px] object-cover p-1"
         />
         {/* Favourite indicator */}
         <div className="absolute top-2 right-2">

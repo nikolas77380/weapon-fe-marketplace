@@ -63,10 +63,10 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
         <BuyerAccountHeader currentUser={currentUser} favourites={favourites} />
         <div className="mt-9 overflow-hidden">
           <TabsContent value="myInquiries">
-            <div className="bg-primary-foreground p-5">
+            <div className="p-5">
               <p className="font-roboto text-xl mb-8">{t('tabMyInquiries.titleTabMyInquiries')}</p>
               {/* Card 1 */}
-              <div className="bg-[#E7E7E7] p-5 flex flex-col">
+              <div className="bg-sidebar-accent p-5 flex flex-col">
                 <div className="flex items-center justify-between">
                   <p className="text-xl font-roboto">
                     Level IIIA Ballistic Vest
@@ -95,7 +95,7 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
                 </p>
               </div>
               {/* Card 2 */}
-              <div className="bg-[#E7E7E7] p-5 flex flex-col mt-5">
+              <div className="bg-sidebar-accent p-5 flex flex-col mt-5">
                 <div className="flex items-center justify-between">
                   <p className="text-xl font-roboto">Glock 19 Gen 5 Pistol</p>
                   <div className="py-0.5 px-3 bg-red-500 text-white rounded-md text-sm font-medium font-roboto">
@@ -122,7 +122,7 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
                 </p>
               </div>
               {/* Card 3 */}
-              <div className="bg-[#E7E7E7] p-5 flex flex-col mt-5">
+              <div className="bg-sidebar-accent p-5 flex flex-col mt-5">
                 <div className="flex items-center justify-between">
                   <p className="text-xl font-roboto">MICH Combat Helmet</p>
                   <div className="py-0.5 px-3 bg-gray-primary text-black rounded-md text-sm font-medium font-roboto">
@@ -151,7 +151,7 @@ const BuyerAccountTabs = ({ currentUser }: BuyerAccountHeaderProps) => {
             </div>
           </TabsContent>
           <TabsContent value="favourites">
-            <div className="bg-primary-foreground p-5">
+            <div className="p-5">
               <ViewModeToggle
                 viewMode={viewMode}
                 onGridClick={toggleToGrid}

@@ -5,7 +5,7 @@ import Logo from "../ui/Logo";
 
 const Footer = () => {
   return (
-    <div className="py-7 bg-[#f0f0e5]">
+    <div className="py-7 bg-sidebar-accent">
       <div className="container mx-auto flex flex-col items-center">
         <div className="flex justify-between w-full">
           <ul>
