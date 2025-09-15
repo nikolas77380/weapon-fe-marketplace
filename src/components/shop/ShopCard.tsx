@@ -53,7 +53,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-border-foreground bg-primary-foreground flex flex-row">
+      <div className="border border-border-foreground flex flex-row">
         <Link
           href={`/marketplace/${item.id}`}
           className="relative overflow-hidden"
@@ -139,7 +139,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <div className="border border-border-foreground flex flex-col bg-primary-foreground">
+    <div className="border border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
         <div className="relative overflow-hidden h-[200px] min-h-[200px] max-h-[200px] p-3">
           <Image
@@ -207,7 +207,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               {formatPrice(item.price, "$")}
             </p>
             <Button
-              className="rounded-none py-2.5 pl-5 hover:underline text-gold-main text-2xl bg-transparent hover:bg-transparent border-none shadow-none"
+              className="rounded-none py-2.5 px-0 hover:underline text-gold-main bg-transparent hover:bg-transparent border-none shadow-none"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >

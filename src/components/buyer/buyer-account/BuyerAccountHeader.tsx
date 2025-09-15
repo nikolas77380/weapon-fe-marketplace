@@ -33,7 +33,7 @@ const BuyerAccountHeader = ({
       </div>
 
       <div className="mt-8">
-        <div className="flex flex-col bg-primary-foreground p-5">
+        <div className="flex flex-col p-5">
           <div className="flex items-center gap-5">
             <Avatar className="size-25 border border-gray-300 cursor-pointer">
               <AvatarFallback className="bg-black text-white text-6xl uppercase">

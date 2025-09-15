@@ -8,7 +8,7 @@ interface BuyerActionCardProps {
 
 const BuyerActionCard = ({ title, count, icons }: BuyerActionCardProps) => {
   return (
-    <div className="bg-[#E7E7E7] p-3.5 gap-3.5 flex items-center">
+    <div className="bg-sidebar-accent p-3.5 gap-3.5 flex items-center">
       {icons ? icons : null}
       <div className="flex flex-col">
         <p className="font-roboto font-medium text-xl">{count}</p>
