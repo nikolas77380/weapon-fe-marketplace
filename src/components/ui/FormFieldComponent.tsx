@@ -49,6 +49,7 @@ interface FormFieldComponentProps<T extends FieldValues> {
     fieldOnChange: (value: unknown) => void
   ) => void;
   customOnFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  classNameLabel?: string;
 }
 
 function FormFieldComponent<T extends FieldValues>({
@@ -71,6 +72,7 @@ function FormFieldComponent<T extends FieldValues>({
   customOnChange,
   customOnFocus,
   customSelectOptions,
+  classNameLabel,
 }: FormFieldComponentProps<T>) {
   const renderField = (field: {
     value: unknown;
@@ -81,7 +83,11 @@ function FormFieldComponent<T extends FieldValues>({
       case "input":
         return (
           <div className="relative">
-            <label className="absolute bg-primary-foreground px-2 left-2 -top-3 text-sm">
+            <label
+              className={`absolute px-2 left-2 -top-3 text-sm ${
+                classNameLabel ?? "bg-primary-foreground"
+              }`}
+            >
               {label}
             </label>
             <Input

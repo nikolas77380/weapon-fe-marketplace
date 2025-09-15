@@ -23,8 +23,12 @@ import Logo from "@/components/ui/Logo";
 import { Tag, User } from "lucide-react";
 import { UserProfile } from "@/lib/types";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 const AuthPage = () => {
+  const t = useTranslations("Auth");
+  
   const searchParams = useSearchParams();
   const router = useRouter();
   const { fetchUser } = useAuthContext();
@@ -158,9 +162,11 @@ const AuthPage = () => {
         {/* Breadcrumb */}
         <Breadcrumb />
 
-        <div className="mx-auto max-w-170">
-          <div className="flex justify-center">
-            <Logo />
+        <div className="mx-auto w-full max-w-170">
+          <div className="flex items-center w-full">
+            <div className="flex justify-center w-full">
+              <Logo />
+            </div>
           </div>
           <div
             className={`border border-border-foreground ${
@@ -169,10 +175,10 @@ const AuthPage = () => {
           >
             <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground">
               <h2 className="font-medium text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
-                Join Esviem Defence
+                {t("titleMain")}
               </h2>
               <p className="mt-2.5 mb-3.5 font-light text-center">
-                Access the premier marketplace for weapon
+                {t('descriptionMain')}
               </p>
             </div>
             <div className="w-full">
@@ -185,7 +191,7 @@ const AuthPage = () => {
               {authMode === "register" && (
                 <>
                   <div className="flex flex-col px-3.5">
-                    <Label className="mt-6 font-light">Account type</Label>
+                    <Label className="mt-6 font-light">{t('register.accountType')}</Label>
                     <div className="flex mt-3.5 w-full">
                       {/* Buyer */}
                       <div
@@ -198,9 +204,9 @@ const AuthPage = () => {
                     }`}
                       >
                         <User className="size-8" strokeWidth={0.5} />
-                        <h1 className="mt-2.5 font-lg">Buyer</h1>
+                        <h1 className="mt-2.5 font-lg">{t('register.buyer')}</h1>
                         <p className="mt-1 text-sm text-center font-light max-w-73">
-                          Law enforcement, military, security professionals
+                          {t('register.userDescription')}
                         </p>
                       </div>
                       {/* Seller */}
@@ -214,9 +220,9 @@ const AuthPage = () => {
                     }`}
                       >
                         <Tag className="size-8 rotate-90" strokeWidth={0.5} />
-                        <h1 className="mt-2.5 font-lg">Seller</h1>
+                        <h1 className="mt-2.5 font-lg">{t('register.seller')}</h1>
                         <p className="mt-1 text-sm text-center font-light max-w-73">
-                          Law enforcement, military, security professionals
+                          {t('register.userDescription')}
                         </p>
                       </div>
                     </div>
@@ -227,9 +233,7 @@ const AuthPage = () => {
                     <RegisterForm onSubmit={onRegistrationSubmit} />
                     <div className="text-center flex items-center justify-center py-3.5 border-t border-border-foreground w-full">
                       <p className="text-xs font-light">
-                        By creating an account, you agree to comply with all
-                        federal, state, and local laws regarding the sale and
-                        transfer of tactical equipment.
+                        {t('register.footerDescripotion')}
                       </p>
                     </div>
                   </div>
@@ -241,13 +245,16 @@ const AuthPage = () => {
                   <LoginForm onSubmit={onLoginSubmit} />
                   <div className="text-center flex items-center justify-center border-t border-border-foreground w-full">
                     <p className="text-sm font-light flex py-3.5">
-                      Secure authentication with industry-standard encryption
+                      {t('login.footerDescripotion')}
                     </p>
                   </div>
                 </>
               )}
             </div>
           </div>
+        </div>
+        <div className="max-w-[200px] w-full flex">
+          <LanguageSwitcher />
         </div>
       </div>
     </div>

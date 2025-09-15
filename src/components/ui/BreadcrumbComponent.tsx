@@ -35,12 +35,12 @@ const BreadcrumbComponent = ({
             <Link href="/">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {crumbs.map(({ href, label, isLast, isClickable }) => (
+        {crumbs.map(({ href, label, isLast }) => (
           <React.Fragment key={href}>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              {isLast || !isClickable ? (
-                <BreadcrumbPage className={!isClickable ? "text-gray-500" : ""}>
+              {isLast ? (
+                <BreadcrumbPage>
                   {label}
                 </BreadcrumbPage>
               ) : (

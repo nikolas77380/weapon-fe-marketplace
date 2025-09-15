@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { X, Upload, File } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface ImagesDropzoneProps {
   maxFiles?: number;
@@ -21,13 +22,15 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   onFilesChange,
   className = "",
 }) => {
+  const t = useTranslations("ImagesDropZone");
+
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (files.length + acceptedFiles.length > maxFiles) {
-        alert(`Maximum number of files: ${maxFiles}`);
+        alert(`t('alertMaximumFiles') ${maxFiles}`);
         return;
       }
 
@@ -104,19 +107,19 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
         <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
         {isDragActive ? (
           <p className="text-blue-600 font-medium">
-            Please release files to download...
+            {t("isDragActive")}
           </p>
         ) : (
           <div>
             <p className="text-gray-600 font-medium mb-2">
-              Drag files here or click to select
+              {t("isDragNonActive")}
             </p>
             <p className="text-sm text-gray-500">
-              Maximum {maxFiles} file(s), up to{" "}
+              {t("titleMaximum")} {maxFiles} {t("titleFilesUpTo")}{" "}
               {Math.round(maxSize / (1024 * 1024))} MB
             </p>
             <p className="text-xs text-gray-400 mt-1">
-              Supported formats: JPEG, JPG, PNG, PDF
+              {t("titleSupportedFormats")} JPEG, JPG, PNG, PDF
             </p>
           </div>
         )}
@@ -126,7 +129,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
       {files.length > 0 && (
         <div className="space-y-3">
           <h4 className="font-medium text-gray-700">
-            Uploaded files ({files.length}/{maxFiles}):
+            {t("titleUploadedFiles")} ({files.length}/{maxFiles}):
           </h4>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {files.map((file, index) => (
@@ -148,7 +151,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center">
                         <span className="text-xs text-gray-500">
-                          Loading...
+                          {t("buttonImageLoading")}
                         </span>
                       </div>
                     )

@@ -1,6 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useTranslations } from "next-intl";
 
 interface AuthSwitcherProps {
   authMode: "login" | "register";
@@ -8,6 +9,7 @@ interface AuthSwitcherProps {
 }
 
 const AuthSwitcher = ({ authMode, onAuthModeChange }: AuthSwitcherProps) => {
+  const t = useTranslations("Auth.authSwitcher");
   return (
     <div className="px-3.5">
       <Tabs
@@ -19,10 +21,10 @@ const AuthSwitcher = ({ authMode, onAuthModeChange }: AuthSwitcherProps) => {
       >
         <TabsList className="grid w-full h-11 grid-cols-2 bg-gray-primary">
           <TabsTrigger value="login" className="text-lg font-normal">
-            Login
+            {t('login')}
           </TabsTrigger>
           <TabsTrigger value="register" className="text-lg font-normal">
-            Register
+            {t('register')}
           </TabsTrigger>
         </TabsList>
       </Tabs>

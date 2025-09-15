@@ -20,15 +20,8 @@ function formatLabel(segment: string, customLabels?: Record<string, string>) {
   return capitalized;
 }
 
-// Paths that should not be clickable (don't have their own pages)
-const NON_CLICKABLE_PATHS = ["/account/edit-product"];
-
 // Segments that should be hidden from breadcrumbs (intermediate routes for dynamic pages)
 const HIDDEN_SEGMENTS = ["company", "edit-product", "marketplace"];
-
-function isPathClickable(href: string) {
-  return !NON_CLICKABLE_PATHS.includes(href);
-}
 
 function shouldHideSegment(segment: string, segments: string[], index: number) {
   // If this is an intermediate route for a dynamic route, hide it.
@@ -64,7 +57,6 @@ export function generateBreadcrumbs(
       label: formatLabel(item.segment, customLabels),
       href,
       isLast: filteredIndex === visibleSegments.length - 1,
-      isClickable: isPathClickable(href),
     };
   });
 }

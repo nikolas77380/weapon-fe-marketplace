@@ -25,12 +25,15 @@ import { useCategories } from "@/hooks/useCategories";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { Product, UpdateProductData } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface EditProductFormProps {
   product: Product;
 }
 
 const EditProductForm = ({ product }: EditProductFormProps) => {
+  const t = useTranslations("EditProduct");
+
   const router = useRouter();
 
   const { categories } = useCategories();
@@ -113,19 +116,19 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         images: values.images,
       });
 
-      toast.success("Product updated successfully!");
+      toast.success(t("toastSuccessUpdate"));
       router.push("/account");
     } catch (error) {
       console.error("Error updating product:", error);
-      toast.error("Failed to update product. Please try again.");
+      toast.error(t("toastErrorUpdate"));
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 w-full">
+    <div className="max-w-4xl mx-auto p-6 w-full mb-10">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">Edit Product</h1>
-        <p className="text-gray-600">Update your product information</p>
+        <h1 className="text-2xl font-bold mb-2">{t("titleEditProduct")}</h1>
+        <p className="text-gray-600">{t("descriptionEditProduct")}</p>
       </div>
 
       <Form {...form}>
@@ -136,7 +139,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product Images</FormLabel>
+                <FormLabel>{t("labelProductImages")}</FormLabel>
                 <FormControl>
                   <ImagesDropzone
                     maxFiles={5}
@@ -155,18 +158,19 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="title"
-            label="Product Title"
+            label={t("labelProductName")}
             type="input"
-            placeholder="Enter product title"
+            placeholder={t("placeholderProductName")}
+            classNameLabel="bg-background"
           />
 
           {/* Description */}
           <FormFieldComponent
             control={form.control}
             name="description"
-            label="Description"
+            label={t("labelDescription")}
             type="textarea"
-            placeholder="Describe your product..."
+            placeholder={t("placeholderDescription")}
             rows={4}
           />
 
@@ -174,52 +178,59 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="price"
-            label="Price (USD)"
+            label={t("labelPrice")}
             type="input"
             inputType="number"
             placeholder="0.00"
             className="w-1/2"
+            classNameLabel="bg-background"
             customOnChange={(e, fieldOnChange) =>
               fieldOnChange(Number(e.target.value))
             }
           />
+          <div className="flex justify-between items-center w-full">
+            <div className="flex justify-between items-center w-1/2">
+              {/* Category */}
+              <FormFieldComponent
+                control={form.control}
+                name="category"
+                label={t("labelCategory")}
+                type="select"
+                placeholder="Select category"
+                onValueChange={(value) => Number(value)}
+                selectValue={undefined}
+                customSelectOptions={
+                  <>
+                    {categories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </>
+                }
+              />
 
-          {/* Category */}
-          <FormFieldComponent
-            control={form.control}
-            name="category"
-            label="Category"
-            type="select"
-            placeholder="Select category"
-            onValueChange={(value) => Number(value)}
-            selectValue={undefined}
-            customSelectOptions={
-              <>
-                {categories.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </>
-            }
-          />
-
-          {/* SKU and Status */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormFieldComponent
-              control={form.control}
-              name="sku"
-              label="SKU"
-              type="input"
-              placeholder="Product SKU"
-            />
-
+              {/* Condition and Quantity */}
+              <FormFieldComponent
+                control={form.control}
+                name="condition"
+                label={t("labelCondition")}
+                type="select"
+                placeholder="Select condition"
+                options={PRODUCT_CONDITION_FORM}
+              />
+            </div>
+            {/* Status */}
             <FormFieldComponent
               control={form.control}
               name="status"
-              label="Status"
+              label={t("labelStatus")}
               type="select"
               placeholder="Select status"
+              className="w-full"
               options={[
                 { key: "available", label: "Available" },
                 { key: "reserved", label: "Reserved" },
@@ -229,47 +240,49 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             />
           </div>
 
-          {/* Condition and Quantity */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormFieldComponent
-              control={form.control}
-              name="condition"
-              label="Condition"
-              type="select"
-              placeholder="Select condition"
-              options={PRODUCT_CONDITION_FORM}
-            />
+          {/* SKU and Status */}
+          <FormFieldComponent
+            control={form.control}
+            name="sku"
+            label="SKU"
+            type="input"
+            placeholder="Product SKU"
+            className="w-1/2"
+            classNameLabel="bg-background"
+          />
 
-            <FormFieldComponent
-              control={form.control}
-              name="quantity"
-              label="Quantity"
-              type="input"
-              inputType="number"
-              min="1"
-              placeholder="1"
-              customOnChange={(e, fieldOnChange) =>
-                fieldOnChange(Number(e.target.value))
-              }
-            />
-          </div>
+          <FormFieldComponent
+            control={form.control}
+            name="quantity"
+            label={t("labelCount")}
+            type="input"
+            inputType="number"
+            min="1"
+            placeholder="1"
+            classNameLabel="bg-background"
+            customOnChange={(e, fieldOnChange) =>
+              fieldOnChange(Number(e.target.value))
+            }
+          />
 
           {/* Manufacturer and Model */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormFieldComponent
               control={form.control}
               name="manufacturer"
-              label="Manufacturer"
+              label={t("labelManufacturer")}
               type="input"
               placeholder="Enter manufacturer"
+              classNameLabel="bg-background"
             />
 
             <FormFieldComponent
               control={form.control}
               name="model"
-              label="Model"
+              label={t("labelModel")}
               type="input"
               placeholder="Enter model"
+              classNameLabel="bg-background"
             />
           </div>
 
@@ -280,7 +293,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               disabled={updateLoading}
               className="flex-1 py-2"
             >
-              {updateLoading ? "Updating..." : "Update Product"}
+              {updateLoading ? t('buttonUpdating') : t('buttonUpdate')}
             </Button>
 
             <Button
@@ -289,14 +302,14 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               onClick={() => router.push("/account")}
               className="flex-1 py-2"
             >
-              Cancel
+              {t('buttonCancel')}
             </Button>
           </div>
 
           {/* Temporary debugging */}
           {updateError && (
             <div className="text-red-500 text-sm mt-2">
-              Error: {updateError.message || "Failed to update product"}
+              {t("error")} {updateError.message || t('errorDescription')}
             </div>
           )}
         </form>

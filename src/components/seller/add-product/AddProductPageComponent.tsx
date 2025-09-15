@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import { UserProfile } from "@/lib/types";
 import AddProductForms from "./AddProductForms";
 import MetadataRequiredDialog from "./MetadataRequiredDialog";
+import { useTranslations } from "next-intl";
 
 const AddProductPageComponent = ({
   currentUser,
 }: {
   currentUser: UserProfile;
 }) => {
+  const t = useTranslations('AddProduct');
+
   const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
@@ -26,7 +29,7 @@ const AddProductPageComponent = ({
     <>
       <MetadataRequiredDialog open={showDialog} onOpenChange={setShowDialog} />
       <div className="text-center py-12 text-gray-500">
-        Please complete your company details to add products.
+        {t('errorAddProduct')}
       </div>
     </>
   );
