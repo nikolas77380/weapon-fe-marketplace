@@ -101,7 +101,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   };
 
   return (
-    <>
+    <div className="min-h-screen h-full w-full">
     <BreadcrumbComponent />
       {currentCategory && (
         <div className="mt-5 mb-6">
@@ -172,7 +172,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
