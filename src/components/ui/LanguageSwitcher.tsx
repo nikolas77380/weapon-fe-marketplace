@@ -1,36 +1,17 @@
 "use client";
 
 import { setUserLocale } from "@/i18n/locale";
-import { defaultLocale, locales } from "@/i18n/config";
+import { locales } from "@/i18n/config";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 
 export default function LanguageSwitcher() {
   const router = useRouter();
+  const currentLocale = useLocale();
 
-  // Initialize with correct locale immediately
-  const getInitialLocale = () => {
-    if (typeof window !== "undefined") {
-      const pathname = window.location.pathname;
-      const localeFromUrl = pathname.split("/")[1];
-
-      if (localeFromUrl && (localeFromUrl === "en" || localeFromUrl === "ua")) {
-        return localeFromUrl as "en" | "ua";
-      }
-
-      const savedLocale =
-        document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("i18Lang="))
-          ?.split("=")[1] || defaultLocale;
-      return savedLocale as "en" | "ua";
-    }
-    return defaultLocale;
-  };
-
-  const currentLocale = getInitialLocale();
-
-  const handleLanguageChange = async (locale: string) => {
-    await setUserLocale(locale as any);
+  const handleLanguageChange = async (newLocale: string) => {
+    await setUserLocale(newLocale as any);
+    
     router.refresh();
   };
 
