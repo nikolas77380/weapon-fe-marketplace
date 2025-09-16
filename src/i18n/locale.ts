@@ -8,7 +8,11 @@ import { cookieName, defaultLocale, Locale } from "./config";
 const COOKIE_NAME = cookieName;
 
 export async function getUserLocale() {
-  return (await cookies()).get(COOKIE_NAME)?.value || defaultLocale;
+  const cookieStore = await cookies();
+  const saved = cookieStore.get(COOKIE_NAME)?.value;
+
+  // Just return defaultLocale if there is no cookie
+  return saved || defaultLocale;
 }
 
 export async function setUserLocale(locale: Locale) {

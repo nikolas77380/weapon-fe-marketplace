@@ -47,6 +47,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-gray-primary: var(--gray-primary);
   --color-gray-secondary: var(--gray-secondary);
+  --spacing-layout: 0.9375rem;
 }
 
 :root {
@@ -56,7 +57,7 @@
   --card: oklch(1 0 0);
   --border-foreground: oklch(0.1448 0 0 / 10.2%);
   --border-secondary: oklch(0.1448 0 0 / 20%);
-  --gold-main: oklch(0.5419 0.0507 35.67);
+  --gold-main: oklch(0.6717 0.1336 71.54);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
