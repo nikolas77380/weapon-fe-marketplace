@@ -7,9 +7,17 @@ const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: "never",
+  localeDetection: false, // Disable browser locale autodetection
 });
 
 export default async function middleware(req: NextRequest) {
+  // Force Ukrainian language if there is no cookie
+  const hasLocaleCookie = req.cookies.get("i18Lang");
+  if (!hasLocaleCookie) {
+    const response = NextResponse.next();
+    response.cookies.set("i18Lang", defaultLocale);
+  }
+
   // 2. Check if the current route is protected or public
   const intlResponse = intlMiddleware(req);
 
@@ -36,8 +44,7 @@ export default async function middleware(req: NextRequest) {
   // 4. Redirect to /auth if the user is not authenticated on protected routes
   if (isProtectedRoute && !sessionToken) {
     console.log("Middleware - Redirecting to /auth (not authenticated)");
-    const locale = path.split("/")[1] || defaultLocale;
-    return NextResponse.redirect(new URL(`/${locale}/auth`, req.nextUrl));
+    return NextResponse.redirect(new URL(`/auth`, req.nextUrl));
   }
 
   // 5. Redirect to /marketplace if the user is authenticated on auth page
@@ -45,10 +52,7 @@ export default async function middleware(req: NextRequest) {
     console.log(
       "Middleware - Redirecting to /marketplace (already authenticated)"
     );
-    const locale = path.split("/")[1] || defaultLocale;
-    return NextResponse.redirect(
-      new URL(`/${locale}/marketplace`, req.nextUrl)
-    );
+    return NextResponse.redirect(new URL(`/marketplace`, req.nextUrl));
   }
 
   return intlResponse;

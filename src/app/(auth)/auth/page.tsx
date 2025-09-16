@@ -28,7 +28,7 @@ import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 const AuthPage = () => {
   const t = useTranslations("Auth");
-  
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const { fetchUser } = useAuthContext();
@@ -149,7 +149,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen h-full w-full relative pt-6 z-1">
+    <div className="min-h-screen h-full w-full relative pt-4 sm:pt-6 pb-8 sm:pb-12 lg:pb-16 z-1">
       <div className="absolute inset-0 z-[-1] bg-[#e7e7e7]">
         <Image
           src="/auth/bg.png"
@@ -158,103 +158,127 @@ const AuthPage = () => {
           className="object-cover mix-blend-exclusion w-full h-full"
         />
       </div>
-      <div className="container mx-auto flex items-start">
-        {/* Breadcrumb */}
-        <Breadcrumb />
-
-        <div className="mx-auto w-full max-w-170">
-          <div className="flex items-center w-full">
-            <div className="flex justify-center w-full">
-              <Logo />
-            </div>
+      <div className="container mx-auto px-layout sm:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-0">
+          {/* Breadcrumb - скрыт на мобильных */}
+          <div className="hidden lg:block">
+            <Breadcrumb />
           </div>
-          <div
-            className={`border border-border-foreground ${
-              authMode === "login" ? "mt-41" : "mt-6"
-            } flex flex-col bg-primary-foreground w-170`}
-          >
-            <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground">
-              <h2 className="font-medium text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
-                {t("titleMain")}
-              </h2>
-              <p className="mt-2.5 mb-3.5 font-light text-center">
-                {t('descriptionMain')}
-              </p>
+
+          <div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-170">
+            <div className="flex items-center justify-between lg:justify-center w-full mb-4 lg:mb-0">
+              {/* Пустой div для выравнивания на мобильных */}
+              <div className="lg:hidden w-8"></div>
+              <div className="flex justify-center">
+                <Logo />
+              </div>
+              {/* Language Switcher на мобильных */}
+              <div className="lg:hidden">
+                <LanguageSwitcher />
+              </div>
             </div>
-            <div className="w-full">
-              {/* Switcher */}
-              <AuthSwitcher
-                authMode={authMode}
-                onAuthModeChange={handleAuthMode}
-              />
-              {/* Content */}
-              {authMode === "register" && (
-                <>
-                  <div className="flex flex-col px-3.5">
-                    <Label className="mt-6 font-light">{t('register.accountType')}</Label>
-                    <div className="flex mt-3.5 w-full">
-                      {/* Buyer */}
-                      <div
-                        onClick={() => handleTypeChange("buyer")}
-                        className={`border w-full flex flex-col items-center justify-center py-2.5 px-3.5 cursor-pointer transition-colors
+            <div
+              className={`border border-border-foreground ${
+                authMode === "login" ? "mt-6 lg:mt-41" : "mt-4 lg:mt-6"
+              } flex flex-col bg-primary-foreground w-full lg:w-170 mx-auto`}
+            >
+              <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground px-4 sm:px-6">
+                <h2 className="font-medium text-xl sm:text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
+                  {t("titleMain")}
+                </h2>
+                <p className="mt-2.5 mb-3.5 font-light text-center text-sm sm:text-base">
+                  {t("descriptionMain")}
+                </p>
+              </div>
+              <div className="w-full">
+                {/* Switcher */}
+                <AuthSwitcher
+                  authMode={authMode}
+                  onAuthModeChange={handleAuthMode}
+                />
+                {/* Content */}
+                {authMode === "register" && (
+                  <>
+                    <div className="flex flex-col px-4 sm:px-6 lg:px-3.5">
+                      <Label className="mt-6 font-light text-sm sm:text-base">
+                        {t("register.accountType")}
+                      </Label>
+                      <div className="flex flex-col sm:flex-row mt-3.5 w-full gap-2 sm:gap-0">
+                        {/* Buyer */}
+                        <div
+                          onClick={() => handleTypeChange("buyer")}
+                          className={`border w-full flex flex-col items-center justify-center py-3 sm:py-2.5 px-3 sm:px-3.5 cursor-pointer transition-colors
                     ${
                       activeType === "buyer"
                         ? "bg-gold-main text-white"
                         : "border-border-foreground bg-transparent text-muted-foreground"
                     }`}
-                      >
-                        <User className="size-8" strokeWidth={0.5} />
-                        <h1 className="mt-2.5 font-lg">{t('register.buyer')}</h1>
-                        <p className="mt-1 text-sm text-center font-light max-w-73">
-                          {t('register.userDescription')}
-                        </p>
-                      </div>
-                      {/* Seller */}
-                      <div
-                        onClick={() => handleTypeChange("seller")}
-                        className={`border w-full flex flex-col items-center justify-center py-2.5 px-3.5 cursor-pointer transition-colors
+                        >
+                          <User
+                            className="size-6 sm:size-8"
+                            strokeWidth={0.5}
+                          />
+                          <h1 className="mt-2 sm:mt-2.5 font-medium text-sm sm:text-base">
+                            {t("register.buyer")}
+                          </h1>
+                          <p className="mt-1 text-xs sm:text-sm text-center font-light max-w-full sm:max-w-73">
+                            {t("register.userDescription")}
+                          </p>
+                        </div>
+                        {/* Seller */}
+                        <div
+                          onClick={() => handleTypeChange("seller")}
+                          className={`border w-full flex flex-col items-center justify-center py-3 sm:py-2.5 px-3 sm:px-3.5 cursor-pointer transition-colors
                     ${
                       activeType === "seller"
                         ? "bg-gold-main text-white"
                         : "border-border-foreground bg-transparent text-muted-foreground"
                     }`}
-                      >
-                        <Tag className="size-8 rotate-90" strokeWidth={0.5} />
-                        <h1 className="mt-2.5 font-lg">{t('register.seller')}</h1>
-                        <p className="mt-1 text-sm text-center font-light max-w-73">
-                          {t('register.userDescription')}
+                        >
+                          <Tag
+                            className="size-6 sm:size-8 rotate-90"
+                            strokeWidth={0.5}
+                          />
+                          <h1 className="mt-2 sm:mt-2.5 font-medium text-sm sm:text-base">
+                            {t("register.seller")}
+                          </h1>
+                          <p className="mt-1 text-xs sm:text-sm text-center font-light max-w-full sm:max-w-73">
+                            {t("register.userDescription")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Forms */}
+                    <div className="mt-6">
+                      <RegisterForm onSubmit={onRegistrationSubmit} />
+                      <div className="text-center flex items-center justify-center py-3.5 border-t border-border-foreground w-full px-4 sm:px-6">
+                        <p className="text-xs sm:text-sm font-light text-center">
+                          {t("register.footerDescripotion")}
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </>
+                )}
 
-                  {/* Forms */}
-                  <div className="mt-6">
-                    <RegisterForm onSubmit={onRegistrationSubmit} />
-                    <div className="text-center flex items-center justify-center py-3.5 border-t border-border-foreground w-full">
-                      <p className="text-xs font-light">
-                        {t('register.footerDescripotion')}
+                {authMode === "login" && (
+                  <>
+                    <LoginForm onSubmit={onLoginSubmit} />
+                    <div className="text-center flex items-center justify-center border-t border-border-foreground w-full px-4 sm:px-6">
+                      <p className="text-xs sm:text-sm font-light flex py-3.5 text-center">
+                        {t("login.footerDescripotion")}
                       </p>
                     </div>
-                  </div>
-                </>
-              )}
-
-              {authMode === "login" && (
-                <>
-                  <LoginForm onSubmit={onLoginSubmit} />
-                  <div className="text-center flex items-center justify-center border-t border-border-foreground w-full">
-                    <p className="text-sm font-light flex py-3.5">
-                      {t('login.footerDescripotion')}
-                    </p>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="max-w-[200px] w-full flex">
-          <LanguageSwitcher />
+
+          {/* Language Switcher - только на десктопе */}
+          <div className="hidden lg:flex lg:justify-start lg:max-w-[200px] w-full lg:mt-0">
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
     </div>
