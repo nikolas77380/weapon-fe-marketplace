@@ -248,5 +248,16 @@
     "buttonCancel": "Скасувати",
     "error": "Помилка:",
     "errorDescription": "Помилка оновлення товару"
+  },
+  "NotFound": {
+    "titleNotFound": "Сторінка не знайдена",
+    "descriptionNotFound": "На жаль, такої сторінки не існує",
+    "descriptionNotFound2": "Можливо, вона була переміщена, видалена або ви ввели неправильну адресу",
+    "buttonGoHome": "На головну",
+    "searchSuggestion": "Не вдалося знайти, що ви шукаєте?",
+    "currentUserDescription": "Перейдіть до каталогу товарів",
+    "notCurrentUserDescription": "Перейдіть до каталогу товарів або увійдіть, щоб переглянути товари",
+    "buttonProductCatalog": "Каталог товарів",
+    "buttonLogReg": "Увійти / Зареєструватися"
   }
 }

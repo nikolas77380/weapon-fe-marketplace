@@ -8,8 +8,6 @@ import { useCategories, useCategoryBySlug } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useCategoryCounts } from "@/hooks/useCategoryCounts";
 import Sorting from "./Sorting";
-import { Input } from "../ui/input";
-import { Search } from "lucide-react";
 import BreadcrumbComponent from "../ui/BreadcrumbComponent";
 
 interface FilterState {
@@ -100,9 +98,15 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     setViewMode("grid");
   };
 
+  const customLabels = currentCategory
+    ? {
+        [categorySlug]: currentCategory.name,
+      }
+    : {};
+
   return (
     <div className="min-h-screen h-full w-full">
-    <BreadcrumbComponent />
+      <BreadcrumbComponent customLabels={customLabels} />
       {currentCategory && (
         <div className="mt-5 mb-6">
           <h1 className="text-3xl font-bold text-foreground">
@@ -115,9 +119,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           )}
         </div>
       )}
-      <div
-        className="flex items-center justify-between w-full"
-      >
+      <div className="flex items-center justify-between w-full">
         {/* <Search /> */}
         {/* <div className="relative w-2/3">
           <Input
@@ -137,7 +139,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         {/* Results */}
         <h2>
           Found {pagination?.total || paginatedProducts.length}{" "}
-          {(pagination?.total || paginatedProducts.length) === 1 ? "Result" : "Results"}
+          {(pagination?.total || paginatedProducts.length) === 1
+            ? "Result"
+            : "Results"}
         </h2>
 
         {/* Sorting */}

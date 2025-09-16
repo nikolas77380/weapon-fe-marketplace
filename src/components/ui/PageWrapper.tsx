@@ -18,12 +18,6 @@ const PageWrapper = ({
   return (
     <div className="w-full min-h-screen h-full">
       <div className="container mx-auto flex flex-col">
-        {currentUser && (
-          <BreadcrumbComponent
-            currentUser={currentUser}
-            className={breadcrumbClassName}
-          />
-        )}
         <BreadcrumbComponent
           currentUser={currentUser}
           className={breadcrumbClassName}
