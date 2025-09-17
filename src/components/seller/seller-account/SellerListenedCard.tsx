@@ -1,6 +1,6 @@
 import { ImageType, Product } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
-import { Ellipsis, Eye, MessageSquare, SquarePen, Trash2 } from "lucide-react";
+import { Ellipsis, Eye, SquarePen, Trash2 } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -74,7 +74,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary px-8 py-6 flex justify-between w-full bg-[#E7E7E7]">
+    <div className="border border-gray-primary px-8 py-6 flex justify-between w-full bg-sidebar-accent">
       {/* Product info */}
       <div className="flex gap-2.5">
         <Image
@@ -95,15 +95,15 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
             <p>{product.price}$</p>
             <p>Posted: {formatDate(product.createdAt)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-6 font-roboto font-medium text-sm text-gray-primary">
+          <div className="mt-1 flex items-center gap-6 font-roboto font-medium text-sm text-gray-400">
             <div className="flex items-center gap-1.5">
               <Eye size={18} />
-              <p>{product.viewsCount || 0} views</p>
+              <p>{t("tabMyInquiries.titleViews", { count: product.viewsCount || 0 })}</p>
             </div>
-            <div className="flex items-center gap-1.5">
+            {/* <div className="flex items-center gap-1.5">
               <MessageSquare size={18} />
               <p>10 Inquires</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

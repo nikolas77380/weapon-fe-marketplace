@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { useTranslations } from "next-intl";
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;
@@ -35,25 +36,26 @@ const Filters = ({
   categoryCounts = {},
   hideCategoryFilter = false,
 }: FiltersProps) => {
+  const t = useTranslations('CompanyDetail.tabProducts');
   return (
-    <div className="border border-border-foreground h-fit p-5 flex flex-col gap-3.5">
+    <div className="border-r border-t border-b border-border-foreground h-fit p-5 flex flex-col gap-3.5">
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-medium">Filter</h2>
+          <h2 className="text-xl font-medium">{t('titleFilter')}</h2>
         </div>
         <Button
           variant="ghost"
           className="py-2 hover:bg-primary-foreground duration-300 transition-all rounded-none"
           onClick={onClearAll}
         >
-          Clear All
+          {t('buttonClearAll')}
         </Button>
       </div>
       {/* Buttons selected filters */}
       {/* <div></div> */}
 
       <div className="flex flex-col border-b border-border-foreground pb-3.5">
-        <h2 className="font-medium">Quick filters</h2>
+        <h2 className="font-medium">{t('titleQuickFilters')}</h2>
         <div className="flex flex-col gap-2 mt-3">
           {quickFilters.map((filter) => (
             <div key={filter.id} className="flex items-center gap-3">
@@ -71,7 +73,7 @@ const Filters = ({
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="category" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
-                <h2 className="text-sm font-medium font-roboto">Category</h2>
+                <h2 className="text-sm font-medium font-roboto">{t('titleCategory')}</h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
@@ -121,7 +123,7 @@ const Filters = ({
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="condition" className="border-none">
             <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">Condition</h2>
+              <h2 className="text-sm font-medium font-roboto">{t('titleCondition')}</h2>
             </AccordionTrigger>
             <AccordionContent className="pt-3">
               <div className="flex flex-col gap-2">
@@ -156,7 +158,7 @@ const Filters = ({
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="availability" className="border-none">
             <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">Availability</h2>
+              <h2 className="text-sm font-medium font-roboto">{t('titleAvailability')}</h2>
             </AccordionTrigger>
             <AccordionContent className="pt-3">
               <div className="flex flex-col gap-2">

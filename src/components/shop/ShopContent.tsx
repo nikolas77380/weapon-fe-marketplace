@@ -14,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useTranslations } from "next-intl";
 
 interface ShopContentProps {
   products: Product[];
@@ -39,12 +40,13 @@ const ShopContent = ({
   loading = false,
   showViewToggle = false,
 }: ShopContentProps) => {
+  const t = useTranslations("CategoryDetail");
+
   if (!loading && products.length === 0) {
     return (
       <div className="mb-12">
-        <h2 className="text-xl font-semibold">0 Results</h2>
         <div className="mt-8 text-center">
-          <p className="text-gray-500">No products found</p>
+          <p className="text-gray-500">{t('titleNotFound')}</p>
         </div>
       </div>
     );
@@ -64,8 +66,8 @@ const ShopContent = ({
       <div
         className={
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7.5"
-            : "flex flex-col gap-4"
+            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            : "flex flex-col"
         }
       >
         {loading ? (

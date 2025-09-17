@@ -6,18 +6,58 @@ import SellerNavbar from "../buyer/navbar/SellerNavbar";
 import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
-import { User } from "lucide-react";
+import { LayoutGrid, User, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useTranslations } from "next-intl";
+import CatalogDropdown from "./CatalogDropdown";
+import { useState } from "react";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
-  const t = useTranslations('Navbar');
+  const t = useTranslations("Navbar");
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
+
+  const handleToggleCatalog = () => {
+    setIsCatalogOpen(!isCatalogOpen);
+  };
+
+  const handleCloseCatalog = () => {
+    setIsCatalogOpen(false);
+  };
 
   const NavbarContent = () => (
-    <div className="h-16">
+    <div className="h-16 flex items-center">
       <div className="container mx-auto flex justify-between items-center">
-        <Logo />
+        <div className="flex items-center gap-22">
+          <Logo />
+          {currentUser && (
+            <div className="relative">
+              <div
+                className={`
+                  bg-gold-main rounded-none cursor-pointer duration-300 transition-all
+                  hover:bg-gold-main/90
+                  ${isCatalogOpen ? "bg-gold-main/90" : ""}
+                `}
+                onClick={handleToggleCatalog}
+              >
+                <div className="flex items-center gap-2 py-2.5 px-4">
+                  {isCatalogOpen ? (
+                    <X size={16} className="text-white" />
+                  ) : (
+                    <LayoutGrid size={16} className="text-white" />
+                  )}
+                  <p className="text-sm font-medium text-white">
+                    {t("titleCatalog")}
+                  </p>
+                </div>
+              </div>
+              <CatalogDropdown
+                isOpen={isCatalogOpen}
+                onClose={handleCloseCatalog}
+              />
+            </div>
+          )}
+        </div>
         {!currentUserLoading && currentUser ? (
           <>
             {currentUser.role.name === "buyer" ? (
@@ -51,7 +91,7 @@ const Navbar = () => {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('logRegTooltip')}</p>
+                <p>{t("logRegTooltip")}</p>
               </TooltipContent>
             </Tooltip>
           </ul>
@@ -61,7 +101,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="w-full px-15 py-5.5 bg-transparent relative">
+    <nav className="w-full px-15 bg-[#565457] py-2.5 relative">
       <NavbarContent />
     </nav>
   );

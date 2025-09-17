@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { SellerMeta } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface MetadataRequiredDialogProps {
   open: boolean;
@@ -22,26 +22,27 @@ const ContactModal = ({
   onOpenChange,
   sellerData,
 }: MetadataRequiredDialogProps) => {
+  const t = useTranslations("ShopCard.contactModal");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Contact Information</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
           <DialogDescription className="flex flex-col gap-2 mt-2">
             <p>
-              <b>Company Name: </b> {sellerData?.companyName}
+              <b>{t('titleCompanyName')} </b> {sellerData?.companyName}
             </p>
             <p>
-              <b>Phone Numbers: </b> {sellerData?.phoneNumbers}
+              <b>{t('titlePhoneNumbers')} </b> {sellerData?.phoneNumbers}
             </p>
             <p>
-              <b>Web Site: </b> {sellerData?.webSite}
+              <b>{t('titleWebSite')} </b> {sellerData?.webSite}
             </p>
             <p>
-              <b>Country: </b> {sellerData?.country}
+              <b>{t('titleCountry')} </b> {sellerData?.country}
             </p>
             <p>
-              <b>Address: </b> {sellerData?.address}
+              <b>{t('titleAddress')} </b> {sellerData?.address}
             </p>
           </DialogDescription>
         </DialogHeader>
@@ -51,7 +52,7 @@ const ContactModal = ({
             onClick={() => onOpenChange(false)}
             className="py-2.5 px-6"
           >
-            Close
+            {t('buttonClose')}
           </Button>
         </div>
       </DialogContent>

@@ -105,7 +105,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     : {};
 
   return (
-    <div className="min-h-screen h-full w-full">
+    <div className="min-h-screen h-full w-full mt-3">
       <BreadcrumbComponent customLabels={customLabels} />
       {currentCategory && (
         <div className="mt-5 mb-6">
@@ -153,7 +153,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         />
       </div>
       {/* Shop Filtering Content */}
-      <div className="flex gap-7.5 h-full w-full mt-3">
+      <div className="flex h-full w-full mt-3">
         {/* Filters */}
         <Filters
           onPriceChange={handlePriceChange}

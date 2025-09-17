@@ -133,6 +133,50 @@
   }
 }
 
+@layer utilities {
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* Hidden scrollbar for catalog categories but keep functionality */
+  .catalog-scroll {
+    /* Hide scrollbar for webkit browsers */
+    -webkit-overflow-scrolling: touch;
+  }
+  .catalog-scroll::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  .catalog-scroll::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+
+  /* Hide scrollbar for Firefox */
+  .catalog-scroll {
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for IE and Edge */
+  .catalog-scroll {
+    -ms-overflow-style: none;
+  }
+}
+
 body,
 html {
   margin: 0;

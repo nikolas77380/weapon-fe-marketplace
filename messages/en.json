@@ -2,6 +2,7 @@
   "Navbar": {
     "logRegTooltip": "Login/Register",
     "messagesToogle": "Messages",
+    "titleCatalog": "Catalog",
     "sellerNavbar": {
       "titleAddProduct": "Add product",
       "titleUserName": "User name",
@@ -36,7 +37,9 @@
     },
     "tabFavourites": {
       "titleMyFavouritesProduct": "My Favourites Product",
-      "titleFavourites": "Favourites"
+      "titleFavourites": "Favourites",
+      "titleSavedItem": "Saved Item",
+      "titleViewDetails": "View Details"
     },
     "tabMessage": {
       "titleMessages": "Messages",
@@ -56,7 +59,8 @@
       "descriptionModalDeleteProduct1": "Are you sure you want to delete",
       "descriptionModalDeleteProduct2": "This action cannot be undone.",
       "descriptionModalDeleting": "Deleting...",
-      "descriptionModalCancel": "Cancel"
+      "descriptionModalCancel": "Cancel",
+      "titleViews": "{count, plural, one {# view} other {# views}}"
     },
     "tabMessage": {
       "titleMessages": "Messages",
@@ -259,5 +263,100 @@
     "notCurrentUserDescription": "Go to the product catalog or sign in to view products",
     "buttonProductCatalog": "Product Catalog",
     "buttonLogReg": "Login / Register"
+  },
+  "ShopCard": {
+    "titleCardSeller": "Contact Seller",
+    "titlebuttonCreating": "Creating...",
+    "contactModal": {
+      "title": "Contact Information",
+      "titleCompanyName": "Company Name:",
+      "titlePhoneNumbers": "Phone Numbers:",
+      "titleWebSite": "Web Site:",
+      "titleCountry": "Country:",
+      "titleAddress": "Address:",
+      "buttonClose": "Close"
+    }
+  },
+  "Footer": {
+    "description": "The trusted marketplace for weapon and armour",
+    "mainTitle": "General",
+    "mainTitle2": "Contact",
+    "subtitleGeneral": "FAQ",
+    "subtitleGeneral2": "Account",
+    "subtitleGeneral3": "Privace Policy",
+    "subtitleGeneral4": "Support",
+    "subtitleContact": "Contact Us",
+    "subtitleContact2": "1-800-WEAPONS",
+    "subtitleContact3": "24/7 Suppor",
+    "titleRightsReserved": "All rights reserved."
+  },
+  "ProductDetail": {
+    "titleProduct": "Product",
+    "titleCardSeller": "Contact Seller",
+    "descriptionNotCountry": "Country not available",
+    "titleViewProfile": "View profile",
+    "titleTabDesc": "Description",
+    "titleTabSpec": "Specifications",
+    "buttonRemoveFavourite": "Remove from Favourites",
+    "buttonAddFavourite": "Add to Favourite",
+    "titleModel": "Model",
+    "titleNotModel": "Not have model name",
+    "titleCategory": "Category",
+    "titleNotCategory": "Not have category name",
+    "titleAddSpec": "Additional Specifications",
+    "titleCondition": "Condition:",
+    "titleManufacturer": "Manufacturer:",
+    "titleProductDetails": "Product Details",
+    "titleStatus": "Status:",
+    "titleUnknown": "Unknown"
+  },
+  "CompanyDetail": {
+    "titleNotCountry": "Country not available",
+    "titleNotAddress": "Address not available",
+    "buttonCardSeller": "Contact Seller",
+    "tabOverview": {
+      "titleOverview": "Overview",
+      "titleAbout": "About",
+      "titleCertifications": "Certifications",
+      "titleFeaturedProducts": "Featured Products",
+      "titleQuickInfo": "Quick info",
+      "titleWorkingTime": "Working time",
+      "titleContact": "Contact",
+      "workTime": {
+        "monFri": "Mon-Fri:",
+        "sat": "Sat:",
+        "sun": "Sun:",
+        "closed": "Closed"
+      },
+      "titlePhone": "Phone:",
+      "titleEmail": "Email:",
+      "titleAddress": "Address:"
+    },
+    "tabProducts": {
+      "titleProducts": "Products",
+      "titleFilter": "Filter",
+      "buttonClearAll": "Clear All",
+      "titleQuickFilters": "Quick filters",
+      "titleCategory": "Category",
+      "titleCondition": "Condition",
+      "titleAvailability": "Availability"
+    },
+    "tabBusinessInfo": {
+      "titleBusinessInfo": "Business Info"
+    }
+  },
+  "PriceRange": {
+    "title": "Price Range",
+    "titleMin": "Min",
+    "titleMax": "Max"
+  },
+  "CategoryDetail": {
+    "titleNotFound": "No products found"
+  },
+  "CatalogModal": {
+    "title": "Products catalog",
+    "titleSeeAll": "See all",
+    "descriptionNotHaveProducts": "There are no goods in this category yet",
+    "descriptionNotHaveProducts2": "Try to choose another category"
   }
 }

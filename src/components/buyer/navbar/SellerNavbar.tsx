@@ -42,12 +42,12 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
         <NavigationMenuLink asChild>
           <Link
             href="/account/add-product"
-            className="border border-black bg-black rounded-sm cursor-pointer duration-300 transition-all
-          hover:bg-black/80 px-1"
+            className="bg-gold-main cursor-pointer duration-300 transition-all
+          hover:bg-gold-main/90"
           >
-            <div className="flex items-center gap-2 py-2 px-3">
+            <div className="flex items-center gap-2 py-2.5 px-4">
               <Plus size={16} className="text-white" />
-              <p className="text-xs font-semibold text-white">{t('titleAddProduct')}</p>
+              <p className="text-sm font-medium text-white">{t('titleAddProduct')}</p>
             </div>
           </Link>
         </NavigationMenuLink>
@@ -62,10 +62,10 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               </AvatarFallback>
             </Avatar>
             <div className="text-sm items-start flex flex-col ml-2">
-              <div className="font-medium">
+              <div className="font-medium text-white">
                 {user.displayName || user.username}
               </div>
-              <div className="text-gray-600 capitalize">{user.role.name}</div>
+              <div className="text-white/70 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent>

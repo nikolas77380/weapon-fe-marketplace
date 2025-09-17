@@ -25,9 +25,9 @@ const FilteringContent = () => {
   const availableCategories = categories;
 
   return (
-    <div className="flex gap-7.5 h-full w-full">
+    <div className="flex h-full w-full">
       {/* Filters */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 border-t border-r border-b border-border-foreground py-2">
         {availableCategories.map((category) => (
           <Link
             href={`/category/${category.slug}`}
@@ -40,7 +40,7 @@ const FilteringContent = () => {
       </div>
       {/* Shop Content */}
       <div className="w-full h-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {loading ? (
             <SkeletonComponent
               type="productCard"
