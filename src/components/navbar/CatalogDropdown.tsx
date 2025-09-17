@@ -71,7 +71,7 @@ const CatalogDropdown = ({ isOpen, onClose }: CatalogDropdownProps) => {
       <div
         ref={dropdownRef}
         className="absolute top-full left-0 z-50 bg-white border border-gray-200 shadow-2xl w-[900px] max-h-[80vh] rounded-b-lg animate-in fade-in-0 slide-in-from-top-2 duration-200"
-        style={{ marginTop: "22px" }}
+        style={{ marginTop: "10px" }}
       >
         <div className="flex h-full max-h-[80vh]">
           {/* Left panel with categories */}
@@ -229,10 +229,9 @@ const CatalogDropdown = ({ isOpen, onClose }: CatalogDropdownProps) => {
                 <div className="w-16 h-16 mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                   <LayoutGrid size={28} className="text-gray-400" />
                 </div>
-                <p className="text-base font-medium mb-2">Выберите категорию</p>
+                <p className="text-base font-medium mb-2">{t('descriptionNotification')}</p>
                 <p className="text-sm text-center max-w-xs">
-                  Наведите курсор на любую категорию слева, чтобы увидеть
-                  популярные товары
+                  {t('descriptionNotification2')}
                 </p>
               </div>
             )}
