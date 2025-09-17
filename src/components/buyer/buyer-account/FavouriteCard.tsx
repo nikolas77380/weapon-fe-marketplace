@@ -5,6 +5,7 @@ import { FavouriteProduct } from "@/lib/favourites";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { formatPrice } from "@/lib/formatUtils";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface FavouriteCardProps {
   favourite: FavouriteProduct;
@@ -15,6 +16,8 @@ const FavouriteCard = ({
   favourite,
   viewMode = "grid",
 }: FavouriteCardProps) => {
+  const t = useTranslations("BuyerAccountTabs.tabFavourites");
+
   const product = favourite.product;
 
   if (viewMode === "list") {
@@ -45,7 +48,7 @@ const FavouriteCard = ({
           <div>
             <div className="flex items-center justify-between mb-2">
               <div className="px-2.5 py-0.5 rounded-sm">
-                <p className="text-xs">Favourite</p>
+                <p className="text-xs">{t('titleFavourites')}</p>
               </div>
               <p className="text-lg font-semibold">
                 {formatPrice(product.price)}
@@ -111,14 +114,14 @@ const FavouriteCard = ({
         {/* Favourite badge */}
         <div className="absolute top-2 left-0">
           <Badge className="text-xs font-semibold rounded-none bg-red-500 text-white">
-            Favourite
+            {t('titleFavourites')}
           </Badge>
         </div>
       </div>
       <div className="flex flex-col p-2">
         <div className="flex items-center justify-between">
           <div className="px-2.5 py-0.5 bg-[#D9D9D9] rounded-sm">
-            <p className="text-xs">Saved Item</p>
+            <p className="text-[0.7rem]">{t('titleSavedItem')}</p>
           </div>
           <p className="text-sm font-semibold">{formatPrice(product.price)}</p>
         </div>
@@ -155,9 +158,9 @@ const FavouriteCard = ({
           <div className="flex items-center justify-center mt-3">
             <Link
               href={`/marketplace/${product.id}`}
-              className="py-1.5 px-3.5 text-sm rounded-md bg-gold-main text-white hover:bg-gold-main/90 duration-300 transition-all"
+              className="py-1.5 px-3.5 w-full text-center text-sm rounded-md bg-gold-main text-white hover:bg-gold-main/90 duration-300 transition-all"
             >
-              View Details →
+              {t('titleViewDetails')}
             </Link>
           </div>
         </div>

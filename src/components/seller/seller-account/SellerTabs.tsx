@@ -55,7 +55,7 @@ const SellerAccountTabs = ({
         <div className="mt-9 overflow-hidden">
           <TabsContent
             value="myInquiries"
-            className="bg-[#DBDBDB] px-6 pt-2 pb-4"
+            className="bg-background border border-sidebar-accent px-6 pt-2 pb-4"
           >
             <div className="mt-7.5">
               <h1 className="text-xl font-roboto">{t('tabMyInquiries.titleTabMyInquiries')}</h1>

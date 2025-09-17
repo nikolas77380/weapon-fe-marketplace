@@ -2,8 +2,10 @@ import React from "react";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import Logo from "../ui/Logo";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+  const t = useTranslations('Footer');
   return (
     <div className="py-7 bg-sidebar-accent">
       <div className="container mx-auto flex flex-col items-center">
@@ -13,35 +15,35 @@ const Footer = () => {
               <Logo />
             </li>
             <li className="font-light w-full max-w-52">
-              The trusted marketplace for weapon and armour
+              {t('description')}
             </li>
           </ul>
 
           <ul>
-            <h1 className="font-medium text-xl mb-3.5">Legal</h1>
+            <h1 className="font-medium text-xl mb-3.5">{t('mainTitle')}</h1>
             <Link
               href="/faq"
               className=" hover:text-gold-main transition-colors
               duration-300"
             >
-              <li className="mb-1 text-sm">FAQ</li>
+              <li className="mb-1 text-sm">{t('subtitleGeneral')}</li>
             </Link>
-            <li className="text-sm mb-1">Seller Dashboard</li>
-            <li className="text-sm mb-1">Verification</li>
-            <li className="text-sm">Support</li>
+            <li className="text-sm mb-1">{t('subtitleGeneral2')}</li>
+            <li className="text-sm mb-1">{t('subtitleGeneral3')}</li>
+            <li className="text-sm">{t('subtitleGeneral4')}</li>
           </ul>
 
           <ul>
-            <h1 className="font-medium text-xl mb-3.5">Contact</h1>
+            <h1 className="font-medium text-xl mb-3.5">{t('mainTitle2')}</h1>
             <Link
               href="/contact"
               className=" hover:text-gold-main transition-colors
             duration-300"
             >
-              <li className="mb-1 text-sm">Contact Us</li>
+              <li className="mb-1 text-sm">{t('subtitleContact')}</li>
             </Link>
-            <li className="text-sm mb-1">1-800-WEAPONS</li>
-            <li className="text-sm">24/7 Support</li>
+            <li className="text-sm mb-1">{t('subtitleContact2')}</li>
+            <li className="text-sm">{t('subtitleContact3')}</li>
           </ul>
         </div>
 
@@ -54,7 +56,7 @@ const Footer = () => {
 
         <div className="my-6">
           <h2 className="font-light text-2xl">
-            © 2025 WM. All rights reserved.
+            © 2025 Esviem Defence. {t('titleRightsReserved')}
           </h2>
         </div>
       </div>

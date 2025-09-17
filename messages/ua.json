@@ -2,6 +2,7 @@
   "Navbar": {
     "logRegTooltip": "Вхід/Реєстрація",
     "messagesToogle": "Повідомлення",
+    "titleCatalog": "Каталог",
     "sellerNavbar": {
       "titleAddProduct": "Додати продукт",
       "titleUserName": "Ім'я користувача",
@@ -36,7 +37,9 @@
     },
     "tabFavourites": {
       "titleMyFavouritesProduct": "Мій обраний товар",
-      "titleFavourites": "Обране"
+      "titleFavourites": "Обране",
+      "titleSavedItem": "Збережений",
+      "titleViewDetails": "Переглянути деталі"
     },
     "tabMessage": {
       "titleMessages": "Повідомлення",
@@ -56,7 +59,8 @@
       "descriptionModalDeleteProduct1": "Ви впевнені, що хочете видалити",
       "descriptionModalDeleteProduct2": "Цю дію не можна скасувати.",
       "descriptionModalDeleting": "Видалення...",
-      "descriptionModalCancel": "Скасувати"
+      "descriptionModalCancel": "Скасувати",
+      "titleViews": "{count, plural, one {# перегляд} few {# перегляди} many {# переглядів} other {# переглядів}}"
     },
     "tabMessage": {
       "titleMessages": "Повідомлення",
@@ -259,5 +263,100 @@
     "notCurrentUserDescription": "Перейдіть до каталогу товарів або увійдіть, щоб переглянути товари",
     "buttonProductCatalog": "Каталог товарів",
     "buttonLogReg": "Увійти / Зареєструватися"
+  },
+  "ShopCard": {
+    "titleCardSeller": "Зв'язатися з продавцем",
+    "titlebuttonCreating": "Створення...",
+    "contactModal": {
+      "title": "Контактна інформація",
+      "titleCompanyName": "Назва компанії:",
+      "titlePhoneNumbers": "Номери телефонів:",
+      "titleWebSite": "Веб-сторінка:",
+      "titleCountry": "Країна:",
+      "titleAddress": "Адреса:",
+      "buttonClose": "Закрити"
+    }
+  },
+  "Footer": {
+    "description": "Надійний ринок зброї та амуніції",
+    "mainTitle": "Загальні",
+    "mainTitle2": "Контакти",
+    "subtitleGeneral": "Найчастіші запитання",
+    "subtitleGeneral2": "Обліковий запис",
+    "subtitleGeneral3": "Політика конфіденційності",
+    "subtitleGeneral4": "Підтримка",
+    "subtitleContact": "Зв'яжіться з нами",
+    "subtitleContact2": "1-800-ЗБРОЯ",
+    "subtitleContact3": "Підтримка 24/7",
+    "titleRightsReserved": "Всі права захищені."
+  },
+  "ProductDetail": {
+    "titleProduct": "Товар",
+    "titleCardSeller": "Зв'язатися з продавцем",
+    "descriptionNotCountry": "Країна недоступна",
+    "titleViewProfile": "Переглянути профіль",
+    "titleTabDesc": "Опис",
+    "titleTabSpec": "Специфікації",
+    "buttonRemoveFavourite": "Видалити з обраного",
+    "buttonAddFavourite": "Додати до обраного",
+    "titleModel": "Модель",
+    "titleNotModel": "Не має назви моделі",
+    "titleCategory": "Категорія",
+    "titleNotCategory": "Не має назви категорії",
+    "titleAddSpec": "Додаткові характеристики",
+    "titleCondition": "Стан:",
+    "titleManufacturer": "Виробник:",
+    "titleProductDetails": "Деталі товару",
+    "titleStatus": "Статус:",
+    "titleUnknown": "Невідомо"
+  },
+  "CompanyDetail": {
+    "titleNotCountry": "Країна недоступна",
+    "titleNotAddress": "Адреса недоступна",
+    "buttonCardSeller": "Зв'язатися з продавцем",
+    "tabOverview": {
+      "titleOverview": "Огляд",
+      "titleAbout": "Про",
+      "titleCertifications": "Сертифікати",
+      "titleFeaturedProducts": "Рекомендовані товари",
+      "titleQuickInfo": "Коротка інформація",
+      "titleWorkingTime": "Робочий час",
+      "titleContact": "Контакти",
+      "workTime": {
+        "monFri": "Пн-Пт:",
+        "sat": "Сб:",
+        "sun": "Нд:",
+        "closed": "Вихідний"
+      },
+      "titlePhone": "Телефон:",
+      "titleEmail": "Пошта:",
+      "titleAddress": "Адреса:"
+    },
+    "tabProducts": {
+      "titleProducts": "Товари",
+      "titleFilter": "Фільтр",
+      "buttonClearAll": "Очистити все",
+      "titleQuickFilters": "Швидкі фільтри",
+      "titleCategory": "Категорія",
+      "titleCondition": "Стан",
+      "titleAvailability": "Наявність"
+    },
+    "tabBusinessInfo": {
+      "titleBusinessInfo": "Інформація про бізнес"
+    }
+  },
+  "PriceRange": {
+    "title": "Ціновий діапазон",
+    "titleMin": "Від",
+    "titleMax": "До"
+  },
+  "CategoryDetail": {
+    "titleNotFound": "Продукти не знайдено"
+  },
+  "CatalogModal": {
+    "title": "Каталог товарів",
+    "titleSeeAll": "Переглянути всі",
+    "descriptionNotHaveProducts": "У цій категорії ще немає товарів",
+    "descriptionNotHaveProducts2": "Спробуйте вибрати іншу категорію"
   }
 }

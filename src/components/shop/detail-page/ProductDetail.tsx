@@ -8,8 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
 import { formatPrice } from "@/lib/formatUtils";
+import { useTranslations } from "next-intl";
 
 const ProductDetail = ({ product }: { product: Product }) => {
+  const t = useTranslations('ProductDetail');
+
   const { sellerData } = useSellerData(product?.seller?.id);
 
   return (
@@ -27,7 +30,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
         {/* Title */}
         <div className="flex items-center justify-between">
           <h1 className="text-[40px] font-medium">
-            {product?.title || "Product"}
+            {product?.title || t('titleProduct')}
           </h1>
           <FavouriteButton productId={product.id} size="lg" />
         </div>
@@ -41,7 +44,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           )}
           {/* Contact Seller */}
           <Button className="py-3 px-6 bg-black text-white rounded-md">
-            Contact Seller
+            {t('titleCardSeller')}
           </Button>
         </div>
 
@@ -65,7 +68,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 {sellerData?.metadata?.country ? (
                   sellerData.metadata.country
                 ) : (
-                  <span className="text-gray-400">Country not available</span>
+                  <span className="text-gray-400">{t('descriptionNotCountry')}</span>
                 )}
               </p>
             </div>
@@ -74,15 +77,15 @@ const ProductDetail = ({ product }: { product: Product }) => {
             href={`/company/${product?.seller?.id}`}
             className="border border-gray-primary py-2.5 px-5"
           >
-            <p>View profile</p>
+            <p>{t('titleViewProfile')}</p>
           </Link>
         </div>
         {/* Tabs */}
         <div className="mt-7.5">
           <Tabs defaultValue="description">
             <TabsList className="bg-gray-primary w-full">
-              <TabsTrigger value="description">Description</TabsTrigger>
-              <TabsTrigger value="specifications">Specifications</TabsTrigger>
+              <TabsTrigger value="description">{t('titleTabDesc')}</TabsTrigger>
+              <TabsTrigger value="specifications">{t('titleTabSpec')}</TabsTrigger>
             </TabsList>
             <TabsContent value="description">
               <p className="text-lg font-light">
@@ -94,17 +97,17 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 {/* Basic Info */}
                 <div className="grid grid-cols-2 gap-6">
                   <div className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-gray-700 mb-2">Model</h4>
+                    <h4 className="font-semibold text-gray-700 mb-2">{t('titleModel')}</h4>
                     <p className="text-lg">
                       {product?.attributesJson?.model || "Not have model name"}
                     </p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-semibold text-gray-700 mb-2">
-                      Category
+                      {t('titleCategory')}
                     </h4>
                     <p className="text-lg">
-                      {product?.category?.name || "Not have category name"}
+                      {product?.category?.name || t('titleNotCategory')}
                     </p>
                   </div>
                 </div>
@@ -116,13 +119,13 @@ const ProductDetail = ({ product }: { product: Product }) => {
                     attrs && (
                       <div className="bg-gray-50 p-4 rounded-lg">
                         <h4 className="font-semibold text-gray-700 mb-3">
-                          Additional Specifications
+                          {t('titleAddSpec')}
                         </h4>
                         <div className="grid grid-cols-2 gap-4">
                           {attrs.condition && (
                             <div>
                               <span className="font-medium text-gray-600">
-                                Condition:
+                                {t('titleCondition')}
                               </span>
                               <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
                                 {attrs.condition}
@@ -132,7 +135,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                           {attrs.manufacturer && (
                             <div>
                               <span className="font-medium text-gray-600">
-                                Manufacturer:
+                                {t('titleManufacturer')}
                               </span>
                               <span className="ml-2 text-gray-800">
                                 {attrs.manufacturer}
@@ -148,7 +151,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                 {/* Product Details */}
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-gray-700 mb-3">
-                    Product Details
+                    {t('titleProductDetails')}
                   </h4>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -158,7 +161,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                       </span>
                     </div>
                     <div>
-                      <span className="font-medium text-gray-600">Status:</span>
+                      <span className="font-medium text-gray-600">{t('titleStatus')}</span>
                       <span
                         className={`ml-2 px-2 py-1 text-xs rounded-full ${
                           product?.status === "available"
@@ -171,7 +174,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                         }`}
                       >
                         {product?.status?.charAt(0).toUpperCase() +
-                          product?.status?.slice(1) || "Unknown"}
+                          product?.status?.slice(1) || t('titleUnknown')}
                       </span>
                     </div>
                   </div>

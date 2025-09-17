@@ -47,10 +47,10 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               </AvatarFallback>
             </Avatar>
             <div className="text-sm items-start flex flex-col ml-2">
-              <div className="font-medium">
+              <div className="font-medium text-white">
                 {user.displayName || user.username}
               </div>
-              <div className="text-gray-600 capitalize">{user.role.name}</div>
+              <div className="text-white/70 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent>

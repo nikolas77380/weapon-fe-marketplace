@@ -15,12 +15,15 @@ import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
+import { useTranslations } from "next-intl";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
 }
 
 const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
+  const t = useTranslations("CompanyDetail");
+
   const { products: sellerProducts, loading } = useSellerProducts(
     sellerData.id
   );
@@ -259,19 +262,19 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                 {sellerData?.metadata?.country ? (
                   sellerData.metadata.country
                 ) : (
-                  <span className="text-gray-400">Country not available</span>
+                  <span className="text-gray-400">{t("titleNotCountry")}</span>
                 )}
                 ,{" "}
                 {sellerData?.metadata?.address ? (
                   sellerData.metadata.address
                 ) : (
-                  <span className="text-gray-500">Address not available</span>
+                  <span className="text-gray-500">{t("titleNotAddress")}</span>
                 )}
               </p>
             </div>
           </div>
-          <Button className="border py-2.5 px-5 rounded-none bg-gold-main hover:bg-gold-main/80 duration-300 transition-colors">
-            Contact Seller
+          <Button className="border py-2.5 px-5 text-white rounded-none bg-gold-main hover:bg-gold-main/80 duration-300 transition-colors">
+            {t("buttonCardSeller")}
           </Button>
         </div>
 
@@ -279,11 +282,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         <div className="mt-15">
           <Tabs defaultValue="overview" onValueChange={handleTabChange}>
             <TabsList className="w-full border border-muted-foreground/20">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="products">
-                Products({sellerProducts.length})
+              <TabsTrigger value="overview">
+                {t("tabOverview.titleOverview")}
               </TabsTrigger>
-              <TabsTrigger value="businessInfo">Business Info</TabsTrigger>
+              <TabsTrigger value="products">
+                {t('tabProducts.titleProducts')} ({sellerProducts.length})
+              </TabsTrigger>
+              <TabsTrigger value="businessInfo">{t('tabBusinessInfo.titleBusinessInfo')}</TabsTrigger>
             </TabsList>
             {/* Tab Overview */}
             <TabsContent value="overview">
@@ -335,15 +340,18 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   {/* Left Side */}
                   <div className="flex flex-col w-4/5 space-y-7.5">
                     <h1 className="text-[40px] font-medium mt-7.5">
-                      About {sellerData?.metadata?.companyName}
+                      {t("tabOverview.titleAbout")}{" "}
+                      {sellerData?.metadata?.companyName}
                     </h1>
                     <p className="text-lg font-light">
                       {sellerData?.metadata?.sellerDescription}
                     </p>
-                    <h2 className="text-[30px] font-medium">Certifications</h2>
+                    <h2 className="text-[30px] font-medium">
+                      {t("tabOverview.titleCertifications")}
+                    </h2>
                     {/* Logic certifications...... */}
                     <h2 className="text-[30px] font-medium">
-                      Featured Products
+                      {t("tabOverview.titleFeaturedProducts")}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7.5">
                       {loading ? (
@@ -367,10 +375,14 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   {/* Right Side */}
                   <div className="w-1/5 mt-7.5">
                     <div className="border border-[#0A0A0A1A] p-5 bg-[#DBDBDB] flex flex-col">
-                      <h1 className="text-xl font-medium">Quick info</h1>
+                      <h1 className="text-xl font-medium">
+                        {t("tabOverview.titleQuickInfo")}
+                      </h1>
                       <div className="mt-5 flex flex-col gap-3.5">
                         {/* Working time */}
-                        <h2 className="text-xl font-light">Working time</h2>
+                        <h2 className="text-xl font-light">
+                          {t("tabOverview.titleWorkingTime")}
+                        </h2>
                         <div className="flex flex-col gap-2.5">
                           {workTimeCompany.map((schedule, index) => (
                             <div
@@ -378,17 +390,23 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                               className="flex items-center gap-2.5"
                             >
                               <p className="font-light text-muted-foreground min-w-[62px]">
-                                {schedule.day}
+                                {t(`tabOverview.workTime.${schedule.dayKey}`)}
                               </p>
-                              <p className="font-light">{schedule.time}</p>
+                              <p className="font-light">
+                                {schedule.time === "closed"
+                                  ? t("tabOverview.workTime.closed")
+                                  : schedule.time}
+                              </p>
                             </div>
                           ))}
                         </div>
-                        <h2 className="text-xl font-light">Contact</h2>
+                        <h2 className="text-xl font-light">
+                          {t("tabOverview.titleContact")}
+                        </h2>
                         <div className="flex flex-col gap-2.5">
                           <div className="flex items-center gap-2.5">
                             <p className="font-light text-muted-foreground min-w-[62px]">
-                              Phone:
+                              {t('tabOverview.titlePhone')}
                             </p>
                             <p className="font-light">
                               {sellerData?.metadata?.phoneNumbers}
@@ -396,13 +414,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           </div>
                           <div className="flex items-center gap-2.5">
                             <p className="font-light text-muted-foreground min-w-[62px]">
-                              Email:
+                              {t('tabOverview.titleEmail')}
                             </p>
                             <p className="font-light">{sellerData?.email}</p>
                           </div>
                           <div className="flex items-center gap-2.5">
                             <p className="font-light text-muted-foreground min-w-[62px]">
-                              Address:
+                              {t('tabOverview.titleAddress')}
                             </p>
                             <p className="font-light">
                               {sellerData?.metadata?.address}

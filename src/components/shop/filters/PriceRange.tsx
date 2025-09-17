@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 interface PriceRangeProps {
@@ -17,6 +18,8 @@ const PriceRange = ({
   minLimit = 1,
   maxLimit = 500000,
 }: PriceRangeProps) => {
+  const t = useTranslations('PriceRange');
+
   // Price range state
   const [minPrice, setMinPrice] = useState(initialMin);
   const [maxPrice, setMaxPrice] = useState(initialMax);
@@ -138,7 +141,7 @@ const PriceRange = ({
 
   return (
     <div>
-      <h2 className="text-sm font-medium font-roboto mb-3">Price Range</h2>
+      <h2 className="text-sm font-medium font-roboto mb-3">{t('title')}</h2>
       <div className="w-[240px]">
         <div className="flex flex-col gap-4">
           {/* Range Slider */}
@@ -186,7 +189,7 @@ const PriceRange = ({
           <div className="flex justify-between gap-3">
             <div className="relative">
               <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                Min
+                {t('titleMin')}
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                 $
@@ -201,7 +204,7 @@ const PriceRange = ({
             </div>
             <div className="relative">
               <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                <p>Max</p>
+                <p>{t('titleMax')}</p>
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                 $

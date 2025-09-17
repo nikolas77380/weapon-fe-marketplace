@@ -3,7 +3,7 @@ import CategoryContent from "@/components/CategoryContent";
 
 const HomePage = () => {
   return (
-    <div className="mb-20 mt-5">
+    <div className="mb-20">
       <div className="container mx-auto">
         <CategoryContent />
       </div>

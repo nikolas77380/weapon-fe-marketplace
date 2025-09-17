@@ -12,6 +12,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
+import { useTranslations } from "next-intl";
 
 interface ShopCardProps {
   item: Product;
@@ -19,6 +20,8 @@ interface ShopCardProps {
 }
 
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
+  const t = useTranslations("ShopCard");
+
   const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -139,7 +142,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <div className="border border-border-foreground flex flex-col">
+    <div className="border first:border-l-0 last:border-l-0 border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
         <div className="relative overflow-hidden h-[200px] min-h-[200px] max-h-[200px] p-3">
           <Image
@@ -213,7 +216,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             >
               {/* <MessageSquare size={15} /> */}
               <p className="font-semibold group-hover:underline">
-                {isLoading ? "Creating..." : "Contact Seller"}
+                {isLoading ? t('titlebuttonCreating') : t('titleCardSeller')}
               </p>
             </Button>
           </div>

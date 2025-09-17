@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useFavourites } from "@/hooks/useFavourites";
+import { useTranslations } from "next-intl";
 
 interface FavouriteButtonProps {
   productId: number;
@@ -25,6 +26,8 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   size = "md",
   variant = "ghost",
 }) => {
+  const t = useTranslations('ProductDetail');
+
   const { isFavourited, toggleFavourite, loading } = useFavourites();
 
   const handleToggleFavourite = async () => {
@@ -39,8 +42,8 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   };
 
   const tooltipText = isFavourited(productId)
-    ? "Remove from Favourites"
-    : "Add to Favourite";
+    ? t('buttonRemoveFavourite')
+    : t('buttonAddFavourite')
 
   return (
     <TooltipProvider>
