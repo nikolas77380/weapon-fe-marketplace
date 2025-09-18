@@ -49,7 +49,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
         </div>
 
         {/* Seller Info */}
-        <div className="flex items-center justify-between mt-7.5 border border-gray-primary p-5">
+        <div className="flex items-center justify-between mt-7.5 p-5">
           <div className="flex items-center gap-3">
             <Avatar className="size-15">
               <AvatarFallback className="uppercase text-3xl">

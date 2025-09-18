@@ -3,6 +3,11 @@
     "logRegTooltip": "Login/Register",
     "messagesToogle": "Messages",
     "titleCatalog": "Catalog",
+    "burgerMenu": {
+      "srTitle": "Navigation menu",
+      "srDescription": "Mobile menu to navigate the site",
+      "titleLogRegNotification": "Sign in to your personal account"
+    },
     "sellerNavbar": {
       "titleAddProduct": "Add product",
       "titleUserName": "User name",

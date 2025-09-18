@@ -436,3 +436,39 @@ input:not(:-webkit-autofill)::-moz-selection {
     url("/messages/message-bg.jpg") center/cover no-repeat;
   color: #000;
 }
+
+/* Screen reader only class for accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Custom breakpoint for extra small screens (<500px) */
+@media (min-width: 500px) {
+  .xs\:text-xs {
+    font-size: 0.75rem;
+  }
+  .xs\:text-sm {
+    font-size: 0.875rem;
+  }
+  .xs\:text-base {
+    font-size: 1rem;
+  }
+  .xs\:block {
+    display: block;
+  }
+}
+
+/* Hide elements on screens <500px */
+@media (max-width: 499px) {
+  .hidden.xs\:block {
+    display: none;
+  }
+}

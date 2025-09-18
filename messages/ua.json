@@ -3,6 +3,11 @@
     "logRegTooltip": "Вхід/Реєстрація",
     "messagesToogle": "Повідомлення",
     "titleCatalog": "Каталог",
+    "burgerMenu": {
+      "srTitle": "Меню навігації",
+      "srDescription": "Мобільне меню для навігації по сайту",
+      "titleLogRegNotification": "Увійдіть в особистий кабінет"
+    },
     "sellerNavbar": {
       "titleAddProduct": "Додати продукт",
       "titleUserName": "Ім'я користувача",
