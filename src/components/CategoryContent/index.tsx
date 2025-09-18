@@ -8,6 +8,7 @@ import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
 import Link from "next/link";
 import BannerSlider from "./BannerSlider";
+import ViewedProductsSlider from "./ViewedProductsSlider";
 
 const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
@@ -44,8 +45,11 @@ const FilteringContent = () => {
         {/* Swiper Slide Banners */}
         <BannerSlider />
 
+        {/* Viewed Products Slider */}
+        <ViewedProductsSlider />
+
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
           {loading ? (
             <SkeletonComponent
               type="productCard"

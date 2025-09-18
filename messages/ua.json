@@ -360,5 +360,8 @@
     "descriptionNotHaveProducts2": "Спробуйте вибрати іншу категорію",
     "descriptionNotification": "Виберіть категорію",
     "descriptionNotification2": "Наведіть курсор до будь-якої категорії зліва, щоб побачити популярні продукти"
+  },
+  "ViewedRecommendedProductsSlider": {
+    "title": "Рекомендації на основі ваших переглядів"
   }
 }

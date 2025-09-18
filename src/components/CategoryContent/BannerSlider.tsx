@@ -9,7 +9,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import NavigationButton from "../ui/NavigationButton";
 import { bannerData } from "@/mockup/banners";
 
 const BannerSlider = () => {
@@ -47,28 +47,21 @@ const BannerSlider = () => {
                   className="object-cover w-full h-full"
                   priority={banner.id === 1}
                 />
-
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
-
-                {/* Content */}
-                <div className="absolute inset-0 flex flex-col justify-center p-6 text-white"></div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
 
         {/* Navigation buttons */}
-        <button className="banner-prev absolute left-4 top-1/2 z-10 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-200 shadow-lg">
-          <ChevronLeft size={26} className="text-gray-500" />
-        </button>
-
-        <button className="banner-next absolute right-4 top-1/2 z-10 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-200 shadow-lg">
-          <ChevronRight size={26} className="text-gray-500" />
-        </button>
+        <div className="banner-prev">
+          <NavigationButton direction="left" onClick={() => {}} />
+        </div>
+        <div className="banner-next">
+          <NavigationButton direction="right" onClick={() => {}} />
+        </div>
 
         {/* Pagination dots */}
-        <div className="banner-pagination absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 flex justify-center"></div>
+        <div className="banner-pagination"></div>
       </div>
     </div>
   );

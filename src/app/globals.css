@@ -181,18 +181,72 @@
     position: relative;
   }
 
+  .banner-pagination {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 10 !important;
+    width: auto !important;
+  }
+
   .banner-pagination .swiper-pagination-bullet {
-    background: var(--color-sidebar-ring)!important;
+    background: var(--color-sidebar-ring) !important;
     opacity: 0.8 !important;
     width: 6px !important;
     height: 6px !important;
-    margin: 4px !important;
+    margin: 0 4px !important;
     transition: all 0.3s ease !important;
+    position: relative !important;
+    display: inline-block !important;
   }
 
   .banner-pagination .swiper-pagination-bullet-active {
     background: var(--color-gold-main) !important;
     transform: scale(1.2) !important;
+  }
+
+  /* Viewed products slider styles */
+  .viewed-products-slider {
+    position: relative;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f0f1f4;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-gold-main);
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  /* Remove scrollbar buttons for all browsers */
+  .custom-scrollbar::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  /* Firefox scrollbar */
+  @-moz-document url-prefix() {
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-gold-main) #f0f1f4;
+    }
+  }
+
+  /* Edge/IE scrollbar */
+  @supports (-ms-overflow-style: none) {
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+    }
   }
 }
 
