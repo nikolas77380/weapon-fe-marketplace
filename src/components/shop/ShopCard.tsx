@@ -179,8 +179,13 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
         </div> */}
         </div>
       </Link>
-      <div className="flex flex-col p-7.5">
+      <div className="flex flex-col p-3.5">
         <div className="flex flex-col gap-2">
+          <div className="flex justify-end w-full">
+            <p className="text-lg font-medium text-gold-main">
+              {formatPrice(item.price, "$")}
+            </p>
+          </div>
           <Link
             href={`/marketplace/${item.id}`}
             className="font-medium text-xl hover:text-gold-main transition-colors duration-300 w-fit"
@@ -204,18 +209,16 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between mt-5">
-            <p className="text-lg font-medium text-gold-main">
-              {formatPrice(item.price, "$")}
-            </p>
+          {/* Contact Seller */}
+          <div className="mt-5 flex items-center justify-center">
             <Button
               className="rounded-none py-2.5 px-0 hover:underline text-gold-main bg-transparent hover:bg-transparent border-none shadow-none"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               {/* <MessageSquare size={15} /> */}
-              <p className="font-semibold group-hover:underline">
-                {isLoading ? t('titlebuttonCreating') : t('titleCardSeller')}
+              <p className="font-semibold group-hover:underline text-sm">
+                {isLoading ? t("titlebuttonCreating") : t("titleCardSeller")}
               </p>
             </Button>
           </div>

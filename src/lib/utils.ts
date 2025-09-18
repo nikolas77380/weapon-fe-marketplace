@@ -511,3 +511,4 @@ export const handleEnterPress = (
 
 export const triggerClasses =
   "w-full text-lg font-medium text-muted-foreground flex justify-start px-3.5";
+

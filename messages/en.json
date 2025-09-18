@@ -360,5 +360,8 @@
     "descriptionNotHaveProducts2": "Try to choose another category",
     "descriptionNotification": "Select the category",
     "descriptionNotification2": "Give the cursor to any category on the left to see popular products"
+  },
+  "ViewedRecommendedProductsSlider": {
+    "title": "Recommendations based on your views"
   }
 }
