@@ -175,6 +175,25 @@
   .catalog-scroll {
     -ms-overflow-style: none;
   }
+
+  /* Banner slider styles */
+  .banner-slider {
+    position: relative;
+  }
+
+  .banner-pagination .swiper-pagination-bullet {
+    background: var(--color-sidebar-ring)!important;
+    opacity: 0.8 !important;
+    width: 6px !important;
+    height: 6px !important;
+    margin: 4px !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .banner-pagination .swiper-pagination-bullet-active {
+    background: var(--color-gold-main) !important;
+    transform: scale(1.2) !important;
+  }
 }
 
 body,

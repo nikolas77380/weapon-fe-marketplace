@@ -7,6 +7,7 @@ import SkeletonComponent from "../ui/SkeletonComponent";
 import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
 import Link from "next/link";
+import BannerSlider from "./BannerSlider";
 
 const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
@@ -25,9 +26,9 @@ const FilteringContent = () => {
   const availableCategories = categories;
 
   return (
-    <div className="flex h-full w-full">
+    <div className="flex h-full w-full gap-10 overflow-hidden">
       {/* Filters */}
-      <div className="flex flex-col gap-2 border-t border-r border-b border-border-foreground py-2">
+      <div className="flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
         {availableCategories.map((category) => (
           <Link
             href={`/category/${category.slug}`}
@@ -39,8 +40,12 @@ const FilteringContent = () => {
         ))}
       </div>
       {/* Shop Content */}
-      <div className="w-full h-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="flex-1 min-w-0 overflow-hidden mt-6">
+        {/* Swiper Slide Banners */}
+        <BannerSlider />
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 w-full">
           {loading ? (
             <SkeletonComponent
               type="productCard"

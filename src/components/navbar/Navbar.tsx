@@ -26,37 +26,36 @@ const Navbar = () => {
   };
 
   const NavbarContent = () => (
-    <div className="h-16 flex items-center">
+    <div className="h-10 flex items-center">
       <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center gap-22">
+        <div className="flex items-center gap-36">
           <Logo />
-          {currentUser && (
-            <div className="relative">
-              <div
-                className={`
+
+          <div className="relative">
+            <div
+              className={`
                   bg-gold-main rounded-none cursor-pointer duration-300 transition-all
                   hover:bg-gold-main/90
                   ${isCatalogOpen ? "bg-gold-main/90" : ""}
                 `}
-                onClick={handleToggleCatalog}
-              >
-                <div className="flex items-center gap-2 py-2.5 px-4">
-                  {isCatalogOpen ? (
-                    <X size={16} className="text-white" />
-                  ) : (
-                    <LayoutGrid size={16} className="text-white" />
-                  )}
-                  <p className="text-sm font-medium text-white">
-                    {t("titleCatalog")}
-                  </p>
-                </div>
+              onClick={handleToggleCatalog}
+            >
+              <div className="flex items-center gap-2 py-2.5 px-4">
+                {isCatalogOpen ? (
+                  <X size={16} className="text-white" />
+                ) : (
+                  <LayoutGrid size={16} className="text-white" />
+                )}
+                <p className="text-sm font-medium text-white">
+                  {t("titleCatalog")}
+                </p>
               </div>
-              <CatalogDropdown
-                isOpen={isCatalogOpen}
-                onClose={handleCloseCatalog}
-              />
             </div>
-          )}
+            <CatalogDropdown
+              isOpen={isCatalogOpen}
+              onClose={handleCloseCatalog}
+            />
+          </div>
         </div>
         {!currentUserLoading && currentUser ? (
           <>

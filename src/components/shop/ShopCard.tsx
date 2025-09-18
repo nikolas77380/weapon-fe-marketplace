@@ -1,8 +1,7 @@
 import Image from "next/image";
-import { Badge } from "../ui/badge";
 import { Eye, MessageSquare } from "lucide-react";
 import { Button } from "../ui/button";
-import { ImageType, Product, SellerMeta } from "@/lib/types";
+import { ImageType, Product } from "@/lib/types";
 import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
@@ -142,7 +141,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <div className="border first:border-l-0 last:border-l-0 border-border-foreground flex flex-col">
+    <div className="border border-l-0 border-t-0 border-b border-r border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
         <div className="relative overflow-hidden h-[200px] min-h-[200px] max-h-[200px] p-3">
           <Image
