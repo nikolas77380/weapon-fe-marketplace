@@ -356,7 +356,18 @@
     "titleMax": "Max"
   },
   "CategoryDetail": {
-    "titleNotFound": "No products found"
+    "titleNotFound": "No products found",
+    "titleFilters": "Filters",
+    "srDescriptionFilters": "Filter products by many parameters",
+    "results": "{count, plural, one {Found # result} other {Found # results}}",
+    "sort": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "nameAToZ": "Name: A to Z",
+      "nameZToA": "Name: Z to A"
+    }
   },
   "CatalogModal": {
     "title": "Products catalog",

@@ -15,11 +15,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { VIEWED_PRODUCTS_BREAKPOINTS } from "@/lib/swiperBreakpoints";
 import { useTranslations } from "next-intl";
+import useBreakpoint from "@/hooks/useBreakpoint";
 
 const ViewedProductsSlider = () => {
   const t = useTranslations("ViewedRecommendedProductsSlider");
   const { currentUser } = useAuthContext();
   const { viewedProductIds, hasViewedProducts } = useViewedProducts();
+  const { currentSlidesPerView } = useBreakpoint();
   const [swiperRef, setSwiperRef] = useState<any>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -95,12 +97,14 @@ const ViewedProductsSlider = () => {
 
   return (
     <div className="mb-10">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800">{t("title")}</h3>
+      <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
+        {t("title")}
+      </h3>
 
       <div className="relative">
         <Swiper
           modules={[Navigation]}
-          slidesPerView={6}
+          slidesPerView={1}
           spaceBetween={0}
           onSwiper={setSwiperRef}
           onSlideChange={handleSlideChange}
@@ -124,13 +128,13 @@ const ViewedProductsSlider = () => {
           progress={progress}
           onProgressChange={handleScrollbarProgressChange}
           totalItems={viewedProducts.length}
-          visibleItems={6}
+          visibleItems={currentSlidesPerView}
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         />
 
         {/* Navigation buttons */}
-        {viewedProducts.length > 6 && (
+        {viewedProducts.length > currentSlidesPerView && (
           <>
             <div className="viewed-prev">
               <NavigationButton
