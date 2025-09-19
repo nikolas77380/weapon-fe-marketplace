@@ -356,7 +356,18 @@
     "titleMax": "До"
   },
   "CategoryDetail": {
-    "titleNotFound": "Продукти не знайдено"
+    "titleNotFound": "Продукти не знайдено",
+    "titleFilters": "Фільтри",
+    "srDescriptionFilters": "Фільтрувати товари за багатьма параметрами",
+    "results": "{count, plural, one {Знайдено # результат} few {Знайдено # результати} many {Знайдено # результатів} other {Знайдено # результатів}}",
+    "sort": {
+      "newest": "Спочатку нові",
+      "oldest": "Спочатку старі",
+      "priceLowToHigh": "Від низького до високого",
+      "priceHighToLow": "Від високого до низького",
+      "nameAToZ": "Від А до Я",
+      "nameZToA": "Від Я до А"
+    }
   },
   "CatalogModal": {
     "title": "Каталог товарів",

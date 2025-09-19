@@ -22,28 +22,32 @@ const ViewModeToggle = ({
     <div className="flex items-center gap-1">
       <div
         onClick={onGridClick}
-        className={`p-2 cursor-pointer transition-colors duration-200 ${
+        className={`p-1.5 min-[500px]:p-2 cursor-pointer transition-colors duration-200 ${
           viewMode === "grid"
             ? "bg-[#FE4819]"
             : "bg-transparent hover:bg-[#E7E7E7]/90"
         }`}
       >
         <LayoutGrid
-          size={20}
-          className={viewMode === "grid" ? "text-white" : "text-black"}
+          size={16}
+          className={`min-[500px]:w-5 min-[500px]:h-5 ${
+            viewMode === "grid" ? "text-white" : "text-black"
+          }`}
         />
       </div>
       <div
         onClick={onListClick}
-        className={`p-2 cursor-pointer transition-colors duration-200 ${
+        className={`p-1.5 min-[500px]:p-2 cursor-pointer transition-colors duration-200 ${
           viewMode === "list"
             ? "bg-[#FE4819]"
             : "bg-transparent hover:bg-[#E7E7E7]/90"
         }`}
       >
         <List
-          size={20}
-          className={viewMode === "list" ? "text-white" : "text-black"}
+          size={16}
+          className={`min-[500px]:w-5 min-[500px]:h-5 ${
+            viewMode === "list" ? "text-white" : "text-black"
+          }`}
         />
       </div>
     </div>

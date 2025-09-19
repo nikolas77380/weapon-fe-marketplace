@@ -9,6 +9,7 @@ interface PriceRangeProps {
   initialMax?: number;
   minLimit?: number;
   maxLimit?: number;
+  isMobile?: boolean;
 }
 
 const PriceRange = ({
@@ -17,8 +18,9 @@ const PriceRange = ({
   initialMax = 500000,
   minLimit = 1,
   maxLimit = 500000,
+  isMobile = false,
 }: PriceRangeProps) => {
-  const t = useTranslations('PriceRange');
+  const t = useTranslations("PriceRange");
 
   // Price range state
   const [minPrice, setMinPrice] = useState(initialMin);
@@ -141,8 +143,8 @@ const PriceRange = ({
 
   return (
     <div>
-      <h2 className="text-sm font-medium font-roboto mb-3">{t('title')}</h2>
-      <div className="w-[240px]">
+      <h2 className="text-sm font-medium font-roboto mb-3">{t("title")}</h2>
+      <div className={isMobile ? "w-full max-w-[280px]" : "w-[240px]"}>
         <div className="flex flex-col gap-4">
           {/* Range Slider */}
           <div className="relative h-4">
@@ -189,7 +191,7 @@ const PriceRange = ({
           <div className="flex justify-between gap-3">
             <div className="relative">
               <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                {t('titleMin')}
+                {t("titleMin")}
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                 $
@@ -204,7 +206,7 @@ const PriceRange = ({
             </div>
             <div className="relative">
               <span className="absolute left-5 top-0 px-1 bg-background transform -translate-x-1/2 -translate-y-1/2 text-xs text-gray-500 pointer-events-none">
-                <p>{t('titleMax')}</p>
+                <p>{t("titleMax")}</p>
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
                 $

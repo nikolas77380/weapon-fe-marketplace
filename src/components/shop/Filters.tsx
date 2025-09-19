@@ -24,6 +24,7 @@ interface FiltersProps {
   priceRange: { min: number; max: number };
   categoryCounts?: { [key: number]: number };
   hideCategoryFilter?: boolean;
+  isMobile?: boolean;
 }
 
 const Filters = ({
@@ -35,27 +36,34 @@ const Filters = ({
   priceRange,
   categoryCounts = {},
   hideCategoryFilter = false,
+  isMobile = false,
 }: FiltersProps) => {
-  const t = useTranslations('CompanyDetail.tabProducts');
+  const t = useTranslations("CompanyDetail.tabProducts");
   return (
-    <div className="border-r border-t border-b border-border-foreground h-fit p-5 flex flex-col gap-3.5">
+    <div
+      className={`${
+        isMobile
+          ? "border-0"
+          : "border-r border-t border-b border-border-foreground"
+      } h-fit ${isMobile ? "p-0" : "p-5"} flex flex-col gap-3.5`}
+    >
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-medium">{t('titleFilter')}</h2>
+          <h2 className="text-xl font-medium">{t("titleFilter")}</h2>
         </div>
         <Button
           variant="ghost"
           className="py-2 hover:bg-primary-foreground duration-300 transition-all rounded-none"
           onClick={onClearAll}
         >
-          {t('buttonClearAll')}
+          {t("buttonClearAll")}
         </Button>
       </div>
       {/* Buttons selected filters */}
       {/* <div></div> */}
 
       <div className="flex flex-col border-b border-border-foreground pb-3.5">
-        <h2 className="font-medium">{t('titleQuickFilters')}</h2>
+        <h2 className="font-medium">{t("titleQuickFilters")}</h2>
         <div className="flex flex-col gap-2 mt-3">
           {quickFilters.map((filter) => (
             <div key={filter.id} className="flex items-center gap-3">
@@ -73,7 +81,9 @@ const Filters = ({
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="category" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
-                <h2 className="text-sm font-medium font-roboto">{t('titleCategory')}</h2>
+                <h2 className="text-sm font-medium font-roboto">
+                  {t("titleCategory")}
+                </h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
@@ -123,7 +133,9 @@ const Filters = ({
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="condition" className="border-none">
             <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">{t('titleCondition')}</h2>
+              <h2 className="text-sm font-medium font-roboto">
+                {t("titleCondition")}
+              </h2>
             </AccordionTrigger>
             <AccordionContent className="pt-3">
               <div className="flex flex-col gap-2">
@@ -158,7 +170,9 @@ const Filters = ({
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="availability" className="border-none">
             <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">{t('titleAvailability')}</h2>
+              <h2 className="text-sm font-medium font-roboto">
+                {t("titleAvailability")}
+              </h2>
             </AccordionTrigger>
             <AccordionContent className="pt-3">
               <div className="flex flex-col gap-2">
@@ -198,6 +212,7 @@ const Filters = ({
         initialMax={priceRange.max}
         minLimit={1}
         maxLimit={500000}
+        isMobile={isMobile}
       />
 
       {/* <div>
