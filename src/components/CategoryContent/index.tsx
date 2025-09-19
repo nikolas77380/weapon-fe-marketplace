@@ -9,6 +9,7 @@ import { Product } from "@/lib/types";
 import Link from "next/link";
 import BannerSlider from "./BannerSlider";
 import ViewedProductsSlider from "./ViewedProductsSlider";
+import { useLocale } from "next-intl";
 
 const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
@@ -20,11 +21,12 @@ const FilteringContent = () => {
 
   const allProducts = response?.data || [];
   const loading = isLoading;
-  const { categories } = useCategories();
+  const { getMainCategories } = useCategories();
+  const currentLocale = useLocale();
 
   const paginatedProducts = allProducts;
 
-  const availableCategories = categories;
+  const availableCategories = getMainCategories();
 
   return (
     <div className="flex h-full w-full gap-10 overflow-hidden">
@@ -36,7 +38,7 @@ const FilteringContent = () => {
             className="cursor-pointer hover:text-gold-main"
             key={category.id}
           >
-            {category.name}
+            {currentLocale === "en" ? category.name : category.translate_ua}
           </Link>
         ))}
       </div>

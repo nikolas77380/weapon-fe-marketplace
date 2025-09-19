@@ -153,7 +153,7 @@ export const getCategories = async (): Promise<Category[]> => {
   try {
     const baseUrl =
       process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-    const url = `${baseUrl}/api/categories/public?populate=*&sort=order:asc`;
+    const url = `${baseUrl}/api/categories/public`;
 
     console.log("Fetching categories from:", url);
 
@@ -203,6 +203,7 @@ export const getCategories = async (): Promise<Category[]> => {
         order: number;
         createdAt: string;
         updatedAt: string;
+        translate_ua?: string;
         parent?: {
           id: number;
           name: string;
@@ -211,6 +212,7 @@ export const getCategories = async (): Promise<Category[]> => {
           order: number;
           createdAt: string;
           updatedAt: string;
+          translate_ua?: string;
         };
         children?: Array<{
           id: number;
@@ -220,6 +222,7 @@ export const getCategories = async (): Promise<Category[]> => {
           order: number;
           createdAt: string;
           updatedAt: string;
+          translate_ua?: string;
         }>;
       };
 
@@ -231,6 +234,7 @@ export const getCategories = async (): Promise<Category[]> => {
         order: typedItem.order,
         createdAt: typedItem.createdAt,
         updatedAt: typedItem.updatedAt,
+        translate_ua: typedItem.translate_ua,
         parent: typedItem.parent
           ? {
               id: typedItem.parent.id,
@@ -240,6 +244,7 @@ export const getCategories = async (): Promise<Category[]> => {
               order: typedItem.parent.order,
               createdAt: typedItem.parent.createdAt,
               updatedAt: typedItem.parent.updatedAt,
+              translate_ua: typedItem.parent.translate_ua,
             }
           : undefined,
         children: typedItem.children
@@ -251,6 +256,7 @@ export const getCategories = async (): Promise<Category[]> => {
               order: child.order,
               createdAt: child.createdAt,
               updatedAt: child.updatedAt,
+              translate_ua: child.translate_ua,
             }))
           : undefined,
       };
@@ -357,7 +363,7 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
   try {
     const baseUrl =
       process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-    const url = `${baseUrl}/api/categories/public/slug/${slug}?populate=*`;
+    const url = `${baseUrl}/api/categories/public/slug/${slug}`;
     console.log("Fetching category by slug from:", url);
 
     const response = await fetch(url, {

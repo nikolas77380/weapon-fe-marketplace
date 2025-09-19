@@ -18,6 +18,7 @@ interface CategorySelectProps {
   error: string | null;
   placeholder?: string;
   className?: string;
+  showHierarchy?: boolean;
 }
 
 const CategorySelect: React.FC<CategorySelectProps> = ({
@@ -28,15 +29,18 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
   error,
   placeholder = "Select Category",
   className = "w-1/2",
+  showHierarchy = true,
 }) => {
   const renderCategoryItem = (category: Category, level: number = 0) => {
-    const indent = "  ".repeat(level);
-    // Убеждаемся, что у категории есть валидное имя
+    const indent = showHierarchy ? "  ".repeat(level) : "";
     const categoryName = category.name || `Category ${category.id}`;
+    const displayName = showHierarchy
+      ? `${indent}${categoryName}`
+      : categoryName;
+
     return (
-      <SelectItem key={category.id} value={categoryName}>
-        {indent}
-        {categoryName}
+      <SelectItem key={category.id} value={category.id.toString()}>
+        {displayName}
       </SelectItem>
     );
   };
@@ -51,14 +55,19 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
       return (
         <React.Fragment key={category.id}>
           {renderCategoryItem(category, level)}
-          {children.length > 0 &&
+          {showHierarchy &&
+            children.length > 0 &&
             renderCategoriesHierarchy(children, level + 1)}
         </React.Fragment>
       );
     });
   };
 
-  const mainCategories = categories.filter((category) => !category.parent);
+  const mainCategories = showHierarchy
+    ? categories
+        .filter((category) => !category.parent)
+        .sort((a, b) => a.order - b.order)
+    : categories.sort((a, b) => a.order - b.order);
 
   return (
     <Select
