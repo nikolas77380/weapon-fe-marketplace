@@ -14,7 +14,7 @@ import { bannerData } from "@/mockup/banners";
 
 const BannerSlider = () => {
   return (
-    <div className="mb-6 w-full overflow-hidden">
+    <div className="mb-4 sm:mb-6 w-full overflow-hidden px-2 sm:px-0">
       <div className="relative w-full">
         <Swiper
           modules={[Pagination, Navigation, Autoplay]}
@@ -38,7 +38,7 @@ const BannerSlider = () => {
         >
           {bannerData.map((banner) => (
             <SwiperSlide key={banner.id}>
-              <div className="relative w-full h-[200px] rounded-sm overflow-hidden cursor-pointer">
+              <div className="relative w-full h-[150px] sm:h-[180px] lg:h-[200px] rounded-sm overflow-hidden cursor-pointer">
                 <Image
                   src={banner.image}
                   alt={banner.image}
@@ -52,11 +52,11 @@ const BannerSlider = () => {
           ))}
         </Swiper>
 
-        {/* Navigation buttons */}
-        <div className="banner-prev">
+        {/* Navigation buttons - Hidden on mobile */}
+        <div className="banner-prev hidden sm:block">
           <NavigationButton direction="left" onClick={() => {}} />
         </div>
-        <div className="banner-next">
+        <div className="banner-next hidden sm:block">
           <NavigationButton direction="right" onClick={() => {}} />
         </div>
 

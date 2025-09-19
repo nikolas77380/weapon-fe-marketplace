@@ -14,7 +14,7 @@ const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
       page: 1,
-      pageSize: 5,
+      pageSize: 6,
     },
   });
 
@@ -27,9 +27,9 @@ const FilteringContent = () => {
   const availableCategories = categories;
 
   return (
-    <div className="flex h-full w-full gap-10 overflow-hidden">
-      {/* Filters */}
-      <div className="flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
+    <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
+      {/* Filters - Hidden on mobile, visible on desktop */}
+      <div className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
         {availableCategories.map((category) => (
           <Link
             href={`/category/${category.slug}`}
@@ -40,8 +40,8 @@ const FilteringContent = () => {
           </Link>
         ))}
       </div>
-      {/* Shop Content */}
-      <div className="flex-1 min-w-0 overflow-hidden mt-6">
+      {/* Shop Content - Full width on mobile, flex-1 on desktop */}
+      <div className="w-full lg:flex-1 min-w-0 overflow-hidden mt-6">
         {/* Swiper Slide Banners */}
         <BannerSlider />
 
@@ -49,7 +49,10 @@ const FilteringContent = () => {
         <ViewedProductsSlider />
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full">
+        <div
+          className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 
+        lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 w-full gap-4"
+        >
           {loading ? (
             <SkeletonComponent
               type="productCard"

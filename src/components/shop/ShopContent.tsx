@@ -46,7 +46,7 @@ const ShopContent = ({
     return (
       <div className="mb-12">
         <div className="mt-8 text-center">
-          <p className="text-gray-500">{t('titleNotFound')}</p>
+          <p className="text-gray-500">{t("titleNotFound")}</p>
         </div>
       </div>
     );
@@ -66,7 +66,7 @@ const ShopContent = ({
       <div
         className={
           viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            ? "grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4"
             : "flex flex-col"
         }
       >

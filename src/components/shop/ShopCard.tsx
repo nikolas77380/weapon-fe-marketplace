@@ -55,10 +55,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-border-foreground flex flex-row">
+      <div className="border border-border-foreground flex flex-col min-[400px]:flex-row">
         <Link
           href={`/marketplace/${item.id}`}
-          className="relative overflow-hidden"
+          className="relative overflow-hidden flex-shrink-0"
         >
           <Image
             src={
@@ -69,7 +69,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             width={200}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-[200px] h-full object-cover"
+            className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-cover"
           />
 
           {/* Badge */}
@@ -95,41 +95,46 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           </Badge>
         </div> */}
         </Link>
-        <div className="flex flex-col justify-between p-4 flex-1">
+        <div className="flex flex-col justify-between p-3 min-[400px]:p-4 flex-1">
           <div>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-lg font-semibold">
+              <p className="text-base sm:text-lg font-semibold">
                 {formatPrice(item.price, "$")}
               </p>
             </div>
-            <p className="font-extrabold text-lg mb-2">{item.title}</p>
-            <p className="font-light text-sm text-gray-600 mb-4">
+            <p className="font-extrabold text-base sm:text-lg mb-2 line-clamp-2">
+              {item.title}
+            </p>
+            <p className="font-light text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
               {item.description}
             </p>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-3 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-between">
+            <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
-                <Avatar>
-                  <AvatarFallback className="bg-black text-white text-sm uppercase">
+                <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
+                  <AvatarFallback className="bg-black text-white text-xs sm:text-sm uppercase">
                     {item?.seller?.username.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
+                <span className="text-xs sm:text-sm truncate max-w-[100px]">
+                  {item?.seller?.username}
+                </span>
               </div>
               <div className="flex items-center gap-1">
-                <Eye size={16} className="text-foreground/50" />
-                <p className="text-sm text-foreground/50">
-                  {item.viewsCount} {item.viewsCount === 1 ? "view" : "views"}
+                <Eye size={14} className="sm:w-4 sm:h-4 text-foreground/50" />
+                <p className="text-xs sm:text-sm text-foreground/50">
+                  {item.viewsCount}
                 </p>
               </div>
             </div>
             <Button
-              className="flex items-center gap-2 rounded-none py-2.5 px-5 hover:underline bg-transparent hover:bg-transparent border-none shadow-none text-gold-main"
+              className="flex items-center gap-2 rounded-none py-2 px-3 sm:py-2.5 sm:px-5 hover:underline bg-transparent hover:bg-transparent border-none shadow-none text-gold-main self-start min-[400px]:self-auto"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
-              <MessageSquare size={15} />
-              <p className="text-sm font-semibold">
+              <MessageSquare size={14} className="sm:w-[15px] sm:h-[15px]" />
+              <p className="text-xs sm:text-sm font-semibold">
                 {isLoading ? "Creating..." : "Contact Seller"}
               </p>
             </Button>
@@ -143,7 +148,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   return (
     <div className="border border-l-0 border-t-0 border-b border-r border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
-        <div className="relative overflow-hidden h-[200px] min-h-[200px] max-h-[200px] p-3">
+        <div className="relative overflow-hidden h-[120px] xs:h-[150px] sm:h-[200px] min-h-[120px] xs:min-h-[150px] sm:min-h-[200px] max-h-[120px] xs:max-h-[150px] sm:max-h-[200px] p-2 xs:p-2.5 sm:p-3">
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
@@ -179,16 +184,16 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
         </div> */}
         </div>
       </Link>
-      <div className="flex flex-col p-3.5">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col p-2 xs:p-2.5 sm:p-3.5">
+        <div className="flex flex-col gap-1.5 xs:gap-2">
           <div className="flex justify-end w-full">
-            <p className="text-lg font-medium text-gold-main">
+            <p className="text-sm xs:text-base sm:text-lg font-medium text-gold-main">
               {formatPrice(item.price, "$")}
             </p>
           </div>
           <Link
             href={`/marketplace/${item.id}`}
-            className="font-medium text-xl hover:text-gold-main transition-colors duration-300 w-fit"
+            className="font-medium text-base xs:text-lg sm:text-xl hover:text-gold-main transition-colors duration-300 w-fit line-clamp-2"
           >
             {item.title}
           </Link>
@@ -197,27 +202,29 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               <div className="flex items-center gap-1">
                 <Link
                   href={`/company/${item.seller?.id}`}
-                  className="text-sm hover:underline cursor-pointer"
+                  className="text-xs xs:text-sm hover:underline cursor-pointer truncate"
                 >
                   {item.seller?.username}
                 </Link>
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <Eye size={16} className="text-foreground/50" />
-              <p className="text-sm text-foreground/50">{item.viewsCount}</p>
+              <Eye size={12} className="xs:w-4 xs:h-4 text-foreground/50" />
+              <p className="text-xs xs:text-sm text-foreground/50">
+                {item.viewsCount}
+              </p>
             </div>
           </div>
 
           {/* Contact Seller */}
-          <div className="mt-5 flex items-center justify-center">
+          <div className="mt-2 xs:mt-3 sm:mt-5 flex items-center justify-center">
             <Button
-              className="rounded-none py-2.5 px-0 hover:underline text-gold-main bg-transparent hover:bg-transparent border-none shadow-none"
+              className="rounded-none py-1.5 xs:py-2 sm:py-2.5 px-0 hover:underline text-gold-main bg-transparent hover:bg-transparent border-none shadow-none"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               {/* <MessageSquare size={15} /> */}
-              <p className="font-semibold group-hover:underline text-sm">
+              <p className="font-semibold group-hover:underline text-xs xs:text-sm">
                 {isLoading ? t("titlebuttonCreating") : t("titleCardSeller")}
               </p>
             </Button>

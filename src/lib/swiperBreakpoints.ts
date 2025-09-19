@@ -1,7 +1,10 @@
 // Breakpoints для ViewedProductsSlider
 export const VIEWED_PRODUCTS_BREAKPOINTS = {
-  320: {
+  0: {
     slidesPerView: 1,
+  },
+  400: {
+    slidesPerView: 2,
   },
   640: {
     slidesPerView: 2,
