@@ -1,0 +1,189 @@
+"use client";
+
+import React from "react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerClose,
+  DrawerTitle,
+  DrawerDescription,
+} from "../ui/drawer";
+import { X, LayoutGrid, User, Plus } from "lucide-react";
+import { UserProfile } from "@/lib/types";
+import Link from "next/link";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import LanguageSwitcher from "../ui/LanguageSwitcher";
+import { useTranslations } from "next-intl";
+import { Separator } from "../ui/separator";
+import Logo from "../ui/Logo";
+import BuyerMenuContent from "../buyer/navbar/BuyerMenuContent";
+import SellerMenuContent from "../buyer/navbar/SellerMenuContent";
+
+interface MobileDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  currentUser: UserProfile | null;
+  onToggleCatalog: () => void;
+  isCatalogOpen: boolean;
+  onLogout: () => void;
+}
+
+const MobileDrawer = ({
+  isOpen,
+  onClose,
+  currentUser,
+  onToggleCatalog,
+  isCatalogOpen,
+  onLogout,
+}: MobileDrawerProps) => {
+  const t = useTranslations("Navbar");
+
+  return (
+    <Drawer direction="left" open={isOpen} onOpenChange={onClose}>
+      <DrawerContent className="h-[100vh] border-none">
+        {/* Hidden accessibility elements */}
+        <DrawerTitle className="sr-only">{t("burgerMenu.srTitle")}</DrawerTitle>
+        <DrawerDescription className="sr-only">
+          {t("burgerMenu.srDescription")}
+        </DrawerDescription>
+
+        <DrawerHeader className="flex items-center justify-between bg-[#565457] h-16 mb-5 px-4">
+          <div className="flex items-center justify-between w-full">
+            <Logo />
+            <DrawerClose asChild>
+              <div
+                className="rounded-full size-8 flex items-center justify-center bg-transparent cursor-pointer
+              transition-all duration-300 hover:bg-white/20"
+              >
+                <X className="h-5 w-5 text-white" />
+              </div>
+            </DrawerClose>
+          </div>
+        </DrawerHeader>
+
+        <div className="px-4 pb-4 space-y-4">
+          {/* Catalog Button for all users on <1024px */}
+          <div
+            className={`
+              bg-gold-main rounded-none cursor-pointer duration-300 transition-all
+              hover:bg-gold-main/90 w-full
+              ${isCatalogOpen ? "bg-gold-main/90" : ""}
+            `}
+            onClick={onToggleCatalog}
+          >
+            <div className="flex items-center gap-2 py-2.5 px-4">
+              {isCatalogOpen ? (
+                <X size={16} className="text-white" />
+              ) : (
+                <LayoutGrid size={16} className="text-white" />
+              )}
+              <p className="text-xs xs:text-sm font-medium text-white">
+                {t("titleCatalog")}
+              </p>
+            </div>
+          </div>
+
+          {/* User Section for unloginned (only on <768px) */}
+          {!currentUser && (
+            <Link
+              href="/auth?mode=login"
+              className="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors md:hidden"
+              onClick={onClose}
+            >
+              <User size={18} className="text-gold-main" />
+              <span className="text-sm xs:text-base font-medium">
+                {t("burgerMenu.titleLogRegNotification")}
+              </span>
+            </Link>
+          )}
+
+          {/* Buyer section */}
+          {currentUser?.role.name === "buyer" && (
+            <>
+              {/* Avatar without click */}
+              <div className="flex items-center gap-3 p-3">
+                <Avatar className="h-8 w-8 border border-gray-300">
+                  <AvatarFallback className="bg-black text-white text-xs xs:text-sm">
+                    {currentUser.displayName?.charAt(0) ||
+                      currentUser.username.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <span className="text-sm xs:text-base font-medium">
+                    {currentUser.displayName || currentUser.username}
+                  </span>
+                  <span className="text-xs xs:text-sm text-gray-500 capitalize">
+                    {currentUser.role.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Buyer menu content */}
+              <BuyerMenuContent
+                user={currentUser}
+                onLogout={onLogout}
+                isMobile={true}
+                onClose={onClose}
+              />
+            </>
+          )}
+
+          {/* Seller section */}
+          {currentUser?.role.name === "seller" && (
+            <>
+              {/* Avatar without click */}
+              <div className="flex items-center gap-3 p-3">
+                <Avatar className="h-8 w-8 border border-gray-300">
+                  <AvatarFallback className="bg-black text-white text-xs xs:text-sm uppercase">
+                    {currentUser.displayName?.charAt(0) ||
+                      currentUser.username.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <span className="text-sm xs:text-base font-medium">
+                    {currentUser.displayName || currentUser.username}
+                  </span>
+                  <span className="text-xs xs:text-sm text-gray-500 capitalize">
+                    {currentUser.role.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Add Product Button for Seller on <2xl */}
+              <Link
+                href="/account/add-product"
+                onClick={onClose}
+                className="bg-transparent rounded-md cursor-pointer duration-300 transition-all 
+                hover:bg-gray-100 w-full block"
+              >
+                <div className="flex items-center gap-2 py-2.5 px-4">
+                  <Plus size={16} className="text-foreground" />
+                  <p className="text-sm xs:text-base font-semibold">
+                    {t("sellerNavbar.titleAddProduct")}
+                  </p>
+                </div>
+              </Link>
+
+              {/* Seller menu content */}
+              <SellerMenuContent
+                user={currentUser}
+                onLogout={onLogout}
+                isMobile={true}
+                onClose={onClose}
+              />
+            </>
+          )}
+
+          <Separator className="my-2" />
+
+          <div className="flex items-center gap-3 p-3">
+            <LanguageSwitcher />
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
+  );
+};
+
+export default MobileDrawer;
