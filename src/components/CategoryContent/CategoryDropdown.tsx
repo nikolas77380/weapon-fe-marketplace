@@ -27,16 +27,23 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   const getCategoryName = (cat: Category) => {
     return currentLocale === "en" ? cat.name : cat.translate_ua || cat.name;
   };
-
   // Если нет подкатегорий, показываем обычную ссылку
   if (subCategories.length === 0) {
     return (
-      <Link
-        href={`/category/${category.slug}`}
-        className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md hover:bg-accent/50 block"
-      >
-        {getCategoryName(category)}
-      </Link>
+      <div>
+        <img
+          src={category.icon?.url}
+          alt={category.name}
+          width={20}
+          height={20}
+        />
+        <Link
+          href={`/category/${category.slug}`}
+          className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md hover:bg-accent/50 block"
+        >
+          {getCategoryName(category)}
+        </Link>
+      </div>
     );
   }
 
@@ -45,14 +52,18 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value={`category-${category.id}`} className="border-none">
         <div className="flex items-center">
-          {/* Ссылка на главную категорию */}
+          <img
+            src={category.icon?.url}
+            alt={category.name}
+            width={20}
+            height={20}
+          />
           <Link
             href={`/category/${category.slug}`}
-            className="flex-1 cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md"
+            className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md"
           >
             {getCategoryName(category)}
           </Link>
-          {/* Кнопка для раскрытия подкатегорий */}
           <AccordionTrigger className="flex-shrink-0 p-2 hover:bg-accent/50 rounded-md [&[data-state=open]]:text-gold-main">
             <span className="sr-only">Показать подкатегории</span>
           </AccordionTrigger>

@@ -6,11 +6,9 @@ import { useCategories } from "@/hooks/useCategories";
 import SkeletonComponent from "../ui/SkeletonComponent";
 import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
-import Link from "next/link";
 import BannerSlider from "./BannerSlider";
 import ViewedProductsSlider from "./ViewedProductsSlider";
 import CategoryDropdown from "./CategoryDropdown";
-import { useLocale } from "next-intl";
 
 const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
@@ -23,7 +21,6 @@ const FilteringContent = () => {
   const allProducts = response?.data || [];
   const loading = isLoading;
   const { getMainCategories, categories } = useCategories();
-  const currentLocale = useLocale();
 
   const paginatedProducts = allProducts;
 
