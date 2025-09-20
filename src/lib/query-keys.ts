@@ -11,6 +11,9 @@ export const queryKeys = {
   categories: {
     all: ["categories"] as const,
     lists: () => [...queryKeys.categories.all, "list"] as const,
+    details: () => [...queryKeys.categories.all, "detail"] as const,
+    detail: (slug: string) =>
+      [...queryKeys.categories.details(), slug] as const,
   },
   certificates: {
     all: ["certificates"] as const,

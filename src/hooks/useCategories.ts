@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Category } from "@/lib/types";
 import { getCategories, getCategoryBySlug } from "@/lib/strapi";
+import { queryKeys } from "@/lib/query-keys";
 
 // Fallback категории на случай, если API недоступен
 const fallbackCategories: Category[] = [
@@ -12,6 +13,7 @@ const fallbackCategories: Category[] = [
     order: 1,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    translate_ua: "Зброя",
   },
   {
     id: 2,
@@ -21,6 +23,7 @@ const fallbackCategories: Category[] = [
     order: 2,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    translate_ua: "Броня",
   },
   {
     id: 3,
@@ -30,35 +33,30 @@ const fallbackCategories: Category[] = [
     order: 3,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    translate_ua: "Аксесуари",
   },
 ];
 
 export const useCategories = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
+  const {
+    data: categories = [],
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.categories.lists(),
+    queryFn: async () => {
       try {
-        setLoading(true);
-        setError(null);
-        const data = await getCategories();
-        setCategories(data);
+        return await getCategories();
       } catch (err) {
         console.error("Error fetching categories:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch categories"
-        );
-        // Используем fallback данные при ошибке
-        setCategories(fallbackCategories);
-      } finally {
-        setLoading(false);
+        // Возвращаем fallback данные при ошибке
+        return fallbackCategories;
       }
-    };
-
-    fetchCategories();
-  }, []);
+    },
+    staleTime: 5 * 60 * 1000, // 5 минут
+    gcTime: 10 * 60 * 1000, // 10 минут
+  });
 
   const getMainCategories = () => {
     return categories.filter((category) => !category.parent);
@@ -79,78 +77,41 @@ export const useCategories = () => {
   return {
     categories,
     loading,
-    error,
+    error: error?.message || null,
     getMainCategories,
     getSubCategories,
     getCategoryById,
     getCategoryBySlug,
-    refetch: () => {
-      setLoading(true);
-      setError(null);
-      getCategories()
-        .then(setCategories)
-        .catch((err) => {
-          console.error("Error refetching categories:", err);
-          setError(
-            err instanceof Error ? err.message : "Failed to fetch categories"
-          );
-          setCategories(fallbackCategories);
-        })
-        .finally(() => setLoading(false));
-    },
+    refetch,
   };
 };
 
 export const useCategoryBySlug = (slug: string) => {
-  const [category, setCategory] = useState<Category | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!slug) {
-      setCategory(null);
-      setLoading(false);
-      return;
-    }
-
-    const fetchCategory = async () => {
+  const {
+    data: category,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.categories.detail(slug),
+    queryFn: async () => {
+      if (!slug) return null;
       try {
-        setLoading(true);
-        setError(null);
-        const data = await getCategoryBySlug(slug);
-        setCategory(data);
+        return await getCategoryBySlug(slug);
       } catch (err) {
         console.error("Error fetching category by slug:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch category"
-        );
-        setCategory(null);
-      } finally {
-        setLoading(false);
+        throw err;
       }
-    };
-
-    fetchCategory();
-  }, [slug]);
+    },
+    enabled: !!slug,
+    staleTime: 5 * 60 * 1000, // 5 минут
+    gcTime: 10 * 60 * 1000, // 10 минут
+  });
 
   return {
-    category,
+    category: category || null,
     loading,
-    error,
-    refetch: () => {
-      if (!slug) return;
-      setLoading(true);
-      setError(null);
-      getCategoryBySlug(slug)
-        .then(setCategory)
-        .catch((err) => {
-          console.error("Error refetching category by slug:", err);
-          setError(
-            err instanceof Error ? err.message : "Failed to fetch category"
-          );
-          setCategory(null);
-        })
-        .finally(() => setLoading(false));
-    },
+    error: error?.message || null,
+    refetch,
   };
 };

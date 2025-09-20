@@ -23,6 +23,7 @@ export interface Category {
   order: number;
   createdAt: string;
   updatedAt: string;
+  translate_ua?: string;
 }
 
 export interface AuthResponse {
