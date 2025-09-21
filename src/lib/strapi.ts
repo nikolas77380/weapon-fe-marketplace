@@ -193,77 +193,7 @@ export const getCategories = async (): Promise<Category[]> => {
       console.error("Invalid data structure:", data);
       throw new Error("Invalid response format from categories API");
     }
-
-    const categories: Category[] = data.data.map((item: unknown) => {
-      const typedItem = item as {
-        id: number;
-        name: string;
-        slug: string;
-        description: string;
-        order: number;
-        createdAt: string;
-        updatedAt: string;
-        translate_ua?: string;
-        parent?: {
-          id: number;
-          name: string;
-          slug: string;
-          description: string;
-          order: number;
-          createdAt: string;
-          updatedAt: string;
-          translate_ua?: string;
-        };
-        children?: Array<{
-          id: number;
-          name: string;
-          slug: string;
-          description: string;
-          order: number;
-          createdAt: string;
-          updatedAt: string;
-          translate_ua?: string;
-        }>;
-      };
-
-      return {
-        id: typedItem.id,
-        name: typedItem.name,
-        slug: typedItem.slug,
-        description: typedItem.description,
-        order: typedItem.order,
-        createdAt: typedItem.createdAt,
-        updatedAt: typedItem.updatedAt,
-        translate_ua: typedItem.translate_ua,
-        parent: typedItem.parent
-          ? {
-              id: typedItem.parent.id,
-              name: typedItem.parent.name,
-              slug: typedItem.parent.slug,
-              description: typedItem.parent.description,
-              order: typedItem.parent.order,
-              createdAt: typedItem.parent.createdAt,
-              updatedAt: typedItem.parent.updatedAt,
-              translate_ua: typedItem.parent.translate_ua,
-            }
-          : undefined,
-        children: typedItem.children
-          ? typedItem.children.map((child) => ({
-              id: child.id,
-              name: child.name,
-              slug: child.slug,
-              description: child.description,
-              order: child.order,
-              createdAt: child.createdAt,
-              updatedAt: child.updatedAt,
-              translate_ua: child.translate_ua,
-            }))
-          : undefined,
-      };
-    });
-
-    console.log("Transformed categories:", categories);
-    return categories;
+    return data.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
 
@@ -309,48 +239,7 @@ export const getCategoryById = async (id: number): Promise<Category> => {
     const data = await response.json();
     console.log("Category data:", data);
 
-    const category: Category = {
-      id: data.data.id,
-      name: data.data.name,
-      slug: data.data.slug,
-      description: data.data.description,
-      order: data.data.order,
-      createdAt: data.data.createdAt,
-      updatedAt: data.data.updatedAt,
-      parent: data.data.parent
-        ? {
-            id: data.data.parent.id,
-            name: data.data.parent.name,
-            slug: data.data.parent.slug,
-            description: data.data.parent.description,
-            order: data.data.parent.order,
-            createdAt: data.data.parent.createdAt,
-            updatedAt: data.data.parent.updatedAt,
-          }
-        : undefined,
-      children: data.data.children
-        ? data.data.children.map((child: unknown) => {
-            const typedChild = child as {
-              id: number;
-              name: string;
-              slug: string;
-              description: string;
-              order: number;
-              createdAt: string;
-              updatedAt: string;
-            };
-            return {
-              id: typedChild.id,
-              name: typedChild.name,
-              slug: typedChild.slug,
-              description: typedChild.description,
-              order: typedChild.order,
-              createdAt: typedChild.createdAt,
-              updatedAt: typedChild.updatedAt,
-            };
-          })
-        : undefined,
-    };
+    const category: Category = data.data;
 
     return category;
   } catch (error) {

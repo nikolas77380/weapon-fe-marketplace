@@ -6,10 +6,9 @@ import { useCategories } from "@/hooks/useCategories";
 import SkeletonComponent from "../ui/SkeletonComponent";
 import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
-import Link from "next/link";
 import BannerSlider from "./BannerSlider";
 import ViewedProductsSlider from "./ViewedProductsSlider";
-import { useLocale } from "next-intl";
+import CategoryDropdown from "./CategoryDropdown";
 
 const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
@@ -21,8 +20,7 @@ const FilteringContent = () => {
 
   const allProducts = response?.data || [];
   const loading = isLoading;
-  const { getMainCategories } = useCategories();
-  const currentLocale = useLocale();
+  const { getMainCategories, categories } = useCategories();
 
   const paginatedProducts = allProducts;
 
@@ -33,13 +31,11 @@ const FilteringContent = () => {
       {/* Filters - Hidden on mobile, visible on desktop */}
       <div className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
         {availableCategories.map((category) => (
-          <Link
-            href={`/category/${category.slug}`}
-            className="cursor-pointer hover:text-gold-main"
+          <CategoryDropdown
             key={category.id}
-          >
-            {currentLocale === "en" ? category.name : category.translate_ua}
-          </Link>
+            category={category}
+            allCategories={categories}
+          />
         ))}
       </div>
       {/* Shop Content - Full width on mobile, flex-1 on desktop */}

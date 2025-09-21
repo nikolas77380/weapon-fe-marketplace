@@ -24,6 +24,9 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
   translate_ua?: string;
+  icon?: {
+    url: string;
+  };
 }
 
 export interface AuthResponse {
