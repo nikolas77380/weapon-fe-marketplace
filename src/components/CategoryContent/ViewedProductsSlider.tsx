@@ -74,6 +74,7 @@ const ViewedProductsSlider = () => {
     (newProgress: number) => {
       if (!swiperRef) return;
       swiperRef.setProgress(newProgress);
+      checkScrollPosition(swiperRef);
     },
     [swiperRef]
   );
@@ -124,14 +125,16 @@ const ViewedProductsSlider = () => {
         </Swiper>
 
         {/* Custom scrollbar */}
-        <CustomScrollbar
-          progress={progress}
-          onProgressChange={handleScrollbarProgressChange}
-          totalItems={viewedProducts.length}
-          visibleItems={currentSlidesPerView}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        />
+        {viewedProducts.length > currentSlidesPerView && (
+          <CustomScrollbar
+            progress={progress}
+            onProgressChange={handleScrollbarProgressChange}
+            totalItems={viewedProducts.length}
+            visibleItems={currentSlidesPerView}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          />
+        )}
 
         {/* Navigation buttons */}
         {viewedProducts.length > currentSlidesPerView && (

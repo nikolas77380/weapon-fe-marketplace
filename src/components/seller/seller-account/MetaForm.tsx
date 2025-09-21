@@ -106,124 +106,153 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   };
 
   return (
-    <div className="container mx-auto w-full">
-      <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
-      <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
-        <Tabs defaultValue="companyDetails" className="w-full">
-          <TabsList className="bg-gray-primary gap-5 flex w-full">
-            <TabsTrigger value="companyDetails">{t("titleCompanyDetails")}</TabsTrigger>
-            <TabsTrigger value="certificates">{t("titleCertificates")}</TabsTrigger>
-          </TabsList>
-          <TabsContent value="companyDetails" className="mt-10">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className="space-y-6"
+    <div className="w-full">
+      {/* Breadcrumb - Hidden on mobile, visible on desktop */}
+      <div className="hidden md:block">
+        <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
+      </div>
+
+      <div className="mt-4 md:mt-0">
+        <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
+          <Tabs defaultValue="companyDetails" className="w-full h-full">
+            <TabsList
+              className="bg-gray-primary flex flex-col min-[400px]:flex-row 
+            min-[400px]:w-auto w-full h-full"
+            >
+              <TabsTrigger
+                value="companyDetails"
+                className="text-sm sm:text-base w-full min-[400px]:w-auto h-full py-2"
               >
-                {/* Specialisation */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="specialisation"
-                  label={t("labelBusinessType")}
-                  type="select"
-                  placeholder={t("placeholderBusinessType")}
-                  defaultValue={undefined}
-                  options={SELLER_TYPES.map(({ key, label }) => ({
-                    key,
-                    label,
-                    value: label,
-                  }))}
-                />
+                {t("titleCompanyDetails")}
+              </TabsTrigger>
+              <TabsTrigger
+                value="certificates"
+                className="text-sm sm:text-base w-full min-[400px]:w-auto h-full py-2"
+              >
+                {t("titleCertificates")}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="companyDetails" className="mt-6 md:mt-10">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="space-y-6"
+                >
+                  {/* Business Type */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="specialisation"
+                    label={t("labelBusinessType")}
+                    type="select"
+                    placeholder={t("placeholderBusinessType")}
+                    className="w-full min-[600px]:w-1/2"
+                    defaultValue={undefined}
+                    options={SELLER_TYPES.map(({ key, label }) => ({
+                      key,
+                      label,
+                      value: label,
+                    }))}
+                  />
 
-                {/* Seller */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="sellerDescription"
-                  label={t("labelDescription")}
-                  type="textarea"
-                  placeholder={t("placeholderDescription")}
-                />
+                  {/* Description */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="sellerDescription"
+                    label={t("labelDescription")}
+                    type="textarea"
+                    placeholder={t("placeholderDescription")}
+                  />
 
-                {/* Company Name */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="companyName"
-                  label={t("labelCompanyName")}
-                  type="input"
-                  placeholder={t("placeholderCompanyName")}
-                />
+                  {/* Company Name */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="companyName"
+                    label={t("labelCompanyName")}
+                    type="input"
+                    placeholder={t("placeholderCompanyName")}
+                    classNameLabel="bg-background"
+                    className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
 
-                {/* Web Site */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="webSite"
-                  label={t("labelWebSite")}
-                  type="input"
-                  placeholder={t("placeholderWebSite")}
-                />
-                {/* phoneNumbers */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="phoneNumbers"
-                  label={t("labelPhoneNumbers")}
-                  type="input"
-                  placeholder={t("placeholderPhoneNumbers")}
-                />
-                {/* country */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="country"
-                  label={t("labelCountry")}
-                  type="select"
-                  placeholder={t("placeholderCountry")}
-                  defaultValue={undefined}
-                  options={COUNTRIES.map(({ name, iso2 }) => ({
-                    key: iso2,
-                    label: name,
-                    value: name,
-                  }))}
-                />
-                {/* address */}
-                <FormFieldComponent
-                  control={form.control}
-                  name="address"
-                  label={t("labelAddress")}
-                  type="input"
-                  placeholder={t("placeholderAddress")}
-                />
-                <div className="flex items-center justify-center">
-                  <Button
-                    type="submit"
-                    className="px-8.5 py-2.5 text-xl font-roboto font-medium"
-                    disabled={isLoading}
-                  >
-                    {isLoading
-                      ? t('buttonSaving')
-                      : metadata
-                      ? t('buttonUpdate')
-                      : t('buttonSubmit')}
-                  </Button>
+                  {/* Web Site */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="webSite"
+                    label={t("labelWebSite")}
+                    type="input"
+                    placeholder={t("placeholderWebSite")}
+                    classNameLabel="bg-background"
+                    className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  {/* phoneNumbers */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="phoneNumbers"
+                    label={t("labelPhoneNumbers")}
+                    type="input"
+                    placeholder={t("placeholderPhoneNumbers")}
+                    classNameLabel="bg-background"
+                    className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  {/* country */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="country"
+                    label={t("labelCountry")}
+                    type="select"
+                    placeholder={t("placeholderCountry")}
+                    className="w-full min-[600px]:w-1/2"
+                    defaultValue={undefined}
+                    options={COUNTRIES.map(({ name, iso2 }) => ({
+                      key: iso2,
+                      label: name,
+                      value: name,
+                    }))}
+                  />
+                  {/* address */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="address"
+                    label={t("labelAddress")}
+                    type="input"
+                    placeholder={t("placeholderAddress")}
+                    classNameLabel="bg-background"
+                    className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  <div className="flex items-center justify-center">
+                    <Button
+                      type="submit"
+                      className="w-full min-[400px]:w-auto px-2 min-[340px]:px-4 min-[400px]:px-6 sm:px-8.5 py-2 min-[400px]:py-2 sm:py-2.5 text-xs min-[340px]:text-sm min-[400px]:text-base sm:text-lg font-roboto font-medium whitespace-normal text-center leading-tight"
+                      disabled={isLoading}
+                    >
+                      {isLoading
+                        ? t("buttonSaving")
+                        : metadata
+                        ? t("buttonUpdate")
+                        : t("buttonSubmit")}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </TabsContent>
+            <TabsContent value="certificates" className="mt-6 md:mt-10">
+              <div className="space-y-8">
+                {/* Existing Certificates List */}
+                <div className="border-t pt-8">
+                  <CertificatesList
+                    currentUser={currentUser}
+                    onRefresh={() => setRefreshCertificates((prev) => prev + 1)}
+                  />
                 </div>
-              </form>
-            </Form>
-          </TabsContent>
-          <TabsContent value="certificates" className="mt-10">
-            <div className="space-y-8">
-              {/* Existing Certificates List */}
-              <div className="border-t pt-8">
-                <CertificatesList
+                {/* Upload New Certificate Form */}
+                <CertificateForm
                   currentUser={currentUser}
-                  onRefresh={() => setRefreshCertificates((prev) => prev + 1)}
+                  onSuccess={() => setRefreshCertificates((prev) => prev + 1)}
                 />
               </div>
-              {/* Upload New Certificate Form */}
-              <CertificateForm
-                currentUser={currentUser}
-                onSuccess={() => setRefreshCertificates((prev) => prev + 1)}
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

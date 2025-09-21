@@ -33,7 +33,7 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { useTranslations } from "next-intl";
 
 const AddProductForms = () => {
-  const t = useTranslations('AddProduct.addProductForm');
+  const t = useTranslations("AddProduct.addProductForm");
 
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
@@ -42,6 +42,8 @@ const AddProductForms = () => {
     categories,
     loading: categoriesLoading,
     error: categoriesError,
+    getMainCategories,
+    getSubCategories,
   } = useCategories();
 
   const {
@@ -111,11 +113,20 @@ const AddProductForms = () => {
   const onSubmit = async (values: AddProductSchemaValues) => {
     try {
       const selectedCategory = categories.find(
-        (cat) => cat.name === values.productCategory
+        (cat) => cat.id.toString() === values.productCategory
       );
 
       if (!selectedCategory) {
         toast.error("Please select a valid category");
+        return;
+      }
+
+      // Check that the leaf category (no children) is selected.
+      const hasChildren = categories.some(
+        (c) => c.parent?.id === selectedCategory.id
+      );
+      if (hasChildren) {
+        toast.error("Please select a subcategory, not a parent category");
         return;
       }
 
@@ -137,10 +148,10 @@ const AddProductForms = () => {
 
       await createProduct({ data: productData, images: values.productImages });
 
-      // Очищаем localStorage и сбрасываем форму
+      // Clear localStorage and reset the form
       removeSavedFormData();
 
-      // Сбрасываем форму к начальным значениям
+      // Resetting the form to its initial values
       form.reset({
         productName: "",
         productDescription: "",
@@ -154,13 +165,11 @@ const AddProductForms = () => {
         productStatus: "available",
       });
 
-      toast.success(t('toastSuccessAdd'));
+      toast.success(t("toastSuccessAdd"));
       router.push("/account");
     } catch (error) {
       console.error("Error creating product:", error);
-      toast.error(
-        error instanceof Error ? error.message : t('toastErrorAdd')
-      );
+      toast.error(error instanceof Error ? error.message : t("toastErrorAdd"));
     }
   };
 
@@ -189,36 +198,36 @@ const AddProductForms = () => {
           {/* Product Basic Info Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
             <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
-              {t('titleBasicInfo')}
+              {t("titleBasicInfo")}
             </h2>
             {/* Product name */}
             <FormFieldComponent
               control={form.control}
               name="productName"
-              label={t('labelProductName')}
+              label={t("labelProductName")}
               type="input"
-              placeholder={t('placeholderProductName')}
-              className="w-1/2"
+              placeholder={t("placeholderProductName")}
+              className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
             />
             {/* Product SKU */}
             <FormFieldComponent
               control={form.control}
               name="productSku"
-              label={t('labelSku')}
+              label={t("labelSku")}
               type="input"
-              placeholder={t('placeholderSku')}
-              className="w-1/2"
+              placeholder={t("placeholderSku")}
+              className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
             />
             {/* Product description */}
             <FormFieldComponent
               control={form.control}
               name="productDescription"
-              label={t('labelDescription')}
+              label={t("labelDescription")}
               type="textarea"
-              placeholder={t('placeholderDescription')}
-              className="w-1/2"
+              placeholder={t("placeholderDescription")}
+              className="w-full md:w-1/2"
             />
 
             {/* Product category */}
@@ -227,21 +236,24 @@ const AddProductForms = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('labelCategory')}</FormLabel>
+                  <FormLabel>{t("labelCategory")}</FormLabel>
                   <FormControl>
                     <CategorySelect
+                      key={`category-select-${field.value}`}
                       value={field.value}
                       onValueChange={field.onChange}
                       categories={categories}
                       loading={categoriesLoading}
                       error={categoriesError}
-                      placeholder={t('placeholderCategory')}
-                      className="w-1/2"
+                      placeholder={t("placeholderCategory")}
+                      className="w-full min-[600px]:w-1/2"
+                      getMainCategories={getMainCategories}
+                      getSubCategories={getSubCategories}
                     />
                   </FormControl>
                   {categoriesError && (
                     <p className="text-sm text-red-500 mt-1">
-                      {t('errorCategories')}
+                      {t("errorCategories")}
                     </p>
                   )}
                   <FormMessage />
@@ -249,14 +261,14 @@ const AddProductForms = () => {
               )}
             />
 
-            <div className="flex w-full gap-4">
+            <div className="flex flex-col min-[600px]:flex-row w-full min-[600px]:gap-4 gap-6">
               {/* Product manufacturer */}
               <FormFieldComponent
                 control={form.control}
                 name="productManufacturer"
-                label={t('labelManufacturer')}
+                label={t("labelManufacturer")}
                 type="input"
-                placeholder={t('placeholderManufacturer')}
+                placeholder={t("placeholderManufacturer")}
                 className="w-full"
                 itemClassName="flex-1"
                 classNameLabel="bg-background"
@@ -265,9 +277,9 @@ const AddProductForms = () => {
               <FormFieldComponent
                 control={form.control}
                 name="productModel"
-                label={t('labelModel')}
+                label={t("labelModel")}
                 type="input"
-                placeholder={t('placeholderModel')}
+                placeholder={t("placeholderModel")}
                 className="w-full"
                 itemClassName="flex-1"
                 classNameLabel="bg-background"
@@ -278,10 +290,10 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productCondition"
-              label={t('labelCondition')}
+              label={t("labelCondition")}
               type="select"
-              placeholder={t('placeholderCondition')}
-              className="w-1/2"
+              placeholder={t("placeholderCondition")}
+              className="w-full min-[600px]:w-1/2"
               options={PRODUCT_CONDITION_FORM}
               selectValue={undefined}
             />
@@ -296,10 +308,10 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productPrice"
-              label={t('labelPrice')}
+              label={t("labelPrice")}
               type="input"
               inputType="number"
-              className="w-1/2"
+              className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
               min="1"
               step="1"
@@ -319,16 +331,16 @@ const AddProductForms = () => {
           {/* Product Details */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
             <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
-              {t('titleDetails')}
+              {t("titleDetails")}
             </h2>
             {/* Product Count */}
             <FormFieldComponent
               control={form.control}
               name="productCount"
-              label={t('labelCount')}
+              label={t("labelCount")}
               type="input"
               inputType="number"
-              className="w-1/2"
+              className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
               min="1"
               step="1"
@@ -347,10 +359,10 @@ const AddProductForms = () => {
             <FormFieldComponent
               control={form.control}
               name="productStatus"
-              label={t('labelStatus')}
+              label={t("labelStatus")}
               type="select"
-              placeholder={t('placeholderStatus')}
-              className="w-1/2"
+              placeholder={t("placeholderStatus")}
+              className="w-full min-[600px]:w-1/2"
               options={PRODUCT_STATUS_FORM}
             />
           </div>
@@ -358,7 +370,7 @@ const AddProductForms = () => {
           {/* Images Dropzone */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
             <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
-              {t('titleImages')}
+              {t("titleImages")}
             </h2>
             <FormField
               control={form.control}
@@ -382,23 +394,23 @@ const AddProductForms = () => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col min-[600px]:flex-row items-center justify-center gap-4">
             {savedFormData && (
               <Button
                 type="button"
                 variant="outline"
                 onClick={clearDraft}
-                className="px-6 py-2.5 text-lg font-medium"
+                className="w-full min-[600px]:w-auto px-4 py-2 min-[600px]:px-6 min-[600px]:py-2.5 text-base min-[600px]:text-lg font-medium"
               >
-                {t('buttonClear')}
+                {t("buttonClear")}
               </Button>
             )}
             <Button
               type="submit"
               disabled={createLoading}
-              className="px-8.5 py-2.5 text-xl font-medium"
+              className="w-full min-[600px]:w-auto px-6 py-2 min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium"
             >
-              {createLoading ? t('buttonCreating') : t('buttonSubmit')}
+              {createLoading ? t("buttonCreating") : t("buttonSubmit")}
             </Button>
           </div>
         </form>

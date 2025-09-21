@@ -6,17 +6,19 @@ import React from "react";
 const SettingsPage = async () => {
   const currentUser = await requireAuth();
   return (
-    <main className=" w-full h-full min-h-screen mb-20">
-      {isBuyer(currentUser) && (
-        <>
-          <div>isBuyer</div>
-        </>
-      )}
-      {isSeller(currentUser) && (
-        <>
-          <MetaForm currentUser={currentUser} />
-        </>
-      )}
+    <main className="w-full h-full min-h-screen mb-20">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6">
+        {isBuyer(currentUser) && (
+          <>
+            <div>isBuyer</div>
+          </>
+        )}
+        {isSeller(currentUser) && (
+          <>
+            <MetaForm currentUser={currentUser} />
+          </>
+        )}
+      </div>
     </main>
   );
 };
