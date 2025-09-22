@@ -6,18 +6,27 @@ import { getTranslations } from "next-intl/server";
 const AddProductPage = async () => {
   const currentUser = await requireAuth();
 
-  const t = await getTranslations('AddProduct');
+  const t = await getTranslations("AddProduct");
   return (
-    <div className="w-full min-h-screen h-full">
-      <div className="p-6">
-        <BreadcrumbComponent currentUser={currentUser} />
-        <div className="mt-6">
-          <h1 className="text-2xl font-semibold">{t('titleAddProduct')}</h1>
-          <p className="font-roboto font-medium text-sm text-[#C4C2C2]">
-            {t('descriptionAddProduct')}
+    <div className="w-full min-h-screen h-full mb-20">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6">
+        {/* Breadcrumb - Hidden on mobile, visible on desktop */}
+        <div className="hidden md:block mt-4">
+          <BreadcrumbComponent currentUser={currentUser} />
+        </div>
+
+        {/* Title section with responsive spacing */}
+        <div className="mt-4 md:mt-6">
+          <h1 className="text-xl sm:text-2xl font-semibold">
+            {t("titleAddProduct")}
+          </h1>
+          <p className="font-roboto font-medium text-sm text-[#C4C2C2] mt-1">
+            {t("descriptionAddProduct")}
           </p>
         </div>
-        <div className="container mx-auto mt-12">
+
+        {/* Main content with responsive spacing */}
+        <div className="mt-8 md:mt-12">
           <AddProductPageComponent currentUser={currentUser} />
         </div>
       </div>

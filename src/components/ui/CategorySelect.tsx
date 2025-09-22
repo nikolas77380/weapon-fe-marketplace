@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   Select,
   SelectContent,
@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Category } from "@/lib/types";
+import { useLocale } from "next-intl";
 
 interface CategorySelectProps {
   value: string;
@@ -18,7 +19,8 @@ interface CategorySelectProps {
   error: string | null;
   placeholder?: string;
   className?: string;
-  showHierarchy?: boolean;
+  getMainCategories?: () => Category[];
+  getSubCategories?: (parentId: number) => Category[];
 }
 
 const CategorySelect: React.FC<CategorySelectProps> = ({
@@ -29,51 +31,154 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
   error,
   placeholder = "Select Category",
   className = "w-1/2",
-  showHierarchy = true,
+  getMainCategories,
+  getSubCategories,
 }) => {
-  const renderCategoryItem = (category: Category, level: number = 0) => {
-    const indent = showHierarchy ? "  ".repeat(level) : "";
-    const categoryName = category.name || `Category ${category.id}`;
-    const displayName = showHierarchy
-      ? `${indent}${categoryName}`
-      : categoryName;
+  const currentLocale = useLocale();
+  const [localeKey, setLocaleKey] = useState(currentLocale);
 
-    return (
-      <SelectItem key={category.id} value={category.id.toString()}>
-        {displayName}
-      </SelectItem>
-    );
-  };
+  // Forcefully update the component when changing the locale
+  useEffect(() => {
+    setLocaleKey(currentLocale);
+  }, [currentLocale]);
 
-  const renderCategoriesHierarchy = (
-    categories: Category[],
-    level: number = 0
-  ) => {
-    return categories.map((category) => {
-      const children = categories.filter((c) => c.parent?.id === category.id);
+  const getCategoryDisplayName = useCallback(
+    (category: Category) => {
+      return currentLocale === "ua" && category.translate_ua
+        ? category.translate_ua
+        : category.name;
+    },
+    [currentLocale]
+  );
+
+  const renderMainCategory = useCallback(
+    (category: Category) => {
+      return (
+        <SelectItem
+          key={`main-${category.id}`}
+          value={`main-${category.id}`}
+          disabled={true}
+          className="font-semibold text-gray-900 cursor-not-allowed"
+        >
+          {getCategoryDisplayName(category)}
+        </SelectItem>
+      );
+    },
+    [getCategoryDisplayName]
+  );
+
+  const renderSubCategory = useCallback(
+    (category: Category) => {
+      // Checking if a subcategory has its own children (third level)
+      const hasChildren = categories.some((c) => c.parent?.id === category.id);
 
       return (
-        <React.Fragment key={category.id}>
-          {renderCategoryItem(category, level)}
-          {showHierarchy &&
-            children.length > 0 &&
-            renderCategoriesHierarchy(children, level + 1)}
+        <SelectItem
+          key={category.id}
+          value={category.id.toString()}
+          disabled={hasChildren}
+          className={
+            hasChildren
+              ? "pl-6 font-normal text-gray-600 cursor-not-allowed"
+              : "pl-6 font-normal text-gray-800"
+          }
+        >
+          {getCategoryDisplayName(category)}
+        </SelectItem>
+      );
+    },
+    [categories, getCategoryDisplayName]
+  );
+
+  const renderSubSubCategory = useCallback(
+    (category: Category) => {
+      return (
+        <SelectItem
+          key={category.id}
+          value={category.id.toString()}
+          className="pl-12 font-normal text-sm text-gray-700"
+        >
+          {getCategoryDisplayName(category)}
+        </SelectItem>
+      );
+    },
+    [getCategoryDisplayName]
+  );
+
+  const renderCategoriesHierarchy = useMemo(() => {
+    if (!getMainCategories || !getSubCategories) {
+      // Fallback to old logic if functions are not passed
+      return categories
+        .filter((category) => !category.parent)
+        .sort((a, b) => a.order - b.order)
+        .map((category) => {
+          const subCategories = categories.filter(
+            (c) => c.parent?.id === category.id
+          );
+          return (
+            <React.Fragment key={category.id}>
+              {renderMainCategory(category)}
+              {subCategories.map((subCat) => {
+                const subSubCategories = categories.filter(
+                  (c) => c.parent?.id === subCat.id
+                );
+                return (
+                  <React.Fragment key={subCat.id}>
+                    {renderSubCategory(subCat)}
+                    {subSubCategories.map((subSubCat) =>
+                      renderSubSubCategory(subSubCat)
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </React.Fragment>
+          );
+        });
+    }
+
+    const mainCategories = getMainCategories().sort(
+      (a, b) => a.order - b.order
+    );
+
+    return mainCategories.map((mainCategory) => {
+      const subCategories = getSubCategories(mainCategory.id).sort(
+        (a, b) => a.order - b.order
+      );
+
+      return (
+        <React.Fragment key={mainCategory.id}>
+          {renderMainCategory(mainCategory)}
+          {subCategories.map((subCategory) => {
+            const subSubCategories = getSubCategories(subCategory.id).sort(
+              (a, b) => a.order - b.order
+            );
+
+            return (
+              <React.Fragment key={subCategory.id}>
+                {renderSubCategory(subCategory)}
+                {subSubCategories.map((subSubCategory) =>
+                  renderSubSubCategory(subSubCategory)
+                )}
+              </React.Fragment>
+            );
+          })}
         </React.Fragment>
       );
     });
-  };
-
-  const mainCategories = showHierarchy
-    ? categories
-        .filter((category) => !category.parent)
-        .sort((a, b) => a.order - b.order)
-    : categories.sort((a, b) => a.order - b.order);
+  }, [
+    categories,
+    getMainCategories,
+    getSubCategories,
+    renderMainCategory,
+    renderSubCategory,
+    renderSubSubCategory,
+  ]);
 
   return (
     <Select
       onValueChange={onValueChange}
       value={value}
-      key={value}
+      key={`${value}-${localeKey}`}
       disabled={loading}
     >
       <SelectTrigger className={className}>
@@ -96,12 +201,12 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
           <SelectItem value="error" disabled>
             Error loading categories
           </SelectItem>
-        ) : mainCategories.length === 0 ? (
+        ) : categories.length === 0 ? (
           <SelectItem value="no-categories" disabled>
             No categories available
           </SelectItem>
         ) : (
-          renderCategoriesHierarchy(mainCategories)
+          renderCategoriesHierarchy
         )}
       </SelectContent>
     </Select>

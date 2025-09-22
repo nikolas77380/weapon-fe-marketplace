@@ -42,13 +42,13 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
   const handleSubmit = async (values: CertificateFormValues) => {
     if (selectedFiles.length === 0) {
-      toast.error(t('toastErrorSelectFile1'));
+      toast.error(t("toastErrorSelectFile1"));
       return;
     }
 
     // Validate that we have exactly one file (as per schema)
     if (selectedFiles.length > 1) {
-      toast.error(t('toastErrorSelectFile2'));
+      toast.error(t("toastErrorSelectFile2"));
       return;
     }
 
@@ -62,7 +62,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
       await createCertificate(certificateData, selectedFiles);
 
-      toast.success(t('toastSuccessUpload'));
+      toast.success(t("toastSuccessUpload"));
 
       // Reset form
       form.reset();
@@ -111,7 +111,9 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold mb-6">{t('titleUploadCertificate')}</h2>
+      <h2 className="text-xl font-semibold mb-6">
+        {t("titleUploadCertificate")}
+      </h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
@@ -119,62 +121,72 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="title"
-            label={t('labelCertificateTitle')}
+            label={t("labelCertificateTitle")}
             type="input"
-            placeholder={t('placeholderCertificateTitle')}
+            placeholder={t("placeholderCertificateTitle")}
+            classNameLabel="bg-background"
+            className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Description */}
           <FormFieldComponent
             control={form.control}
             name="description"
-            label={t('labelDescription')}
+            label={t("labelDescription")}
             type="textarea"
-            placeholder={t('placeholderDescription')}
+            placeholder={t("placeholderDescription")}
           />
 
           {/* Issued By */}
           <FormFieldComponent
             control={form.control}
             name="issuedBy"
-            label={t('labelIssuedBy')}
+            label={t("labelIssuedBy")}
             type="input"
-            placeholder={t('placeholderIssuedBy')}
+            placeholder={t("placeholderIssuedBy")}
+            classNameLabel="bg-background"
+            className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Issued Date */}
           <FormFieldComponent
             control={form.control}
             name="issuedDate"
-            label={t('labelIssuedDate')}
+            label={t("labelIssuedDate")}
             type="input"
             inputType="date"
-            placeholder={t('placeholderIssuedDate')}
+            placeholder={t("placeholderIssuedDate")}
+            classNameLabel="bg-background"
+            className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Expiry Date */}
           <FormFieldComponent
             control={form.control}
             name="expiryDate"
-            label={t('labelExpiryDate')}
+            label={t("labelExpiryDate")}
             type="input"
             inputType="date"
-            placeholder={t('placeholderExpiryDate')}
+            placeholder={t("placeholderExpiryDate")}
+            classNameLabel="bg-background"
+            className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* Certificate Number */}
           <FormFieldComponent
             control={form.control}
             name="certificateNumber"
-            label={t('labelCertificateNumber')}
+            label={t("labelCertificateNumber")}
             type="input"
-            placeholder={t('placeholderCertificateNumber')}
+            placeholder={t("placeholderCertificateNumber")}
+            classNameLabel="bg-background"
+            className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
           />
 
           {/* File Upload */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
-              {t('labelCertificateFile')} *
+              {t("labelCertificateFile")} *
             </label>
             <ImagesDropzone
               maxFiles={1}
@@ -188,7 +200,8 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
               onFilesChange={setSelectedFiles}
             />
             <p className="text-xs text-gray-500">
-              {t('titlenUploadOne')} PDF, JPEG, JPG, or PNG file ({t('descMax')} 10MB)
+              {t("titlenUploadOne")} PDF, JPEG, JPG, or PNG file ({t("descMax")}{" "}
+              10MB)
             </p>
           </div>
 
@@ -196,10 +209,10 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="px-8 py-2.5 text-xl font-roboto font-medium"
+              className="w-full min-[400px]:w-auto px-2 min-[340px]:px-4 min-[400px]:px-8 py-2 min-[400px]:py-2.5 text-xs min-[340px]:text-sm min-[400px]:text-base sm:text-xl font-roboto font-medium whitespace-normal text-center leading-tight"
               disabled={isLoading || selectedFiles.length === 0}
             >
-              {isLoading ? t('buttonUploading') : t('buttonUpload')}
+              {isLoading ? t("buttonUploading") : t("buttonUpload")}
             </Button>
           </div>
         </form>
