@@ -10,11 +10,13 @@ import { useTranslations } from "next-intl";
 interface SellerAccountHeaderProps {
   currentUser: UserProfile;
   products: Product[];
+  className?: string;
 }
 
 const SellerAccountHeader = ({
   currentUser,
   products,
+  className,
 }: SellerAccountHeaderProps) => {
   const t = useTranslations("SellerAccountHeader");
 
@@ -33,15 +35,14 @@ const SellerAccountHeader = ({
     router.push("/account/add-product");
   };
   return (
-    <div>
-      <h2 className="font-medium text-2xl">
+    <div className={className}>
+      <h2 className="font-medium text-xl lg:text-2xl">
         {t('titleWelcome')}, {currentUser.username}
       </h2>
       {/* Right Buttons */}
-      <div className="flex items-center justify-end mb-8 gap-3.5">
+      <div className="flex items-center lg:justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
         <Button
-          className="border border-black bg-black rounded-sm cursor-pointer duration-300 transition-all
-          hover:bg-black/80 px-1"
+          className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all px-1 hover:bg-gold-main/90"
           onClick={handleClickToAddProduct}
         >
           <div className="flex items-center gap-2 py-2 px-3">
@@ -51,7 +52,7 @@ const SellerAccountHeader = ({
         </Button>
 
         <Button
-          className="border border-black bg-white rounded-sm cursor-pointer duration-300 transition-all
+          className="border border-gray-300 bg-white rounded-none cursor-pointer duration-300 transition-all
           hover:bg-gray-100 px-1"
           onClick={handleClickToSettings}
         >
@@ -62,21 +63,21 @@ const SellerAccountHeader = ({
         </Button>
       </div>
       {/* Action Cards */}
-      <div className="flex items-center justify-between gap-12.5 mb-15">
+      <div className="flex flex-col min-[450px]:flex-row items-center justify-between gap-2 md:gap-7 lg:gap-12.5 mb-10 lg:mb-15">
         <SellerActionCard
           title={t('titleActiveListings')}
           count={activeListings}
-          icon={<Box size={30} className="mr-1" />}
+          icon={<Box className="size-5 lg:size-7" />}
         />
         <SellerActionCard
           title={t('titleTotalViews')}
           count={totalViews.toString()}
-          icon={<Eye size={30} className="mr-1" />}
+          icon={<Eye className="size-5 lg:size-7" />}
         />
         <SellerActionCard
           title={t('titleUnreadChats')}
           count={0}
-          icon={<MessageSquare size={30} className="mr-1" />}
+          icon={<MessageSquare className="size-5 lg:size-7" />}
         />
       </div>
     </div>

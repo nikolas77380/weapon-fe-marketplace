@@ -74,9 +74,9 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary px-8 py-6 flex justify-between w-full bg-sidebar-accent">
+    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row justify-between w-full bg-background gap-4">
       {/* Product info */}
-      <div className="flex gap-2.5">
+      <div className="flex gap-2.5 items-start">
         <Image
           src={
             getBestImageUrl(product.images?.[0] as ImageType, "small") ||
@@ -89,16 +89,20 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           className="rounded-md object-cover aspect-square"
         />
         <div className="flex flex-col">
-          <h2 className="font-roboto text-xl">{product.title}</h2>
-          <div className="flex items-center mt-1 gap-6 font-roboto font-extralight text-sm text-black">
+          <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>
+          <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-roboto font-extralight text-sm text-black">
             <p>{product.category?.name}</p>
             <p>{product.price}$</p>
             <p>Posted: {formatDate(product.createdAt)}</p>
           </div>
-          <div className="mt-1 flex items-center gap-6 font-roboto font-medium text-sm text-gray-400">
+          <div className="mt-1 flex flex-wrap items-center gap-3 sm:gap-6 font-roboto font-medium text-xs sm:text-sm text-gray-400">
             <div className="flex items-center gap-1.5">
-              <Eye size={18} />
-              <p>{t("tabMyInquiries.titleViews", { count: product.viewsCount || 0 })}</p>
+              <Eye size={16} className="min-[400px]:size-[18px]" />
+              <p>
+                {t("tabMyInquiries.titleViews", {
+                  count: product.viewsCount || 0,
+                })}
+              </p>
             </div>
             {/* <div className="flex items-center gap-1.5">
               <MessageSquare size={18} />
@@ -108,18 +112,21 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
         </div>
       </div>
       {/* Action Buttons */}
-      <div className="flex flex-col gap-8">
-        <div className="bg-black text-white px-2.5 py-1 text-sm font-medium self-start">
+      <div className="flex items-center min-[600px]:items-start justify-between min-[600px]:justify-end gap-4 min-[600px]:gap-8">
+        <div className="bg-black text-white px-2 py-0.5 text-xs font-medium self-start">
           {currentStatus}
         </div>
         <div className="flex items-center gap-3">
           <Link href={`/account/edit-product/${product.slug}`}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <SquarePen size={20} className="cursor-pointer" />
+                <SquarePen
+                  size={16}
+                  className="cursor-pointer min-[400px]:size-5"
+                />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t('tabMyInquiries.titleToogleEditProduct')}</p>
+                <p>{t("tabMyInquiries.titleToogleEditProduct")}</p>
               </TooltipContent>
             </Tooltip>
           </Link>
@@ -132,8 +139,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Trash2
-                      size={20}
-                      className={`cursor-pointer text-red-500 ${
+                      size={16}
+                      className={`cursor-pointer text-red-500 min-[400px]:size-5 ${
                         loading
                           ? "opacity-50 cursor-not-allowed"
                           : "hover:text-red-700"
@@ -141,17 +148,20 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                     />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{t('tabMyInquiries.titleToogleDeleteCard')}</p>
+                    <p>{t("tabMyInquiries.titleToogleDeleteCard")}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>{t('tabMyInquiries.titleToogleDeleteCard')}</DialogTitle>
+                <DialogTitle>
+                  {t("tabMyInquiries.titleToogleDeleteCard")}
+                </DialogTitle>
                 <DialogDescription>
-                  {t('tabMyInquiries.descriptionModalDeleteProduct1')} &ldquo;{product.title}&rdquo;?{" "}
-                  {t('tabMyInquiries.descriptionModalDeleteProduct2')}
+                  {t("tabMyInquiries.descriptionModalDeleteProduct1")} &ldquo;
+                  {product.title}&rdquo;?{" "}
+                  {t("tabMyInquiries.descriptionModalDeleteProduct2")}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -161,14 +171,16 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                   disabled={loading}
                   className="py-2"
                 >
-                  {t('tabMyInquiries.descriptionModalCancel')}
+                  {t("tabMyInquiries.descriptionModalCancel")}
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleDeleteProduct}
                   disabled={loading}
                 >
-                  {loading ? t('tabMyInquiries.descriptionModalDeleting') : t('tabMyInquiries.titleToogleDeleteCard')}
+                  {loading
+                    ? t("tabMyInquiries.descriptionModalDeleting")
+                    : t("tabMyInquiries.titleToogleDeleteCard")}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -177,7 +189,10 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="text-gray-600 hover:text-gray-800 transition-colors">
-                <Ellipsis size={20} className="cursor-pointer" />
+                <Ellipsis
+                  size={16}
+                  className="cursor-pointer min-[400px]:size-5"
+                />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">

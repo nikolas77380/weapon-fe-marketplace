@@ -257,33 +257,31 @@ html {
   font-family: var(--font-outfit);
 }
 
-/* Fix autofill background color - only for autofilled inputs */
+/* Autofill fixes (keep inputs white, not gray) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px var(--color-primary-foreground) inset !important;
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  /* Paint background to match regular inputs */
+  -webkit-box-shadow: 0 0 0 1000px var(--color-card) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-card) inset !important;
   -webkit-text-fill-color: var(--color-foreground) !important;
+  caret-color: var(--color-foreground) !important;
+  transition: background-color 9999s ease-in-out 0s !important;
 }
 
-/* Fix text selection in autofilled inputs only */
-input:-webkit-autofill::selection {
+/* Selection color while autofilled */
+input:-webkit-autofill::selection,
+textarea:-webkit-autofill::selection {
   -webkit-text-fill-color: var(--color-foreground) !important;
   background-color: var(--color-primary) !important;
 }
 
-input:-webkit-autofill::-moz-selection {
-  -webkit-text-fill-color: var(--color-foreground) !important;
-  background-color: var(--color-primary) !important;
-}
-
-/* Normal text selection for non-autofilled inputs */
-input:not(:-webkit-autofill)::selection {
-  background-color: var(--color-primary) !important;
-  color: var(--color-primary-foreground) !important;
-}
-
-input:not(:-webkit-autofill)::-moz-selection {
+/* Normal selection for non-autofilled */
+input::selection,
+textarea::selection {
   background-color: var(--color-primary) !important;
   color: var(--color-primary-foreground) !important;
 }
