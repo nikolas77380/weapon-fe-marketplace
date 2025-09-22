@@ -160,11 +160,6 @@ const AuthPage = () => {
       </div>
       <div className="container mx-auto px-layout sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-0">
-          {/* Breadcrumb - скрыт на мобильных */}
-          <div className="hidden lg:block">
-            <Breadcrumb />
-          </div>
-
           <div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-170">
             <div className="flex items-center justify-between lg:justify-center w-full mb-4 lg:mb-0">
               {/* Пустой div для выравнивания на мобильных */}
