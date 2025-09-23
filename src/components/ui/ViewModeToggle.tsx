@@ -24,7 +24,7 @@ const ViewModeToggle = ({
         onClick={onGridClick}
         className={`p-1.5 min-[500px]:p-2 cursor-pointer transition-colors duration-200 ${
           viewMode === "grid"
-            ? "bg-[#FE4819]"
+            ? "bg-gold-main"
             : "bg-transparent hover:bg-[#E7E7E7]/90"
         }`}
       >
@@ -39,7 +39,7 @@ const ViewModeToggle = ({
         onClick={onListClick}
         className={`p-1.5 min-[500px]:p-2 cursor-pointer transition-colors duration-200 ${
           viewMode === "list"
-            ? "bg-[#FE4819]"
+            ? "bg-gold-main"
             : "bg-transparent hover:bg-[#E7E7E7]/90"
         }`}
       >
