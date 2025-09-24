@@ -47,7 +47,7 @@ const SellerAccountHeader = ({
         >
           <div className="flex items-center gap-2 py-2 px-3">
             <Plus size={16} className="text-white" />
-            <p className="text-xs font-semibold text-white">{t('titleAddProduct')}</p>
+            <p className="text-xs sm:text-sm font-semibold text-white">{t('titleAddProduct')}</p>
           </div>
         </Button>
 
@@ -58,7 +58,7 @@ const SellerAccountHeader = ({
         >
           <div className="flex items-center gap-2 py-2 px-3">
             <Settings size={16} className="text-black" />
-            <p className="text-xs font-semibold text-black">{t('titleSettings')}</p>
+            <p className="text-xs sm:text-sm font-semibold text-black">{t('titleSettings')}</p>
           </div>
         </Button>
       </div>

@@ -8,11 +8,14 @@ interface BuyerActionCardProps {
 
 const BuyerActionCard = ({ title, count, icons }: BuyerActionCardProps) => {
   return (
-    <div className="bg-sidebar-accent p-3.5 gap-3.5 flex items-center">
-      {icons ? icons : null}
-      <div className="flex flex-col">
-        <p className="font-roboto font-medium text-xl">{count}</p>
-        <p className="font-roboto font-light">{title}</p>
+    <div className="border border-gray-primary rounded-lg p-3.5 gap-2.5 flex justify-between w-full h-full 
+    min-[450px]:min-h-[100px] min-[450px]:max-h-[100px] min-h-full">
+      <div className="flex flex-col gap-2.5">
+        <p className="font-light text-xs md:text-sm lg:text-base">{title}</p>
+        <p className="font-medium text-base lg:text-xl">{count}</p>
+      </div>
+      <div className="flex items-end lg:items-center justify-center">
+        {icons ? icons : null}
       </div>
     </div>
   );

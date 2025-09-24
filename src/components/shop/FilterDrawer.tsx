@@ -83,11 +83,6 @@ const FilterDrawer = ({
 
           {/* Separator */}
           <div className="border-t border-border-foreground my-4"></div>
-
-          {/* Language Switcher */}
-          <div className="flex justify-center">
-            <LanguageSwitcher />
-          </div>
         </div>
       </DrawerContent>
     </Drawer>

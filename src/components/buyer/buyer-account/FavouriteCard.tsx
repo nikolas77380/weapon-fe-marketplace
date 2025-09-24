@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Badge } from "../../ui/badge";
 import { Heart } from "lucide-react";
 import { FavouriteProduct } from "@/lib/favourites";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
@@ -24,7 +23,7 @@ const FavouriteCard = ({
     // List view
     return (
       <div className="flex flex-row border border-border-foreground">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden px-4 py-4">
           <Image
             src={
               typeof product.images?.[0] === "string"
@@ -46,40 +45,30 @@ const FavouriteCard = ({
         </div>
         <div className="flex flex-col justify-between p-4 flex-1">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="px-2.5 py-0.5 rounded-sm">
-                <p className="text-xs">{t('titleFavourites')}</p>
-              </div>
-              <p className="text-lg font-semibold">
+            <div className="flex items-start justify-between mb-3">
+              <h3 className="font-extrabold text-sm md:text-base lg:text-lg lg:leading-tight flex-1 lg:mr-4">
+                {product.title}
+              </h3>
+              <p className="hidden min-[400px]:block text-sm md:text-base lg:text-lg font-semibold text-gold-main flex-shrink-0 ">
                 {formatPrice(product.price)}
               </p>
             </div>
-            <p className="font-extrabold text-lg mb-2">{product.title}</p>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                {product.seller?.companyName && (
-                  <>
-                    <p className="text-xs text-muted-foreground">Seller:</p>
-                    <p className="text-xs font-bold">
-                      {product.seller?.companyName}
-                    </p>
-                  </>
-                )}
-              </div>
-              <div className="rounded-sm bg-green-500 py-1 px-2">
-                <p className="text-xs text-white font-semibold">Available</p>
+          <div className="flex flex-col gap-2 lg:flex-row items-start lg:items-center lg:justify-between">
+            <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
+              <div className="hidden min-[400px]:block bg-green-500 py-1 px-2">
+                <p className="text-xs lg:text-sm text-white font-semibold">Available</p>
               </div>
               <div>
-                <p className="text-xs font-bold text-muted-foreground">
+                <p className="hidden min-[400px]:block text-xs lg:text-sm font-bold text-muted-foreground">
                   Added: {new Date(favourite.createdAt).toLocaleDateString()}
                 </p>
               </div>
             </div>
             <Link
               href={`/marketplace/${product.id}`}
-              className="py-2 px-4 rounded-md bg-gold-main text-white hover:bg-gold-main/90 duration-300 transition-all"
+              className="py-2 px-4 bg-gold-main text-white hover:bg-gold-main/90 duration-300 
+              transition-all text-xs lg:text-sm"
             >
               View Details →
             </Link>
@@ -91,8 +80,8 @@ const FavouriteCard = ({
 
   // Grid view
   return (
-    <div className="border border-primary-foreground flex flex-col">
-      <div className="relative overflow-hidden">
+    <div className="border border-primary-foreground flex flex-col h-full">
+      <div className="relative overflow-hidden flex-shrink-0">
         <Image
           src={
             typeof product.images?.[0] === "string"
@@ -111,59 +100,50 @@ const FavouriteCard = ({
             <Heart size={12} className="text-white fill-white" />
           </div>
         </div>
-        {/* Favourite badge */}
-        <div className="absolute top-2 left-0">
-          <Badge className="text-xs font-semibold rounded-none bg-red-500 text-white">
-            {t('titleFavourites')}
-          </Badge>
-        </div>
       </div>
-      <div className="flex flex-col p-2">
-        <div className="flex items-center justify-between">
-          <div className="px-2.5 py-0.5 bg-[#D9D9D9] rounded-sm">
-            <p className="text-[0.7rem]">{t('titleSavedItem')}</p>
-          </div>
-          <p className="text-sm font-semibold">{formatPrice(product.price)}</p>
+
+      <div className="flex flex-col p-3 flex-1 justify-between min-h-0">
+        {/* Header with price */}
+        <div className="flex items-start justify-between mb-3">
+          <h3 className="font-extrabold text-sm leading-tight flex-1 mr-2 line-clamp-2">
+            {product.title}
+          </h3>
+          <p className="text-sm font-semibold text-gold-main flex-shrink-0">
+            {formatPrice(product.price)}
+          </p>
         </div>
 
-        <div className="flex flex-col gap-2 mt-6.5">
-          <p className="font-extrabold text-sm">{product.title}</p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                {product.seller?.companyName && (
-                  <>
-                    <p className="text-xs text-muted-foreground">Seller:</p>
-                    <p className="text-xs font-bold">
-                      {product.seller?.companyName}
-                    </p>
-                  </>
-                )}
-              </div>
+        {/* Seller info */}
+        <div className="mb-3">
+          {product.seller?.companyName && (
+            <div className="flex items-center gap-1 text-xs">
+              <span className="text-muted-foreground">Seller:</span>
+              <span className="font-bold truncate">
+                {product.seller.companyName}
+              </span>
             </div>
+          )}
+        </div>
+
+        {/* Status and date */}
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="rounded-sm bg-green-500 py-0.5 px-2 flex-shrink-0">
+            <p className="text-xs text-white font-semibold">Available</p>
           </div>
-
-          <div className="flex items-center justify-between">
-            <div className="rounded-sm bg-green-500 py-0.5 px-2">
-              <p className="text-xs text-white font-semibold">Available</p>
-            </div>
-
-            <div>
-              <p className="text-xs font-bold text-muted-foreground">
-                {new Date(favourite.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-center mt-3">
-            <Link
-              href={`/marketplace/${product.id}`}
-              className="py-1.5 px-3.5 w-full text-center text-sm rounded-md bg-gold-main text-white hover:bg-gold-main/90 duration-300 transition-all"
-            >
-              {t('titleViewDetails')}
-            </Link>
+          <div className="text-right">
+            <p className="text-xs font-bold text-muted-foreground">
+              {new Date(favourite.createdAt).toLocaleDateString()}
+            </p>
           </div>
         </div>
+
+        {/* Action button */}
+        <Link
+          href={`/marketplace/${product.id}`}
+          className="py-2 px-4 w-full text-center text-sm rounded-md bg-gold-main text-white hover:bg-gold-main/90 duration-300 transition-all flex-shrink-0"
+        >
+          {t("titleViewDetails")}
+        </Link>
       </div>
     </div>
   );

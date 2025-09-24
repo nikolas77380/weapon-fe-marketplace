@@ -34,7 +34,8 @@
     "titlePhone": "Телефон",
     "titleActiveInquiries": "Активні запити",
     "titleSavedProducts": "Збережені товари",
-    "titleCompletedDeals": "Завершені угоди"
+    "titleCompletedDeals": "Завершені угоди",
+    "titleWelcome": "Вітаємо"
   },
   "BuyerAccountTabs": {
     "tabMyInquiries": {
