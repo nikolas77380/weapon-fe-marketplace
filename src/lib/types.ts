@@ -228,3 +228,17 @@ export type ImageType = {
   url?: string;
   formats?: Record<string, { url?: string }>;
 };
+
+// Promo types
+export interface Promo {
+  id: number;
+  title?: string;
+  description?: string;
+  subtitle?: string;
+  image?: MediaFile;
+  category?: Category | null;
+  isActive?: boolean;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string;
+}
