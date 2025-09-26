@@ -7,6 +7,7 @@ import SkeletonComponent from "../ui/SkeletonComponent";
 import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
 import BannerSlider from "./BannerSlider";
+import { usePromosQuery } from "@/hooks/usePromosQuery";
 import ViewedProductsSlider from "./ViewedProductsSlider";
 import CategoryDropdown from "./CategoryDropdown";
 
@@ -21,7 +22,8 @@ const FilteringContent = () => {
   const allProducts = response?.data || [];
   const loading = isLoading;
   const { getMainCategories, categories } = useCategories();
-
+  const { data: promosResponse } = usePromosQuery();
+  console.log("promosResponse", promosResponse);
   const paginatedProducts = allProducts;
 
   const availableCategories = getMainCategories();
@@ -41,7 +43,7 @@ const FilteringContent = () => {
       {/* Shop Content - Full width on mobile, flex-1 on desktop */}
       <div className="w-full lg:flex-1 min-w-0 overflow-hidden mt-6">
         {/* Swiper Slide Banners */}
-        <BannerSlider />
+        <BannerSlider promos={promosResponse?.data || []} />
 
         {/* Viewed Products Slider */}
         <ViewedProductsSlider />

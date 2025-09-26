@@ -10,9 +10,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 import NavigationButton from "../ui/NavigationButton";
-import { bannerData } from "@/mockup/banners";
+import { Promo } from "@/lib/types";
 
-const BannerSlider = () => {
+const BannerSlider = ({ promos }: { promos?: Promo[] }) => {
   return (
     <div className="mb-4 sm:mb-6 w-full overflow-hidden px-2 sm:px-0">
       <div className="relative w-full">
@@ -36,20 +36,26 @@ const BannerSlider = () => {
           }}
           className="banner-slider w-full"
         >
-          {bannerData.map((banner) => (
-            <SwiperSlide key={banner.id}>
-              <div className="relative w-full h-[150px] sm:h-[180px] lg:h-[200px] rounded-sm overflow-hidden cursor-pointer">
-                <Image
-                  src={banner.image}
-                  alt={banner.image}
-                  width={1000}
-                  height={200}
-                  className="object-cover w-full h-full"
-                  priority={banner.id === 1}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
+          {(promos && promos.length > 0 ? promos : []).map((promo, index) => {
+            const imageUrl =
+              `${process.env.NEXT_PUBLIC_STRAPI_URL}${promo.image?.url}` ||
+              "/banners/1.png";
+            const alt = promo.title || "promo";
+            return (
+              <SwiperSlide key={promo.id || index}>
+                <div className="relative w-full h-[150px] sm:h-[180px] lg:h-[200px] rounded-sm overflow-hidden cursor-pointer">
+                  <Image
+                    src={imageUrl}
+                    alt={alt}
+                    width={1000}
+                    height={200}
+                    className="object-cover w-full h-full"
+                    priority={index === 0}
+                  />
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         {/* Navigation buttons - Hidden on mobile */}

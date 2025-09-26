@@ -12,6 +12,8 @@ import Sorting from "./Sorting";
 import BreadcrumbComponent from "../ui/BreadcrumbComponent";
 import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { usePromosQuery } from "@/hooks/usePromosQuery";
+import BannerSlider from "../CategoryContent/BannerSlider";
 
 interface FilterState {
   minPrice: number;
@@ -56,6 +58,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const { categories } = useCategories();
   const { categoryCounts } = useCategoryCounts();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
+
+  const { data: promosResponse } = usePromosQuery({
+    categorySlug,
+  });
 
   const paginatedProducts = allProducts;
 
@@ -181,6 +187,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         </div>
         {/* Shop Content - Full width on mobile, flex-1 on desktop */}
         <div className="w-full lg:flex-1 h-full">
+          <BannerSlider promos={promosResponse?.data || []} />
           <ShopContent
             products={paginatedProducts}
             pagination={pagination}
