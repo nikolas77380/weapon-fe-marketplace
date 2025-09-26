@@ -44,7 +44,7 @@ const SellerTabsMobile = ({
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-primary flex flex-col min-[400px]:flex-row min-[400px]:w-auto w-full h-full">
+          <TabsList className="bg-gray-100 flex flex-col min-[400px]:flex-row min-[400px]:w-auto w-full h-full">
             <TabsTrigger
               value="myInquiries"
               className={cn(

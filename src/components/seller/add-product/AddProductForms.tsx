@@ -408,7 +408,9 @@ const AddProductForms = () => {
             <Button
               type="submit"
               disabled={createLoading}
-              className="w-full min-[600px]:w-auto px-6 py-2 min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium"
+              className="w-full rounded-none text-white bg-gold-main min-[600px]:w-auto px-6 py-2 
+              min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium
+              hover:bg-gold-main/90"
             >
               {createLoading ? t("buttonCreating") : t("buttonSubmit")}
             </Button>

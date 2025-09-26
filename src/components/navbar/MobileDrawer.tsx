@@ -184,7 +184,10 @@ const MobileDrawer = ({
           <Separator className="my-2" />
 
           <div className="flex items-center gap-3 p-3">
-            <LanguageSwitcher />
+            <LanguageSwitcher
+              classNameSelectTrigger="border-gray-500"
+              classNameSelectValue="text-gold-main"
+            />
           </div>
         </div>
       </DrawerContent>

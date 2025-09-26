@@ -48,7 +48,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-primary grid grid-cols-1 min-[400px]:grid-cols-2 min-[500px]:grid-cols-4 w-full h-full gap-1">
+          <TabsList className="bg-gray-100 grid grid-cols-1 min-[400px]:grid-cols-2 min-[500px]:grid-cols-4 w-full h-full gap-1">
             <TabsTrigger
               value="myInquiries"
               className={cn(

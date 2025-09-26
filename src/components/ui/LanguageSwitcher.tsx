@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 const getLanguageConfig = (locale: string) => {
   const configs = {
@@ -21,7 +22,17 @@ const getLanguageConfig = (locale: string) => {
   return configs[locale as keyof typeof configs];
 };
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  classNameMainDiv?: string;
+  classNameSelectTrigger?: string;
+  classNameSelectValue?: string;
+}
+
+export default function LanguageSwitcher({
+  classNameMainDiv,
+  classNameSelectTrigger,
+  classNameSelectValue,
+}: LanguageSwitcherProps) {
   const router = useRouter();
   const currentLocale = useLocale();
 
@@ -35,15 +46,18 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", classNameMainDiv)}>
       <Globe className="h-5 w-5 text-gold-main" />
       <Select value={currentLocale} onValueChange={handleLanguageChange}>
         <SelectTrigger
           size="sm"
-          className="w-18 border !h-7 border-white/60 bg-transparent transition-colors"
+          className={cn(
+            "w-18 border !h-7 border-white/60 bg-transparent transition-colors",
+            classNameSelectTrigger
+          )}
         >
           <SelectValue>
-            <span className="text-sm font-medium text-gold-main">
+            <span className={cn("text-sm font-medium", classNameSelectValue)}>
               {getCurrentLanguage()?.code}
             </span>
           </SelectValue>

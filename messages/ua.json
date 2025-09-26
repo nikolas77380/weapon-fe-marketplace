@@ -345,7 +345,8 @@
       "titleQuickFilters": "Швидкі фільтри",
       "titleCategory": "Категорія",
       "titleCondition": "Стан",
-      "titleAvailability": "Наявність"
+      "titleAvailability": "Наявність",
+      "placeholderSearch": "Пошук товарів..."
     },
     "tabBusinessInfo": {
       "titleBusinessInfo": "Інформація про бізнес"
