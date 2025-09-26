@@ -12,7 +12,7 @@ interface PageWrapperProps {
 const PageWrapper = ({
   children,
   currentUser,
-  breadcrumbClassName = "mt-4 mb-10",
+  breadcrumbClassName = "mt-4 mb-10 hidden sm:block",
   customLabels = {},
 }: PageWrapperProps) => {
   return (

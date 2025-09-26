@@ -34,7 +34,8 @@
     "titlePhone": "Phone",
     "titleActiveInquiries": "Active inquiries",
     "titleSavedProducts": "Saved product",
-    "titleCompletedDeals": "Completed deals"
+    "titleCompletedDeals": "Completed deals",
+    "titleWelcome": "Welcome"
   },
   "BuyerAccountTabs": {
     "tabMyInquiries": {

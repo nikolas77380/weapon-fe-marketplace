@@ -8,12 +8,13 @@ interface SellerActionCardProps {
 
 const SellerActionCard = ({ title, count, icon }: SellerActionCardProps) => {
   return (
-    <div className="border border-gray-primary rounded-lg p-3.5 gap-2.5 flex justify-between w-full">
+    <div className="border border-gray-primary rounded-lg p-3.5 gap-2.5 flex justify-between w-full h-full 
+    min-[450px]:min-h-[100px] min-[450px]:max-h-[100px] min-h-full">
       <div className="flex flex-col gap-2.5">
-        <p className="font-roboto font-light">{title}</p>
-        <p className="font-roboto font-medium text-xl">{count}</p>
+        <p className="font-light text-xs md:text-sm lg:text-base">{title}</p>
+        <p className="font-medium text-base lg:text-xl">{count}</p>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex items-end lg:items-center justify-center">
         {icon ? icon : null}
       </div>
     </div>

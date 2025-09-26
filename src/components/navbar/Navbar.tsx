@@ -11,30 +11,42 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useTranslations } from "next-intl";
 import CatalogDropdown from "./CatalogDropdown";
 import MobileDrawer from "./MobileDrawer";
-import { useState } from "react";
+import MobileCatalog from "./MobileCatalog";
+import { useState, useCallback } from "react";
 import { Input } from "../ui/input";
+import { useCategories } from "@/hooks/useCategories";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
   const t = useTranslations("Navbar");
+  const { getMainCategories, categories } = useCategories();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
+  const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
 
-  const handleToggleCatalog = () => {
+  const handleToggleCatalog = useCallback(() => {
     setIsCatalogOpen(!isCatalogOpen);
-  };
+  }, [isCatalogOpen]);
 
-  const handleCloseCatalog = () => {
+  const handleCloseCatalog = useCallback(() => {
     setIsCatalogOpen(false);
-  };
+  }, []);
 
-  const handleToggleMobileDrawer = () => {
+  const handleToggleMobileDrawer = useCallback(() => {
     setIsMobileDrawerOpen(!isMobileDrawerOpen);
-  };
+  }, [isMobileDrawerOpen]);
 
-  const handleCloseMobileDrawer = () => {
+  const handleCloseMobileDrawer = useCallback(() => {
     setIsMobileDrawerOpen(false);
-  };
+  }, []);
+
+  const handleOpenMobileCatalog = useCallback(() => {
+    setIsMobileCatalogOpen(true);
+  }, []);
+
+  const handleCloseMobileCatalog = useCallback(() => {
+    setIsMobileCatalogOpen(false);
+  }, []);
 
   const NavbarContent = () => (
     <div className="h-8 sm:h-9 lg:h-10 w-full flex items-center">
@@ -137,7 +149,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full px-2 sm:px-4 lg:px-6 bg-[#565457] py-2 sm:py-2.5 relative">
+      <nav className="w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-2.5 relative bg-gradient-to-br from-slate-800 via-gray-500 to-slate-900 shadow-2xl">
         <NavbarContent />
       </nav>
 
@@ -146,9 +158,16 @@ const Navbar = () => {
         isOpen={isMobileDrawerOpen}
         onClose={handleCloseMobileDrawer}
         currentUser={currentUser}
-        onToggleCatalog={handleToggleCatalog}
-        isCatalogOpen={isCatalogOpen}
+        onOpenCatalog={handleOpenMobileCatalog}
         onLogout={handleLogout}
+      />
+
+      {/* Mobile Catalog */}
+      <MobileCatalog
+        isOpen={isMobileCatalogOpen}
+        onClose={handleCloseMobileCatalog}
+        categories={getMainCategories()}
+        allCategories={categories}
       />
     </>
   );

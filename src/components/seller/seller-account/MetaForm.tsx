@@ -132,7 +132,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                 {t("titleCertificates")}
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="companyDetails" className="mt-6 md:mt-10">
+            <TabsContent value="companyDetails" className="mt-6 md:mt-10 h-fit">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(handleSubmit)}
@@ -222,7 +222,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                   <div className="flex items-center justify-center">
                     <Button
                       type="submit"
-                      className="w-full min-[400px]:w-auto px-2 min-[340px]:px-4 min-[400px]:px-6 sm:px-8.5 py-2 min-[400px]:py-2 sm:py-2.5 text-xs min-[340px]:text-sm min-[400px]:text-base sm:text-lg font-roboto font-medium whitespace-normal text-center leading-tight"
+                      className="w-full min-[400px]:w-auto px-2 min-[340px]:px-4 min-[400px]:px-6 sm:px-8.5 py-2 min-[400px]:py-2 sm:py-2.5 text-xs min-[340px]:text-sm min-[400px]:text-base sm:text-lg font-medium whitespace-normal text-center leading-tight"
                       disabled={isLoading}
                     >
                       {isLoading

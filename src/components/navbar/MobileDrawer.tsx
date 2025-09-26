@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -24,8 +24,7 @@ interface MobileDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   currentUser: UserProfile | null;
-  onToggleCatalog: () => void;
-  isCatalogOpen: boolean;
+  onOpenCatalog: () => void;
   onLogout: () => void;
 }
 
@@ -33,11 +32,23 @@ const MobileDrawer = ({
   isOpen,
   onClose,
   currentUser,
-  onToggleCatalog,
-  isCatalogOpen,
+  onOpenCatalog,
   onLogout,
 }: MobileDrawerProps) => {
   const t = useTranslations("Navbar");
+
+  // Block body scrolling when the drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
   return (
     <Drawer direction="left" open={isOpen} onOpenChange={onClose}>
@@ -64,25 +75,20 @@ const MobileDrawer = ({
 
         <div className="px-4 pb-4 space-y-4">
           {/* Catalog Button for all users on <1024px */}
-          <div
-            className={`
-              bg-gold-main rounded-none cursor-pointer duration-300 transition-all
-              hover:bg-gold-main/90 w-full
-              ${isCatalogOpen ? "bg-gold-main/90" : ""}
-            `}
-            onClick={onToggleCatalog}
+          <button
+            className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all hover:bg-gold-main/90 w-full"
+            onClick={() => {
+              onClose();
+              onOpenCatalog();
+            }}
           >
             <div className="flex items-center gap-2 py-2.5 px-4">
-              {isCatalogOpen ? (
-                <X size={16} className="text-white" />
-              ) : (
-                <LayoutGrid size={16} className="text-white" />
-              )}
+              <LayoutGrid size={16} className="text-white" />
               <p className="text-xs xs:text-sm font-medium text-white">
                 {t("titleCatalog")}
               </p>
             </div>
-          </div>
+          </button>
 
           {/* User Section for unloginned (only on <768px) */}
           {!currentUser && (

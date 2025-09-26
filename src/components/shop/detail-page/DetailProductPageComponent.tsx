@@ -33,23 +33,25 @@ const DetailProductPageComponent = ({
 
   return (
     <PageWrapper customLabels={customLabels}>
-      {loading && <LoadingState title="Loading product..." />}
+      <div className="container mx-auto px-2 sm:px-4 lg:px-6">
+        {loading && <LoadingState title="Loading product..." />}
 
-      {error && (
-        <ErrorState
-          title="Error loading product"
-          message={error.message || "Failed to load product"}
-        />
-      )}
+        {error && (
+          <ErrorState
+            title="Error loading product"
+            message={error.message || "Failed to load product"}
+          />
+        )}
 
-      {!loading && !error && !product && (
-        <NotFoundState
-          title="Product not found"
-          message={`The product with slug "${productId}" doesn't exist or you don't have permission to edit it.`}
-        />
-      )}
+        {!loading && !error && !product && (
+          <NotFoundState
+            title="Product not found"
+            message={`The product with slug "${productId}" doesn't exist or you don't have permission to edit it.`}
+          />
+        )}
 
-      {!loading && !error && product && <ProductDetail product={product} />}
+        {!loading && !error && product && <ProductDetail product={product} />}
+      </div>
     </PageWrapper>
   );
 };
