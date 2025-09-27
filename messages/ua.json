@@ -195,6 +195,13 @@
     "titleUploadedFiles": "Завантажені файли",
     "buttonImageLoading": "Завантаження..."
   },
+  "ImageCrop": {
+    "titleCropImage": "Обрізати зображення",
+    "buttonReset": "Скинути",
+    "buttonCancel": "Скасувати",
+    "buttonApply": "Застосувати",
+    "tooltipCropImage": "Обрізати зображення"
+  },
   "AddProduct": {
     "titleAddProduct": "Додати новий продукт",
     "descriptionAddProduct": "Розмістіть своє тактичне спорядження на ринку",

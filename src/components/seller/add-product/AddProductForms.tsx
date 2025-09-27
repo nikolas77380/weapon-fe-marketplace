@@ -381,6 +381,7 @@ const AddProductForms = () => {
                     <ImagesDropzone
                       maxFiles={5}
                       maxSize={5 * 1024 * 1024}
+                      enableCrop={true}
                       onFilesChange={(files) => {
                         field.onChange(files);
                         console.log("Images updated in form:", files);

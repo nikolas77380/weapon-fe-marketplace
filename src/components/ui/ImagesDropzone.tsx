@@ -2,10 +2,12 @@
 
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { X, Upload, File } from "lucide-react";
+import { X, Upload, File, Crop } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import ImageCropPreview from "./ImageCropPreview";
 
 interface ImagesDropzoneProps {
   maxFiles?: number;
@@ -13,6 +15,7 @@ interface ImagesDropzoneProps {
   acceptedFormats?: string[];
   onFilesChange?: (files: File[]) => void;
   className?: string;
+  enableCrop?: boolean; // New optional prop
 }
 
 const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
@@ -21,44 +24,152 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   acceptedFormats = ["image/jpeg", "image/jpg", "image/png", "application/pdf"],
   onFilesChange,
   className = "",
+  enableCrop = false, // Default false for backward compatibility
 }) => {
   const t = useTranslations("ImagesDropZone");
+  const tCrop = useTranslations("ImageCrop");
 
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
+  const [cropIndex, setCropIndex] = useState<number | null>(null);
+  const [tempImageData, setTempImageData] = useState<{
+    file: File;
+    preview: string;
+  } | null>(null);
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (files.length + acceptedFiles.length > maxFiles) {
-        alert(`t('alertMaximumFiles') ${maxFiles}`);
-        return;
-      }
-
-      const newFiles = [...files, ...acceptedFiles];
+  const addFileDirectly = useCallback(
+    (file: File) => {
+      const newFiles = [...files, file];
       setFiles(newFiles);
 
       const newPreviews = [...previews];
-      acceptedFiles.forEach((file) => {
-        if (file.type.startsWith("image/")) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            newPreviews.push(e.target?.result as string);
-            setPreviews([...newPreviews]);
-          };
-          reader.readAsDataURL(file);
-        } else {
-          newPreviews.push("pdf");
-        }
-      });
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          newPreviews.push(e.target?.result as string);
+          setPreviews([...newPreviews]);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        newPreviews.push("pdf");
+        setPreviews([...newPreviews]);
+      }
 
       if (onFilesChange) {
         onFilesChange(newFiles);
       }
+    },
+    [files, previews, onFilesChange]
+  );
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (files.length + acceptedFiles.length > maxFiles) {
+        toast.error(`${t("alertMaximumFiles")} ${maxFiles}`);
+        return;
+      }
+
+      acceptedFiles.forEach((file) => {
+        if (file.type.startsWith("image/") && enableCrop) {
+          // For images with crop enabled, show crop interface immediately
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            setTempImageData({
+              file,
+              preview: e.target?.result as string,
+            });
+            setCropIndex(files.length);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          // For non-images or when crop is disabled, add directly
+          addFileDirectly(file);
+        }
+      });
 
       console.log("Files uploaded:", acceptedFiles);
-      console.log("Total files:", newFiles);
     },
-    [files, previews, maxFiles, onFilesChange]
+    [files, maxFiles, enableCrop, addFileDirectly, t]
+  );
+
+  const handleCropComplete = useCallback(
+    (croppedFile: File) => {
+      if (tempImageData && cropIndex !== null) {
+        const newFiles = [...files, croppedFile];
+        setFiles(newFiles);
+
+        // Create preview for cropped image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const newPreviews = [...previews, e.target?.result as string];
+          setPreviews(newPreviews);
+        };
+        reader.readAsDataURL(croppedFile);
+
+        if (onFilesChange) {
+          onFilesChange(newFiles);
+        }
+
+        // Reset crop state
+        setTempImageData(null);
+        setCropIndex(null);
+
+        console.log("Cropped file added:", croppedFile);
+      }
+    },
+    [files, previews, tempImageData, cropIndex, onFilesChange]
+  );
+
+  const handleCropCancel = useCallback(() => {
+    if (tempImageData) {
+      // Add original file without cropping
+      addFileDirectly(tempImageData.file);
+    }
+    setTempImageData(null);
+    setCropIndex(null);
+  }, [tempImageData, addFileDirectly]);
+
+  const startCropMode = useCallback(
+    (index: number) => {
+      const file = files[index];
+      const preview = previews[index];
+
+      if (file.type.startsWith("image/") && preview !== "pdf") {
+        setTempImageData({ file, preview });
+        setCropIndex(index);
+      }
+    },
+    [files, previews]
+  );
+
+  const handleCropExistingComplete = useCallback(
+    (croppedFile: File) => {
+      if (cropIndex !== null && tempImageData) {
+        const newFiles = [...files];
+        newFiles[cropIndex] = croppedFile;
+        setFiles(newFiles);
+
+        // Update preview for cropped image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const newPreviews = [...previews];
+          newPreviews[cropIndex] = e.target?.result as string;
+          setPreviews(newPreviews);
+        };
+        reader.readAsDataURL(croppedFile);
+
+        if (onFilesChange) {
+          onFilesChange(newFiles);
+        }
+
+        // Reset crop state
+        setTempImageData(null);
+        setCropIndex(null);
+
+        console.log("Existing file cropped:", croppedFile);
+      }
+    },
+    [files, previews, cropIndex, tempImageData, onFilesChange]
   );
 
   const removeFile = useCallback(
@@ -91,6 +202,25 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
+      {/* Crop Interface - Show when tempImageData exists */}
+      {tempImageData && (
+        <div className="border-2 border-dashed border-gold-main rounded-lg p-1 min-[320px]:p-2 sm:p-4 bg-gold-main/5 mx-auto max-w-full overflow-hidden">
+          <h4 className="font-medium text-gray-700 mb-1 min-[320px]:mb-2 sm:mb-3 text-xs min-[320px]:text-sm sm:text-base truncate">
+            {tCrop("titleCropImage")}: {tempImageData.file.name}
+          </h4>
+          <ImageCropPreview
+            src={tempImageData.preview}
+            fileName={tempImageData.file.name}
+            onCropComplete={
+              cropIndex !== null && cropIndex < files.length
+                ? handleCropExistingComplete
+                : handleCropComplete
+            }
+            onCancel={handleCropCancel}
+          />
+        </div>
+      )}
+
       {/* Dropzone */}
       <div
         {...getRootProps()}
@@ -106,9 +236,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
         <input {...getInputProps()} />
         <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
         {isDragActive ? (
-          <p className="text-blue-600 font-medium">
-            {t("isDragActive")}
-          </p>
+          <p className="text-blue-600 font-medium">{t("isDragActive")}</p>
         ) : (
           <div>
             <p className="text-gray-600 font-medium mb-2">
@@ -175,16 +303,33 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                   {(file.size / 1024).toFixed(1)} KB
                 </p>
 
-                {/* Delete button */}
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="sm"
-                  className="absolute top-1 right-1 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                  onClick={() => removeFile(index)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
+                {/* Action buttons */}
+                <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Crop button - only for images when crop is enabled */}
+                  {file.type.startsWith("image/") && enableCrop && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
+                      onClick={() => startCropMode(index)}
+                      title={tCrop("tooltipCropImage")}
+                    >
+                      <Crop className="h-3 w-3" />
+                    </Button>
+                  )}
+
+                  {/* Delete button */}
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="h-6 w-6 p-0"
+                    onClick={() => removeFile(index)}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
             ))}
           </div>

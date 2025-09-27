@@ -55,7 +55,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-border-foreground flex flex-col min-[400px]:flex-row">
+      <div className="border border-border-foreground flex flex-col min-[400px]:flex-row p-2">
         <Link
           href={`/marketplace/${item.id}`}
           className="relative overflow-hidden flex-shrink-0"
@@ -66,10 +66,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               "/shop/1.jpg"
             }
             alt={item.title}
-            width={200}
+            width={150}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-cover"
+            className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-contain"
           />
 
           {/* Badge */}
@@ -163,7 +163,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             width={266}
             height={200}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
           {/* Badge */}
           {/* <div className="absolute top-2 left-0">
