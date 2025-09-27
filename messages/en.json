@@ -195,6 +195,13 @@
     "titleUploadedFiles": "Uploaded files",
     "buttonImageLoading": "Loading..."
   },
+  "ImageCrop": {
+    "titleCropImage": "Crop Image",
+    "buttonReset": "Reset",
+    "buttonCancel": "Cancel",
+    "buttonApply": "Apply",
+    "tooltipCropImage": "Crop image"
+  },
   "AddProduct": {
     "titleAddProduct": "Add new Product",
     "descriptionAddProduct": "List your tactical equipment on the marketplace",
