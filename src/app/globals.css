@@ -125,9 +125,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
     @apply bg-background text-foreground;
   }
@@ -290,7 +287,7 @@ html {
   font-family: var(--font-outfit);
 }
 
-/* Autofill fixes (keep inputs white, not gray) */
+/* Autofill fixes (keep inputs white, not gray) - ONLY for autofilled inputs */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -299,10 +296,16 @@ textarea:-webkit-autofill,
 select:-webkit-autofill {
   /* Paint background to match regular inputs */
   -webkit-box-shadow: 0 0 0 1000px var(--color-card) inset !important;
-  box-shadow: 0 0 0 1000px var(--color-card) inset !important;
   -webkit-text-fill-color: var(--color-foreground) !important;
   caret-color: var(--color-foreground) !important;
   transition: background-color 9999s ease-in-out 0s !important;
+}
+
+/* Remove box-shadow for non-autofilled inputs */
+input:not(:-webkit-autofill),
+textarea:not(:-webkit-autofill),
+select:not(:-webkit-autofill) {
+  box-shadow: none !important;
 }
 
 /* Selection color while autofilled */

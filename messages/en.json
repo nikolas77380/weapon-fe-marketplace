@@ -345,7 +345,8 @@
       "titleQuickFilters": "Quick filters",
       "titleCategory": "Category",
       "titleCondition": "Condition",
-      "titleAvailability": "Availability"
+      "titleAvailability": "Availability",
+      "placeholderSearch": "Search products..."
     },
     "tabBusinessInfo": {
       "titleBusinessInfo": "Business Info"

@@ -109,7 +109,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               {item.description}
             </p>
           </div>
-          <div className="flex flex-col gap-3 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-between">
+          <div
+            className="flex flex-col gap-3 min-[460px]:flex-row min-[400px]:items-start 
+          min-[400px]:justify-between"
+          >
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
                 <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
@@ -129,13 +132,15 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               </div>
             </div>
             <Button
-              className="flex items-center gap-2 rounded-none py-2 px-3 sm:py-2.5 sm:px-5 hover:underline bg-transparent hover:bg-transparent border-none shadow-none text-gold-main self-start min-[400px]:self-auto"
+              className="flex items-center border border-border-foreground gap-2 rounded-none py-2 px-3 
+              sm:py-2.5 sm:px-5 hover:underline bg-transparent hover:bg-transparent 
+              shadow-none text-gold-main self-start min-[400px]:self-auto"
               onClick={(e) => handleContactSeller(e)}
               disabled={isLoading}
             >
               <MessageSquare size={14} className="sm:w-[15px] sm:h-[15px]" />
               <p className="text-xs sm:text-sm font-semibold">
-                {isLoading ? "Creating..." : "Contact Seller"}
+                {isLoading ? t("titlebuttonCreating") : t("titleCardSeller")}
               </p>
             </Button>
           </div>

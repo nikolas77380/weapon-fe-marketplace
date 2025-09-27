@@ -42,7 +42,7 @@ const SellerTabsDesktop = ({
         orientation="vertical"
         className="w-full flex-row gap-10"
       >
-        <TabsList className="flex-col w-64 h-23 border border-border-foreground">
+        <TabsList className="flex-col w-64 h-23 bg-gray-100">
           <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
             {t("tabMyInquiries.titleTabMyInquiries")}
           </TabsTrigger>

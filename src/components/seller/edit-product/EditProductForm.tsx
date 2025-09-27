@@ -125,14 +125,21 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 w-full mb-10">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-2">{t("titleEditProduct")}</h1>
-        <p className="text-gray-600">{t("descriptionEditProduct")}</p>
+    <div className="max-w-4xl mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 w-full mb-10">
+      <div className="mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold mb-2">
+          {t("titleEditProduct")}
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600">
+          {t("descriptionEditProduct")}
+        </p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 sm:space-y-6"
+        >
           {/* Product Images */}
           <FormField
             control={form.control}
@@ -161,7 +168,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             label={t("labelProductName")}
             type="input"
             placeholder={t("placeholderProductName")}
-            classNameLabel="bg-background"
+            classNameLabel="bg-background outline-none"
           />
 
           {/* Description */}
@@ -182,47 +189,48 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             type="input"
             inputType="number"
             placeholder="0.00"
-            className="w-1/2"
+            className="w-full sm:w-1/2"
             classNameLabel="bg-background"
             customOnChange={(e, fieldOnChange) =>
               fieldOnChange(Number(e.target.value))
             }
           />
-          <div className="flex justify-between items-center w-full">
-            <div className="flex justify-between items-center w-1/2">
-              {/* Category */}
-              <FormFieldComponent
-                control={form.control}
-                name="category"
-                label={t("labelCategory")}
-                type="select"
-                placeholder="Select category"
-                onValueChange={(value) => Number(value)}
-                selectValue={undefined}
-                customSelectOptions={
-                  <>
-                    {categories.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.id.toString()}
-                      >
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </>
-                }
-              />
 
-              {/* Condition and Quantity */}
-              <FormFieldComponent
-                control={form.control}
-                name="condition"
-                label={t("labelCondition")}
-                type="select"
-                placeholder="Select condition"
-                options={PRODUCT_CONDITION_FORM}
-              />
-            </div>
+          {/* Category, Condition, Status - 3 in a row on desktop, stacked on mobile */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full">
+            {/* Category */}
+            <FormFieldComponent
+              control={form.control}
+              name="category"
+              label={t("labelCategory")}
+              type="select"
+              placeholder="Select category"
+              onValueChange={(value) => Number(value)}
+              selectValue={undefined}
+              customSelectOptions={
+                <>
+                  {categories.map((category) => (
+                    <SelectItem
+                      key={category.id}
+                      value={category.id.toString()}
+                    >
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </>
+              }
+            />
+
+            {/* Condition */}
+            <FormFieldComponent
+              control={form.control}
+              name="condition"
+              label={t("labelCondition")}
+              type="select"
+              placeholder="Select condition"
+              options={PRODUCT_CONDITION_FORM}
+            />
+
             {/* Status */}
             <FormFieldComponent
               control={form.control}
@@ -230,7 +238,6 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               label={t("labelStatus")}
               type="select"
               placeholder="Select status"
-              className="w-full"
               options={[
                 { key: "available", label: "Available" },
                 { key: "reserved", label: "Reserved" },
@@ -240,33 +247,34 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             />
           </div>
 
-          {/* SKU and Status */}
-          <FormFieldComponent
-            control={form.control}
-            name="sku"
-            label="SKU"
-            type="input"
-            placeholder="Product SKU"
-            className="w-1/2"
-            classNameLabel="bg-background"
-          />
+          {/* SKU and Quantity */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <FormFieldComponent
+              control={form.control}
+              name="sku"
+              label="SKU"
+              type="input"
+              placeholder="Product SKU"
+              classNameLabel="bg-background"
+            />
 
-          <FormFieldComponent
-            control={form.control}
-            name="quantity"
-            label={t("labelCount")}
-            type="input"
-            inputType="number"
-            min="1"
-            placeholder="1"
-            classNameLabel="bg-background"
-            customOnChange={(e, fieldOnChange) =>
-              fieldOnChange(Number(e.target.value))
-            }
-          />
+            <FormFieldComponent
+              control={form.control}
+              name="quantity"
+              label={t("labelCount")}
+              type="input"
+              inputType="number"
+              min="1"
+              placeholder="1"
+              classNameLabel="bg-background"
+              customOnChange={(e, fieldOnChange) =>
+                fieldOnChange(Number(e.target.value))
+              }
+            />
+          </div>
 
           {/* Manufacturer and Model */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <FormFieldComponent
               control={form.control}
               name="manufacturer"
@@ -286,30 +294,30 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             />
           </div>
 
-          {/* Submit Button */}
-          <div className="flex gap-4">
+          {/* Submit Buttons - 2 buttons side by side */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
             <Button
               type="submit"
               disabled={updateLoading}
-              className="flex-1 py-2"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none bg-gold-main hover:bg-gold-main/90 text-white text-sm sm:text-base"
             >
-              {updateLoading ? t('buttonUpdating') : t('buttonUpdate')}
+              {updateLoading ? t("buttonUpdating") : t("buttonUpdate")}
             </Button>
 
             <Button
               type="button"
               variant="outline"
               onClick={() => router.push("/account")}
-              className="flex-1 py-2"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none text-sm sm:text-base"
             >
-              {t('buttonCancel')}
+              {t("buttonCancel")}
             </Button>
           </div>
 
           {/* Temporary debugging */}
           {updateError && (
             <div className="text-red-500 text-sm mt-2">
-              {t("error")} {updateError.message || t('errorDescription')}
+              {t("error")} {updateError.message || t("errorDescription")}
             </div>
           )}
         </form>

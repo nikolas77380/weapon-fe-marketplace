@@ -29,7 +29,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
         <NavigationMenuLink asChild>
-          <LanguageSwitcher />
+          <LanguageSwitcher classNameSelectValue="text-gold-main" />
         </NavigationMenuLink>
         <NavigationMenuLink asChild className="hidden 2xl:block">
           <Link

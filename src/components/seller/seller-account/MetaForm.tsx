@@ -116,7 +116,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
         <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
           <Tabs defaultValue="companyDetails" className="w-full h-full">
             <TabsList
-              className="bg-gray-primary flex flex-col min-[400px]:flex-row 
+              className="bg-gray-100 flex flex-col min-[400px]:flex-row 
             min-[400px]:w-auto w-full h-full"
             >
               <TabsTrigger

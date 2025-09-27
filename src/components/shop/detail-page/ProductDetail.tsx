@@ -95,7 +95,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
         <div className="mt-6 lg:mt-7.5">
           <Tabs defaultValue="description" className="w-full h-full">
             <TabsList
-              className="bg-gray-primary flex flex-col min-[400px]:flex-row 
+              className="bg-gray-100 flex flex-col min-[400px]:flex-row 
             min-[400px]:w-auto w-full h-full"
             >
               <TabsTrigger

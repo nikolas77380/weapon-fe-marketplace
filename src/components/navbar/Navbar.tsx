@@ -118,7 +118,10 @@ const Navbar = () => {
           <ul className="flex items-center gap-6">
             {/* Desktop LanguageSwitcher - скрывается на мобильных */}
             <div className="hidden lg:block">
-              <LanguageSwitcher />
+              <LanguageSwitcher
+                classNameSelectTrigger="border-gray-500"
+                classNameSelectValue="text-gold-main"
+              />
             </div>
 
             {/* User avatar icon - hides on <768px */}

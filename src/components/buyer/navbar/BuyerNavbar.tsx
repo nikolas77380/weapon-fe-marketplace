@@ -23,7 +23,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
-        <LanguageSwitcher />
+        <LanguageSwitcher classNameSelectValue="text-gold-main" />
         <Messages />
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
