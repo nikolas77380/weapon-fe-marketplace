@@ -664,6 +664,128 @@ export const getCertificates = async (params?: {
   });
 };
 
+export const getCertificatesPublic = async (params?: {
+  certificateType?: "product" | "seller";
+  product?: number;
+  seller?: number;
+  status?: "active" | "expired" | "revoked";
+  sort?: string;
+  pagination?: { page?: number; pageSize?: number };
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.certificateType) {
+    queryParams.append("filters[certificateType][$eq]", params.certificateType);
+  }
+  if (params?.product) {
+    queryParams.append("filters[product][$eq]", params.product.toString());
+  }
+  if (params?.seller) {
+    queryParams.append("filters[seller][$eq]", params.seller.toString());
+  }
+  if (params?.status) {
+    queryParams.append("filters[status][$eq]", params.status);
+  }
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", String(params.pagination.page));
+  }
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      String(params.pagination.pageSize)
+    );
+  }
+  queryParams.append("populate", "*");
+
+  const queryString = queryParams.toString();
+  const path = `/api/certificates/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({ path, method: "GET" });
+};
+
+export const getCertificatesByUser = async (
+  userId: number,
+  params?: {
+    certificateType?: "product" | "seller";
+    status?: "active" | "expired" | "revoked";
+    sort?: string;
+    pagination?: { page?: number; pageSize?: number };
+  }
+) => {
+  const queryParams = new URLSearchParams();
+  if (params?.certificateType) {
+    queryParams.append("filters[certificateType][$eq]", params.certificateType);
+  }
+  if (params?.status) {
+    queryParams.append("filters[status][$eq]", params.status);
+  }
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", String(params.pagination.page));
+  }
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      String(params.pagination.pageSize)
+    );
+  }
+  queryParams.append("populate", "*");
+
+  const queryString = queryParams.toString();
+  const path = `/api/certificates/by-user/${userId}${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  // Endpoint is public per backend config
+  return strapiFetch({ path, method: "GET" });
+};
+
+export const getCertificatesByProduct = async (
+  productId: number,
+  params?: {
+    certificateType?: "product" | "seller";
+    status?: "active" | "expired" | "revoked";
+    sort?: string;
+    pagination?: { page?: number; pageSize?: number };
+  }
+) => {
+  const queryParams = new URLSearchParams();
+  if (params?.certificateType) {
+    queryParams.append("filters[certificateType][$eq]", params.certificateType);
+  }
+  if (params?.status) {
+    queryParams.append("filters[status][$eq]", params.status);
+  }
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", String(params.pagination.page));
+  }
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      String(params.pagination.pageSize)
+    );
+  }
+  queryParams.append("populate", "*");
+
+  const queryString = queryParams.toString();
+  const path = `/api/certificates/by-product/${productId}${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  // Endpoint is public per backend config
+  return strapiFetch({ path, method: "GET" });
+};
+
 export const updateCertificate = async ({
   id,
   data,

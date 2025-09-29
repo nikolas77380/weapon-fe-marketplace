@@ -60,7 +60,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
         status: "active" as const,
       };
 
-      await createCertificate(certificateData, selectedFiles);
+      await createCertificate({ data: certificateData, files: selectedFiles });
 
       toast.success(t("toastSuccessUpload"));
 

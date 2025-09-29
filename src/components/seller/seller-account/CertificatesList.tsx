@@ -24,7 +24,7 @@ const CertificatesList = ({
 }: CertificatesListProps) => {
   const t = useTranslations("Settings.certificatesList");
 
-  const { certificates, loading, error, refetch } = useCertificates({
+  const { data, isLoading, error, refetch } = useCertificates({
     certificateType: "seller",
     seller: currentUser.id,
   });
@@ -32,14 +32,14 @@ const CertificatesList = ({
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const handleDelete = async (id: number) => {
-    if (!confirm(t('confirmDelete'))) {
+    if (!confirm(t("confirmDelete"))) {
       return;
     }
 
     setDeletingId(id);
     try {
       await deleteCertificate(id);
-      toast.success(t('toastSuccessDelete'));
+      toast.success(t("toastSuccessDelete"));
       refetch();
       if (onRefresh) {
         onRefresh();
@@ -71,7 +71,7 @@ const CertificatesList = ({
     return new Date(dateString).toLocaleDateString();
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
         <div className="text-gray-500">{t("loadingCertificates")}</div>
@@ -82,10 +82,14 @@ const CertificatesList = ({
   if (error) {
     return (
       <div className="flex justify-center items-center py-8">
-        <div className="text-red-500">{t("errorLoadingCertificate")} {error}</div>
+        <div className="text-red-500">
+          {t("errorLoadingCertificate")} {(error as Error).message}
+        </div>
       </div>
     );
   }
+
+  const certificates = (data as any)?.data ?? [];
 
   if (certificates.length === 0) {
     return (
@@ -101,7 +105,7 @@ const CertificatesList = ({
         {t("titleCertificates")} ({certificates.length})
       </h3>
       <div className="grid gap-4">
-        {certificates.map((certificate) => (
+        {certificates.map((certificate: any) => (
           <Card key={certificate.id} className="w-full">
             <CardHeader className="pb-3">
               <div className="flex justify-between items-start">
@@ -180,7 +184,9 @@ const CertificatesList = ({
                     disabled={deletingId === certificate.id}
                   >
                     <Trash2 className="h-4 w-4 mr-1" />
-                    {deletingId === certificate.id ? t('buttonDeleting') : t('buttonDelete')}
+                    {deletingId === certificate.id
+                      ? t("buttonDeleting")
+                      : t("buttonDelete")}
                   </Button>
                 </div>
               )}
