@@ -20,6 +20,17 @@ export const queryKeys = {
     lists: () => [...queryKeys.certificates.all, "list"] as const,
     list: (params?: any) =>
       [...queryKeys.certificates.lists(), params] as const,
+    details: () => [...queryKeys.certificates.all, "detail"] as const,
+    detail: (id: number) => [...queryKeys.certificates.details(), id] as const,
+    byUser: (userId: number, params?: any) =>
+      [...queryKeys.certificates.lists(), "user", userId, params] as const,
+    byProduct: (productId: number, params?: any) =>
+      [
+        ...queryKeys.certificates.lists(),
+        "product",
+        productId,
+        params,
+      ] as const,
   },
   favourites: {
     all: ["favourites"] as const,
