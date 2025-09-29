@@ -27,4 +27,11 @@ export const queryKeys = {
     list: (userId?: number) =>
       [...queryKeys.favourites.lists(), userId] as const,
   },
+  promos: {
+    all: ["promos"] as const,
+    lists: () => [...queryKeys.promos.all, "list"] as const,
+    list: (params?: any) => [...queryKeys.promos.lists(), params] as const,
+    details: () => [...queryKeys.promos.all, "detail"] as const,
+    detail: (id: number) => [...queryKeys.promos.details(), id] as const,
+  },
 } as const;

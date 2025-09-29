@@ -1,5 +1,5 @@
 import { SellerFormValues } from "@/schemas/sellerSchema";
-import { Category, CreateProductData, UpdateProductData } from "./types";
+import { Category, CreateProductData, UpdateProductData, Promo } from "./types";
 import { getSessionTokenFromCookie } from "./auth";
 
 // Base Strapi API client for public requests (without JWT)
@@ -751,6 +751,37 @@ export const getSellerMetaById = async (id: number) => {
 export const getSellerMetaBySellerId = async (sellerId: number) => {
   return strapiFetch({
     path: `/api/seller-metas/public/seller/${sellerId}`,
+    method: "GET",
+  });
+};
+
+// Promo API (public)
+export const getPromos = async (params?: {
+  category?: number;
+  categorySlug?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.category) {
+    queryParams.append("category", params.category.toString());
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("categorySlug", params.categorySlug);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/promos/public${queryString ? `?${queryString}` : ""}`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+export const getPromoById = async (id: number) => {
+  return strapiFetch({
+    path: `/api/promos/public/${id}`,
     method: "GET",
   });
 };
