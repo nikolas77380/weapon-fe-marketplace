@@ -17,6 +17,7 @@ import { Search, Funnel } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
+import CertificateSlider from "./CertificateSlider";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -380,7 +381,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                     <h2 className="text-xl sm:text-2xl lg:text-[30px] font-medium">
                       {t("tabOverview.titleCertifications")}
                     </h2>
-                    {/* Logic certifications...... */}
+                    {/* Certificates Slider */}
+                    <CertificateSlider sellerId={sellerData.id} />
                     <h2 className="text-xl sm:text-2xl lg:text-[30px] font-medium">
                       {t("tabOverview.titleFeaturedProducts")}
                     </h2>

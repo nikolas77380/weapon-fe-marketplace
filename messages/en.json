@@ -388,5 +388,24 @@
   },
   "ViewedRecommendedProductsSlider": {
     "title": "Recommendations based on your views"
+  },
+  "CertificateSlider": {
+    "errorLoading": "Failed to load certificates",
+    "noCertificates": "No certificates available"
+  },
+  "CertificateCard": {
+    "noFile": "No file",
+    "issuedBy": "Issued by:",
+    "date": "Date:"
+  },
+  "CertificateModal": {
+    "noFileAttached": "No file attached",
+    "description": "Description",
+    "issuedBy": "Issued by",
+    "issueDate": "Issue Date",
+    "expiryDate": "Expiry Date",
+    "certificateNumber": "Certificate Number",
+    "download": "Download",
+    "certificate": "Certificate"
   }
 }

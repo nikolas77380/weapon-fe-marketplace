@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { X, Upload, File, Crop } from "lucide-react";
 import Image from "next/image";
@@ -16,6 +16,7 @@ interface ImagesDropzoneProps {
   onFilesChange?: (files: File[]) => void;
   className?: string;
   enableCrop?: boolean; // New optional prop
+  externalFiles?: File[]; // External files to sync with
 }
 
 const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
@@ -25,6 +26,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   onFilesChange,
   className = "",
   enableCrop = false, // Default false for backward compatibility
+  externalFiles = [], // Default to empty array
 }) => {
   const t = useTranslations("ImagesDropZone");
   const tCrop = useTranslations("ImageCrop");
@@ -36,6 +38,16 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     file: File;
     preview: string;
   } | null>(null);
+
+  // Sync with external files - reset when external files is empty
+  useEffect(() => {
+    if (externalFiles.length === 0 && files.length > 0) {
+      setFiles([]);
+      setPreviews([]);
+      setCropIndex(null);
+      setTempImageData(null);
+    }
+  }, [externalFiles, files.length]);
 
   const addFileDirectly = useCallback(
     (file: File) => {

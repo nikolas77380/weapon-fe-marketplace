@@ -63,12 +63,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
-              "/shop/1.jpg"
+              "/no-image.png"
             }
             alt={item.title}
             width={150}
             height={150}
-            onError={(e) => handleImageError(e, "/shop/1.jpg")}
+            onError={(e) => handleImageError(e, "/no-image.png")}
             className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-contain"
           />
 
@@ -157,12 +157,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
-              "/shop/1.jpg"
+              "/no-image.png"
             }
             alt={item.title}
             width={266}
             height={200}
-            onError={(e) => handleImageError(e, "/shop/1.jpg")}
+            onError={(e) => handleImageError(e, "/no-image.png")}
             className="w-full h-full object-contain"
           />
           {/* Badge */}

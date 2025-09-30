@@ -53,6 +53,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             type="input"
             placeholder={t("placeholderDisplayName")}
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           {/* Email */}
@@ -65,6 +66,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             placeholder={t("placeholderEmail")}
             autoComplete="email"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           {/* Password */}
@@ -77,6 +79,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             placeholder={t("placeholderPassword")}
             autoComplete="new-password"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           {/* Confirm Password */}
@@ -89,6 +92,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             placeholder={t("placeholderConfirmPassword")}
             autoComplete="new-password"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           {/* Terms */}
