@@ -254,7 +254,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     <div className="w-full min-h-screen mb-20">
       <div className="container mx-auto px-2 sm:px-4 lg:px-6">
         {/* Company Top Info */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mt-4 sm:mt-7.5 border border-gray-primary p-3 sm:p-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mt-4 sm:mt-7.5 p-3 sm:p-5">
           <div className="flex items-center gap-2 sm:gap-3">
             <Avatar className="size-12 sm:size-15">
               <AvatarFallback className="uppercase text-xl sm:text-3xl">

@@ -11,6 +11,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Image from "next/image";
+import { Shield } from "lucide-react";
 
 interface CategoryDropdownProps {
   category: Category;
@@ -30,13 +32,18 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   // Если нет подкатегорий, показываем обычную ссылку
   if (subCategories.length === 0) {
     return (
-      <div>
-        <img
-          src={category.icon?.url}
-          alt={category.name}
-          width={20}
-          height={20}
-        />
+      <div className="flex items-center">
+        {category.icon?.url ? (
+          <Image
+            src={category.icon.url}
+            alt={category.name}
+            width={16}
+            height={16}
+            className="w-4 h-4 mr-2 object-contain"
+          />
+        ) : (
+          <Shield className="w-4 h-4 mr-2 text-gray-600" />
+        )}
         <Link
           href={`/category/${category.slug}`}
           className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md hover:bg-accent/50 block"
@@ -52,12 +59,17 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value={`category-${category.id}`} className="border-none">
         <div className="flex items-center">
-          <img
-            src={category.icon?.url}
-            alt={category.name}
-            width={20}
-            height={20}
-          />
+          {category.icon?.url ? (
+            <Image
+              src={category.icon.url}
+              alt={category.name}
+              width={16}
+              height={16}
+              className="w-4 h-4 mr-2 object-contain"
+            />
+          ) : (
+            <Shield className="w-4 h-4 mr-2 text-gray-600" />
+          )}
           <Link
             href={`/category/${category.slug}`}
             className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md"
