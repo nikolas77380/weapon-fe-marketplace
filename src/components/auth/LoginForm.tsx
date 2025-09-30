@@ -52,6 +52,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             placeholder="example@gmail.com"
             autoComplete="email"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           <FormFieldComponent
@@ -63,6 +64,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             placeholder="********"
             autoComplete="current-password"
             className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            classNameLabel="bg-background"
           />
 
           <div className="w-full flex justify-end">

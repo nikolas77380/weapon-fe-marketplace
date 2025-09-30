@@ -101,41 +101,55 @@ const CertificatesList = ({
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">
+      <h3 className="text-base sm:text-lg font-semibold">
         {t("titleCertificates")} ({certificates.length})
       </h3>
-      <div className="grid gap-4">
+      <div className="grid gap-3 sm:gap-4">
         {certificates.map((certificate: any) => (
           <Card key={certificate.id} className="w-full">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <CardTitle className="text-lg">{certificate.title}</CardTitle>
-                <Badge className={getStatusColor(certificate.status)}>
+            <CardHeader className="pb-2 sm:pb-3">
+              <div className="flex justify-between items-start gap-2">
+                <CardTitle className="text-sm sm:text-lg leading-tight">
+                  {certificate.title}
+                </CardTitle>
+                <Badge
+                  className={`${getStatusColor(
+                    certificate.status
+                  )} text-xs flex-shrink-0`}
+                >
                   {certificate.status}
                 </Badge>
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2 sm:space-y-3">
               {certificate.description && (
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-xs sm:text-sm line-clamp-2">
                   {certificate.description}
                 </p>
               )}
 
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
                 <div>
-                  <span className="font-medium">{t("titleIssuedBy")}</span>
-                  <p className="text-gray-600">{certificate.issuedBy}</p>
+                  <span className="font-medium block">
+                    {t("titleIssuedBy")}:
+                  </span>
+                  <p className="text-gray-600 truncate">
+                    {certificate.issuedBy}
+                  </p>
                 </div>
                 <div>
-                  <span className="font-medium">{t("titleIssuedDate")}</span>
+                  <span className="font-medium block">
+                    {t("titleIssuedDate")}:
+                  </span>
                   <p className="text-gray-600">
                     {formatDate(certificate.issuedDate)}
                   </p>
                 </div>
                 {certificate.expiryDate && (
                   <div>
-                    <span className="font-medium">{t("titleExpiryDate")}</span>
+                    <span className="font-medium block">
+                      {t("titleExpiryDate")}:
+                    </span>
                     <p className="text-gray-600">
                       {formatDate(certificate.expiryDate)}
                     </p>
@@ -143,8 +157,10 @@ const CertificatesList = ({
                 )}
                 {certificate.certificateNumber && (
                   <div>
-                    <span className="font-medium">{t("titleCertificate")}</span>
-                    <p className="text-gray-600">
+                    <span className="font-medium block">
+                      {t("titleCertificate")} #:
+                    </span>
+                    <p className="text-gray-600 truncate">
                       {certificate.certificateNumber}
                     </p>
                   </div>
@@ -152,20 +168,22 @@ const CertificatesList = ({
               </div>
 
               {certificate.certificateFile && (
-                <div className="flex gap-2 pt-2">
+                <div className="flex flex-col sm:flex-row gap-2 pt-2">
                   <Button
                     variant="outline"
                     size="sm"
+                    className="text-xs sm:text-sm h-8 sm:h-9"
                     onClick={() =>
                       window.open(certificate.certificateFile?.url, "_blank")
                     }
                   >
-                    <Eye className="h-4 w-4 mr-1" />
+                    <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                     {t("buttonView")}
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
+                    className="text-xs sm:text-sm h-8 sm:h-9"
                     onClick={() => {
                       const link = document.createElement("a");
                       link.href = certificate.certificateFile?.url || "";
@@ -174,16 +192,17 @@ const CertificatesList = ({
                       link.click();
                     }}
                   >
-                    <Download className="h-4 w-4 mr-1" />
+                    <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                     {t("buttonUpload")}
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
+                    className="text-xs sm:text-sm h-8 sm:h-9"
                     onClick={() => handleDelete(certificate.id)}
                     disabled={deletingId === certificate.id}
                   >
-                    <Trash2 className="h-4 w-4 mr-1" />
+                    <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                     {deletingId === certificate.id
                       ? t("buttonDeleting")
                       : t("buttonDelete")}
