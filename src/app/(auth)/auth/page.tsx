@@ -258,11 +258,11 @@ const AuthPage = () => {
                 {authMode === "login" && (
                   <>
                     <LoginForm onSubmit={onLoginSubmit} />
-                    <div className="text-center flex items-center justify-center border-t border-border-foreground w-full px-4 sm:px-6">
+                    {/* <div className="text-center flex items-center justify-center border-t border-border-foreground w-full px-4 sm:px-6">
                       <p className="text-xs sm:text-sm font-light flex py-3.5 text-center">
                         {t("login.footerDescripotion")}
                       </p>
-                    </div>
+                    </div> */}
                   </>
                 )}
               </div>

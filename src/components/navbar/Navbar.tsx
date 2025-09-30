@@ -95,12 +95,12 @@ const Navbar = () => {
         <div className="relative w-full xl:max-w-sm mx-2 sm:mx-4 lg:mx-10">
           <Input
             placeholder="Search"
-            className="border-white/60 pl-7 sm:pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
-            h-8 sm:h-9 lg:h-10 rounded-none text-gray-200 placeholder:text-gray-400 text-sm"
+            className="border-gold-main pl-7 sm:pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
+            h-8 sm:h-9 lg:h-10 rounded-none text-gray-200 placeholder:text-gold-main text-sm"
           />
           <Search
             size={12}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400"
+            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer text-gold-main"
           />
         </div>
         {!currentUserLoading && currentUser ? (
