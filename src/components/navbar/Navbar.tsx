@@ -13,11 +13,13 @@ import CatalogDropdown from "./CatalogDropdown";
 import MobileDrawer from "./MobileDrawer";
 import MobileCatalog from "./MobileCatalog";
 import { useState, useCallback } from "react";
-import { Input } from "../ui/input";
 import { useCategories } from "@/hooks/useCategories";
+import { NavbarSearch } from "../search/NavbarSearch";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
+  const router = useRouter();
   const t = useTranslations("Navbar");
   const { getMainCategories, categories } = useCategories();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -93,14 +95,13 @@ const Navbar = () => {
         </div>
         {/* Search bar - adaptive width */}
         <div className="relative w-full xl:max-w-sm mx-2 sm:mx-4 lg:mx-10">
-          <Input
-            placeholder="Search"
-            className="border-white/60 pl-7 sm:pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
-            h-8 sm:h-9 lg:h-10 rounded-none text-gray-200 placeholder:text-gray-400 text-sm"
-          />
-          <Search
-            size={12}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400"
+          <NavbarSearch
+            onProductSelect={(product) =>
+              router.push(`/marketplace/${product.id}`)
+            }
+            onSellerSelect={(seller) => router.push(`/company/${seller.id}`)}
+            placeholder={t("searchPlaceholder")}
+            className="text-white"
           />
         </div>
         {!currentUserLoading && currentUser ? (

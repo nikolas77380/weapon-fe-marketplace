@@ -3,6 +3,9 @@
     "logRegTooltip": "Вхід/Реєстрація",
     "messagesToogle": "Повідомлення",
     "titleCatalog": "Каталог",
+    "searchPlaceholder": "Пошук товарів і продавців...",
+    "searchResultProducts": "Товари",
+    "searchResultsNotFound": "Товари не знайдені",
     "burgerMenu": {
       "srTitle": "Меню навігації",
       "srDescription": "Мобільне меню для навігації по сайту",

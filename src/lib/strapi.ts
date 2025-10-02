@@ -537,6 +537,226 @@ export const getProductById = async (id: number) => {
   });
 };
 
+// Search products by title or seller name (public)
+export const searchProductsPublic = async (params?: {
+  search: string;
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("filters[categorySlug]", params.categorySlug);
+  }
+
+  if (params?.priceRange?.min !== undefined) {
+    queryParams.append(
+      "filters[priceRange][min]",
+      params.priceRange.min.toString()
+    );
+  }
+
+  if (params?.priceRange?.max !== undefined) {
+    queryParams.append(
+      "filters[priceRange][max]",
+      params.priceRange.max.toString()
+    );
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      params.pagination.pageSize.toString()
+    );
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/search/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Search products by title or seller name (authenticated)
+export const searchProducts = async (params?: {
+  search: string;
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("filters[categorySlug]", params.categorySlug);
+  }
+
+  if (params?.priceRange?.min !== undefined) {
+    queryParams.append(
+      "filters[priceRange][min]",
+      params.priceRange.min.toString()
+    );
+  }
+
+  if (params?.priceRange?.max !== undefined) {
+    queryParams.append(
+      "filters[priceRange][max]",
+      params.priceRange.max.toString()
+    );
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      params.pagination.pageSize.toString()
+    );
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/search${queryString ? `?${queryString}` : ""}`;
+
+  return strapiFetchAuth({
+    path,
+    method: "GET",
+    token,
+  });
+};
+
+// Search sellers by name or company (public)
+export const searchSellersPublic = async (params?: {
+  search: string;
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      params.pagination.pageSize.toString()
+    );
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/users/search/sellers/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Search sellers by name or company (authenticated)
+export const searchSellers = async (params?: {
+  search: string;
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("pagination[page]", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append(
+      "pagination[pageSize]",
+      params.pagination.pageSize.toString()
+    );
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/users/search/sellers${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetchAuth({
+    path,
+    method: "GET",
+    token,
+  });
+};
+
 // Certificate API functions
 export const createCertificate = async ({
   data,
