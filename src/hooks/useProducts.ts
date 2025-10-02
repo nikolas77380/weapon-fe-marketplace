@@ -35,18 +35,6 @@ export const useProducts = (params?: {
     total: 0,
   });
 
-  // Create a stable key for the params to avoid infinite loops
-  const paramsKey = JSON.stringify({
-    category: params?.category,
-    categorySlug: params?.categorySlug,
-    seller: params?.seller,
-    status: params?.status,
-    search: params?.search,
-    sort: params?.sort,
-    priceRange: params?.priceRange,
-    pagination: params?.pagination,
-  });
-
   const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
@@ -76,7 +64,7 @@ export const useProducts = (params?: {
     } finally {
       setLoading(false);
     }
-  }, [paramsKey]);
+  }, [params]);
 
   useEffect(() => {
     fetchProducts();

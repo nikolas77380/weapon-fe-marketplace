@@ -8,7 +8,6 @@ import { LoginFormValues } from "@/schemas/loginSchema";
 import { useSearchParams, useRouter } from "next/navigation";
 import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegisterForm";
-import Breadcrumb from "@/components/auth/Breadcrumb";
 import AuthSwitcher from "@/components/auth/AuthSwitcher";
 import {
   registerBuyer,

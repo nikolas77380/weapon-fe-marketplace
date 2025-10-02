@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Image from "next/image";
 
 interface CategoryDropdownProps {
   category: Category;
@@ -31,8 +32,8 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
   if (subCategories.length === 0) {
     return (
       <div>
-        <img
-          src={category.icon?.url}
+        <Image
+          src={category.icon?.url || ""}
           alt={category.name}
           width={20}
           height={20}
@@ -52,8 +53,8 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
     <Accordion type="single" collapsible className="w-full">
       <AccordionItem value={`category-${category.id}`} className="border-none">
         <div className="flex items-center">
-          <img
-            src={category.icon?.url}
+          <Image
+            src={category.icon?.url || ""}
             alt={category.name}
             width={20}
             height={20}

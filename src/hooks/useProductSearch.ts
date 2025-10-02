@@ -27,16 +27,6 @@ export const useProductSearch = (params?: {
   });
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Create a stable key for the params to avoid infinite loops
-  const paramsKey = JSON.stringify({
-    search: params?.search,
-    categorySlug: params?.categorySlug,
-    priceRange: params?.priceRange,
-    pagination: params?.pagination,
-    sort: params?.sort,
-    useAuth: params?.useAuth,
-  });
-
   const searchProductsData = useCallback(async () => {
     if (!params?.search || params.search.trim().length === 0) {
       setProducts([]);
@@ -95,7 +85,7 @@ export const useProductSearch = (params?: {
     } finally {
       setLoading(false);
     }
-  }, [paramsKey]);
+  }, [params]);
 
   useEffect(() => {
     searchProductsData();

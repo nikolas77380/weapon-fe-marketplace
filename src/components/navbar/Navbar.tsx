@@ -6,7 +6,7 @@ import SellerNavbar from "../buyer/navbar/SellerNavbar";
 import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
-import { LayoutGrid, Search, User, X, Menu } from "lucide-react";
+import { LayoutGrid, User, X, Menu } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useTranslations } from "next-intl";
 import CatalogDropdown from "./CatalogDropdown";

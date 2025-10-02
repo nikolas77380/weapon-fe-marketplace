@@ -30,7 +30,7 @@ export const useSellerData = (sellerId?: number) => {
         if (token) {
           try {
             userResponse = await getUserById(sellerId, token);
-          } catch (authError) {
+          } catch {
             console.log("Auth request failed, trying public endpoints");
           }
         }

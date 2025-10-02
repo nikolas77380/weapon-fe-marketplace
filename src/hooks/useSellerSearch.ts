@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { searchSellersPublic, searchSellers } from "@/lib/strapi";
-import { getSessionTokenFromCookie } from "@/lib/auth";
 
 // Seller type based on the API response
 export interface Seller {
@@ -68,14 +67,6 @@ export const useSellerSearch = (params?: {
   });
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-  // Create a stable key for the params to avoid infinite loops
-  const paramsKey = JSON.stringify({
-    search: params?.search,
-    pagination: params?.pagination,
-    sort: params?.sort,
-    useAuth: params?.useAuth,
-  });
-
   const searchSellersData = useCallback(async () => {
     if (!params?.search || params.search.trim().length === 0) {
       setSellers([]);
@@ -132,7 +123,7 @@ export const useSellerSearch = (params?: {
     } finally {
       setLoading(false);
     }
-  }, [paramsKey]);
+  }, [params]);
 
   useEffect(() => {
     searchSellersData();

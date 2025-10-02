@@ -21,7 +21,6 @@ interface SellerTabsMobileProps {
 const SellerTabsMobile = ({
   products,
   loading,
-  refetch,
   currentUser,
 }: SellerTabsMobileProps) => {
   const t = useTranslations("SellerAccountTabs");

@@ -55,45 +55,42 @@ export const NavbarSearch = ({
   }>({ products: null, sellers: null });
 
   // Debounced search function
-  const debouncedSearch = useCallback(
-    debounce(async (query: string) => {
-      if (!query.trim()) {
-        clearProductsSearch();
-        clearSellersSearch();
-        setSearchErrors({ products: null, sellers: null });
-        setIsDropdownOpen(false);
-        return;
-      }
-
-      setIsSearching(true);
+  const debouncedSearch = debounce(async (query: string) => {
+    if (!query.trim()) {
+      clearProductsSearch();
+      clearSellersSearch();
       setSearchErrors({ products: null, sellers: null });
+      setIsDropdownOpen(false);
+      return;
+    }
 
-      // Search products and sellers independently
-      const searchPromises = [
-        searchProducts({
-          search: query.trim(),
-          pagination: { page: 1, pageSize: 5 },
-        }).catch((error) => {
-          console.warn("Products search failed:", error);
-          setSearchErrors((prev) => ({ ...prev, products: error.message }));
-          return null;
-        }),
-        searchSellers({
-          search: query.trim(),
-          pagination: { page: 1, pageSize: 5 },
-        }).catch((error) => {
-          console.warn("Sellers search failed:", error);
-          setSearchErrors((prev) => ({ ...prev, sellers: error.message }));
-          return null;
-        }),
-      ];
+    setIsSearching(true);
+    setSearchErrors({ products: null, sellers: null });
 
-      await Promise.allSettled(searchPromises);
-      setIsDropdownOpen(true);
-      setIsSearching(false);
-    }, 300),
-    [searchProducts, searchSellers, clearProductsSearch, clearSellersSearch]
-  );
+    // Search products and sellers independently
+    const searchPromises = [
+      searchProducts({
+        search: query.trim(),
+        pagination: { page: 1, pageSize: 5 },
+      }).catch((error) => {
+        console.warn("Products search failed:", error);
+        setSearchErrors((prev) => ({ ...prev, products: error.message }));
+        return null;
+      }),
+      searchSellers({
+        search: query.trim(),
+        pagination: { page: 1, pageSize: 5 },
+      }).catch((error) => {
+        console.warn("Sellers search failed:", error);
+        setSearchErrors((prev) => ({ ...prev, sellers: error.message }));
+        return null;
+      }),
+    ];
+
+    await Promise.allSettled(searchPromises);
+    setIsDropdownOpen(true);
+    setIsSearching(false);
+  }, 300);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -319,7 +316,9 @@ export const NavbarSearch = ({
                 searchQuery.trim() && (
                   <div className="p-4 text-center text-sm text-gray-500">
                     <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                    <p>По запросу "{searchQuery}" ничего не найдено</p>
+                    <p>
+                      По запросу &quot;{searchQuery}&quot; ничего не найдено
+                    </p>
                   </div>
                 )}
             </div>

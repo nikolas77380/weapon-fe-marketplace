@@ -1,5 +1,5 @@
 import { SellerFormValues } from "@/schemas/sellerSchema";
-import { Category, CreateProductData, UpdateProductData, Promo } from "./types";
+import { Category, CreateProductData, UpdateProductData } from "./types";
 import { getSessionTokenFromCookie } from "./auth";
 
 // Base Strapi API client for public requests (without JWT)
