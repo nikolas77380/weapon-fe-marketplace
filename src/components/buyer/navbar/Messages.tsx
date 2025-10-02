@@ -43,7 +43,7 @@ const Messages = () => {
       <Link href="/messages" className="relative">
         <Tooltip>
           <TooltipTrigger asChild>
-            <MessageCircle size={22} className="text-gold-main cursor-pointer" />
+            <MessageCircle size={20} className="text-gold-main cursor-pointer" />
           </TooltipTrigger>
           <TooltipContent>
             <p>{t('messagesToogle')}</p>

@@ -149,7 +149,7 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen h-full w-full relative pt-4 sm:pt-6 pb-8 sm:pb-12 lg:pb-16 z-1">
-      <div className="absolute inset-0 z-[-1] bg-[#e7e7e7]">
+      <div className="absolute inset-0 z-[-1] bg-[#f2eeee]">
         <Image
           src="/auth/bg.png"
           alt="bg"
@@ -174,7 +174,7 @@ const AuthPage = () => {
             <div
               className={`border border-border-foreground ${
                 authMode === "login" ? "mt-6 lg:mt-41" : "mt-4 lg:mt-6"
-              } flex flex-col bg-primary-foreground w-full lg:w-170 mx-auto`}
+              } flex bg-background flex-col w-full lg:w-170 mx-auto`}
             >
               <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground px-4 sm:px-6">
                 <h2 className="font-medium text-xl sm:text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
@@ -258,11 +258,11 @@ const AuthPage = () => {
                 {authMode === "login" && (
                   <>
                     <LoginForm onSubmit={onLoginSubmit} />
-                    <div className="text-center flex items-center justify-center border-t border-border-foreground w-full px-4 sm:px-6">
+                    {/* <div className="text-center flex items-center justify-center border-t border-border-foreground w-full px-4 sm:px-6">
                       <p className="text-xs sm:text-sm font-light flex py-3.5 text-center">
                         {t("login.footerDescripotion")}
                       </p>
-                    </div>
+                    </div> */}
                   </>
                 )}
               </div>

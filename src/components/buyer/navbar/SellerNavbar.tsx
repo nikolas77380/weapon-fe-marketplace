@@ -28,18 +28,15 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
-        <NavigationMenuLink asChild>
-          <LanguageSwitcher classNameSelectValue="text-gold-main" />
-        </NavigationMenuLink>
         <NavigationMenuLink asChild className="hidden 2xl:block">
           <Link
             href="/account/add-product"
-            className="bg-gold-main cursor-pointer duration-300 transition-all
-            hover:bg-gold-main/90"
+            className="border-none cursor-pointer duration-500 transition-all
+            hover:bg-white/70"
           >
             <div className="flex items-center gap-2 py-2.5 px-4">
-              <Plus size={16} className="text-white" />
-              <p className="text-sm font-medium text-white">
+              <Plus size={16} className="text-gold-main" />
+              <p className="text-sm font-medium text-gold-main">
                 {t("titleAddProduct")}
               </p>
             </div>
@@ -48,9 +45,13 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
 
         <Messages />
 
+        <NavigationMenuLink asChild>
+          <LanguageSwitcher classNameSelectValue="text-gold-main" />
+        </NavigationMenuLink>
+
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
-            <Avatar className="h-8 w-8 border border-gray-300 cursor-pointer">
+            <Avatar className="h-8 w-8 border border-gold-main cursor-pointer">
               <AvatarFallback className="bg-black text-white text-sm uppercase">
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
@@ -62,7 +63,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               <div className="text-white/70 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
-          <NavigationMenuContent>
+          <NavigationMenuContent className="border-gold-main">
             <SellerMenuContent user={user} onLogout={onLogout} />
           </NavigationMenuContent>
         </NavigationMenuItem>
