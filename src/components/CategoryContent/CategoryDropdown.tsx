@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import { Shield } from "lucide-react";
 
+
 interface CategoryDropdownProps {
   category: Category;
   allCategories: Category[];

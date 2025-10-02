@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/drawer";
 import { X } from "lucide-react";
 import Filters from "./Filters";
-import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { useTranslations } from "next-intl";
 
 interface FilterDrawerProps {

@@ -3,6 +3,9 @@
     "logRegTooltip": "Login/Register",
     "messagesToogle": "Messages",
     "titleCatalog": "Catalog",
+    "searchPlaceholder": "Search products and sellers...",
+    "searchResultProducts": "Products",
+    "searchResultsNotFound": "Products not found",
     "burgerMenu": {
       "srTitle": "Navigation menu",
       "srDescription": "Mobile menu to navigate the site",

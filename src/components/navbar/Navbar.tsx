@@ -6,18 +6,20 @@ import SellerNavbar from "../buyer/navbar/SellerNavbar";
 import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
-import { LayoutGrid, Search, User, X, Menu } from "lucide-react";
+import { LayoutGrid, User, X, Menu } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useTranslations } from "next-intl";
 import CatalogDropdown from "./CatalogDropdown";
 import MobileDrawer from "./MobileDrawer";
 import MobileCatalog from "./MobileCatalog";
 import { useState, useCallback } from "react";
-import { Input } from "../ui/input";
 import { useCategories } from "@/hooks/useCategories";
+import { NavbarSearch } from "../search/NavbarSearch";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
+  const router = useRouter();
   const t = useTranslations("Navbar");
   const { getMainCategories, categories } = useCategories();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
@@ -93,14 +95,13 @@ const Navbar = () => {
         </div>
         {/* Search bar - adaptive width */}
         <div className="relative w-full xl:max-w-sm mx-2 sm:mx-4 lg:mx-10">
-          <Input
-            placeholder="Search"
-            className="border-gold-main pl-7 sm:pl-9 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 
-            h-8 sm:h-9 lg:h-10 rounded-none text-gray-200 placeholder:text-gold-main text-sm"
-          />
-          <Search
-            size={12}
-            className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer text-gold-main"
+          <NavbarSearch
+            onProductSelect={(product) =>
+              router.push(`/marketplace/${product.id}`)
+            }
+            onSellerSelect={(seller) => router.push(`/company/${seller.id}`)}
+            placeholder={t("searchPlaceholder")}
+            className="text-white"
           />
         </div>
         {!currentUserLoading && currentUser ? (

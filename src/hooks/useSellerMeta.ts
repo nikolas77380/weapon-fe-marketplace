@@ -22,8 +22,6 @@ export const useSellerMetas = (params?: {
     total: 0,
   });
 
-  const paramsKey = JSON.stringify(params);
-
   const fetchSellerMetas = useCallback(async () => {
     try {
       setLoading(true);
@@ -55,7 +53,7 @@ export const useSellerMetas = (params?: {
     } finally {
       setLoading(false);
     }
-  }, [paramsKey]);
+  }, [params]);
 
   useEffect(() => {
     fetchSellerMetas();

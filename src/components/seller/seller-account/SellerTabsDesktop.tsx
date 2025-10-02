@@ -21,7 +21,6 @@ interface SellerTabsDesktopProps {
 const SellerTabsDesktop = ({
   products,
   loading,
-  refetch,
   currentUser,
 }: SellerTabsDesktopProps) => {
   const t = useTranslations("SellerAccountTabs");

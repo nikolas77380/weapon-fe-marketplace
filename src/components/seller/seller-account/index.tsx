@@ -8,7 +8,6 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
   const {
     data: response,
     isLoading,
-    error,
     refetch,
   } = useSellerProductsQuery(currentUser.id);
 

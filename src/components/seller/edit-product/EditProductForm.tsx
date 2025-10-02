@@ -79,6 +79,8 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
       });
     }
   }, [
+    form,
+    product,
     product.id,
     product.title,
     product.description,
