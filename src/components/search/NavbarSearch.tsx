@@ -48,49 +48,42 @@ export const NavbarSearch = ({
     clearSearch: clearSellersSearch,
   } = useSellerSearchManual();
 
-  // Local state to track individual search errors
-  const [searchErrors, setSearchErrors] = useState<{
-    products: string | null;
-    sellers: string | null;
-  }>({ products: null, sellers: null });
-
   // Debounced search function
-  const debouncedSearch = debounce(async (query: string) => {
-    if (!query.trim()) {
-      clearProductsSearch();
-      clearSellersSearch();
-      setSearchErrors({ products: null, sellers: null });
-      setIsDropdownOpen(false);
-      return;
-    }
+  const debouncedSearch = useCallback(
+    debounce(async (query: string) => {
+      if (!query.trim()) {
+        clearProductsSearch();
+        clearSellersSearch();
+        setIsDropdownOpen(false);
+        return;
+      }
 
-    setIsSearching(true);
-    setSearchErrors({ products: null, sellers: null });
+      setIsSearching(true);
 
-    // Search products and sellers independently
-    const searchPromises = [
-      searchProducts({
-        search: query.trim(),
-        pagination: { page: 1, pageSize: 5 },
-      }).catch((error) => {
-        console.warn("Products search failed:", error);
-        setSearchErrors((prev) => ({ ...prev, products: error.message }));
-        return null;
-      }),
-      searchSellers({
-        search: query.trim(),
-        pagination: { page: 1, pageSize: 5 },
-      }).catch((error) => {
-        console.warn("Sellers search failed:", error);
-        setSearchErrors((prev) => ({ ...prev, sellers: error.message }));
-        return null;
-      }),
-    ];
+      // Search products and sellers independently
+      const searchPromises = [
+        searchProducts({
+          search: query.trim(),
+          pagination: { page: 1, pageSize: 5 },
+        }).catch((error) => {
+          console.warn("Products search failed:", error);
+          return null;
+        }),
+        searchSellers({
+          search: query.trim(),
+          pagination: { page: 1, pageSize: 5 },
+        }).catch((error) => {
+          console.warn("Sellers search failed:", error);
+          return null;
+        }),
+      ];
 
-    await Promise.allSettled(searchPromises);
-    setIsDropdownOpen(true);
-    setIsSearching(false);
-  }, 300);
+      await Promise.allSettled(searchPromises);
+      setIsDropdownOpen(true);
+      setIsSearching(false);
+    }, 300),
+    [searchProducts, searchSellers, clearProductsSearch, clearSellersSearch]
+  );
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
