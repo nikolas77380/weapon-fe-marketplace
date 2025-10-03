@@ -42,11 +42,8 @@ const BuyerMenuContent = ({
 
   const handleFavouritesClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    console.log("BuyerMenuContent: handleFavouritesClick called");
     sessionStorage.setItem("accountTab", "favourites");
-    console.log("BuyerMenuContent: sessionStorage set to favourites");
     handleLinkClick();
-    // Navigate to account page
     router.push("/account");
   };
 

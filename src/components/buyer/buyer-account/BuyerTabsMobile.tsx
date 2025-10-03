@@ -30,14 +30,8 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
     const savedTab = sessionStorage.getItem("accountTab");
-    console.log(
-      "BuyerTabsMobile: Checking sessionStorage, savedTab:",
-      savedTab
-    );
     if (savedTab === "favourites") {
-      console.log("BuyerTabsMobile: Setting activeTab to favourites");
       setActiveTab("favourites");
-      // Remove after a delay to ensure both Mobile and Desktop components read it
       setTimeout(() => {
         sessionStorage.removeItem("accountTab");
       }, 100);
