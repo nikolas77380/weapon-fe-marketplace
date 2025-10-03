@@ -4,7 +4,6 @@ import { setUserLocale } from "@/i18n/locale";
 import { locales } from "@/i18n/config";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
-import { Globe } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -47,12 +46,12 @@ export default function LanguageSwitcher({
 
   return (
     <div className={cn("flex items-center gap-2", classNameMainDiv)}>
-      <Globe className="h-5 w-5 text-gold-main" />
+      {/* <Globe className="h-5 w-5 text-gold-main" /> */}
       <Select value={currentLocale} onValueChange={handleLanguageChange}>
         <SelectTrigger
           size="sm"
           className={cn(
-            "w-18 border !h-7 border-white/60 bg-transparent transition-colors",
+            "w-18 border-none !h-7 bg-transparent transition-colors",
             classNameSelectTrigger
           )}
         >
@@ -62,14 +61,14 @@ export default function LanguageSwitcher({
             </span>
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="mt-2 border-gold-main">
           {locales.map((locale) => {
             const config = getLanguageConfig(locale);
             return (
               <SelectItem
                 key={locale}
                 value={locale}
-                className="cursor-pointer hover:bg-accent"
+                className="cursor-pointer hover:bg-accent text-gold-main hover:text-gold-main/70"
               >
                 <span className="text-sm font-medium">{config?.code}</span>
               </SelectItem>

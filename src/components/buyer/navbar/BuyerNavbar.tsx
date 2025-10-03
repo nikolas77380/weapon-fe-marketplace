@@ -23,11 +23,11 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
-        <LanguageSwitcher classNameSelectValue="text-gold-main" />
         <Messages />
+        <LanguageSwitcher classNameSelectValue="text-gold-main" />
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
-            <Avatar className="h-8 w-8 border border-gray-300 cursor-pointer">
+            <Avatar className="h-8 w-8 border border-gold-main cursor-pointer">
               <AvatarFallback className="bg-black text-white text-sm">
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
@@ -39,7 +39,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
               <div className="text-white/70 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
-          <NavigationMenuContent>
+          <NavigationMenuContent className="border-gold-main">
             <BuyerMenuContent user={user} onLogout={onLogout} />
           </NavigationMenuContent>
         </NavigationMenuItem>

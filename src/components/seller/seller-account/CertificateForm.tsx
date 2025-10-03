@@ -198,6 +198,7 @@ const CertificateForm = ({ onSuccess }: CertificateFormProps) => {
                 "image/png",
               ]}
               onFilesChange={setSelectedFiles}
+              externalFiles={selectedFiles}
             />
             <p className="text-xs text-gray-500">
               {t("titlenUploadOne")} PDF, JPEG, JPG, or PNG file ({t("descMax")}{" "}

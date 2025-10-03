@@ -391,5 +391,24 @@
   },
   "ViewedRecommendedProductsSlider": {
     "title": "Рекомендації на основі ваших переглядів"
+  },
+  "CertificateSlider": {
+    "errorLoading": "Не вдалося завантажити сертифікати",
+    "noCertificates": "Сертифікати відсутні"
+  },
+  "CertificateCard": {
+    "noFile": "Файл відсутній",
+    "issuedBy": "Видано:",
+    "date": "Дата:"
+  },
+  "CertificateModal": {
+    "noFileAttached": "Файл не прикріплено",
+    "description": "Опис",
+    "issuedBy": "Видано",
+    "issueDate": "Дата видачі",
+    "expiryDate": "Дата закінчення",
+    "certificateNumber": "Номер сертифікату",
+    "download": "Завантажити",
+    "certificate": "Сертифікат"
   }
 }
