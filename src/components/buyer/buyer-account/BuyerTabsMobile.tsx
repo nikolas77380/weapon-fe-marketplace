@@ -13,6 +13,7 @@ import { UserProfile } from "@/lib/types";
 import { cn, triggerClasses } from "@/lib/utils";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 interface BuyerTabsMobileProps {
   currentUser: UserProfile;
@@ -20,19 +21,28 @@ interface BuyerTabsMobileProps {
 
 const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
   const t = useTranslations("BuyerAccountTabs");
+  const pathname = usePathname();
 
   const { favourites, loading } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
 
+  // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
-    // Check if we should open favourites tab or another tabs - without hash in URL
     const savedTab = sessionStorage.getItem("accountTab");
+    console.log(
+      "BuyerTabsMobile: Checking sessionStorage, savedTab:",
+      savedTab
+    );
     if (savedTab === "favourites") {
+      console.log("BuyerTabsMobile: Setting activeTab to favourites");
       setActiveTab("favourites");
-      sessionStorage.removeItem("accountTab");
+      // Remove after a delay to ensure both Mobile and Desktop components read it
+      setTimeout(() => {
+        sessionStorage.removeItem("accountTab");
+      }, 100);
     }
-  }, []);
+  }, [pathname]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);

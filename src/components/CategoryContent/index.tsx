@@ -32,13 +32,17 @@ const FilteringContent = () => {
     <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
       {/* Filters - Hidden on mobile, visible on desktop */}
       <div className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
-        {availableCategories.map((category) => (
+        {loading ? (
+        <SkeletonComponent type="leftSidebar" />
+      ) : (
+        availableCategories.map((category) => (
           <CategoryDropdown
             key={category.id}
             category={category}
             allCategories={categories}
           />
-        ))}
+        ))
+      )}
       </div>
       {/* Shop Content - Full width on mobile, flex-1 on desktop */}
       <div className="w-full lg:flex-1 min-w-0 overflow-hidden mt-6">
@@ -56,7 +60,7 @@ const FilteringContent = () => {
           {loading ? (
             <SkeletonComponent
               type="productCard"
-              count={6}
+              count={18}
               className="w-full"
             />
           ) : (

@@ -75,7 +75,7 @@ const SellerMenuContent = ({
               </div>
             </Link>
 
-            <Link href="#" onClick={handleLinkClick} className={linkClass}>
+            <Link href="/" onClick={handleLinkClick} className={linkClass}>
               <div className="flex items-center gap-3">
                 <PackageSearch size={18} />
                 <p className={`font-semibold ${textClass}`}>
@@ -160,7 +160,7 @@ const SellerMenuContent = ({
             </NavigationMenuLink>
 
             <NavigationMenuLink asChild className={linkClass}>
-              <Link href="#" onClick={handleLinkClick}>
+              <Link href="/" onClick={handleLinkClick}>
                 <div className="flex items-center gap-3">
                   <PackageSearch size={18} />
                   <p className={`font-semibold ${textClass}`}>
