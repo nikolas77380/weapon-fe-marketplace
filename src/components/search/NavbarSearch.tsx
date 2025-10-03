@@ -140,17 +140,13 @@ export const NavbarSearch = ({
     [onSellerSelect, router]
   );
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && searchQuery.trim()) {
-        // Navigate to search results page
-        router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-        setSearchQuery("");
-        setIsDropdownOpen(false);
-      }
-    },
-    [searchQuery, router]
-  );
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    // Prevent Enter key from submitting the form or navigating
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -178,8 +174,7 @@ export const NavbarSearch = ({
 
   const hasResults = products.length > 0 || sellers.length > 0;
   const isLoading = productsLoading || sellersLoading || isSearching;
-  const hasAnyResults =
-    hasResults || searchErrors.products || searchErrors.sellers;
+  const hasAnyResults = hasResults;
 
   return (
     <div className={`relative w-full ${className}`} ref={dropdownRef}>
@@ -203,124 +198,105 @@ export const NavbarSearch = ({
       </div>
 
       {/* Dropdown Results */}
-      {isDropdownOpen && hasAnyResults && (
+      {isDropdownOpen && (hasAnyResults || isLoading) && (
         <Card className="absolute top-full left-0 right-0 mt-1 z-50 max-h-96 overflow-y-auto shadow-lg">
           <CardContent className="p-0">
             <div className="divide-y">
               {/* Products Section */}
-              {(products.length > 0 || searchErrors.products) && (
+              {products.length > 0 && (
                 <div className="p-2">
                   <div className="flex items-center gap-2 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-50">
                     <Package className="h-3 w-3" />
                     {t("searchResultProducts")}{" "}
                     {products.length > 0 && `(${products.length})`}
                   </div>
-                  {searchErrors.products ? (
-                    <div className="p-2 text-xs text-gray-500">
-                      ${t("searchResultsNotFound")}
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      {products.map((product) => (
-                        <div
-                          key={product.id}
-                          className="flex items-center gap-3 p-2 hover:bg-gray-50 cursor-pointer rounded"
-                          onClick={() => handleProductClick(product)}
-                        >
-                          {product.images && product.images.length > 0 && (
-                            <div className="relative w-10 h-10 rounded overflow-hidden shrink-0">
-                              <Image
-                                src={
-                                  product.images[0].url ||
-                                  (product.images[0].formats &&
-                                    (product.images[0].formats as any).thumbnail
-                                      ?.url) ||
-                                  "/placeholder-image.jpg"
-                                }
-                                alt={product.title}
-                                fill
-                                className="object-cover"
-                              />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {product.title}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {product.price} {product.currency}
-                              {product.seller && (
-                                <span className="ml-2">
-                                  • {product.seller.username}
-                                </span>
-                              )}
-                            </p>
+                  <div className="space-y-1">
+                    {products.map((product) => (
+                      <div
+                        key={product.id}
+                        className="flex items-center gap-3 p-2 hover:bg-gray-50 cursor-pointer rounded"
+                        onClick={() => handleProductClick(product)}
+                      >
+                        {product.images && product.images.length > 0 && (
+                          <div className="relative w-10 h-10 rounded overflow-hidden shrink-0">
+                            <Image
+                              src={
+                                product.images[0].url ||
+                                (product.images[0].formats &&
+                                  (product.images[0].formats as any).thumbnail
+                                    ?.url) ||
+                                "/placeholder-image.jpg"
+                              }
+                              alt={product.title}
+                              fill
+                              className="object-cover"
+                            />
                           </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {product.title}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {product.price} {product.currency}
+                            {product.seller && (
+                              <span className="ml-2">
+                                • {product.seller.username}
+                              </span>
+                            )}
+                          </p>
                         </div>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {/* Sellers Section */}
-              {(sellers.length > 0 || searchErrors.sellers) && (
+              {sellers.length > 0 && (
                 <div className="p-2">
                   <div className="flex items-center gap-2 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-50">
                     <Users className="h-3 w-3" />
                     Продавцы {sellers.length > 0 && `(${sellers.length})`}
                   </div>
-                  {searchErrors.sellers ? (
-                    <div className="p-2 text-xs text-gray-500">
-                      Продавцы не найдены
-                    </div>
-                  ) : (
-                    <div className="space-y-1">
-                      {sellers.map((seller) => (
-                        <div
-                          key={seller.id}
-                          className="flex items-center gap-3 p-2 hover:bg-gray-50 cursor-pointer rounded"
-                          onClick={() => handleSellerClick(seller)}
-                        >
-                          <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0">
-                            <Users className="h-5 w-5 text-gray-600" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-gray-900 truncate">
-                              {seller.displayName}
-                            </p>
-                            <p className="text-xs text-gray-500 truncate">
-                              {seller.metadata?.companyName && (
-                                <span>{seller.metadata.companyName}</span>
-                              )}
-                              {seller.products &&
-                                seller.products.length > 0 && (
-                                  <span className="ml-2">
-                                    • {seller.products.length} товаров
-                                  </span>
-                                )}
-                            </p>
-                          </div>
+                  <div className="space-y-1">
+                    {sellers.map((seller) => (
+                      <div
+                        key={seller.id}
+                        className="flex items-center gap-3 p-2 hover:bg-gray-50 cursor-pointer rounded"
+                        onClick={() => handleSellerClick(seller)}
+                      >
+                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center shrink-0">
+                          <Users className="h-5 w-5 text-gray-600" />
                         </div>
-                      ))}
-                    </div>
-                  )}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {seller.displayName}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {seller.metadata?.companyName && (
+                              <span>{seller.metadata.companyName}</span>
+                            )}
+                            {seller.products && seller.products.length > 0 && (
+                              <span className="ml-2">
+                                • {seller.products.length} товаров
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {/* No Results */}
-              {!hasResults &&
-                !searchErrors.products &&
-                !searchErrors.sellers &&
-                !isLoading &&
-                searchQuery.trim() && (
-                  <div className="p-4 text-center text-sm text-gray-500">
-                    <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                    <p>
-                      По запросу &quot;{searchQuery}&quot; ничего не найдено
-                    </p>
-                  </div>
-                )}
+              {!hasResults && !isLoading && searchQuery.trim() && (
+                <div className="p-4 text-center text-sm text-gray-500">
+                  <Search className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                  <p>По запросу &quot;{searchQuery}&quot; ничего не найдено</p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
