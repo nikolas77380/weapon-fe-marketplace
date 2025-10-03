@@ -173,7 +173,7 @@ export const NavbarSearch = ({
     <div className={`relative w-full ${className}`} ref={dropdownRef}>
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white h-4 w-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gold-main h-4 w-4" />
         <Input
           ref={inputRef}
           type="text"
@@ -183,7 +183,7 @@ export const NavbarSearch = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onKeyDown={handleKeyDown}
-          className="pl-10 pr-4 w-full"
+          className="pl-10 pr-4 w-full border-gold-main placeholder:text-white/50"
         />
         {isLoading && (
           <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin text-gray-400" />

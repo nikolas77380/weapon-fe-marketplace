@@ -15,6 +15,7 @@ import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
+import { useRouter } from "next/navigation";
 
 interface BuyerMenuContentProps {
   user: UserProfile;
@@ -31,6 +32,7 @@ const BuyerMenuContent = ({
 }: BuyerMenuContentProps) => {
   const t = useTranslations("Navbar.buyerNavbar");
   const { favourites } = useFavourites();
+  const router = useRouter();
 
   const handleLinkClick = () => {
     if (isMobile && onClose) {
@@ -38,9 +40,14 @@ const BuyerMenuContent = ({
     }
   };
 
-  const handleFavouritesClick = () => {
+  const handleFavouritesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log("BuyerMenuContent: handleFavouritesClick called");
     sessionStorage.setItem("accountTab", "favourites");
+    console.log("BuyerMenuContent: sessionStorage set to favourites");
     handleLinkClick();
+    // Navigate to account page
+    router.push("/account");
   };
 
   const containerClass = isMobile ? "space-y-2" : "grid w-[200px] gap-1";
@@ -81,10 +88,9 @@ const BuyerMenuContent = ({
               </div>
             </Link>
 
-            <Link
-              href="/account"
+            <button
               onClick={handleFavouritesClick}
-              className={linkClass}
+              className={`${linkClass} w-full text-left`}
             >
               <div className="flex items-center gap-3">
                 <PackageSearch size={18} />
@@ -97,7 +103,7 @@ const BuyerMenuContent = ({
                   </div>
                 </div>
               </div>
-            </Link>
+            </button>
 
             <Link
               href="/messages"
@@ -158,7 +164,10 @@ const BuyerMenuContent = ({
             </NavigationMenuLink>
 
             <NavigationMenuLink asChild className={linkClass}>
-              <Link href="/account" onClick={handleFavouritesClick}>
+              <button
+                onClick={handleFavouritesClick}
+                className="w-full text-left"
+              >
                 <div className="flex items-center gap-3">
                   <PackageSearch size={18} />
                   <div className="flex items-center justify-between w-full">
@@ -170,7 +179,7 @@ const BuyerMenuContent = ({
                     </div>
                   </div>
                 </div>
-              </Link>
+              </button>
             </NavigationMenuLink>
 
             <NavigationMenuLink asChild className={linkClass}>

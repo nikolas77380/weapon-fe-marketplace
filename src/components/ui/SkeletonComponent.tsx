@@ -2,7 +2,12 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface SkeletonComponentProps {
-  type: "productCard" | "sellerCard" | "title" | "favouriteCard";
+  type:
+    | "productCard"
+    | "sellerCard"
+    | "title"
+    | "favouriteCard"
+    | "leftSidebar";
   count?: number;
   className?: string;
 }
@@ -16,9 +21,11 @@ const SkeletonComponent = ({
     switch (type) {
       case "productCard":
         return (
-          <div className="space-y-3">
-            <Skeleton className="h-48 w-full rounded-lg" />
-            <div className="space-y-2">
+          <div className="border border-gray-200 rounded-lg p-2 flex flex-col">
+            {/* Image */}
+            <Skeleton className="h-48 w-full rounded-md mb-3" />
+            {/* Text */}
+            <div className="flex flex-col gap-2">
               <Skeleton className="h-4 w-3/4" />
               <Skeleton className="h-4 w-1/2" />
               <Skeleton className="h-6 w-1/3" />
@@ -90,6 +97,20 @@ const SkeletonComponent = ({
                 </div>
               </div>
             </div>
+          </div>
+        );
+
+      case "leftSidebar":
+        return (
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-6 w-32 mb-3" />
+            <Skeleton className="h-5 w-40 rounded" />
+            <Skeleton className="h-5 w-36 rounded" />
+            <Skeleton className="h-5 w-44 rounded" />
+            <Skeleton className="h-5 w-32 rounded" />
+            <Skeleton className="h-5 w-28 rounded" />
+            <Skeleton className="h-5 w-40 rounded" />
+            <Skeleton className="h-5 w-34 rounded" />
           </div>
         );
 
