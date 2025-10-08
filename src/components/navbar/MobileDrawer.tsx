@@ -76,7 +76,7 @@ const MobileDrawer = ({
         <div className="px-4 pb-4 space-y-4">
           {/* Catalog Button for all users on <1024px */}
           <button
-            className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all hover:bg-gold-main/90 w-full"
+            className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all hover:bg-gold-main/90 w-full"
             onClick={() => {
               onClose();
               onOpenCatalog();

@@ -42,7 +42,7 @@ const SellerAccountHeader = ({
       {/* Right Buttons */}
       <div className="flex items-center lg:justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
         <Button
-          className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all px-1 hover:bg-gold-main/90"
+          className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all px-1 hover:bg-gold-main/90"
           onClick={handleClickToAddProduct}
         >
           <div className="flex items-center gap-2 py-2 px-3">
@@ -52,7 +52,7 @@ const SellerAccountHeader = ({
         </Button>
 
         <Button
-          className="border border-gray-300 bg-white rounded-none cursor-pointer duration-300 transition-all
+          className="border border-gray-300 bg-white rounded-sm cursor-pointer duration-300 transition-all
           hover:bg-gray-100 px-1"
           onClick={handleClickToSettings}
         >

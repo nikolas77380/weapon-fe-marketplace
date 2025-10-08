@@ -90,10 +90,10 @@ const SellerTabsDesktop = ({
                   </h1>
                   <Link
                     href="/messages"
-                    className="bg-black py-1.5 px-4 rounded-md flex items-center gap-3 text-white hover:bg-black/80 duration-300 transition-all"
+                    className="bg-gold-main py-2.5 px-4 rounded-md flex items-center gap-3 text-white hover:bg-gold-main/80 duration-300 transition-all"
                   >
                     <MessageSquare size={20} />
-                    <p className="text-xs font-semibold">
+                    <p className="text-xs md:text-sm font-semibold">
                       {t("tabMessage.titleOpenFullMessenger")}
                     </p>
                   </Link>

@@ -143,6 +143,8 @@
     "placeholderCountry": "Select Country",
     "labelAddress": "Address",
     "placeholderAddress": "Enter company address",
+    "labelAvatar": "Company Avatar",
+    "labelCurrentAvatar": "Current Avatar:",
     "buttonSaving": "Saving...",
     "buttonUpdate": "Update Company Details",
     "buttonSubmit": "Submit Company Details",
@@ -330,6 +332,7 @@
     "titleNotCountry": "Country not available",
     "titleNotAddress": "Address not available",
     "buttonCardSeller": "Contact Seller",
+    "buttonCreating": "Creating...",
     "tabOverview": {
       "titleOverview": "Overview",
       "titleAbout": "About",
@@ -354,12 +357,13 @@
       "buttonClearAll": "Clear All",
       "titleQuickFilters": "Quick filters",
       "titleCategory": "Category",
+      "titleSubcategory": "Subcategory",
       "titleCondition": "Condition",
       "titleAvailability": "Availability",
       "placeholderSearch": "Search products..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Business Info"
+      "titleBusinessInfo": "Additional information"
     }
   },
   "PriceRange": {

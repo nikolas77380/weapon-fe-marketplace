@@ -149,6 +149,27 @@ export const updateSellerMeta = async ({
   });
 };
 
+// Function to upload seller meta avatar
+export const uploadSellerAvatar = async ({
+  id,
+  avatar,
+  token,
+}: {
+  id: number;
+  avatar: File;
+  token: string;
+}) => {
+  const formData = new FormData();
+  formData.append("files", avatar);
+
+  return strapiFetchAuth({
+    path: `/api/seller-metas/${id}/avatar`,
+    method: "POST",
+    body: formData,
+    token,
+  });
+};
+
 export const getCategories = async (): Promise<Category[]> => {
   try {
     const baseUrl =

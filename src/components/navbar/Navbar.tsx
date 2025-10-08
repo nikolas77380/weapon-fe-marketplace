@@ -70,17 +70,17 @@ const Navbar = () => {
           <div className="relative hidden lg:block">
             <div
               className={`
-                bg-gold-main rounded-none cursor-pointer duration-300 transition-all
-                hover:bg-gold-main/90
-                  ${isCatalogOpen ? "bg-gold-main/90" : ""}
+                rounded-sm cursor-pointer duration-300 transition-all
+                border border-gold-main hover:bg-white/10
+                  ${isCatalogOpen ? "bg-white/10" : ""}
                 `}
               onClick={handleToggleCatalog}
             >
-              <div className="flex items-center gap-2 py-2 lg:py-2.5 px-3 lg:px-4">
+              <div className="flex items-center gap-2 py-1.5 lg:py-2 px-3 lg:px-4">
                 {isCatalogOpen ? (
                   <X size={14} className="text-white lg:w-4 lg:h-4" />
                 ) : (
-                  <LayoutGrid size={14} className="text-white lg:w-4 lg:h-4" />
+                  <LayoutGrid size={14} className="text-gold-main lg:w-4 lg:h-4" />
                 )}
                 <p className="text-xs lg:text-sm font-medium text-white">
                   {t("titleCatalog")}
@@ -153,7 +153,8 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-2.5 relative bg-gradient-to-br from-slate-800 via-gray-500 to-slate-900 shadow-2xl">
+      <nav className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-2.5 relative bg-gradient-to-br 
+      from-slate-800 via-gray-500 to-slate-900 shadow-2xl">
         <NavbarContent />
       </nav>
 

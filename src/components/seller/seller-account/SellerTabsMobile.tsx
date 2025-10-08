@@ -98,7 +98,7 @@ const SellerTabsMobile = ({
                   </h1>
                   <Link
                     href="/messages"
-                    className="bg-black py-1 px-3 sm:py-1.5 sm:px-4 rounded-md flex items-center gap-2 sm:gap-3 text-white hover:bg-black/80 duration-300 transition-all"
+                    className="bg-gold-main py-2 px-3 sm:py-1.5 sm:px-4 rounded-md flex items-center gap-2 sm:gap-3 text-white hover:bg-gold-main/80 duration-300 transition-all"
                   >
                     <MessageSquare size={20} />
                     <p className="text-[10px] sm:text-xs font-semibold">

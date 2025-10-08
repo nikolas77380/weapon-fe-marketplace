@@ -14,11 +14,14 @@ import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
+import { getChildCategories } from "@/lib/categoryUtils";
+import { useMemo } from "react";
 
 interface FilterState {
   minPrice: number;
   maxPrice: number;
   categoryId: number | null;
+  subcategoryId: number | null;
   search: string;
   page: number;
   sort: string;
@@ -32,14 +35,34 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     minPrice: 1,
     maxPrice: 500000,
     categoryId: null,
+    subcategoryId: null,
     search: "",
     page: 1,
     sort: "id:desc",
   });
 
+  const { categories } = useCategories();
+  const { categoryCounts } = useCategoryCounts();
+  const { category: currentCategory } = useCategoryBySlug(categorySlug);
+
+  // Get child categories of current category
+  const childCategories = useMemo(() => {
+    if (!currentCategory) return [];
+    return getChildCategories(categories, currentCategory.id);
+  }, [currentCategory, categories]);
+
+  // Get slug of selected subcategory
+  const selectedSubcategorySlug = useMemo(() => {
+    if (!filters.subcategoryId) return null;
+    const subcategory = categories.find(
+      (cat) => cat.id === filters.subcategoryId
+    );
+    return subcategory?.slug || null;
+  }, [filters.subcategoryId, categories]);
+
   const { data: response, isLoading } = useProductsQuery({
     category: filters.categoryId || undefined,
-    categorySlug: categorySlug || undefined,
+    categorySlug: selectedSubcategorySlug || categorySlug || undefined,
     search: filters.search !== "" ? filters.search : undefined,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
     priceRange: {
@@ -55,9 +78,6 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const allProducts = response?.data || [];
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
-  const { categories } = useCategories();
-  const { categoryCounts } = useCategoryCounts();
-  const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
@@ -79,6 +99,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const handleCategoryChange = useCallback((categoryId: number | null) => {
     setFilters((prev) => ({ ...prev, categoryId, page: 1 }));
   }, []);
+
+  const handleSubcategoryChange = useCallback(
+    (subcategoryId: number | null) => {
+      setFilters((prev) => ({ ...prev, subcategoryId, page: 1 }));
+    },
+    []
+  );
 
   // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setFilters((prev) => ({
@@ -102,6 +129,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       minPrice: 1,
       maxPrice: 500000,
       categoryId: null,
+      subcategoryId: null,
       search: "",
       page: 1,
       sort: "id:desc",
@@ -177,9 +205,12 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           <Filters
             onPriceChange={handlePriceChange}
             onCategoryChange={handleCategoryChange}
+            onSubcategoryChange={handleSubcategoryChange}
             onClearAll={handleClearAll}
             availableCategories={categorySlug ? [] : availableCategories}
+            childCategories={childCategories}
             selectedCategoryId={filters.categoryId}
+            selectedSubcategoryId={filters.subcategoryId}
             priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
             categoryCounts={categoryCounts}
             hideCategoryFilter={!!categorySlug}
@@ -204,9 +235,12 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
         onCategoryChange={handleCategoryChange}
+        onSubcategoryChange={handleSubcategoryChange}
         onClearAll={handleClearAll}
         availableCategories={categorySlug ? [] : availableCategories}
+        childCategories={childCategories}
         selectedCategoryId={filters.categoryId}
+        selectedSubcategoryId={filters.subcategoryId}
         priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
         categoryCounts={categoryCounts}
         hideCategoryFilter={!!categorySlug}

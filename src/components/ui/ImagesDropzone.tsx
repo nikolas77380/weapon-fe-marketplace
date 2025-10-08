@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { X, Upload, File, Crop } from "lucide-react";
 import Image from "next/image";
@@ -15,7 +15,7 @@ interface ImagesDropzoneProps {
   acceptedFormats?: string[];
   onFilesChange?: (files: File[]) => void;
   className?: string;
-  enableCrop?: boolean; // New optional prop
+  enableCrop?: boolean;
   externalFiles?: File[]; // External files to sync with
 }
 
@@ -25,8 +25,8 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   acceptedFormats = ["image/jpeg", "image/jpg", "image/png", "application/pdf"],
   onFilesChange,
   className = "",
-  enableCrop = false, // Default false for backward compatibility
-  externalFiles = [], // Default to empty array
+  enableCrop = false,
+  externalFiles = [],
 }) => {
   const t = useTranslations("ImagesDropZone");
   const tCrop = useTranslations("ImageCrop");
@@ -39,36 +39,53 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     preview: string;
   } | null>(null);
 
-  // Sync with external files - reset when external files is empty
+  // Sync with external files - reset ONLY when external files were not empty before and became empty
+  // This prevents clearing files immediately after adding them
+  const prevExternalFilesLength = useRef(externalFiles.length);
+
   useEffect(() => {
-    if (externalFiles.length === 0 && files.length > 0) {
+    // Only clear if external files WERE present and NOW are empty (form was submitted and cleared)
+    if (
+      prevExternalFilesLength.current > 0 &&
+      externalFiles.length === 0 &&
+      files.length > 0
+    ) {
       setFiles([]);
       setPreviews([]);
       setCropIndex(null);
       setTempImageData(null);
     }
+
+    prevExternalFilesLength.current = externalFiles.length;
   }, [externalFiles, files.length]);
 
   const addFileDirectly = useCallback(
     (file: File) => {
-      const newFiles = [...files, file];
-      setFiles(newFiles);
-
-      const newPreviews = [...previews];
       if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          newPreviews.push(e.target?.result as string);
-          setPreviews([...newPreviews]);
+          const newFiles = [...files, file];
+          const newPreviews = [...previews, e.target?.result as string];
+
+          setFiles(newFiles);
+          setPreviews(newPreviews);
+
+          if (onFilesChange) {
+            onFilesChange(newFiles);
+          }
         };
         reader.readAsDataURL(file);
       } else {
-        newPreviews.push("pdf");
-        setPreviews([...newPreviews]);
-      }
+        // For PDFs, add immediately
+        const newFiles = [...files, file];
+        const newPreviews = [...previews, "pdf"];
 
-      if (onFilesChange) {
-        onFilesChange(newFiles);
+        setFiles(newFiles);
+        setPreviews(newPreviews);
+
+        if (onFilesChange) {
+          onFilesChange(newFiles);
+        }
       }
     },
     [files, previews, onFilesChange]
@@ -90,7 +107,8 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
               file,
               preview: e.target?.result as string,
             });
-            setCropIndex(files.length);
+            // Set cropIndex to null for new files (not editing existing)
+            setCropIndex(null);
           };
           reader.readAsDataURL(file);
         } else {
@@ -98,38 +116,34 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
           addFileDirectly(file);
         }
       });
-
-      console.log("Files uploaded:", acceptedFiles);
     },
     [files, maxFiles, enableCrop, addFileDirectly, t]
   );
 
   const handleCropComplete = useCallback(
     (croppedFile: File) => {
-      if (tempImageData && cropIndex !== null) {
-        const newFiles = [...files, croppedFile];
-        setFiles(newFiles);
-
-        // Create preview for cropped image
+      if (tempImageData) {
+        // Create preview for cropped image first
         const reader = new FileReader();
         reader.onload = (e) => {
+          const newFiles = [...files, croppedFile];
           const newPreviews = [...previews, e.target?.result as string];
+
+          setFiles(newFiles);
           setPreviews(newPreviews);
+
+          if (onFilesChange) {
+            onFilesChange(newFiles);
+          }
+
+          // Reset crop state after everything is done
+          setTempImageData(null);
+          setCropIndex(null);
         };
         reader.readAsDataURL(croppedFile);
-
-        if (onFilesChange) {
-          onFilesChange(newFiles);
-        }
-
-        // Reset crop state
-        setTempImageData(null);
-        setCropIndex(null);
-
-        console.log("Cropped file added:", croppedFile);
       }
     },
-    [files, previews, tempImageData, cropIndex, onFilesChange]
+    [files, previews, tempImageData, onFilesChange]
   );
 
   const handleCropCancel = useCallback(() => {
@@ -157,28 +171,27 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   const handleCropExistingComplete = useCallback(
     (croppedFile: File) => {
       if (cropIndex !== null && tempImageData) {
-        const newFiles = [...files];
-        newFiles[cropIndex] = croppedFile;
-        setFiles(newFiles);
-
-        // Update preview for cropped image
+        // Update preview for cropped image first
         const reader = new FileReader();
         reader.onload = (e) => {
+          const newFiles = [...files];
+          newFiles[cropIndex] = croppedFile;
+
           const newPreviews = [...previews];
           newPreviews[cropIndex] = e.target?.result as string;
+
+          setFiles(newFiles);
           setPreviews(newPreviews);
+
+          if (onFilesChange) {
+            onFilesChange(newFiles);
+          }
+
+          // Reset crop state after everything is done
+          setTempImageData(null);
+          setCropIndex(null);
         };
         reader.readAsDataURL(croppedFile);
-
-        if (onFilesChange) {
-          onFilesChange(newFiles);
-        }
-
-        // Reset crop state
-        setTempImageData(null);
-        setCropIndex(null);
-
-        console.log("Existing file cropped:", croppedFile);
       }
     },
     [files, previews, cropIndex, tempImageData, onFilesChange]

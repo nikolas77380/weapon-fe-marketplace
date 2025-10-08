@@ -11,6 +11,8 @@ import { COUNTRIES, isSeller, SELLER_TYPES } from "@/lib/utils";
 import { UserProfile } from "@/lib/types";
 import { useState } from "react";
 import { toast } from "sonner";
+import ImagesDropzone from "@/components/ui/ImagesDropzone";
+import Image from "next/image";
 
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
 import { getSessionTokenFromCookie } from "@/lib/auth";
@@ -20,6 +22,7 @@ import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
 import CertificatesList from "./CertificatesList";
 import { useTranslations } from "next-intl";
+import { useUploadSellerAvatar } from "@/hooks/useUploadSellerAvatar";
 
 const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const t = useTranslations("Settings");
@@ -27,6 +30,9 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   const { metadata } = currentUser;
   const [isLoading, setIsLoading] = useState(false);
   const [, setRefreshCertificates] = useState(0);
+  const [avatarFiles, setAvatarFiles] = useState<File[]>([]);
+
+  const uploadAvatarMutation = useUploadSellerAvatar();
 
   const form = useForm<SellerFormValues>({
     resolver: zodResolver(sellerSchema),
@@ -61,6 +67,8 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
       );
       console.log("Seller data:", values);
 
+      let metaId: number;
+
       if (metadata) {
         // Update existing seller meta
         const response = await updateSellerMeta({
@@ -69,7 +77,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           token,
         });
         console.log("Update response:", response);
-        toast.success(t("toastUpdate"));
+        metaId = metadata.id;
       } else {
         // Create new seller meta
         const response = await createSellerMeta({
@@ -77,8 +85,19 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           token,
         });
         console.log("Create response:", response);
-        toast.success(t("toastCreate"));
+        // Get the ID from the response
+        metaId = response.data?.id || response.id;
       }
+
+      // Upload avatar separately if provided
+      if (avatarFiles.length > 0 && metaId) {
+        await uploadAvatarMutation.mutateAsync({
+          id: metaId,
+          avatar: avatarFiles[0],
+        });
+      }
+
+      toast.success(metadata ? t("toastUpdate") : t("toastCreate"));
     } catch (error: unknown) {
       console.error("Error saving seller data:", error);
 
@@ -219,6 +238,44 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                     classNameLabel="bg-background"
                     className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
+
+                  {/* Avatar Upload */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      {t("labelAvatar")}
+                    </label>
+
+                    {/* Show current avatar if exists and no new file selected */}
+                    {metadata?.avatar && avatarFiles.length === 0 && (
+                      <div className="mb-4 p-4 border border-border rounded-lg">
+                        <p className="text-xs text-muted-foreground mb-2">
+                          {t("labelCurrentAvatar")}
+                        </p>
+                        <div className="relative w-32 h-32">
+                          <Image
+                            src={metadata.avatar}
+                            alt="Current avatar"
+                            fill
+                            className="object-cover rounded-full"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    <ImagesDropzone
+                      maxFiles={1}
+                      onFilesChange={setAvatarFiles}
+                      externalFiles={avatarFiles}
+                      enableCrop={true}
+                      acceptedFormats={[
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/webp",
+                      ]}
+                    />
+                  </div>
+
                   <div className="flex items-center justify-center">
                     <Button
                       type="submit"

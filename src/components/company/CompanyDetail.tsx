@@ -18,6 +18,11 @@ import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
 import CertificateSlider from "./CertificateSlider";
+import ContactModal from "../shop/ContactModal";
+import { useAuthContext } from "@/context/AuthContext";
+import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
+import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
+import { toast } from "sonner";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -48,7 +53,47 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { currentUser } = useAuthContext();
+  const { sellerMeta } = useSellerMetaBySeller(sellerData.id as number);
+
   const { categories } = useCategories();
+
+  const handleContactSeller = async (e: React.MouseEvent) => {
+    // Prevent event bubbling to parent Link
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (currentUser?.role.name !== "buyer" || !currentUser) {
+      setOpen(true);
+      return;
+    }
+
+    // Check if seller has products
+    if (!sellerProducts || sellerProducts.length === 0) {
+      toast.warning("This seller has no products available.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Use the first available product to create a channel with the seller
+      const response = await createSendBirdChannel(sellerProducts[0]);
+
+      if (response.success) {
+        // Redirect to messages page with the channel URL
+        redirectToMessages();
+      }
+    } catch (error) {
+      console.error("Error creating channel:", error);
+      toast.error("Failed to create chat channel. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter products by price, category and search
   const filteredProducts = useMemo(() => {
@@ -284,8 +329,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
               </p>
             </div>
           </div>
-          <Button className="border py-2 sm:py-2.5 px-4 sm:px-5 text-white rounded-none bg-gold-main hover:bg-gold-main/80 duration-300 transition-colors text-sm sm:text-base w-full sm:w-auto">
-            {t("buttonCardSeller")}
+          <Button
+            onClick={handleContactSeller}
+            disabled={isLoading}
+            className="border py-2 sm:py-2.5 px-4 sm:px-5 text-white rounded-sm bg-gold-main 
+            hover:bg-gold-main/80 duration-300 transition-colors text-sm sm:text-base w-full sm:w-auto"
+          >
+            {isLoading ? t("buttonCreating") : t("buttonCardSeller")}
           </Button>
         </div>
 
@@ -461,6 +511,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                               {sellerData?.metadata?.address}
                             </p>
                           </div>
+                          <div>
+                            <ContactModal
+                              open={open}
+                              onOpenChange={setOpen}
+                              sellerData={sellerMeta}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -503,11 +560,15 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                             placeholder={t("tabProducts.placeholderSearch")}
                             value={filters.search}
                             onChange={handleSearchChange}
-                            className="pl-8 sm:pl-9 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-[#B3B3B3] h-8 sm:h-10 w-full sm:w-48 lg:w-full border-border-foreground shadow-none text-xs sm:text-sm"
+                            className="pl-8 sm:pl-9 focus-visible:outline-none focus-visible:ring-0 
+                            focus-visible:ring-offset-0 placeholder:text-[#B3B3B3] h-8 sm:h-10 w-full 
+                            sm:w-48 lg:w-full border-border-foreground shadow-none text-xs sm:text-sm
+                            rounded-sm"
                           />
                           <Search
                             size={14}
-                            className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer text-[#B3B3B3]"
+                            className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 cursor-pointer 
+                            text-[#B3B3B3]"
                           />
                         </div>
                       </div>
@@ -555,9 +616,12 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                         <Filters
                           onPriceChange={handlePriceChange}
                           onCategoryChange={handleCategoryChange}
+                          onSubcategoryChange={() => {}}
                           onClearAll={handleClearAll}
                           availableCategories={availableCategories}
+                          childCategories={[]}
                           selectedCategoryId={filters.categoryId}
+                          selectedSubcategoryId={null}
                           priceRange={{
                             min: filters.minPrice,
                             max: filters.maxPrice,
@@ -585,9 +649,12 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   onClose={handleCloseFilterDrawer}
                   onPriceChange={handlePriceChange}
                   onCategoryChange={handleCategoryChange}
+                  onSubcategoryChange={() => {}}
                   onClearAll={handleClearAll}
                   availableCategories={availableCategories}
+                  childCategories={[]}
                   selectedCategoryId={filters.categoryId}
+                  selectedSubcategoryId={null}
                   priceRange={{
                     min: filters.minPrice,
                     max: filters.maxPrice,

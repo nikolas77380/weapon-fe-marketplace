@@ -22,7 +22,7 @@ const FavouriteCard = ({
   if (viewMode === "list") {
     // List view
     return (
-      <div className="flex flex-row border border-border-foreground">
+      <div className="flex flex-row border border-border-foreground rounded-sm">
         <div className="relative overflow-hidden px-4 py-4">
           <Image
             src={
@@ -34,7 +34,7 @@ const FavouriteCard = ({
             width={200}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
-            className="w-[200px] h-full object-cover"
+            className="w-[200px] h-[150px] object-contain"
           />
           {/* Favourite indicator */}
           <div className="absolute top-2 right-2">
@@ -68,7 +68,7 @@ const FavouriteCard = ({
             <Link
               href={`/marketplace/${product.id}`}
               className="py-2 px-4 bg-gold-main text-white hover:bg-gold-main/90 duration-300 
-              transition-all text-xs lg:text-sm"
+              transition-all text-xs lg:text-sm rounded-sm"
             >
               View Details →
             </Link>
@@ -80,7 +80,7 @@ const FavouriteCard = ({
 
   // Grid view
   return (
-    <div className="border border-primary-foreground flex flex-col h-full">
+    <div className="border border-primary-foreground flex flex-col h-full rounded-sm">
       <div className="relative overflow-hidden flex-shrink-0">
         <Image
           src={
@@ -92,7 +92,7 @@ const FavouriteCard = ({
           width={300}
           height={200}
           onError={(e) => handleImageError(e, "/shop/1.jpg")}
-          className="w-full h-[125px] object-cover p-1"
+          className="w-full h-[125px] object-contain p-2"
         />
         {/* Favourite indicator */}
         <div className="absolute top-2 right-2">

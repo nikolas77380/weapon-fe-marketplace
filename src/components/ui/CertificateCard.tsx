@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Certificate } from "@/hooks/useCertificates";
 import CertificateModal from "./CertificateModal";
 import Image from "next/image";
@@ -16,19 +15,6 @@ interface CertificateCardProps {
 const CertificateCard = ({ certificate }: CertificateCardProps) => {
   const t = useTranslations("CertificateCard");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "expired":
-        return "bg-red-100 text-red-800";
-      case "revoked":
-        return "bg-gray-100 text-gray-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
@@ -45,7 +31,8 @@ const CertificateCard = ({ certificate }: CertificateCardProps) => {
   return (
     <>
       <Card
-        className="w-full h-full border-border-foreground rounded-none shadow-none cursor-pointer hover:shadow-lg transition-shadow duration-200"
+        className="w-full h-full border-border-foreground rounded-sm overflow-hidden shadow-none 
+        cursor-pointer hover:shadow-lg transition-shadow duration-200"
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -78,15 +65,6 @@ const CertificateCard = ({ certificate }: CertificateCardProps) => {
                 </div>
               </div>
             )}
-
-            {/* Status Badge */}
-            <div className="absolute top-2 right-2">
-              <Badge
-                className={`${getStatusColor(certificate.status)} text-xs`}
-              >
-                {certificate.status}
-              </Badge>
-            </div>
           </div>
 
           {/* Certificate Info */}
