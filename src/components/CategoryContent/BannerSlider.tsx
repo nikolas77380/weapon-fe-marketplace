@@ -37,9 +37,7 @@ const BannerSlider = ({ promos }: { promos?: Promo[] }) => {
           className="banner-slider w-full"
         >
           {(promos && promos.length > 0 ? promos : []).map((promo, index) => {
-            const imageUrl =
-              `${process.env.NEXT_PUBLIC_STRAPI_URL}${promo.image?.url}` ||
-              "/banners/1.png";
+            const imageUrl = `${promo.image?.url}` || "/banners/1.png";
             const alt = promo.title || "promo";
             return (
               <SwiperSlide key={promo.id || index}>
