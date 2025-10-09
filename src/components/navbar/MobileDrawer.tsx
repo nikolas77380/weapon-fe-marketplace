@@ -59,7 +59,8 @@ const MobileDrawer = ({
           {t("burgerMenu.srDescription")}
         </DrawerDescription>
 
-        <DrawerHeader className="flex items-center justify-between bg-[#565457] h-16 mb-5 px-4">
+        <DrawerHeader className="flex items-center justify-between bg-gradient-to-br 
+      from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4">
           <div className="flex items-center justify-between w-full">
             <Logo />
             <DrawerClose asChild>

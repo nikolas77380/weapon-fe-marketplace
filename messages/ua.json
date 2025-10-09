@@ -15,6 +15,7 @@
       "titleAddProduct": "Додати продукт",
       "titleUserName": "Ім'я користувача",
       "titleMyAccount": "Мій обліковий запис",
+      "titleFavourites": "Обране",
       "titleBrowseProducts": "Переглянути товари",
       "titlAddNewProduct": "Додати новий продукт",
       "titleMessages": "Повідомлення",
@@ -77,6 +78,9 @@
       "titleCustomerMessages": "Ваші повідомлення",
       "titleOpenFullMessenger": "Відкрити Месенджер",
       "descriptionCustomerMessages": "Керувати запитами та комунікувати з продавцями"
+    },
+    "tabSettings": {
+      "titleSettings": "Налаштування"
     }
   },
   "SellerAccountHeader": {
@@ -84,6 +88,7 @@
     "titleAddProduct": "Додати товар",
     "titleSettings": "Налаштування",
     "titleActiveListings": "Активні списки",
+    "titleSavedProducts": "Збережені товари",
     "titleTotalViews": "Всього переглядів",
     "titleUnreadChats": "Непрочитаних повідомлень"
   },
@@ -94,6 +99,11 @@
     "authSwitcher": {
       "login": "Вхід",
       "register": "Зареєструватися"
+    },
+    "toasts": {
+      "registrationFailed": "Реєстрація не вдалася. Будь ласка, спробуйте ще раз.",
+      "invalidCredentials": "Невірна пошта або пароль",
+      "loginFailed": "Вхід не вдався. Будь ласка, спробуйте ще раз."
     },
     "login": {
       "footerDescripotion": "Безпечна автентифікація за допомогою шифрування, що відповідає галузевим стандартам.",

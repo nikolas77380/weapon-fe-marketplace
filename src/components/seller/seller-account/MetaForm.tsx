@@ -17,7 +17,6 @@ import Image from "next/image";
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
 import { getSessionTokenFromCookie } from "@/lib/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import BreadcrumbComponent from "@/components/ui/BreadcrumbComponent";
 import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
 import CertificatesList from "./CertificatesList";
@@ -127,12 +126,12 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
   return (
     <div className="w-full">
       {/* Breadcrumb - Hidden on mobile, visible on desktop */}
-      <div className="hidden md:block">
+      {/* <div className="hidden md:block">
         <BreadcrumbComponent currentUser={currentUser} className="mt-4 mb-10" />
-      </div>
+      </div> */}
 
       <div className="mt-4 md:mt-0">
-        <div className="max-w-5xl mx-auto w-full flex items-center justify-center">
+        <div className=" w-full flex items-center justify-center">
           <Tabs defaultValue="companyDetails" className="w-full h-full">
             <TabsList
               className="bg-gray-100 flex flex-col min-[400px]:flex-row 

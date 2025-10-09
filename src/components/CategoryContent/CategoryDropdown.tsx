@@ -56,7 +56,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               <Link
                 href={`/category/${category.slug}`}
                 className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 
-                rounded-md hover:bg-accent/50 block w-40 truncate"
+                rounded-md hover:bg-accent/50 block w-64 truncate"
               >
                 {getCategoryName(category)}
               </Link>
@@ -94,17 +94,24 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
               <TooltipTrigger asChild>
                 <Link
                   href={`/category/${category.slug}`}
-                  className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md w-40 truncate"
+                  className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md 
+                  w-50 truncate font-bold text-xl"
                 >
                   {getCategoryName(category)}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={5} className="data-[side=bottom]:!slide-in-from-top-0">
+              <TooltipContent
+                side="bottom"
+                sideOffset={5}
+                className="data-[side=bottom]:!slide-in-from-top-0"
+              >
                 <p>{getCategoryName(category)}</p>
               </TooltipContent>
             </Tooltip>
-            <AccordionTrigger className="flex-shrink-0 p-2 hover:bg-accent/50 rounded-md 
-            [&[data-state=open]]:text-gold-main ml-1">
+            <AccordionTrigger
+              className="flex-shrink-0 p-2 hover:bg-accent/50 rounded-md 
+            [&[data-state=open]]:text-gold-main ml-1"
+            >
               <span className="sr-only">Показать подкатегории</span>
             </AccordionTrigger>
           </div>
@@ -123,12 +130,13 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                       <TooltipTrigger asChild>
                         <Link
                           href={`/category/${subCategory.slug}`}
-                          className="block cursor-pointer hover:text-gold-main transition-colors duration-200 py-1 px-2 rounded-md truncate"
+                          className="block cursor-pointer hover:text-gold-main transition-colors duration-200 
+                          py-1 px-2 w-50 rounded-md truncate"
                         >
                           {getCategoryName(subCategory)}
                         </Link>
                       </TooltipTrigger>
-                      <TooltipContent side="right" sideOffset={5}>
+                      <TooltipContent side="bottom" sideOffset={5}>
                         <p>{getCategoryName(subCategory)}</p>
                       </TooltipContent>
                     </Tooltip>
@@ -141,7 +149,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                     key={subCategory.id}
                     type="single"
                     collapsible
-                    className="w-full"
+                    className="w-57"
                   >
                     <AccordionItem
                       value={`subcategory-${subCategory.id}`}
@@ -153,12 +161,13 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                           <TooltipTrigger asChild>
                             <Link
                               href={`/category/${subCategory.slug}`}
-                              className="flex-1 cursor-pointer hover:text-gold-main transition-colors duration-200 py-1 px-2 rounded-md truncate"
+                              className="flex-1 cursor-pointer hover:text-gold-main transition-colors duration-200 
+                              py-1 px-2 ml-2 rounded-md truncate font-medium"
                             >
                               {getCategoryName(subCategory)}
                             </Link>
                           </TooltipTrigger>
-                          <TooltipContent side="right" sideOffset={5}>
+                          <TooltipContent side="bottom" sideOffset={5}>
                             <p>{getCategoryName(subCategory)}</p>
                           </TooltipContent>
                         </Tooltip>
@@ -180,7 +189,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                                   {getCategoryName(subSubCategory)}
                                 </Link>
                               </TooltipTrigger>
-                              <TooltipContent side="right" sideOffset={5}>
+                              <TooltipContent side="bottom" sideOffset={5}>
                                 <p>{getCategoryName(subSubCategory)}</p>
                               </TooltipContent>
                             </Tooltip>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
 import { MessageSquare, Users } from "lucide-react";
@@ -10,6 +10,13 @@ import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
 import { cn, triggerClasses } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useFavourites } from "@/hooks/useFavourites";
+import { useViewMode } from "@/hooks/useViewMode";
+import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
+import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteState";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
+import { usePathname } from "next/navigation";
+import MetaForm from "./MetaForm";
 
 interface SellerTabsDesktopProps {
   products: Product[];
@@ -24,7 +31,28 @@ const SellerTabsDesktop = ({
   currentUser,
 }: SellerTabsDesktopProps) => {
   const t = useTranslations("SellerAccountTabs");
+  const tBuyer = useTranslations("BuyerAccountTabs");
+  const pathname = usePathname();
+
   const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const { favourites, loading: favouritesLoading } = useFavourites();
+  const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
+  const [activeTab, setActiveTab] = useState("myInquiries");
+
+  // Check sessionStorage on mount and whenever pathname changes
+  useEffect(() => {
+    const savedTab = sessionStorage.getItem("accountTab");
+    if (savedTab === "favourites" || savedTab === "settings") {
+      setActiveTab(savedTab);
+      setTimeout(() => {
+        sessionStorage.removeItem("accountTab");
+      }, 100);
+    }
+  }, [pathname]);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   const markAsRead = (messageId: number) => {
     setMessages((prev) =>
@@ -37,16 +65,23 @@ const SellerTabsDesktop = ({
   return (
     <div className="hidden md:block w-full">
       <Tabs
-        defaultValue="myInquiries"
+        value={activeTab}
+        onValueChange={handleTabChange}
         orientation="vertical"
         className="w-full flex-row gap-10"
       >
-        <TabsList className="flex-col w-64 h-23 bg-gray-100">
+        <TabsList className="flex-col w-64 h-37.5 bg-gray-100">
           <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
             {t("tabMyInquiries.titleTabMyInquiries")}
           </TabsTrigger>
+          <TabsTrigger value="favourites" className={cn(triggerClasses)}>
+            {tBuyer("tabFavourites.titleFavourites")} ({favourites.length || 0})
+          </TabsTrigger>
           <TabsTrigger value="messages" className={cn(triggerClasses)}>
             {t("tabMessage.titleMessages")}
+          </TabsTrigger>
+          <TabsTrigger value="settings" className={cn(triggerClasses)}>
+            {t("tabSettings.titleSettings")}
           </TabsTrigger>
         </TabsList>
         <div className="grow w-full">
@@ -78,6 +113,44 @@ const SellerTabsDesktop = ({
                     products.map((product) => (
                       <SellerListenedCard key={product.id} product={product} />
                     ))
+                  )}
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="favourites">
+              <div className="p-5">
+                <ViewModeToggle
+                  viewMode={viewMode}
+                  onGridClick={toggleToGrid}
+                  onListClick={toggleToList}
+                  count={favourites.length || 0}
+                  title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
+                />
+
+                {/* Favourites Content */}
+                <div
+                  className={
+                    viewMode === "grid"
+                      ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                      : "flex flex-col gap-4"
+                  }
+                >
+                  {favouritesLoading ? (
+                    <SkeletonComponent
+                      type="favouriteCard"
+                      count={6}
+                      className={viewMode === "grid" ? "" : "w-full"}
+                    />
+                  ) : favourites.length > 0 ? (
+                    favourites.map((favourite) => (
+                      <FavouriteCard
+                        key={favourite.id}
+                        favourite={favourite}
+                        viewMode={viewMode}
+                      />
+                    ))
+                  ) : (
+                    <NotFavouriteState />
                   )}
                 </div>
               </div>
@@ -178,6 +251,9 @@ const SellerTabsDesktop = ({
                   ))}
                 </div>
               </div>
+            </TabsContent>
+            <TabsContent value="settings">
+              <MetaForm currentUser={currentUser} />
             </TabsContent>
           </div>
         </div>
