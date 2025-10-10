@@ -4,6 +4,10 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useSellerProducts } from "@/hooks/useSellerProducts";
+import {
+  useSellerProductsElastic,
+  useSellerFiltersElastic,
+} from "@/hooks/useProductsQuery";
 import ShopCard from "../shop/ShopCard";
 import { workTimeCompany } from "@/mockup/workTimeCompany";
 import SkeletonComponent from "../ui/SkeletonComponent";
@@ -46,6 +50,36 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     search: "",
     page: 1,
     sort: "id:desc",
+    availability: [] as string[],
+    condition: [] as string[],
+    categories: [] as string[],
+  });
+
+  // Elasticsearch hooks
+  const { data: elasticProducts, isLoading: elasticLoading } =
+    useSellerProductsElastic({
+      sellerId: sellerData.id,
+      search: filters.search,
+      priceRange: {
+        min: filters.minPrice,
+        max: filters.maxPrice,
+      },
+      sort: filters.sort !== "id:desc" ? filters.sort : undefined,
+      page: filters.page,
+      pageSize: 6,
+      availability:
+        filters.availability.length > 0 ? filters.availability : undefined,
+      condition: filters.condition.length > 0 ? filters.condition : undefined,
+      categories:
+        filters.categories.length > 0 ? filters.categories : undefined,
+    });
+
+  const { data: elasticFilters } = useSellerFiltersElastic({
+    sellerId: sellerData.id,
+    priceRange: {
+      min: filters.minPrice,
+      max: filters.maxPrice,
+    },
   });
 
   // Local loading state for products tab
@@ -95,8 +129,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     }
   };
 
-  // Filter products by price, category and search
+  // Use Elasticsearch data if available, otherwise fallback to local filtering
   const filteredProducts = useMemo(() => {
+    if (elasticProducts?.data) {
+      return elasticProducts.data;
+    }
+
+    // Fallback to local filtering
     const filtered = sellerProducts.filter((product) => {
       // Search filter
       const searchMatch =
@@ -142,6 +181,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
     return sorted;
   }, [
+    elasticProducts?.data,
     sellerProducts,
     filters.search,
     filters.minPrice,
@@ -172,6 +212,15 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     return categories.filter((category) => categoryIds.has(category.id));
   }, [categories, priceFilteredProducts]);
 
+  // Memoize priceRange objects to prevent infinite re-renders
+  const desktopPriceRange = useMemo(
+    () => ({
+      min: elasticFilters?.data?.priceStats?.min || 1,
+      max: elasticFilters?.data?.priceStats?.max || 500000,
+    }),
+    [elasticFilters?.data?.priceStats]
+  );
+
   // Category counts for all seller products
   const categoryCounts = useMemo(() => {
     const counts: { [key: number]: number } = {};
@@ -183,21 +232,42 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     return counts;
   }, [sellerProducts]);
 
-  // Client-side pagination for filtered products
-  const pageSize = 6;
-  const startIndex = (filters.page - 1) * pageSize;
-  const paginatedProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + pageSize
+  // Memoize other objects that might cause re-renders
+  const memoizedCategoryCounts = useMemo(
+    () => categoryCounts,
+    [categoryCounts]
   );
 
+  // Use Elasticsearch pagination if available, otherwise client-side pagination
+  const paginatedProducts = useMemo(() => {
+    if (elasticProducts?.data) {
+      return elasticProducts.data;
+    }
+
+    // Client-side pagination for filtered products
+    const pageSize = 6;
+    const startIndex = (filters.page - 1) * pageSize;
+    return filteredProducts.slice(startIndex, startIndex + pageSize);
+  }, [elasticProducts?.data, filteredProducts, filters.page]);
+
   // Pagination data for filtered products
-  const paginationData = {
-    page: filters.page,
-    pageSize: pageSize,
-    pageCount: Math.ceil(filteredProducts.length / pageSize),
-    total: filteredProducts.length,
-  };
+  const paginationData = useMemo(() => {
+    if (elasticProducts?.meta?.pagination) {
+      return elasticProducts.meta.pagination;
+    }
+
+    const pageSize = 6;
+    return {
+      page: filters.page,
+      pageSize: pageSize,
+      pageCount: Math.ceil(filteredProducts.length / pageSize),
+      total: filteredProducts.length,
+    };
+  }, [
+    elasticProducts?.meta?.pagination,
+    filteredProducts.length,
+    filters.page,
+  ]);
 
   const handlePriceChange = useCallback(
     (min: number, max: number) => {
@@ -253,6 +323,18 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
   }, []);
 
+  const handleAvailabilityChange = useCallback((availability: string[]) => {
+    setFilters((prev) => ({ ...prev, availability, page: 1 }));
+  }, []);
+
+  const handleConditionChange = useCallback((condition: string[]) => {
+    setFilters((prev) => ({ ...prev, condition, page: 1 }));
+  }, []);
+
+  const handleCategoriesChange = useCallback((categories: string[]) => {
+    setFilters((prev) => ({ ...prev, categories, page: 1 }));
+  }, []);
+
   const handleClearAll = useCallback(() => {
     setFilters({
       minPrice: 1,
@@ -261,6 +343,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       search: "",
       page: 1,
       sort: "id:desc",
+      availability: [],
+      condition: [],
+      categories: [],
     });
     setViewMode("grid");
   }, [setViewMode]);
@@ -615,18 +700,20 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       <div className="hidden lg:block">
                         <Filters
                           onPriceChange={handlePriceChange}
-                          onCategoryChange={handleCategoryChange}
-                          onSubcategoryChange={() => {}}
+                          onSubcategoryChange={handleCategoryChange}
+                          onAvailabilityChange={handleAvailabilityChange}
+                          onConditionChange={handleConditionChange}
+                          onCategoriesChange={handleCategoriesChange}
                           onClearAll={handleClearAll}
                           availableCategories={availableCategories}
-                          childCategories={[]}
-                          selectedCategoryId={filters.categoryId}
-                          selectedSubcategoryId={null}
-                          priceRange={{
-                            min: filters.minPrice,
-                            max: filters.maxPrice,
-                          }}
-                          categoryCounts={categoryCounts}
+                          selectedSubcategoryId={filters.categoryId}
+                          selectedAvailability={filters.availability}
+                          selectedCondition={filters.condition}
+                          selectedCategories={filters.categories}
+                          priceRange={desktopPriceRange}
+                          categories={memoizedCategoryCounts}
+                          hideCategoryFilter={false}
+                          elasticFilters={elasticFilters?.data}
                         />
                       </div>
                       {/* Shop Content - Full width on mobile, flex-1 on desktop */}
@@ -636,7 +723,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           pagination={paginationData}
                           onPageChange={handlePageChange}
                           viewMode={viewMode}
-                          loading={false}
+                          loading={elasticLoading || loading}
                         />
                       </div>
                     </>
@@ -648,18 +735,24 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   isOpen={isFilterDrawerOpen}
                   onClose={handleCloseFilterDrawer}
                   onPriceChange={handlePriceChange}
-                  onCategoryChange={handleCategoryChange}
-                  onSubcategoryChange={() => {}}
+                  onSubcategoryChange={handleCategoryChange}
                   onClearAll={handleClearAll}
                   availableCategories={availableCategories}
-                  childCategories={[]}
-                  selectedCategoryId={filters.categoryId}
-                  selectedSubcategoryId={null}
+                  selectedSubcategoryId={filters.categoryId}
                   priceRange={{
-                    min: filters.minPrice,
-                    max: filters.maxPrice,
+                    min:
+                      elasticFilters?.data?.priceStats?.min || filters.minPrice,
+                    max:
+                      elasticFilters?.data?.priceStats?.max || filters.maxPrice,
                   }}
-                  categoryCounts={categoryCounts}
+                  categories={memoizedCategoryCounts}
+                  elasticFilters={elasticFilters?.data}
+                  onAvailabilityChange={handleAvailabilityChange}
+                  onConditionChange={handleConditionChange}
+                  onCategoriesChange={handleCategoriesChange}
+                  selectedAvailability={filters.availability}
+                  selectedCondition={filters.condition}
+                  selectedCategories={filters.categories}
                   hideCategoryFilter={false}
                 />
               </div>

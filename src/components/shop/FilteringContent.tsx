@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import FilterDrawer from "./FilterDrawer";
-import { useProductsQuery } from "@/hooks/useProductsQuery";
+import {
+  useCategoryProductsElastic,
+  useCategoryFiltersElastic,
+} from "@/hooks/useProductsQuery";
 import { useCategories, useCategoryBySlug } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
-import { useCategoryCounts } from "@/hooks/useCategoryCounts";
 import Sorting from "./Sorting";
 import BreadcrumbComponent from "../ui/BreadcrumbComponent";
 import { Funnel } from "lucide-react";
@@ -15,16 +17,17 @@ import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
 import { getChildCategories } from "@/lib/categoryUtils";
-import { useMemo } from "react";
 
 interface FilterState {
   minPrice: number;
   maxPrice: number;
   categoryId: number | null;
-  subcategoryId: number | null;
-  search: string;
   page: number;
   sort: string;
+  subcategoryId: number | null;
+  availability: string[];
+  condition: string[];
+  categories: string[];
 }
 
 const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
@@ -35,43 +38,34 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     minPrice: 1,
     maxPrice: 500000,
     categoryId: null,
-    subcategoryId: null,
-    search: "",
     page: 1,
     sort: "id:desc",
+    subcategoryId: null,
+    availability: [],
+    condition: [],
+    categories: [],
   });
 
-  const { categories } = useCategories();
-  const { categoryCounts } = useCategoryCounts();
-  const { category: currentCategory } = useCategoryBySlug(categorySlug);
-
-  // Get child categories of current category
-  const childCategories = useMemo(() => {
-    if (!currentCategory) return [];
-    return getChildCategories(categories, currentCategory.id);
-  }, [currentCategory, categories]);
-
-  // Get slug of selected subcategory
-  const selectedSubcategorySlug = useMemo(() => {
-    if (!filters.subcategoryId) return null;
-    const subcategory = categories.find(
-      (cat) => cat.id === filters.subcategoryId
-    );
-    return subcategory?.slug || null;
-  }, [filters.subcategoryId, categories]);
-
-  const { data: response, isLoading } = useProductsQuery({
-    category: filters.categoryId || undefined,
-    categorySlug: selectedSubcategorySlug || categorySlug || undefined,
-    search: filters.search !== "" ? filters.search : undefined,
+  const { data: response, isLoading } = useCategoryProductsElastic({
+    categorySlug: categorySlug,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
     priceRange: {
       min: filters.minPrice,
       max: filters.maxPrice,
     },
-    pagination: {
-      page: filters.page,
-      pageSize: 5,
+    page: filters.page,
+    pageSize: 5,
+    availability:
+      filters.availability.length > 0 ? filters.availability : undefined,
+    condition: filters.condition.length > 0 ? filters.condition : undefined,
+    categories: filters.categories.length > 0 ? filters.categories : undefined,
+  });
+
+  const { data: filtersData } = useCategoryFiltersElastic({
+    categorySlug: categorySlug,
+    priceRange: {
+      min: filters.minPrice,
+      max: filters.maxPrice,
     },
   });
 
@@ -79,13 +73,14 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
 
+  // Use Elasticsearch data for filters instead of old hooks
+  const elasticFilters = useMemo(() => filtersData?.data, [filtersData]);
+  const { categories } = useCategories();
+  const { category: currentCategory } = useCategoryBySlug(categorySlug);
+
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
   });
-
-  const paginatedProducts = allProducts;
-
-  const availableCategories = categories;
 
   const handlePriceChange = useCallback((min: number, max: number) => {
     setFilters((prev) => ({
@@ -107,6 +102,18 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     []
   );
 
+  const handleAvailabilityChange = useCallback((availability: string[]) => {
+    setFilters((prev) => ({ ...prev, availability, page: 1 }));
+  }, []);
+
+  const handleConditionChange = useCallback((condition: string[]) => {
+    setFilters((prev) => ({ ...prev, condition, page: 1 }));
+  }, []);
+
+  const handleCategoriesChange = useCallback((categories: string[]) => {
+    setFilters((prev) => ({ ...prev, categories, page: 1 }));
+  }, []);
+
   // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setFilters((prev) => ({
   //     ...prev,
@@ -120,9 +127,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     setFilters((prev) => ({ ...prev, page }));
   };
 
-  const handleSortChange = useCallback((sort: string) => {
+  const handleSortChange = (sort: string) => {
     setFilters((prev) => ({ ...prev, sort, page: 1 }));
-  }, []);
+  };
 
   const handleClearAll = () => {
     setFilters({
@@ -130,7 +137,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       maxPrice: 500000,
       categoryId: null,
       subcategoryId: null,
-      search: "",
+      availability: [],
+      condition: [],
+      categories: [],
       page: 1,
       sort: "id:desc",
     });
@@ -145,13 +154,40 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     setIsFilterDrawerOpen(false);
   };
 
-  const count = pagination?.total || paginatedProducts.length;
+  const count = pagination?.total || allProducts.length;
 
   const customLabels = currentCategory
     ? {
         [categorySlug]: currentCategory.name,
       }
     : {};
+
+  // Memoize priceRange objects to prevent infinite re-renders
+  const desktopPriceRange = useMemo(
+    () => ({
+      min: elasticFilters?.priceStats?.min,
+      max: elasticFilters?.priceStats?.max,
+    }),
+    [elasticFilters]
+  );
+
+  const mobilePriceRange = useMemo(
+    () => ({
+      min: elasticFilters?.priceStats?.min,
+      max: elasticFilters?.priceStats?.max,
+    }),
+    [elasticFilters]
+  );
+
+  // Memoize other objects that might cause re-renders
+  const memoizedCategoryCounts = useMemo(
+    () => elasticFilters?.categories || {},
+    [elasticFilters?.categories]
+  );
+  const availableCategoriesList = useMemo(
+    () => (categorySlug ? [] : categories),
+    [categorySlug, categories]
+  );
 
   return (
     <div className="min-h-screen h-full w-full mt-3 px-2 sm:px-4 lg:px-6">
@@ -204,23 +240,27 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         <div className="hidden lg:block">
           <Filters
             onPriceChange={handlePriceChange}
-            onCategoryChange={handleCategoryChange}
             onSubcategoryChange={handleSubcategoryChange}
+            onAvailabilityChange={handleAvailabilityChange}
+            onConditionChange={handleConditionChange}
+            onCategoriesChange={handleCategoriesChange}
             onClearAll={handleClearAll}
-            availableCategories={categorySlug ? [] : availableCategories}
-            childCategories={childCategories}
-            selectedCategoryId={filters.categoryId}
+            availableCategories={availableCategoriesList}
             selectedSubcategoryId={filters.subcategoryId}
-            priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
-            categoryCounts={categoryCounts}
+            selectedAvailability={filters.availability}
+            selectedCondition={filters.condition}
+            selectedCategories={filters.categories}
+            priceRange={desktopPriceRange}
+            categories={memoizedCategoryCounts}
             hideCategoryFilter={!!categorySlug}
+            elasticFilters={elasticFilters}
           />
         </div>
         {/* Shop Content - Full width on mobile, flex-1 on desktop */}
         <div className="w-full lg:flex-1 h-full">
           <BannerSlider promos={promosResponse?.data || []} />
           <ShopContent
-            products={paginatedProducts}
+            products={allProducts}
             pagination={pagination}
             onPageChange={handlePageChange}
             viewMode={viewMode}
@@ -234,16 +274,20 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
-        onCategoryChange={handleCategoryChange}
         onSubcategoryChange={handleSubcategoryChange}
         onClearAll={handleClearAll}
-        availableCategories={categorySlug ? [] : availableCategories}
-        childCategories={childCategories}
-        selectedCategoryId={filters.categoryId}
-        selectedSubcategoryId={filters.subcategoryId}
-        priceRange={{ min: filters.minPrice, max: filters.maxPrice }}
-        categoryCounts={categoryCounts}
+        availableCategories={availableCategoriesList}
+        priceRange={mobilePriceRange}
+        categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
+        elasticFilters={elasticFilters}
+        selectedSubcategoryId={filters.subcategoryId}
+        onAvailabilityChange={handleAvailabilityChange}
+        onConditionChange={handleConditionChange}
+        onCategoriesChange={handleCategoriesChange}
+        selectedAvailability={filters.availability}
+        selectedCondition={filters.condition}
+        selectedCategories={filters.categories}
       />
     </div>
   );

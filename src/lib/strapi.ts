@@ -1148,3 +1148,548 @@ export const getPromoById = async (id: number) => {
     method: "GET",
   });
 };
+
+// Elasticsearch-powered search (public)
+export const searchProductsElasticPublic = async (params?: {
+  search?: string;
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  subcategories?: string[];
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("categorySlug", params.categorySlug);
+  }
+
+  if (params?.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params?.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params?.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params?.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params?.subcategories && params.subcategories.length > 0) {
+    params.subcategories.forEach((subcategory) =>
+      queryParams.append("subcategories", subcategory)
+    );
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("page", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append("pageSize", params.pagination.pageSize.toString());
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/search/elastic/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Elasticsearch-powered search (authenticated)
+export const searchProductsElastic = async (params?: {
+  search?: string;
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  subcategories?: string[];
+  pagination?: {
+    page?: number;
+    pageSize?: number;
+  };
+  sort?: string;
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params?.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params?.categorySlug) {
+    queryParams.append("categorySlug", params.categorySlug);
+  }
+
+  if (params?.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params?.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params?.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params?.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params?.subcategories && params.subcategories.length > 0) {
+    params.subcategories.forEach((subcategory) =>
+      queryParams.append("subcategories", subcategory)
+    );
+  }
+
+  if (params?.pagination?.page) {
+    queryParams.append("page", params.pagination.page.toString());
+  }
+
+  if (params?.pagination?.pageSize) {
+    queryParams.append("pageSize", params.pagination.pageSize.toString());
+  }
+
+  if (params?.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/search/elastic${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetchAuth({
+    path,
+    method: "GET",
+    token,
+  });
+};
+
+// Get product aggregations for filters (public)
+export const getProductAggregationsPublic = async (params?: {
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  subcategories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.categorySlug) {
+    queryParams.append("categorySlug", params.categorySlug);
+  }
+
+  if (params?.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params?.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params?.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params?.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params?.subcategories && params.subcategories.length > 0) {
+    params.subcategories.forEach((subcategory) =>
+      queryParams.append("subcategories", subcategory)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/aggregations/public${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Get product aggregations for filters (authenticated)
+export const getProductAggregations = async (params?: {
+  categorySlug?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  subcategories?: string[];
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  const queryParams = new URLSearchParams();
+
+  if (params?.categorySlug) {
+    queryParams.append("categorySlug", params.categorySlug);
+  }
+
+  if (params?.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params?.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params?.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params?.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params?.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params?.subcategories && params.subcategories.length > 0) {
+    params.subcategories.forEach((subcategory) =>
+      queryParams.append("subcategories", subcategory)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/aggregations${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetchAuth({
+    path,
+    method: "GET",
+    token,
+  });
+};
+
+// Elasticsearch-based category products
+export const getCategoryProductsElastic = async (params: {
+  categorySlug: string;
+  search?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  if (params.page) {
+    queryParams.append("page", params.page.toString());
+  }
+
+  if (params.pageSize) {
+    queryParams.append("pageSize", params.pageSize.toString());
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => {
+      queryParams.append("tags", tag);
+    });
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/categories/public/slug/${params.categorySlug}/products${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Elasticsearch-based category filters
+export const getCategoryFiltersElastic = async (params: {
+  categorySlug: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/categories/public/slug/${params.categorySlug}/filters${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Elasticsearch-based seller products
+export const getSellerProductsElastic = async (params: {
+  sellerId: number;
+  search?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  if (params.page) {
+    queryParams.append("page", params.page.toString());
+  }
+
+  if (params.pageSize) {
+    queryParams.append("pageSize", params.pageSize.toString());
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/seller/${params.sellerId}/search/elastic${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Elasticsearch-based seller product filters
+export const getSellerProductFiltersElastic = async (params: {
+  sellerId: number;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/seller/${params.sellerId}/aggregations${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
