@@ -16,7 +16,8 @@ interface ImagesDropzoneProps {
   onFilesChange?: (files: File[]) => void;
   className?: string;
   enableCrop?: boolean;
-  externalFiles?: File[]; // External files to sync with
+  externalFiles?: File[];
+  cropShape?: "rect" | "circle";
 }
 
 const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
@@ -27,6 +28,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   className = "",
   enableCrop = false,
   externalFiles = [],
+  cropShape = "rect",
 }) => {
   const t = useTranslations("ImagesDropZone");
   const tCrop = useTranslations("ImageCrop");
@@ -242,6 +244,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                 : handleCropComplete
             }
             onCancel={handleCropCancel}
+            cropShape={cropShape}
           />
         </div>
       )}
