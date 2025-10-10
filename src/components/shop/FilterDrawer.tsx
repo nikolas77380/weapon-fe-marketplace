@@ -17,32 +17,40 @@ interface FilterDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onPriceChange: (min: number, max: number) => void;
-  onCategoryChange: (categoryId: number | null) => void;
   onSubcategoryChange: (subcategoryId: number | null) => void;
   onClearAll: () => void;
   availableCategories: any[];
-  childCategories: any[];
-  selectedCategoryId: number | null;
   selectedSubcategoryId: number | null;
   priceRange: { min: number; max: number };
-  categoryCounts: Record<number, number>;
+  categories: Record<number, number>;
   hideCategoryFilter: boolean;
+  elasticFilters: any;
+  onAvailabilityChange: (availability: string[]) => void;
+  onConditionChange: (condition: string[]) => void;
+  onCategoriesChange: (categories: string[]) => void;
+  selectedAvailability: string[];
+  selectedCondition: string[];
+  selectedCategories: string[];
 }
 
 const FilterDrawer = ({
   isOpen,
   onClose,
   onPriceChange,
-  onCategoryChange,
   onSubcategoryChange,
   onClearAll,
   availableCategories,
-  childCategories,
-  selectedCategoryId,
   selectedSubcategoryId,
   priceRange,
-  categoryCounts,
+  categories,
   hideCategoryFilter,
+  elasticFilters,
+  onAvailabilityChange,
+  onConditionChange,
+  onCategoriesChange,
+  selectedAvailability,
+  selectedCondition,
+  selectedCategories,
 }: FilterDrawerProps) => {
   const t = useTranslations("CategoryDetail");
   return (
@@ -76,17 +84,21 @@ const FilterDrawer = ({
         <div className="flex-1 overflow-y-auto p-2 sm:p-4">
           <Filters
             onPriceChange={onPriceChange}
-            onCategoryChange={onCategoryChange}
             onSubcategoryChange={onSubcategoryChange}
             onClearAll={onClearAll}
             availableCategories={availableCategories}
-            childCategories={childCategories}
-            selectedCategoryId={selectedCategoryId}
             selectedSubcategoryId={selectedSubcategoryId}
             priceRange={priceRange}
-            categoryCounts={categoryCounts}
+            categories={categories}
             hideCategoryFilter={hideCategoryFilter}
             isMobile={true}
+            elasticFilters={elasticFilters}
+            onAvailabilityChange={onAvailabilityChange}
+            onConditionChange={onConditionChange}
+            onCategoriesChange={onCategoriesChange}
+            selectedAvailability={selectedAvailability}
+            selectedCondition={selectedCondition}
+            selectedCategories={selectedCategories}
           />
 
           {/* Separator */}
