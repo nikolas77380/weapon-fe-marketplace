@@ -16,8 +16,6 @@ import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
-import { getChildCategories } from "@/lib/categoryUtils";
-import { useMemo } from "react";
 
 interface FilterState {
   minPrice: number;
@@ -25,6 +23,10 @@ interface FilterState {
   categoryId: number | null;
   page: number;
   sort: string;
+  subcategoryId: number | null;
+  availability: string[];
+  condition: string[];
+  categories: string[];
 }
 
 const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
@@ -37,6 +39,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     categoryId: null,
     page: 1,
     sort: "id:desc",
+    subcategoryId: null,
+    availability: [],
+    condition: [],
+    categories: [],
   });
 
   const { data: response, isLoading } = useCategoryProductsElastic({
@@ -48,6 +54,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     },
     page: filters.page,
     pageSize: 5,
+    availability:
+      filters.availability.length > 0 ? filters.availability : undefined,
+    condition: filters.condition.length > 0 ? filters.condition : undefined,
+    categories: filters.categories.length > 0 ? filters.categories : undefined,
   });
 
   const { data: filtersData } = useCategoryFiltersElastic({
@@ -61,7 +71,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const allProducts = response?.data || [];
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
-  
+
   // Use Elasticsearch data for filters instead of old hooks
   const elasticFilters = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
@@ -91,6 +101,18 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     []
   );
 
+  const handleAvailabilityChange = useCallback((availability: string[]) => {
+    setFilters((prev) => ({ ...prev, availability, page: 1 }));
+  }, []);
+
+  const handleConditionChange = useCallback((condition: string[]) => {
+    setFilters((prev) => ({ ...prev, condition, page: 1 }));
+  }, []);
+
+  const handleCategoriesChange = useCallback((categories: string[]) => {
+    setFilters((prev) => ({ ...prev, categories, page: 1 }));
+  }, []);
+
   // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setFilters((prev) => ({
   //     ...prev,
@@ -113,6 +135,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       minPrice: 1,
       maxPrice: 500000,
       categoryId: null,
+      subcategoryId: null,
+      availability: [],
+      condition: [],
+      categories: [],
       page: 1,
       sort: "id:desc",
     });
@@ -213,13 +239,18 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         <div className="hidden lg:block">
           <Filters
             onPriceChange={handlePriceChange}
-            onCategoryChange={handleCategoryChange}
             onSubcategoryChange={handleSubcategoryChange}
+            onAvailabilityChange={handleAvailabilityChange}
+            onConditionChange={handleConditionChange}
+            onCategoriesChange={handleCategoriesChange}
             onClearAll={handleClearAll}
             availableCategories={availableCategoriesList}
-            selectedCategoryId={filters.categoryId}
+            selectedSubcategoryId={filters.subcategoryId}
+            selectedAvailability={filters.availability}
+            selectedCondition={filters.condition}
+            selectedCategories={filters.categories}
             priceRange={desktopPriceRange}
-            categoryCounts={memoizedCategoryCounts}
+            categories={memoizedCategoryCounts}
             hideCategoryFilter={!!categorySlug}
             elasticFilters={elasticFilters}
           />
@@ -238,7 +269,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       </div>
 
       {/* Mobile Filter Drawer */}
-      <FilterDrawer
+      {/* <FilterDrawer
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
@@ -250,7 +281,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         priceRange={mobilePriceRange}
         categoryCounts={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-      />
+      /> */}
     </div>
   );
 };

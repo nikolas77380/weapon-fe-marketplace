@@ -23,15 +23,18 @@ import {
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;
-  onCategoryChange: (categoryId: number | null) => void;
   onSubcategoryChange: (subcategoryId: number | null) => void;
+  onAvailabilityChange: (availability: string[]) => void;
+  onConditionChange: (condition: string[]) => void;
+  onCategoriesChange: (categories: string[]) => void;
   onClearAll: () => void;
   availableCategories: Category[];
-  childCategories: Category[];
-  selectedCategoryId: number | null;
   selectedSubcategoryId: number | null;
+  selectedAvailability: string[];
+  selectedCondition: string[];
+  selectedCategories: string[];
   priceRange: { min: number; max: number };
-  categoryCounts?: { [key: number]: number };
+  categories?: { [key: number]: number };
   hideCategoryFilter?: boolean;
   isMobile?: boolean;
   elasticFilters?: any; // Elasticsearch aggregations data
@@ -39,15 +42,18 @@ interface FiltersProps {
 
 const Filters = ({
   onPriceChange,
-  onCategoryChange,
   onSubcategoryChange,
+  onAvailabilityChange,
+  onConditionChange,
+  onCategoriesChange,
   onClearAll,
   availableCategories,
-  childCategories,
-  selectedCategoryId,
   selectedSubcategoryId,
+  selectedAvailability,
+  selectedCondition,
+  selectedCategories,
   priceRange,
-  categoryCounts = {},
+  categories = {},
   hideCategoryFilter = false,
   isMobile = false,
   elasticFilters,
@@ -140,10 +146,28 @@ const Filters = ({
                 <div className="flex flex-col gap-2">
                   {elasticFilters.categories.map((category: any) => (
                     <div key={category.key} className="flex items-center gap-3">
-                      <Checkbox id={`elastic-category-${category.key}`} />
+                      <Checkbox
+                        id={`elastic-category-${category.key}`}
+                        checked={selectedCategories.includes(category.key)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            onCategoriesChange([
+                              ...selectedCategories,
+                              category.key,
+                            ]);
+                          } else {
+                            onCategoriesChange(
+                              selectedCategories.filter(
+                                (c) => c !== category.key
+                              )
+                            );
+                          }
+                        }}
+                        className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                      />
                       <Label
                         htmlFor={`elastic-category-${category.key}`}
-                        className="text-sm font-light"
+                        className="text-sm font-light cursor-pointer"
                       >
                         {category.key} ({category.doc_count})
                       </Label>
@@ -174,10 +198,28 @@ const Filters = ({
                   <div className="flex flex-col gap-2">
                     {elasticFilters.availability.map((item: any) => (
                       <div key={item.key} className="flex items-center gap-3">
-                        <Checkbox id={`elastic-availability-${item.key}`} />
+                        <Checkbox
+                          id={`elastic-availability-${item.key}`}
+                          checked={selectedAvailability.includes(item.key)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              onAvailabilityChange([
+                                ...selectedAvailability,
+                                item.key,
+                              ]);
+                            } else {
+                              onAvailabilityChange(
+                                selectedAvailability.filter(
+                                  (a) => a !== item.key
+                                )
+                              );
+                            }
+                          }}
+                          className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                        />
                         <Label
                           htmlFor={`elastic-availability-${item.key}`}
-                          className="text-sm font-light"
+                          className="text-sm font-light cursor-pointer"
                         >
                           {item.key} ({item.doc_count})
                         </Label>
@@ -204,10 +246,23 @@ const Filters = ({
                 <div className="flex flex-col gap-2">
                   {elasticFilters.condition.map((item: any) => (
                     <div key={item.key} className="flex items-center gap-3">
-                      <Checkbox id={`elastic-condition-${item.key}`} />
+                      <Checkbox
+                        id={`elastic-condition-${item.key}`}
+                        checked={selectedCondition.includes(item.key)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            onConditionChange([...selectedCondition, item.key]);
+                          } else {
+                            onConditionChange(
+                              selectedCondition.filter((c) => c !== item.key)
+                            );
+                          }
+                        }}
+                        className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                      />
                       <Label
                         htmlFor={`elastic-condition-${item.key}`}
-                        className="text-sm font-light"
+                        className="text-sm font-light cursor-pointer"
                       >
                         {item.key} ({item.doc_count})
                       </Label>
@@ -220,131 +275,66 @@ const Filters = ({
         </div>
       )}
 
-      {!hideCategoryFilter && (
+      {Object.keys(categories).length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
           <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="category" className="border-none">
+            <AccordionItem value="subcategory" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
                 <h2 className="text-sm font-medium font-roboto">
-                  {t("titleCategory")}
+                  {t("titleSubcategory")}
                 </h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
-                  {availableCategories.map((category) => (
-                    <div key={category.id} className="flex items-center gap-3">
-                      <Checkbox
-                        id={`category-${category.id}`}
-                        checked={selectedCategoryId === category.id}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            onCategoryChange(category.id);
-                          } else {
-                            onCategoryChange(null);
+                  {Object.entries(categories).map(([categoryId, count]) => {
+                    const category = availableCategories.find(
+                      (cat) => cat.id === parseInt(categoryId)
+                    );
+                    if (!category) return null;
+
+                    return (
+                      <div key={categoryId} className="flex items-center gap-3">
+                        <Checkbox
+                          id={`subcategory-${categoryId}`}
+                          checked={
+                            selectedSubcategoryId === parseInt(categoryId)
                           }
-                        }}
-                        className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
-                      />
-                      <Label
-                        htmlFor={`category-${category.id}`}
-                        className={`text-sm font-light flex-1 cursor-pointer ${
-                          selectedCategoryId === category.id
-                            ? "text-foreground"
-                            : "text-foreground/80"
-                        }`}
-                      >
-                        {getCategoryName(category)}
-                      </Label>
-                      <span
-                        className={`text-sm ${
-                          selectedCategoryId === category.id
-                            ? "text-gray-500"
-                            : "text-gray-500"
-                        }`}
-                      >
-                        ({categoryCounts[category.id] || 0})
-                      </span>
-                    </div>
-                  ))}
+                          onCheckedChange={(checked) => {
+                            console.log(
+                              "Subcategory checkbox changed:",
+                              categoryId,
+                              checked
+                            );
+                            if (checked) {
+                              onSubcategoryChange(parseInt(categoryId));
+                            } else {
+                              onSubcategoryChange(null);
+                            }
+                          }}
+                          className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                        />
+                        <Label
+                          htmlFor={`subcategory-${categoryId}`}
+                          className={`text-sm font-light cursor-pointer truncate max-w-[150px] block ${
+                            selectedSubcategoryId === parseInt(categoryId)
+                              ? "text-foreground"
+                              : "text-foreground/80"
+                          }`}
+                        >
+                          {getCategoryName(category)}
+                        </Label>
+                        <span className="text-sm flex-shrink-0 text-gray-500">
+                          ({count})
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>
       )}
-
-      {childCategories.length > 0 &&
-        childCategories.filter(
-          (subcategory) => (categoryCounts[subcategory.id] || 0) > 0
-        ).length > 0 && (
-          <div className="border-b border-border-foreground pb-3.5">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="subcategory" className="border-none">
-                <AccordionTrigger className="py-0 hover:no-underline">
-                  <h2 className="text-sm font-medium font-roboto">
-                    {t("titleSubcategory")}
-                  </h2>
-                </AccordionTrigger>
-                <AccordionContent className="pt-3">
-                  <TooltipProvider>
-                    <div className="flex flex-col gap-2">
-                      {childCategories
-                        .filter(
-                          (subcategory) =>
-                            (categoryCounts[subcategory.id] || 0) > 0
-                        )
-                        .map((subcategory) => (
-                          <div
-                            key={subcategory.id}
-                            className="flex items-center gap-3"
-                          >
-                            <Checkbox
-                              id={`subcategory-${subcategory.id}`}
-                              checked={selectedSubcategoryId === subcategory.id}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  onSubcategoryChange(subcategory.id);
-                                } else {
-                                  onSubcategoryChange(null);
-                                }
-                              }}
-                              className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
-                            />
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Label
-                                  htmlFor={`subcategory-${subcategory.id}`}
-                                  className={`text-sm font-light cursor-pointer truncate max-w-[150px] block ${
-                                    selectedSubcategoryId === subcategory.id
-                                      ? "text-foreground"
-                                      : "text-foreground/80"
-                                  }`}
-                                >
-                                  {getCategoryName(subcategory)}
-                                </Label>
-                              </TooltipTrigger>
-                              <TooltipContent side="right">
-                                <p>{getCategoryName(subcategory)}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                            <span
-                              className={`text-sm flex-shrink-0 ${
-                                selectedSubcategoryId === subcategory.id
-                                  ? "text-gray-500"
-                                  : "text-gray-500"
-                              }`}
-                            >
-                              ({categoryCounts[subcategory.id] || 0})
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-                  </TooltipProvider>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        )}
 
       <div className="border-b border-border-foreground pb-3.5">
         <Accordion type="single" collapsible className="w-full">

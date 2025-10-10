@@ -166,6 +166,9 @@ export interface CategoryProductsElasticParams {
   sort?: string;
   page?: number;
   pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
 }
 
 export interface CategoryFiltersElasticParams {

@@ -1458,6 +1458,9 @@ export const getCategoryProductsElastic = async (params: {
   sort?: string;
   page?: number;
   pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -1487,6 +1490,30 @@ export const getCategoryProductsElastic = async (params: {
 
   if (params.pageSize) {
     queryParams.append("pageSize", params.pageSize.toString());
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => {
+      queryParams.append("tags", tag);
+    });
   }
 
   const queryString = queryParams.toString();
