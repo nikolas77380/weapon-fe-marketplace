@@ -5,6 +5,8 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  getCategoryProductsElastic,
+  getCategoryFiltersElastic,
 } from "@/lib/strapi";
 import { CreateProductData, UpdateProductData } from "@/lib/types";
 import { queryKeys } from "@/lib/query-keys";
@@ -149,4 +151,49 @@ export const useProductActions = () => {
       deleteMutation.isPending,
     error: createMutation.error || updateMutation.error || deleteMutation.error,
   };
+};
+
+// Elasticsearch-based hooks
+export interface CategoryProductsElasticParams {
+  categorySlug: string;
+  search?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+export interface CategoryFiltersElasticParams {
+  categorySlug: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+}
+
+export const useCategoryProductsElastic = (
+  params: CategoryProductsElasticParams
+) => {
+  return useQuery({
+    queryKey: ["category-products-elastic", params],
+    queryFn: () => getCategoryProductsElastic(params),
+    enabled: !!params.categorySlug,
+  });
+};
+
+export const useCategoryFiltersElastic = (
+  params: CategoryFiltersElasticParams
+) => {
+  return useQuery({
+    queryKey: ["category-filters-elastic", params],
+    queryFn: () => getCategoryFiltersElastic(params),
+    enabled: !!params.categorySlug,
+  });
 };

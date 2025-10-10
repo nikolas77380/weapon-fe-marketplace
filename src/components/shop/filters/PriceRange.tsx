@@ -26,11 +26,6 @@ const PriceRange = ({
   const [minPrice, setMinPrice] = useState(initialMin);
   const [maxPrice, setMaxPrice] = useState(initialMax);
 
-  // Initial values
-  useEffect(() => {
-    onPriceChange?.(initialMin, initialMax);
-  }, [initialMin, initialMax, onPriceChange]);
-
   // Sync with external prop changes (for Clear All functionality)
   useEffect(() => {
     setMinPrice(initialMin);
@@ -63,19 +58,22 @@ const PriceRange = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = Math.min(Number(e.target.value), maxPrice - 100);
       setMinPrice(value);
-      onPriceChange?.(value, maxPrice);
     },
-    [maxPrice, onPriceChange]
+    [maxPrice]
   );
 
   const handleMaxChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = Math.max(Number(e.target.value), minPrice + 100);
       setMaxPrice(value);
-      onPriceChange?.(minPrice, value);
     },
-    [minPrice, onPriceChange]
+    [minPrice]
   );
+
+  // Handle slider end events
+  const handleSliderEnd = useCallback(() => {
+    onPriceChange?.(minPrice, maxPrice);
+  }, [minPrice, maxPrice, onPriceChange]);
 
   // Handle input changes
   const handleMinInputChange = useCallback(
@@ -167,6 +165,8 @@ const PriceRange = ({
               max={maxLimit}
               value={clampedMinPrice}
               onChange={handleMinChange}
+              onMouseUp={handleSliderEnd}
+              onTouchEnd={handleSliderEnd}
               style={{
                 zIndex: clampedMinPrice > clampedMaxPrice - 200 ? 2 : 1,
               }}
@@ -180,6 +180,8 @@ const PriceRange = ({
               max={maxLimit}
               value={clampedMaxPrice}
               onChange={handleMaxChange}
+              onMouseUp={handleSliderEnd}
+              onTouchEnd={handleSliderEnd}
               style={{
                 zIndex: clampedMaxPrice < clampedMinPrice + 200 ? 2 : 1,
               }}

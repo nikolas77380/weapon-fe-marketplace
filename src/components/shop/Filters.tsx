@@ -25,6 +25,7 @@ interface FiltersProps {
   categoryCounts?: { [key: number]: number };
   hideCategoryFilter?: boolean;
   isMobile?: boolean;
+  elasticFilters?: any; // Elasticsearch aggregations data
 }
 
 const Filters = ({
@@ -37,6 +38,7 @@ const Filters = ({
   categoryCounts = {},
   hideCategoryFilter = false,
   isMobile = false,
+  elasticFilters,
 }: FiltersProps) => {
   const t = useTranslations("CompanyDetail.tabProducts");
   return (
@@ -75,6 +77,128 @@ const Filters = ({
           ))}
         </div>
       </div>
+
+      {/* Elasticsearch Tags Filter */}
+      {elasticFilters?.tags && elasticFilters.tags.length > 0 && (
+        <div className="border-b border-border-foreground pb-3.5">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="tags" className="border-none">
+              <AccordionTrigger className="py-0 hover:no-underline">
+                <h2 className="text-sm font-medium font-roboto">Tags</h2>
+              </AccordionTrigger>
+              <AccordionContent className="pt-3">
+                <div className="flex flex-col gap-2">
+                  {elasticFilters.tags.map((tag: any) => (
+                    <div key={tag.key} className="flex items-center gap-3">
+                      <Checkbox id={`tag-${tag.key}`} />
+                      <Label
+                        htmlFor={`tag-${tag.key}`}
+                        className="text-sm font-light"
+                      >
+                        {tag.key} ({tag.doc_count})
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      )}
+
+      {/* Elasticsearch Categories Filter */}
+      {elasticFilters?.categories && elasticFilters.categories.length > 0 && (
+        <div className="border-b border-border-foreground pb-3.5">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="elastic-categories" className="border-none">
+              <AccordionTrigger className="py-0 hover:no-underline">
+                <h2 className="text-sm font-medium font-roboto">
+                  Subcategories
+                </h2>
+              </AccordionTrigger>
+              <AccordionContent className="pt-3">
+                <div className="flex flex-col gap-2">
+                  {elasticFilters.categories.map((category: any) => (
+                    <div key={category.key} className="flex items-center gap-3">
+                      <Checkbox id={`elastic-category-${category.key}`} />
+                      <Label
+                        htmlFor={`elastic-category-${category.key}`}
+                        className="text-sm font-light"
+                      >
+                        {category.key} ({category.doc_count})
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      )}
+
+      {/* Elasticsearch Availability Filter */}
+      {elasticFilters?.availability &&
+        elasticFilters.availability.length > 0 && (
+          <div className="border-b border-border-foreground pb-3.5">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem
+                value="elastic-availability"
+                className="border-none"
+              >
+                <AccordionTrigger className="py-0 hover:no-underline">
+                  <h2 className="text-sm font-medium font-roboto">
+                    Availability
+                  </h2>
+                </AccordionTrigger>
+                <AccordionContent className="pt-3">
+                  <div className="flex flex-col gap-2">
+                    {elasticFilters.availability.map((item: any) => (
+                      <div key={item.key} className="flex items-center gap-3">
+                        <Checkbox id={`elastic-availability-${item.key}`} />
+                        <Label
+                          htmlFor={`elastic-availability-${item.key}`}
+                          className="text-sm font-light"
+                        >
+                          {item.key} ({item.doc_count})
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        )}
+
+      {/* Elasticsearch Condition Filter */}
+      {elasticFilters?.condition && elasticFilters.condition.length > 0 && (
+        <div className="border-b border-border-foreground pb-3.5">
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="elastic-condition" className="border-none">
+              <AccordionTrigger className="py-0 hover:no-underline">
+                <h2 className="text-sm font-medium font-roboto">
+                  {t("titleCondition")}
+                </h2>
+              </AccordionTrigger>
+              <AccordionContent className="pt-3">
+                <div className="flex flex-col gap-2">
+                  {elasticFilters.condition.map((item: any) => (
+                    <div key={item.key} className="flex items-center gap-3">
+                      <Checkbox id={`elastic-condition-${item.key}`} />
+                      <Label
+                        htmlFor={`elastic-condition-${item.key}`}
+                        className="text-sm font-light"
+                      >
+                        {item.key} ({item.doc_count})
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      )}
 
       {!hideCategoryFilter && (
         <div className="border-b border-border-foreground pb-3.5">
@@ -131,43 +255,6 @@ const Filters = ({
 
       <div className="border-b border-border-foreground pb-3.5">
         <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="condition" className="border-none">
-            <AccordionTrigger className="py-0 hover:no-underline">
-              <h2 className="text-sm font-medium font-roboto">
-                {t("titleCondition")}
-              </h2>
-            </AccordionTrigger>
-            <AccordionContent className="pt-3">
-              <div className="flex flex-col gap-2">
-                {[
-                  { id: "new", name: "New", count: 15 },
-                  { id: "used", name: "Used", count: 8 },
-                  { id: "refurbished", name: "Refurbished", count: 3 },
-                ].map((condition) => (
-                  <div key={condition.id} className="flex items-center gap-3">
-                    <Checkbox
-                      id={`condition-${condition.id}`}
-                      className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
-                    />
-                    <Label
-                      htmlFor={`condition-${condition.id}`}
-                      className="text-sm font-light flex-1 cursor-pointer text-foreground/80"
-                    >
-                      {condition.name}
-                    </Label>
-                    <span className="text-sm text-gray-500">
-                      ({condition.count})
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </div>
-
-      <div className="border-b border-border-foreground pb-3.5">
-        <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="availability" className="border-none">
             <AccordionTrigger className="py-0 hover:no-underline">
               <h2 className="text-sm font-medium font-roboto">
@@ -210,8 +297,8 @@ const Filters = ({
         onPriceChange={onPriceChange}
         initialMin={priceRange.min}
         initialMax={priceRange.max}
-        minLimit={1}
-        maxLimit={500000}
+        minLimit={priceRange.min}
+        maxLimit={priceRange.max}
         isMobile={isMobile}
       />
 
