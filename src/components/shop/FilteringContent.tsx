@@ -269,7 +269,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       </div>
 
       {/* Mobile Filter Drawer */}
-      {/* <FilterDrawer
+      <FilterDrawer
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
@@ -281,7 +281,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         priceRange={mobilePriceRange}
         categoryCounts={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-      /> */}
+        childCategories={[]}
+        selectedSubcategoryId={filters.subcategoryId}
+      />
     </div>
   );
 };

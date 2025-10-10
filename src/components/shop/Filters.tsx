@@ -14,12 +14,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { useTranslations, useLocale } from "next-intl";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;

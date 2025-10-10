@@ -1561,3 +1561,135 @@ export const getCategoryFiltersElastic = async (params: {
     method: "GET",
   });
 };
+
+// Elasticsearch-based seller products
+export const getSellerProductsElastic = async (params: {
+  sellerId: number;
+  search?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.search) {
+    queryParams.append("search", params.search);
+  }
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params.sort) {
+    queryParams.append("sort", params.sort);
+  }
+
+  if (params.page) {
+    queryParams.append("page", params.page.toString());
+  }
+
+  if (params.pageSize) {
+    queryParams.append("pageSize", params.pageSize.toString());
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/seller/${params.sellerId}/search/elastic${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};
+
+// Elasticsearch-based seller product filters
+export const getSellerProductFiltersElastic = async (params: {
+  sellerId: number;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params.priceRange) {
+    queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    params.tags.forEach((tag) => queryParams.append("tags", tag));
+  }
+
+  if (params.status) {
+    queryParams.append("status", params.status);
+  }
+
+  if (params.availability && params.availability.length > 0) {
+    params.availability.forEach((availability) =>
+      queryParams.append("availability", availability)
+    );
+  }
+
+  if (params.condition && params.condition.length > 0) {
+    params.condition.forEach((condition) =>
+      queryParams.append("condition", condition)
+    );
+  }
+
+  if (params.categories && params.categories.length > 0) {
+    params.categories.forEach((category) =>
+      queryParams.append("categories", category)
+    );
+  }
+
+  const queryString = queryParams.toString();
+  const path = `/api/products/seller/${params.sellerId}/aggregations${
+    queryString ? `?${queryString}` : ""
+  }`;
+
+  return strapiFetch({
+    path,
+    method: "GET",
+  });
+};

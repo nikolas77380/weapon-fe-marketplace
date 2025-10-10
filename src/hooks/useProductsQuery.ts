@@ -7,6 +7,8 @@ import {
   deleteProduct,
   getCategoryProductsElastic,
   getCategoryFiltersElastic,
+  getSellerProductsElastic,
+  getSellerProductFiltersElastic,
 } from "@/lib/strapi";
 import { CreateProductData, UpdateProductData } from "@/lib/types";
 import { queryKeys } from "@/lib/query-keys";
@@ -198,5 +200,54 @@ export const useCategoryFiltersElastic = (
     queryKey: ["category-filters-elastic", params],
     queryFn: () => getCategoryFiltersElastic(params),
     enabled: !!params.categorySlug,
+  });
+};
+
+// Seller Elasticsearch hooks
+export interface SellerProductsElasticParams {
+  sellerId: number;
+  search?: string;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  sort?: string;
+  page?: number;
+  pageSize?: number;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}
+
+export interface SellerFiltersElasticParams {
+  sellerId: number;
+  priceRange?: {
+    min?: number;
+    max?: number;
+  };
+  tags?: string[];
+  status?: string;
+  availability?: string[];
+  condition?: string[];
+  categories?: string[];
+}
+
+export const useSellerProductsElastic = (
+  params: SellerProductsElasticParams
+) => {
+  return useQuery({
+    queryKey: ["seller-products-elastic", params],
+    queryFn: () => getSellerProductsElastic(params),
+    enabled: !!params.sellerId,
+  });
+};
+
+export const useSellerFiltersElastic = (params: SellerFiltersElasticParams) => {
+  return useQuery({
+    queryKey: ["seller-filters-elastic", params],
+    queryFn: () => getSellerProductFiltersElastic(params),
+    enabled: !!params.sellerId,
   });
 };
