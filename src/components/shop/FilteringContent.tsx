@@ -273,16 +273,20 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
-        onCategoryChange={handleCategoryChange}
         onSubcategoryChange={handleSubcategoryChange}
         onClearAll={handleClearAll}
         availableCategories={availableCategoriesList}
-        selectedCategoryId={filters.categoryId}
         priceRange={mobilePriceRange}
-        categoryCounts={memoizedCategoryCounts}
+        categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-        childCategories={[]}
+        elasticFilters={elasticFilters}
         selectedSubcategoryId={filters.subcategoryId}
+        onAvailabilityChange={handleAvailabilityChange}
+        onConditionChange={handleConditionChange}
+        onCategoriesChange={handleCategoriesChange}
+        selectedAvailability={filters.availability}
+        selectedCondition={filters.condition}
+        selectedCategories={filters.categories}
       />
     </div>
   );

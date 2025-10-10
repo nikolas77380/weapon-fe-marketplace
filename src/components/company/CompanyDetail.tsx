@@ -735,12 +735,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   isOpen={isFilterDrawerOpen}
                   onClose={handleCloseFilterDrawer}
                   onPriceChange={handlePriceChange}
-                  onCategoryChange={handleCategoryChange}
                   onSubcategoryChange={handleCategoryChange}
                   onClearAll={handleClearAll}
                   availableCategories={availableCategories}
-                  childCategories={[]}
-                  selectedCategoryId={filters.categoryId}
                   selectedSubcategoryId={filters.categoryId}
                   priceRange={{
                     min:
@@ -748,7 +745,14 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                     max:
                       elasticFilters?.data?.priceStats?.max || filters.maxPrice,
                   }}
-                  categoryCounts={categoryCounts}
+                  categories={memoizedCategoryCounts}
+                  elasticFilters={elasticFilters?.data}
+                  onAvailabilityChange={handleAvailabilityChange}
+                  onConditionChange={handleConditionChange}
+                  onCategoriesChange={handleCategoriesChange}
+                  selectedAvailability={filters.availability}
+                  selectedCondition={filters.condition}
+                  selectedCategories={filters.categories}
                   hideCategoryFilter={false}
                 />
               </div>
