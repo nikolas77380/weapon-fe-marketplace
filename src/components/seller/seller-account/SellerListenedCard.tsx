@@ -43,6 +43,21 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(product.status);
 
+  const getStatusStyles = (status: string) => {
+    switch (status) {
+      case "available":
+        return "bg-green-600 text-white";
+      case "reserved":
+        return "bg-yellow-500 text-black";
+      case "sold":
+        return "bg-red-600 text-white";
+      case "archived":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-black text-white";
+    }
+  };
+
   const handleDeleteProduct = async () => {
     try {
       await deleteProduct({ id: product.id });
@@ -113,7 +128,11 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
       </div>
       {/* Action Buttons */}
       <div className="flex items-center min-[600px]:items-start justify-between min-[600px]:justify-end gap-4 min-[600px]:gap-8">
-        <div className="bg-black text-white px-2 py-0.5 text-xs font-medium self-start">
+        <div
+          className={`px-2 py-0.5 text-xs font-medium self-start rounded ${getStatusStyles(
+            currentStatus
+          )}`}
+        >
           {currentStatus}
         </div>
         <div className="flex items-center gap-3">
