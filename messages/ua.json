@@ -15,6 +15,7 @@
       "titleAddProduct": "Додати продукт",
       "titleUserName": "Ім'я користувача",
       "titleMyAccount": "Мій обліковий запис",
+      "titleFavourites": "Обране",
       "titleBrowseProducts": "Переглянути товари",
       "titlAddNewProduct": "Додати новий продукт",
       "titleMessages": "Повідомлення",
@@ -77,6 +78,9 @@
       "titleCustomerMessages": "Ваші повідомлення",
       "titleOpenFullMessenger": "Відкрити Месенджер",
       "descriptionCustomerMessages": "Керувати запитами та комунікувати з продавцями"
+    },
+    "tabSettings": {
+      "titleSettings": "Налаштування"
     }
   },
   "SellerAccountHeader": {
@@ -84,6 +88,7 @@
     "titleAddProduct": "Додати товар",
     "titleSettings": "Налаштування",
     "titleActiveListings": "Активні списки",
+    "titleSavedProducts": "Збережені товари",
     "titleTotalViews": "Всього переглядів",
     "titleUnreadChats": "Непрочитаних повідомлень"
   },
@@ -94,6 +99,11 @@
     "authSwitcher": {
       "login": "Вхід",
       "register": "Зареєструватися"
+    },
+    "toasts": {
+      "registrationFailed": "Реєстрація не вдалася. Будь ласка, спробуйте ще раз.",
+      "invalidCredentials": "Невірна пошта або пароль",
+      "loginFailed": "Вхід не вдався. Будь ласка, спробуйте ще раз."
     },
     "login": {
       "footerDescripotion": "Безпечна автентифікація за допомогою шифрування, що відповідає галузевим стандартам.",
@@ -143,6 +153,8 @@
     "placeholderCountry": "Оберіть краіну",
     "labelAddress": "Адреса",
     "placeholderAddress": "Введіть адресу компанії",
+    "labelAvatar": "Аватар компанії",
+    "labelCurrentAvatar": "Поточний аватар:",
     "buttonSaving": "Збереження...",
     "buttonUpdate": "Оновити інформацію про компанію",
     "buttonSubmit": "Підтвердити інформацію про компанію",
@@ -281,7 +293,7 @@
     "buttonLogReg": "Увійти / Зареєструватися"
   },
   "ShopCard": {
-    "titleCardSeller": "Зв'язатися з продавцем",
+    "titleCardSeller": "Контакти продавця",
     "titlebuttonCreating": "Створення...",
     "contactModal": {
       "title": "Контактна інформація",
@@ -308,7 +320,7 @@
   },
   "ProductDetail": {
     "titleProduct": "Товар",
-    "titleCardSeller": "Зв'язатися з продавцем",
+    "titleCardSeller": "Контакти продавця",
     "descriptionNotCountry": "Країна недоступна",
     "titleViewProfile": "Переглянути профіль",
     "titleTabDesc": "Опис",
@@ -329,7 +341,8 @@
   "CompanyDetail": {
     "titleNotCountry": "Країна недоступна",
     "titleNotAddress": "Адреса недоступна",
-    "buttonCardSeller": "Зв'язатися з продавцем",
+    "buttonCardSeller": "Контакти продавця",
+    "buttonCreating": "Створюється...",
     "tabOverview": {
       "titleOverview": "Огляд",
       "titleAbout": "Про",
@@ -354,12 +367,13 @@
       "buttonClearAll": "Очистити все",
       "titleQuickFilters": "Швидкі фільтри",
       "titleCategory": "Категорія",
+      "titleSubcategory": "Підкатегорія",
       "titleCondition": "Стан",
       "titleAvailability": "Наявність",
       "placeholderSearch": "Пошук товарів..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Інформація про бізнес"
+      "titleBusinessInfo": "Додаткова інформація"
     }
   },
   "PriceRange": {
@@ -375,8 +389,8 @@
     "sort": {
       "newest": "Спочатку нові",
       "oldest": "Спочатку старі",
-      "priceLowToHigh": "Від низького до високого",
-      "priceHighToLow": "Від високого до низького",
+      "priceLowToHigh": "Від дешевого до дорожчого",
+      "priceHighToLow": "Від дорожчого до дешевого",
       "nameAToZ": "Від А до Я",
       "nameZToA": "Від Я до А"
     }

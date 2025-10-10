@@ -13,14 +13,23 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;
   onCategoryChange: (categoryId: number | null) => void;
+  onSubcategoryChange: (subcategoryId: number | null) => void;
   onClearAll: () => void;
   availableCategories: Category[];
+  childCategories: Category[];
   selectedCategoryId: number | null;
+  selectedSubcategoryId: number | null;
   priceRange: { min: number; max: number };
   categoryCounts?: { [key: number]: number };
   hideCategoryFilter?: boolean;
@@ -30,21 +39,32 @@ interface FiltersProps {
 const Filters = ({
   onPriceChange,
   onCategoryChange,
+  onSubcategoryChange,
   onClearAll,
   availableCategories,
+  childCategories,
   selectedCategoryId,
+  selectedSubcategoryId,
   priceRange,
   categoryCounts = {},
   hideCategoryFilter = false,
   isMobile = false,
 }: FiltersProps) => {
   const t = useTranslations("CompanyDetail.tabProducts");
+  const currentLocale = useLocale();
+
+  const getCategoryName = (category: Category) => {
+    return currentLocale === "en"
+      ? category.name
+      : category.translate_ua || category.name;
+  };
+
   return (
     <div
       className={`${
         isMobile
           ? "border-0"
-          : "border-r border-t border-b border-border-foreground"
+          : "border-r border-t border-b border-border-foreground rounded-sm"
       } h-fit ${isMobile ? "p-0" : "p-5"} flex flex-col gap-3.5`}
     >
       <div className="flex justify-between">
@@ -109,7 +129,7 @@ const Filters = ({
                             : "text-foreground/80"
                         }`}
                       >
-                        {category.name}
+                        {getCategoryName(category)}
                       </Label>
                       <span
                         className={`text-sm ${
@@ -128,6 +148,79 @@ const Filters = ({
           </Accordion>
         </div>
       )}
+
+      {childCategories.length > 0 &&
+        childCategories.filter(
+          (subcategory) => (categoryCounts[subcategory.id] || 0) > 0
+        ).length > 0 && (
+          <div className="border-b border-border-foreground pb-3.5">
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="subcategory" className="border-none">
+                <AccordionTrigger className="py-0 hover:no-underline">
+                  <h2 className="text-sm font-medium font-roboto">
+                    {t("titleSubcategory")}
+                  </h2>
+                </AccordionTrigger>
+                <AccordionContent className="pt-3">
+                  <TooltipProvider>
+                    <div className="flex flex-col gap-2">
+                      {childCategories
+                        .filter(
+                          (subcategory) =>
+                            (categoryCounts[subcategory.id] || 0) > 0
+                        )
+                        .map((subcategory) => (
+                          <div
+                            key={subcategory.id}
+                            className="flex items-center gap-3"
+                          >
+                            <Checkbox
+                              id={`subcategory-${subcategory.id}`}
+                              checked={selectedSubcategoryId === subcategory.id}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  onSubcategoryChange(subcategory.id);
+                                } else {
+                                  onSubcategoryChange(null);
+                                }
+                              }}
+                              className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
+                            />
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Label
+                                  htmlFor={`subcategory-${subcategory.id}`}
+                                  className={`text-sm font-light cursor-pointer truncate max-w-[150px] block ${
+                                    selectedSubcategoryId === subcategory.id
+                                      ? "text-foreground"
+                                      : "text-foreground/80"
+                                  }`}
+                                >
+                                  {getCategoryName(subcategory)}
+                                </Label>
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                <p>{getCategoryName(subcategory)}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            <span
+                              className={`text-sm flex-shrink-0 ${
+                                selectedSubcategoryId === subcategory.id
+                                  ? "text-gray-500"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              ({categoryCounts[subcategory.id] || 0})
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </TooltipProvider>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+        )}
 
       <div className="border-b border-border-foreground pb-3.5">
         <Accordion type="single" collapsible className="w-full">

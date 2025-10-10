@@ -9,6 +9,7 @@ export interface SellerMeta {
   phoneNumbers?: string;
   country?: string;
   address?: string;
+  avatar?: string;
   createdAt: string;
   updatedAt: string;
 }

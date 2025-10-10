@@ -106,7 +106,7 @@ const ViewedProductsSlider = () => {
         <Swiper
           modules={[Navigation]}
           slidesPerView={1}
-          spaceBetween={0}
+          spaceBetween={16}
           onSwiper={setSwiperRef}
           onSlideChange={handleSlideChange}
           onProgress={handleProgress}

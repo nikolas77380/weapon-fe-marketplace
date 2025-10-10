@@ -7,7 +7,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Certificate } from "@/hooks/useCertificates";
 import { Download, FileText, ZoomIn, ZoomOut, SearchX } from "lucide-react";
@@ -32,19 +31,6 @@ const CertificateModal = ({
   const zoomStep = 25;
 
   if (!certificate) return null;
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "expired":
-        return "bg-red-100 text-red-800";
-      case "revoked":
-        return "bg-gray-100 text-gray-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
@@ -143,7 +129,9 @@ const CertificateModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleModalClose}>
-      <DialogContent className="max-w-[98vw] min-[300px]:max-w-[95vw] sm:max-w-2xl lg:max-w-4xl max-h-[95vh] overflow-y-auto p-2 min-[300px]:p-3 sm:p-6 [&>button]:cursor-pointer [&>button]:lg:w-6 [&>button]:lg:h-6 [&>button>svg]:lg:w-5 [&>button>svg]:lg:h-5">
+      <DialogContent className="max-w-[98vw] min-[300px]:max-w-[95vw] sm:max-w-2xl lg:max-w-4xl max-h-[95vh] 
+      overflow-y-auto p-2 min-[300px]:p-3 sm:p-6 [&>button]:cursor-pointer [&>button]:lg:w-6 
+      [&>button]:lg:h-6 [&>button>svg]:lg:w-5 [&>button>svg]:lg:h-5 border-transparent">
         <DialogHeader className="space-y-2 sm:space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3 pr-6 sm:pr-8">
             <DialogTitle className="text-lg sm:text-xl lg:text-2xl leading-tight">
@@ -190,13 +178,6 @@ const CertificateModal = ({
                     </span>
                   </div>
                 )}
-              <Badge
-                className={`${getStatusColor(
-                  certificate.status
-                )} text-xs sm:text-sm flex-shrink-0 self-start mt-2 sm:mt-0`}
-              >
-                {certificate.status}
-              </Badge>
             </div>
           </div>
         </DialogHeader>
@@ -260,7 +241,7 @@ const CertificateModal = ({
             <div className="flex justify-center pt-2">
               <Button
                 onClick={handleDownload}
-                className="w-full sm:w-auto px-3 md:px-6 py-1.5 md:py-2 text-sm md:text-base rounded-none"
+                className="w-full sm:w-auto px-3 md:px-6 py-1.5 md:py-2 text-sm md:text-base rounded-sm"
                 variant="outline"
               >
                 <Download className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />

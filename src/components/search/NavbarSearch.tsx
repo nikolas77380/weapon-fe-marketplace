@@ -183,7 +183,7 @@ export const NavbarSearch = ({
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           onKeyDown={handleKeyDown}
-          className="pl-10 pr-4 w-full border-gold-main placeholder:text-white/50"
+          className="pl-10 pr-4 w-full rounded-sm border-gold-main placeholder:text-white/50"
         />
         {isLoading && (
           <Loader2 className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 animate-spin text-gray-400" />

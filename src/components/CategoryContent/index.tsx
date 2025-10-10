@@ -31,7 +31,8 @@ const FilteringContent = () => {
   return (
     <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
       {/* Filters - Hidden on mobile, visible on desktop */}
-      <div className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 flex-shrink-0 pr-2">
+      <div className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 
+      flex-shrink-0 pr-2 rounded-br-sm">
         {loading ? (
         <SkeletonComponent type="leftSidebar" />
       ) : (
@@ -55,7 +56,7 @@ const FilteringContent = () => {
         {/* Products Grid */}
         <div
           className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 
-        lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 w-full"
+        lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full"
         >
           {loading ? (
             <SkeletonComponent

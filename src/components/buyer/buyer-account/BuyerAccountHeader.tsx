@@ -28,7 +28,8 @@ const BuyerAccountHeader = ({
           <div>
             <Link
               href={"/"}
-              className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all hover:bg-gold-main/90 px-2 py-2 lg:px-3 lg:py-2.5 text-white"
+              className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all 
+              hover:bg-gold-main/90 px-2 py-2 font-medium lg:px-3 lg:py-2.5 text-white"
             >
               {t("titleBrowseMarketplace")}
             </Link>
@@ -92,9 +93,10 @@ const BuyerAccountHeader = ({
         <div className="flex items-center lg:justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
           <Link
             href={"/"}
-            className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all px-2.5 py-1.5 hover:bg-gold-main/90"
+            className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all px-2.5 py-1.5 
+            hover:bg-gold-main/90"
           >
-            <p className="text-xs sm:text-sm font-semibold text-white">
+            <p className="text-xs sm:text-sm font-medium text-white">
               {t("titleBrowseMarketplace")}
             </p>
           </Link>

@@ -18,9 +18,12 @@ interface FilterDrawerProps {
   onClose: () => void;
   onPriceChange: (min: number, max: number) => void;
   onCategoryChange: (categoryId: number | null) => void;
+  onSubcategoryChange: (subcategoryId: number | null) => void;
   onClearAll: () => void;
   availableCategories: any[];
+  childCategories: any[];
   selectedCategoryId: number | null;
+  selectedSubcategoryId: number | null;
   priceRange: { min: number; max: number };
   categoryCounts: Record<number, number>;
   hideCategoryFilter: boolean;
@@ -31,9 +34,12 @@ const FilterDrawer = ({
   onClose,
   onPriceChange,
   onCategoryChange,
+  onSubcategoryChange,
   onClearAll,
   availableCategories,
+  childCategories,
   selectedCategoryId,
+  selectedSubcategoryId,
   priceRange,
   categoryCounts,
   hideCategoryFilter,
@@ -71,9 +77,12 @@ const FilterDrawer = ({
           <Filters
             onPriceChange={onPriceChange}
             onCategoryChange={onCategoryChange}
+            onSubcategoryChange={onSubcategoryChange}
             onClearAll={onClearAll}
             availableCategories={availableCategories}
+            childCategories={childCategories}
             selectedCategoryId={selectedCategoryId}
+            selectedSubcategoryId={selectedSubcategoryId}
             priceRange={priceRange}
             categoryCounts={categoryCounts}
             hideCategoryFilter={hideCategoryFilter}

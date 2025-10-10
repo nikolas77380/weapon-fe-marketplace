@@ -55,7 +55,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   if (viewMode === "list") {
     // List view
     return (
-      <div className="border border-border-foreground flex flex-col min-[400px]:flex-row p-2">
+      <div className="border border-border-foreground flex flex-col min-[400px]:flex-row p-2 rounded-sm">
         <Link
           href={`/marketplace/${item.id}`}
           className="relative overflow-hidden flex-shrink-0"
@@ -151,7 +151,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
 
   // Grid view
   return (
-    <div className="border border-l-0 border-t-0 border-b border-r border-border-foreground flex flex-col">
+    <div className="border rounded-sm border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
         <div className="relative overflow-hidden h-[120px] xs:h-[150px] sm:h-[200px] min-h-[120px] xs:min-h-[150px] sm:min-h-[200px] max-h-[120px] xs:max-h-[150px] sm:max-h-[200px] p-2 xs:p-2.5 sm:p-3">
           <Image
