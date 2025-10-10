@@ -59,7 +59,8 @@ const MobileDrawer = ({
           {t("burgerMenu.srDescription")}
         </DrawerDescription>
 
-        <DrawerHeader className="flex items-center justify-between bg-[#565457] h-16 mb-5 px-4">
+        <DrawerHeader className="flex items-center justify-between bg-gradient-to-br 
+      from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4">
           <div className="flex items-center justify-between w-full">
             <Logo />
             <DrawerClose asChild>
@@ -76,7 +77,7 @@ const MobileDrawer = ({
         <div className="px-4 pb-4 space-y-4">
           {/* Catalog Button for all users on <1024px */}
           <button
-            className="bg-gold-main rounded-none cursor-pointer duration-300 transition-all hover:bg-gold-main/90 w-full"
+            className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all hover:bg-gold-main/90 w-full"
             onClick={() => {
               onClose();
               onOpenCatalog();

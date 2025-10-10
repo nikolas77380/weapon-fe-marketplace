@@ -3,7 +3,11 @@
 import React, { useState, useRef, useCallback } from "react";
 import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
 import { Button } from "@/components/ui/button";
-import { getCroppedImg, makeDefaultCrop } from "@/lib/cropUtils";
+import {
+  getCroppedImg,
+  getCroppedImgCircular,
+  makeDefaultCrop,
+} from "@/lib/cropUtils";
 import { Check, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import "react-image-crop/dist/ReactCrop.css";
@@ -14,6 +18,7 @@ interface ImageCropPreviewProps {
   onCropComplete: (croppedFile: File) => void;
   onCancel?: () => void;
   className?: string;
+  cropShape?: "rect" | "circle";
 }
 
 const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
@@ -22,6 +27,7 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   onCropComplete,
   onCancel,
   className = "",
+  cropShape = "rect",
 }) => {
   const t = useTranslations("ImageCrop");
   const [crop, setCrop] = useState<Crop>(makeDefaultCrop());
@@ -52,7 +58,9 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
 
       if (imgRef.current) {
         try {
-          const croppedFile = await getCroppedImg(
+          const cropFunction =
+            cropShape === "circle" ? getCroppedImgCircular : getCroppedImg;
+          const croppedFile = await cropFunction(
             imgRef.current,
             fullCrop,
             fileName
@@ -66,7 +74,9 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
     }
 
     try {
-      const croppedFile = await getCroppedImg(
+      const cropFunction =
+        cropShape === "circle" ? getCroppedImgCircular : getCroppedImg;
+      const croppedFile = await cropFunction(
         imgRef.current,
         completedCrop,
         fileName
@@ -75,7 +85,7 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
     } catch (error) {
       console.error("Error creating cropped image:", error);
     }
-  }, [completedCrop, fileName, onCropComplete]);
+  }, [completedCrop, fileName, onCropComplete, cropShape]);
 
   const handleResetCrop = useCallback(() => {
     setCrop(makeDefaultCrop());
@@ -91,10 +101,11 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
           crop={crop}
           onChange={(_, percentCrop) => setCrop(percentCrop)}
           onComplete={(c) => setCompletedCrop(c)}
-          aspect={undefined} // No fixed aspect ratio
+          aspect={cropShape === "circle" ? 1 : undefined}
           minWidth={20}
           minHeight={20}
           className="w-full"
+          circularCrop={cropShape === "circle"}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img

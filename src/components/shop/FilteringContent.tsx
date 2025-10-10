@@ -16,6 +16,8 @@ import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
+import { getChildCategories } from "@/lib/categoryUtils";
+import { useMemo } from "react";
 
 interface FilterState {
   minPrice: number;
@@ -59,7 +61,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const allProducts = response?.data || [];
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
-
+  
   // Use Elasticsearch data for filters instead of old hooks
   const elasticFilters = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
@@ -81,6 +83,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const handleCategoryChange = useCallback((categoryId: number | null) => {
     setFilters((prev) => ({ ...prev, categoryId, page: 1 }));
   }, []);
+
+  const handleSubcategoryChange = useCallback(
+    (subcategoryId: number | null) => {
+      setFilters((prev) => ({ ...prev, subcategoryId, page: 1 }));
+    },
+    []
+  );
 
   // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   setFilters((prev) => ({
@@ -205,6 +214,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           <Filters
             onPriceChange={handlePriceChange}
             onCategoryChange={handleCategoryChange}
+            onSubcategoryChange={handleSubcategoryChange}
             onClearAll={handleClearAll}
             availableCategories={availableCategoriesList}
             selectedCategoryId={filters.categoryId}
@@ -233,6 +243,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
         onCategoryChange={handleCategoryChange}
+        onSubcategoryChange={handleSubcategoryChange}
         onClearAll={handleClearAll}
         availableCategories={availableCategoriesList}
         selectedCategoryId={filters.categoryId}

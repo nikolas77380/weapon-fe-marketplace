@@ -2,7 +2,7 @@ import { Product } from "@/lib/types";
 import React from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
@@ -44,7 +44,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           )}
           {/* Contact Seller */}
           <Button
-            className="py-2 px-3 min-[400px]:px-4 sm:px-6 bg-gold-main text-white rounded-none
+            className="py-2 px-3 min-[400px]:px-4 sm:px-6 bg-gold-main text-white rounded-sm
           text-xs min-[400px]:text-sm sm:text-base hover:bg-gold-main/90 duration-300"
           >
             {t("titleCardSeller")}
@@ -61,6 +61,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
               <AvatarFallback className="uppercase text-3xl">
                 {product?.seller?.username.charAt(0) || "U"}
               </AvatarFallback>
+              {/* <AvatarImage src={product?.seller?.avatar} /> */}
             </Avatar>
             <div className="flex flex-col">
               {/* Company name */}
@@ -83,7 +84,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
           </div>
           <Link
             href={`/company/${product?.seller?.id}`}
-            className="border border-gray-primary w-full min-[400px]:w-auto py-2 px-3 sm:px-5 
+            className="border border-gray-primary w-full min-[400px]:w-auto py-2 px-3 sm:px-5 rounded-sm
             hover:bg-gold-main transition-all duration-300 flex items-center justify-center group"
           >
             <p className="text-xs min-[400px]:text-sm sm:text-base text-center group-hover:text-white duration-300">

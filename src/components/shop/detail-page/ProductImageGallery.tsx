@@ -82,9 +82,9 @@ const ProductImageGallery = ({
           {images.map((image, index) => (
             <div
               key={image.id}
-              className={`relative w-20 h-20 overflow-hidden cursor-pointer border-2 transition-all duration-200 ${
+              className={`relative w-20 h-20 rounded-sm overflow-hidden cursor-pointer border transition-all duration-200 ${
                 index === selectedImageIndex && !isImageLoading
-                  ? "border-red-200 scale-105 shadow-lg"
+                  ? "border-gold-main/10 scale-105 shadow-lg"
                   : "border-transparent hover:scale-102"
               }`}
               onClick={() => handleImageClick(index)}
@@ -96,7 +96,7 @@ const ProductImageGallery = ({
                 }
                 alt={image.name || productTitle}
                 fill
-                className="object-contain aspect-square"
+                className="object-contain aspect-square p-1"
                 onError={(e) => handleImageError(e, "/shop/1.jpg")}
               />
             </div>

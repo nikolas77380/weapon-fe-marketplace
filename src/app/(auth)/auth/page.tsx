@@ -1,6 +1,6 @@
 "use client";
 
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { RegisterFormValues } from "@/schemas/registerSchema";
@@ -10,17 +10,17 @@ import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegisterForm";
 import AuthSwitcher from "@/components/auth/AuthSwitcher";
 import {
-  registerBuyer,
+  // registerBuyer,
   login,
   getSessionTokenFromCookie,
   registerSeller,
-  getCurrentUser,
+  // getCurrentUser,
 } from "@/lib/auth";
 import { useAuthContext } from "@/context/AuthContext";
-import { isSeller } from "@/lib/utils";
+// import { isSeller } from "@/lib/utils";
 import Logo from "@/components/ui/Logo";
-import { Tag, User } from "lucide-react";
-import { UserProfile } from "@/lib/types";
+// import { Tag, User } from "lucide-react";
+// import { UserProfile } from "@/lib/types";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
@@ -33,18 +33,28 @@ const AuthPage = () => {
   const { fetchUser } = useAuthContext();
 
   const mode = searchParams.get("mode");
-  const type = searchParams.get("type");
+  // const type = searchParams.get("type");
 
   const [authMode, setAuthMode] = useState<"login" | "register">(
     mode === "login" ? "login" : "register"
   );
-  const [activeType, setActiveType] = useState<"buyer" | "seller">(
-    type === "seller" ? "seller" : "buyer"
-  );
+  // Always seller - buyer type removed
+  // const [activeType, setActiveType] = useState<"buyer" | "seller">(
+  //   type === "seller" ? "seller" : "buyer"
+  // );
+  // const activeType = "seller";
 
   useEffect(() => {
     const currentMode = searchParams.get("mode");
     const currentType = searchParams.get("type");
+
+    // Remove type parameter from URL if present - always seller
+    if (currentType) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("type");
+      router.replace(`/auth?${params.toString()}`, { scroll: false });
+      return;
+    }
 
     if (currentMode === "login") {
       setAuthMode("login");
@@ -52,12 +62,13 @@ const AuthPage = () => {
       setAuthMode("register");
     }
 
-    if (currentType === "seller") {
-      setActiveType("seller");
-    } else if (currentType === "buyer") {
-      setActiveType("buyer");
-    }
-  }, [searchParams]);
+    // Type switching removed - always seller
+    // if (currentType === "seller") {
+    //   setActiveType("seller");
+    // } else if (currentType === "buyer") {
+    //   setActiveType("buyer");
+    // }
+  }, [searchParams, router]);
 
   // Check if user is already authenticated
   useEffect(() => {
@@ -73,51 +84,59 @@ const AuthPage = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("mode", mode);
 
-    if (mode === "login") {
-      params.delete("type");
-    } else if (mode === "register" && !params.has("type")) {
-      params.set("type", "buyer");
-    }
+    // Type parameter removed - always seller
+    // if (mode === "login") {
+    //   params.delete("type");
+    // } else if (mode === "register" && !params.has("type")) {
+    //   params.set("type", "buyer");
+    // }
+    params.delete("type");
 
     router.replace(`/auth?${params.toString()}`, { scroll: false });
   };
 
-  const handleTypeChange = (type: "buyer" | "seller") => {
-    setActiveType(type);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("type", type);
-    router.replace(`/auth?${params.toString()}`, { scroll: false });
-  };
+  // Type switching removed - always seller
+  // const handleTypeChange = (type: "buyer" | "seller") => {
+  //   setActiveType(type);
+  //   const params = new URLSearchParams(searchParams.toString());
+  //   params.set("type", type);
+  //   router.replace(`/auth?${params.toString()}`, { scroll: false });
+  // };
 
   const onRegistrationSubmit = async (
     values: RegisterFormValues
   ): Promise<void> => {
     console.log("Attempting registration with:", values);
     try {
-      let response;
-      if (activeType === "buyer") {
-        response = await registerBuyer(values);
-        console.log("Buyer registration response:", response);
-      } else if (activeType === "seller") {
-        response = await registerSeller(values);
-        console.log("Seller registration response:", response);
-      }
+      // Always register as seller
+      // let response;
+      // if (activeType === "buyer") {
+      //   response = await registerBuyer(values);
+      //   console.log("Buyer registration response:", response);
+      // } else if (activeType === "seller") {
+      //   response = await registerSeller(values);
+      //   console.log("Seller registration response:", response);
+      // }
+
+      const response = await registerSeller(values);
+      console.log("Seller registration response:", response);
 
       if (response && "jwt" in response) {
         console.log("Registration successful! JWT cookie set");
         await fetchUser();
-        if (isSeller(response.user)) {
-          router.push("/account");
-        } else {
-          router.push("/marketplace");
-        }
+        // if (isSeller(response.user)) {
+        //   router.push("/account");
+        // } else {
+        //   router.push("/marketplace");
+        // }
+        router.push("/account");
       } else {
         console.error("Registration failed:", response);
-        toast.error("Registration failed. Please try again.");
+        toast.error(t("toasts.registrationFailed"));
       }
     } catch (error) {
       console.error("Registration error:", error);
-      toast.error("Registration failed. Please try again.");
+      toast.error(t("toasts.registrationFailed"));
     }
   };
 
@@ -128,22 +147,24 @@ const AuthPage = () => {
       console.log("Login response:", response);
 
       if (response && "jwt" in response) {
-        const currentUser = await getCurrentUser(response.jwt);
+        // const currentUser = await getCurrentUser(response.jwt);
         console.log("Login successful! JWT cookie set");
         await fetchUser();
         console.log("response.user", response.user);
-        if (isSeller(currentUser as UserProfile)) {
-          router.push("/account");
-        } else {
-          router.push("/marketplace");
-        }
+        // Always redirect to account - only sellers can login
+        // if (isSeller(currentUser as UserProfile)) {
+        //   router.push("/account");
+        // } else {
+        //   router.push("/marketplace");
+        // }
+        router.push("/account");
       } else {
         console.error("Login failed - no JWT in response:", response);
-        toast.error("Invalid email or password");
+        toast.error(t("toasts.invalidCredentials"));
       }
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please try again.");
+      toast.error(t("toasts.loginFailed"));
     }
   };
 
@@ -193,12 +214,12 @@ const AuthPage = () => {
                 {/* Content */}
                 {authMode === "register" && (
                   <>
-                    <div className="flex flex-col px-4 sm:px-6 lg:px-3.5">
+                    {/* Type switcher removed - always seller registration */}
+                    {/* <div className="flex flex-col px-4 sm:px-6 lg:px-3.5">
                       <Label className="mt-6 font-light text-sm sm:text-base">
                         {t("register.accountType")}
                       </Label>
                       <div className="flex flex-col sm:flex-row mt-3.5 w-full gap-2 sm:gap-0">
-                        {/* Buyer */}
                         <div
                           onClick={() => handleTypeChange("buyer")}
                           className={`border w-full flex flex-col items-center justify-center py-3 sm:py-2.5 px-3 sm:px-3.5 cursor-pointer transition-colors
@@ -219,7 +240,6 @@ const AuthPage = () => {
                             {t("register.userDescription")}
                           </p>
                         </div>
-                        {/* Seller */}
                         <div
                           onClick={() => handleTypeChange("seller")}
                           className={`border w-full flex flex-col items-center justify-center py-3 sm:py-2.5 px-3 sm:px-3.5 cursor-pointer transition-colors
@@ -241,7 +261,7 @@ const AuthPage = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* Forms */}
                     <div className="mt-6">

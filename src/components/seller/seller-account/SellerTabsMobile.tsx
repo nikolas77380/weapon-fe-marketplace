@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
 import { MessageSquare, Users } from "lucide-react";
@@ -10,6 +10,13 @@ import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
 import { cn, triggerClasses } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useFavourites } from "@/hooks/useFavourites";
+import { useViewMode } from "@/hooks/useViewMode";
+import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
+import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteState";
+import ViewModeToggle from "@/components/ui/ViewModeToggle";
+import { usePathname } from "next/navigation";
+import MetaForm from "./MetaForm";
 
 interface SellerTabsMobileProps {
   products: Product[];
@@ -24,7 +31,28 @@ const SellerTabsMobile = ({
   currentUser,
 }: SellerTabsMobileProps) => {
   const t = useTranslations("SellerAccountTabs");
+  const tBuyer = useTranslations("BuyerAccountTabs");
+  const pathname = usePathname();
+
   const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const { favourites, loading: favouritesLoading } = useFavourites();
+  const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
+  const [activeTab, setActiveTab] = useState("myInquiries");
+
+  // Check sessionStorage on mount and whenever pathname changes
+  useEffect(() => {
+    const savedTab = sessionStorage.getItem("accountTab");
+    if (savedTab === "favourites" || savedTab === "settings") {
+      setActiveTab(savedTab);
+      setTimeout(() => {
+        sessionStorage.removeItem("accountTab");
+      }, 100);
+    }
+  }, [pathname]);
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+  };
 
   const markAsRead = (messageId: number) => {
     setMessages((prev) =>
@@ -39,28 +67,48 @@ const SellerTabsMobile = ({
       <SellerAccountHeader products={products} currentUser={currentUser} />
       <div className="mt-6">
         <Tabs
-          defaultValue="myInquiries"
+          value={activeTab}
+          onValueChange={handleTabChange}
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-100 flex flex-col min-[400px]:flex-row min-[400px]:w-auto w-full h-full">
+          <TabsList className="bg-gray-100 grid grid-cols-2 min-[400px]:grid-cols-4 w-full h-full gap-1">
             <TabsTrigger
               value="myInquiries"
               className={cn(
                 triggerClasses,
-                "text-sm sm:text-base w-full min-[400px]:w-auto h-full py-2"
+                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
               {t("tabMyInquiries.titleTabMyInquiries")}
             </TabsTrigger>
             <TabsTrigger
+              value="favourites"
+              className={cn(
+                triggerClasses,
+                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
+              )}
+            >
+              {tBuyer("tabFavourites.titleFavourites")} (
+              {favourites.length || 0})
+            </TabsTrigger>
+            <TabsTrigger
               value="messages"
               className={cn(
                 triggerClasses,
-                "text-sm sm:text-base w-full min-[400px]:w-auto h-full py-2"
+                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
               {t("tabMessage.titleMessages")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="settings"
+              className={cn(
+                triggerClasses,
+                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
+              )}
+            >
+              {t("tabSettings.titleSettings")}
             </TabsTrigger>
           </TabsList>
           <div className="mt-6 overflow-hidden">
@@ -90,6 +138,44 @@ const SellerTabsMobile = ({
                 </div>
               </div>
             </TabsContent>
+            <TabsContent value="favourites">
+              <div className="space-y-4">
+                <ViewModeToggle
+                  viewMode={viewMode}
+                  onGridClick={toggleToGrid}
+                  onListClick={toggleToList}
+                  count={favourites.length || 0}
+                  title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
+                />
+
+                {/* Favourites Content */}
+                <div
+                  className={
+                    viewMode === "grid"
+                      ? "grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 gap-4"
+                      : "flex flex-col gap-4"
+                  }
+                >
+                  {favouritesLoading ? (
+                    <SkeletonComponent
+                      type="favouriteCard"
+                      count={6}
+                      className={viewMode === "grid" ? "" : "w-full"}
+                    />
+                  ) : favourites.length > 0 ? (
+                    favourites.map((favourite) => (
+                      <FavouriteCard
+                        key={favourite.id}
+                        favourite={favourite}
+                        viewMode={viewMode}
+                      />
+                    ))
+                  ) : (
+                    <NotFavouriteState />
+                  )}
+                </div>
+              </div>
+            </TabsContent>
             <TabsContent value="messages">
               <div className="mt-7.5">
                 <div className="flex items-center justify-between">
@@ -98,7 +184,7 @@ const SellerTabsMobile = ({
                   </h1>
                   <Link
                     href="/messages"
-                    className="bg-black py-1 px-3 sm:py-1.5 sm:px-4 rounded-md flex items-center gap-2 sm:gap-3 text-white hover:bg-black/80 duration-300 transition-all"
+                    className="bg-gold-main py-2 px-3 sm:py-1.5 sm:px-4 rounded-md flex items-center gap-2 sm:gap-3 text-white hover:bg-gold-main/80 duration-300 transition-all"
                   >
                     <MessageSquare size={20} />
                     <p className="text-[10px] sm:text-xs font-semibold">
@@ -179,6 +265,9 @@ const SellerTabsMobile = ({
                   ))}
                 </div>
               </div>
+            </TabsContent>
+            <TabsContent value="settings">
+              <MetaForm currentUser={currentUser} />
             </TabsContent>
           </div>
         </Tabs>
