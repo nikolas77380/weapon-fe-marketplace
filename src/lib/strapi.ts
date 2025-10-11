@@ -160,7 +160,7 @@ export const uploadSellerAvatar = async ({
   token: string;
 }) => {
   const formData = new FormData();
-  formData.append("files", avatar);
+  formData.append("files.avatar", avatar);
 
   return strapiFetchAuth({
     path: `/api/seller-metas/${id}/avatar`,
