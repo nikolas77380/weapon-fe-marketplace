@@ -70,7 +70,7 @@ const SellerTabsDesktop = ({
         orientation="vertical"
         className="w-full flex-row gap-10"
       >
-        <TabsList className="flex-col w-64 h-37.5 bg-gray-100">
+        <TabsList className="flex-col w-64 h-37.5 bg-gray-100 rounded-sm">
           <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
             {t("tabMyInquiries.titleTabMyInquiries")}
           </TabsTrigger>
@@ -93,7 +93,7 @@ const SellerTabsDesktop = ({
           <div className="mt-9 overflow-hidden">
             <TabsContent
               value="myInquiries"
-              className="bg-background border border-sidebar-accent px-6 pt-2 pb-4"
+              className="bg-background border border-sidebar-accent rounded-sm px-6 pt-2 pb-4"
             >
               <div className="mt-7.5">
                 <h1 className="text-xl font-roboto">

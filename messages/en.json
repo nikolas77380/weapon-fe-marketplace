@@ -247,6 +247,7 @@
       "placeholderModel": "Enter your product model",
       "labelCondition": "Condition",
       "placeholderCondition": "Select condition",
+      "titlePrice": "Pricing",
       "labelPrice": "Price (USD)",
       "titleDetails": "Details",
       "labelCount": "Count",
@@ -292,9 +293,14 @@
     "buttonProductCatalog": "Product Catalog",
     "buttonLogReg": "Login / Register"
   },
+  "NotFavourite": {
+    "titleNotFavourite": "No favourites yet.",
+    "descriptionNotFavourite": "Start adding products to your favourites!"
+  },
   "ShopCard": {
     "titleCardSeller": "Contact Seller",
     "titlebuttonCreating": "Creating...",
+    "taostErrorCreateChat": "Failed to create chat channel. Please try again.",
     "contactModal": {
       "title": "Contact Information",
       "titleCompanyName": "Company Name:",
@@ -336,7 +342,11 @@
     "titleManufacturer": "Manufacturer:",
     "titleProductDetails": "Product Details",
     "titleStatus": "Status:",
-    "titleUnknown": "Unknown"
+    "titleUnknown": "Unknown",
+    "toastSuccessFavourite": "Added to favourites",
+    "toastSuccessRemoveFavourite": "Removed from favourites",
+    "toastErrorAddFavourite": "Failed to add to favourites",
+    "toastErrorRemoveFavourite": "Failed to remove from favourites"
   },
   "CompanyDetail": {
     "titleNotCountry": "Country not available",
@@ -363,6 +373,7 @@
     },
     "tabProducts": {
       "titleProducts": "Products",
+      "titleTags": "Tags",
       "titleFilter": "Filter",
       "buttonClearAll": "Clear All",
       "titleQuickFilters": "Quick filters",

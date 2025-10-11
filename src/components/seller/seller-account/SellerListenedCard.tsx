@@ -89,7 +89,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row justify-between w-full bg-background gap-4">
+    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row 
+    justify-between w-full bg-background gap-4 rounded-sm">
       {/* Product info */}
       <div className="flex gap-2.5 items-start">
         <Image

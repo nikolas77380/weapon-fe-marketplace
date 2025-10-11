@@ -51,7 +51,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             inputType="email"
             placeholder="example@gmail.com"
             autoComplete="email"
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -63,7 +63,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             inputType="password"
             placeholder="********"
             autoComplete="current-password"
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -77,9 +77,9 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full font-medium py-3 rounded-none text-white bg-gold-main hover:bg-gold-main/90 
-              duration-300 transition-all disabled:bg-gray-500 disabled:text-gray-100 
-              disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+              className="w-full font-medium py-3 rounded-sm text-white bg-gold-main hover:bg-gold-main/90 
+              duration-300 transition-all disabled:bg-gray-400 disabled:text-gray-100 
+              disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-base xl:text-lg"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">

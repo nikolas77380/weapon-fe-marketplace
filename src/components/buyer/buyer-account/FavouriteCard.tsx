@@ -56,8 +56,8 @@ const FavouriteCard = ({
           </div>
           <div className="flex flex-col gap-2 lg:flex-row items-start lg:items-center lg:justify-between">
             <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
-              <div className="hidden min-[400px]:block bg-green-500 py-1 px-2">
-                <p className="text-xs lg:text-sm text-white font-semibold">Available</p>
+              <div className="hidden min-[400px]:block bg-green-500 py-1 px-2 rounded-sm">
+                <p className="text-xs lg:text-sm text-white font-semibold">{product.status}</p>
               </div>
               <div>
                 <p className="hidden min-[400px]:block text-xs lg:text-sm font-bold text-muted-foreground">
@@ -128,7 +128,7 @@ const FavouriteCard = ({
         {/* Status and date */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="rounded-sm bg-green-500 py-0.5 px-2 flex-shrink-0">
-            <p className="text-xs text-white font-semibold">Available</p>
+            <p className="text-xs text-white font-semibold">{product.status}</p>
           </div>
           <div className="text-right">
             <p className="text-xs font-bold text-muted-foreground">

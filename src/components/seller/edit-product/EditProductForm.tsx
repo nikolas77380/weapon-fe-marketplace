@@ -203,6 +203,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Category */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="category"
               label={t("labelCategory")}
               type="select"
@@ -226,6 +227,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Condition */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="condition"
               label={t("labelCondition")}
               type="select"
@@ -236,6 +238,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Status */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="status"
               label={t("labelStatus")}
               type="select"
@@ -301,7 +304,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             <Button
               type="submit"
               disabled={updateLoading}
-              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none bg-gold-main hover:bg-gold-main/90 text-white text-sm sm:text-base"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-sm bg-gold-main hover:bg-gold-main/90 text-white text-sm sm:text-base"
             >
               {updateLoading ? t("buttonUpdating") : t("buttonUpdate")}
             </Button>
@@ -310,7 +313,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               type="button"
               variant="outline"
               onClick={() => router.push("/account")}
-              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none text-sm sm:text-base"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-sm text-sm sm:text-base"
             >
               {t("buttonCancel")}
             </Button>

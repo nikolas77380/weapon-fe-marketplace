@@ -69,13 +69,13 @@ const Filters = ({
           : "border-r border-t border-b border-border-foreground rounded-sm"
       } h-fit ${isMobile ? "p-0" : "p-5"} flex flex-col gap-3.5`}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-medium">{t("titleFilter")}</h2>
         </div>
         <Button
-          variant="ghost"
-          className="py-2 hover:bg-primary-foreground duration-300 transition-all rounded-none"
+          variant="outline"
+          className="py-1 px-1.5 border-gold-main hover:opacity-80 duration-300 transition-all rounded-sm"
           onClick={onClearAll}
         >
           {t("buttonClearAll")}
@@ -84,7 +84,7 @@ const Filters = ({
       {/* Buttons selected filters */}
       {/* <div></div> */}
 
-      <div className="flex flex-col border-b border-border-foreground pb-3.5">
+      {/* <div className="flex flex-col border-b border-border-foreground pb-3.5">
         <h2 className="font-medium">{t("titleQuickFilters")}</h2>
         <div className="flex flex-col gap-2 mt-3">
           {quickFilters.map((filter) => (
@@ -96,7 +96,7 @@ const Filters = ({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Elasticsearch Tags Filter */}
       {elasticFilters?.tags && elasticFilters.tags.length > 0 && (
@@ -104,7 +104,7 @@ const Filters = ({
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="tags" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
-                <h2 className="text-sm font-medium font-roboto">Tags</h2>
+                <h2 className="text-sm font-medium font-roboto">{t("titleTags")}</h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
@@ -133,7 +133,7 @@ const Filters = ({
             <AccordionItem value="elastic-categories" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
                 <h2 className="text-sm font-medium font-roboto">
-                  Subcategories
+                  {t("titleCategory")}
                 </h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
@@ -185,7 +185,7 @@ const Filters = ({
               >
                 <AccordionTrigger className="py-0 hover:no-underline">
                   <h2 className="text-sm font-medium font-roboto">
-                    Availability
+                    {t("titleAvailability")}
                   </h2>
                 </AccordionTrigger>
                 <AccordionContent className="pt-3">
@@ -269,7 +269,7 @@ const Filters = ({
         </div>
       )}
 
-      {Object.keys(categories).length > 0 && (
+      {/* {Object.keys(categories).length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="subcategory" className="border-none">
@@ -368,7 +368,7 @@ const Filters = ({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div> */}
 
       <PriceRange
         onPriceChange={onPriceChange}

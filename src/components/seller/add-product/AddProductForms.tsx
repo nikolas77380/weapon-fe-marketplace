@@ -189,7 +189,7 @@ const AddProductForms = () => {
       productStatus: "available",
     });
 
-    toast.success("Draft cleared successfully!");
+    toast.success(t("toastSuccessClear"));
   };
   return (
     <>
@@ -246,7 +246,7 @@ const AddProductForms = () => {
                       loading={categoriesLoading}
                       error={categoriesError}
                       placeholder={t("placeholderCategory")}
-                      className="w-full min-[600px]:w-1/2"
+                      className="w-full min-[600px]:w-1/2 rounded-sm"
                       getMainCategories={getMainCategories}
                       getSubCategories={getSubCategories}
                     />
@@ -293,7 +293,7 @@ const AddProductForms = () => {
               label={t("labelCondition")}
               type="select"
               placeholder={t("placeholderCondition")}
-              className="w-full min-[600px]:w-1/2"
+              className="w-full min-[600px]:w-1/2 rounded-sm"
               options={PRODUCT_CONDITION_FORM}
               selectValue={undefined}
             />
@@ -302,7 +302,7 @@ const AddProductForms = () => {
           {/* Product Pricing Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
             <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
-              Pricing
+              {t("titlePrice")}
             </h2>
             {/* Product Price */}
             <FormFieldComponent
@@ -362,7 +362,7 @@ const AddProductForms = () => {
               label={t("labelStatus")}
               type="select"
               placeholder={t("placeholderStatus")}
-              className="w-full min-[600px]:w-1/2"
+              className="w-full min-[600px]:w-1/2 rounded-sm"
               options={PRODUCT_STATUS_FORM}
             />
           </div>
@@ -408,8 +408,8 @@ const AddProductForms = () => {
             )}
             <Button
               type="submit"
-              disabled={createLoading}
-              className="w-full rounded-none text-white bg-gold-main min-[600px]:w-auto px-6 py-2 
+              disabled={createLoading || !form.formState.isValid}
+              className="w-full rounded-sm text-white bg-gold-main min-[600px]:w-auto px-6 py-2 
               min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium
               hover:bg-gold-main/90"
             >

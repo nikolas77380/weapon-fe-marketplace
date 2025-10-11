@@ -7,8 +7,10 @@ import {
   FavouriteProduct,
 } from "@/lib/favourites";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export const useFavourites = () => {
+  const t = useTranslations("ProductDetail");
   const [favourites, setFavourites] = useState<FavouriteProduct[]>([]);
   const [loading, setLoading] = useState(false);
   const [favouriteStatuses, setFavouriteStatuses] = useState<
@@ -71,15 +73,15 @@ export const useFavourites = () => {
           // Перезагружаем список избранного
           await loadFavourites();
 
-          toast.success("Added to favourites");
+          toast.success(t("toastSuccessFavourite"));
           return true;
         } else {
-          toast.error(result.error || "Failed to add to favourites");
+          toast.error(result.error || t("toastErrorAddFavourite"));
           return false;
         }
       } catch (error) {
         console.error("Error adding to favourites:", error);
-        toast.error("Failed to add to favourites");
+        toast.error(t("toastErrorAddFavourite"));
         return false;
       }
     },
@@ -102,15 +104,15 @@ export const useFavourites = () => {
           // Удаляем из локального состояния
           setFavourites((prev) => prev.filter((fav) => fav.id !== favouriteId));
 
-          toast.success("Removed from favourites");
+          toast.success(t("toastSuccessRemoveFavourite"));
           return true;
         } else {
-          toast.error(result.error || "Failed to remove from favourites");
+          toast.error(result.error || t("toastErrorRemoveFavourite"));
           return false;
         }
       } catch (error) {
         console.error("Error removing from favourites:", error);
-        toast.error("Failed to remove from favourites");
+        toast.error(t("toastErrorRemoveFavourite"));
         return false;
       }
     },
