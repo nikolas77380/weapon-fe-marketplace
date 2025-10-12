@@ -262,6 +262,8 @@
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
     "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
+    "toastSuccessDeleteImage": "Зображення успішно видалено!",
+    "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
     "titleEditProduct": "Редагування товару",
     "descriptionEditProduct": "Оновіть інформацію про свій товар",
     "labelProductImages": "Зображення товару",
@@ -280,7 +282,14 @@
     "buttonUpdate": "Оновити товар",
     "buttonCancel": "Скасувати",
     "error": "Помилка:",
-    "errorDescription": "Помилка оновлення товару"
+    "errorDescription": "Помилка оновлення товару",
+    "deleteModal": {
+      "dialogTitleDeleteImage": "Видалення зображення",
+      "dialogDescriptionDeleteImage": "Ви впевнені, що хочете видалити це зображення?",
+      "buttonCancel": "Скасувати",
+      "buttonDelete": "Видалити",
+      "buttonDeleting": "Видаляється..."
+    }
   },
   "NotFound": {
     "titleNotFound": "Сторінка не знайдена",

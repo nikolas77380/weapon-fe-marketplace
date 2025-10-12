@@ -262,6 +262,8 @@
   "EditProduct": {
     "toastSuccessUpdate": "Product updated successfully!",
     "toastErrorUpdate": "Failed to update product. Please try again.",
+    "toastSuccessDeleteImage": "Image deleted successfully!",
+    "toastErrorDeleteImage": "Failed to delete image. Please try again.",
     "titleEditProduct": "Edit Product",
     "descriptionEditProduct": "Update your product information",
     "labelProductImages": "Product Images",
@@ -280,7 +282,14 @@
     "buttonUpdate": "Update Product",
     "buttonCancel": "Cancel",
     "error": "Error:",
-    "errorDescription": "Failed to update product"
+    "errorDescription": "Failed to update product",
+    "deleteModal": {
+      "dialogTitleDeleteImage": "Deleting an image",
+      "dialogDescriptionDeleteImage": "Are you sure you want to delete this image?",
+      "buttonCancel": "Cancel",
+      "buttonDelete": "Delete",
+      "buttonDeleting": "Deleting..."
+    }
   },
   "NotFound": {
     "titleNotFound": "Page Not Found",

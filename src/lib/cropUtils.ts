@@ -82,35 +82,40 @@ export function getCroppedImgCircular(
   const scaleY = image.naturalHeight / image.height;
   const pixelRatio = window.devicePixelRatio;
 
-  // Use the shortest side to create a square
-  const size = Math.min(crop.width, crop.height);
-  canvas.width = size * pixelRatio * scaleX;
-  canvas.height = size * pixelRatio * scaleY;
+  // Используем минимальную сторону кропа для создания квадратного холста
+  const cropWidth = crop.width * scaleX;
+  const cropHeight = crop.height * scaleY;
+  const size = Math.min(cropWidth, cropHeight);
+
+  // Устанавливаем размеры холста
+  canvas.width = size * pixelRatio;
+  canvas.height = size * pixelRatio;
 
   ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
   ctx.imageSmoothingQuality = "high";
 
-  const radius = (size * scaleX) / 2;
-  const centerX = (size * scaleX) / 2;
-  const centerY = (size * scaleY) / 2;
+  // Центр круга находится в центре холста
+  const centerX = (size * pixelRatio) / 2;
+  const centerY = (size * pixelRatio) / 2;
+  const radius = (size * pixelRatio) / 2;
 
-  // Create a circular mask
+  // Создаем круглый клиппинг
   ctx.beginPath();
   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
   ctx.closePath();
   ctx.clip();
 
-  // Draw an image inside a circle
+  // Рисуем изображение с учетом масштабирования и смещения
   ctx.drawImage(
     image,
     crop.x * scaleX,
     crop.y * scaleY,
-    size * scaleX,
-    size * scaleY,
+    cropWidth,
+    cropHeight,
     0,
     0,
-    size * scaleX,
-    size * scaleY
+    size * pixelRatio,
+    size * pixelRatio
   );
 
   return new Promise((resolve) => {

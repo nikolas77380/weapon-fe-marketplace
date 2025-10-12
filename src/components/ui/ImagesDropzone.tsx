@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
-import { X, Upload, File, Crop } from "lucide-react";
+import { X, Upload, File } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
@@ -149,26 +149,26 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   );
 
   const handleCropCancel = useCallback(() => {
-    if (tempImageData) {
+    if (tempImageData && cropIndex === null) {
       // Add original file without cropping
       addFileDirectly(tempImageData.file);
     }
     setTempImageData(null);
     setCropIndex(null);
-  }, [tempImageData, addFileDirectly]);
+  }, [tempImageData, addFileDirectly, cropIndex]);
 
-  const startCropMode = useCallback(
-    (index: number) => {
-      const file = files[index];
-      const preview = previews[index];
+  // const startCropMode = useCallback(
+  //   (index: number) => {
+  //     const file = files[index];
+  //     const preview = previews[index];
 
-      if (file.type.startsWith("image/") && preview !== "pdf") {
-        setTempImageData({ file, preview });
-        setCropIndex(index);
-      }
-    },
-    [files, previews]
-  );
+  //     if (file.type.startsWith("image/") && preview !== "pdf") {
+  //       setTempImageData({ file, preview });
+  //       setCropIndex(index);
+  //     }
+  //   },
+  //   [files, previews]
+  // );
 
   const handleCropExistingComplete = useCallback(
     (croppedFile: File) => {
@@ -231,7 +231,8 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     <div className={`space-y-4 ${className}`}>
       {/* Crop Interface - Show when tempImageData exists */}
       {tempImageData && (
-        <div className="border-2 border-dashed border-gold-main rounded-lg p-1 min-[320px]:p-2 sm:p-4 bg-gold-main/5 mx-auto max-w-full overflow-hidden">
+        <div className="border-2 border-dashed border-gold-main rounded-lg p-1 min-[320px]:p-2 
+        sm:p-4 bg-gold-main/5 mx-auto max-w-[95vw] flex flex-col items-center justify-center sm:max-w-lg md:max-w-3xl overflow-hidden">
           <h4 className="font-medium text-gray-700 mb-1 min-[320px]:mb-2 sm:mb-3 text-xs min-[320px]:text-sm sm:text-base truncate">
             {tCrop("titleCropImage")}: {tempImageData.file.name}
           </h4>
@@ -253,7 +254,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
       <div
         {...getRootProps()}
         className={`
-          border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+          border-2 border-dashed rounded-lg p-4 sm:p-6 md:p-8 text-center cursor-pointer transition-colors
           ${
             isDragActive
               ? "border-blue-500 bg-blue-50"
@@ -262,7 +263,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
         `}
       >
         <input {...getInputProps()} />
-        <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+        <Upload className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400 mb-3 sm:mb-4" />
         {isDragActive ? (
           <p className="text-blue-600 font-medium">{t("isDragActive")}</p>
         ) : (
@@ -334,7 +335,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                 {/* Action buttons */}
                 <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   {/* Crop button - only for images when crop is enabled */}
-                  {file.type.startsWith("image/") && enableCrop && (
+                  {/* {file.type.startsWith("image/") && enableCrop && (
                     <Button
                       type="button"
                       variant="outline"
@@ -345,7 +346,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                     >
                       <Crop className="h-3 w-3" />
                     </Button>
-                  )}
+                  )} */}
 
                   {/* Delete button */}
                   <Button
