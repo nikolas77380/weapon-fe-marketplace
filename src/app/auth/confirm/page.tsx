@@ -162,7 +162,7 @@ export default function ConfirmPage() {
                   <strong>Email:</strong> {user.email}
                 </p>
                 <p>
-                  <strong>Ім'я:</strong> {user.displayName}
+                  <strong>Ім&apos;я:</strong> {user.displayName}
                 </p>
                 <p>
                   <strong>Роль:</strong>{" "}
