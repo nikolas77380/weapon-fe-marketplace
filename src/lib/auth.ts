@@ -30,7 +30,6 @@ export const registerBuyer = async (
       email,
       password,
       displayName,
-      provider: "local",
       role: "buyer",
     },
   });
@@ -63,7 +62,6 @@ export const registerSeller = async (
       email,
       password,
       displayName: displayName,
-      provider: "local",
       role: "seller", // Use role instead of storeRole
     },
   });
