@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   FormLabel,
@@ -26,6 +26,10 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { Product, UpdateProductData } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { X } from "lucide-react";
+import DeleteImageDialog from "./DeleteImageDialog";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface EditProductFormProps {
   product: Product;
@@ -33,6 +37,9 @@ interface EditProductFormProps {
 
 const EditProductForm = ({ product }: EditProductFormProps) => {
   const t = useTranslations("EditProduct");
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -94,6 +101,20 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
     product.attributesJson?.model,
   ]);
 
+  const handleDeleteImage = async () => {
+    if (imageToDelete) {
+      try {
+        // await deleteImageMutation.mutateAsync({ imageId: imageToDelete });
+        toast.success(t("toastSuccessDeleteImage"));
+        setOpenDialog(false);
+        setImageToDelete(null);
+      } catch (error) {
+        console.error("Error deleting image:", error);
+        toast.error(t("toastErrorDeleteImage"));
+      }
+    }
+  };
+
   const onSubmit = async (values: EditProductSchemaValues) => {
     try {
       const updateData: UpdateProductData = {
@@ -142,6 +163,51 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 sm:space-y-6"
         >
+          {product.images && product.images.length > 0 && (
+            <div className="mb-4 flex items-center flex-wrap w-full gap-4">
+              {product.images.map((image) => (
+                <div
+                  key={image.id}
+                  className="relative size-30 border border-border rounded-sm"
+                >
+                  <Image
+                    src={image.url}
+                    alt={image.name}
+                    fill
+                    priority
+                    className="object-contain size-full p-2"
+                  />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white 
+                    rounded-full group p-2 cursor-pointer transition duration-300 ease-in-out"
+                        onClick={() => {
+                          setImageToDelete(image.id);
+                          setOpenDialog(true);
+                        }}
+                      >
+                        <X className="h-4 w-4 group-hover:text-white" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("deleteModal.buttonDelete")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <DeleteImageDialog
+            isOpen={openDialog}
+            onClose={() => {
+              setOpenDialog(false);
+              setImageToDelete(null);
+            }}
+            onConfirm={handleDeleteImage}
+          />
+
           {/* Product Images */}
           <FormField
             control={form.control}
@@ -203,6 +269,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Category */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="category"
               label={t("labelCategory")}
               type="select"
@@ -226,6 +293,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Condition */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="condition"
               label={t("labelCondition")}
               type="select"
@@ -236,6 +304,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Status */}
             <FormFieldComponent
               control={form.control}
+              className="rounded-sm"
               name="status"
               label={t("labelStatus")}
               type="select"
@@ -301,7 +370,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             <Button
               type="submit"
               disabled={updateLoading}
-              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none bg-gold-main hover:bg-gold-main/90 text-white text-sm sm:text-base"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-sm bg-gold-main hover:bg-gold-main/90 text-white text-sm sm:text-base"
             >
               {updateLoading ? t("buttonUpdating") : t("buttonUpdate")}
             </Button>
@@ -310,7 +379,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               type="button"
               variant="outline"
               onClick={() => router.push("/account")}
-              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-none text-sm sm:text-base"
+              className="w-full sm:flex-1 py-2.5 sm:py-2 rounded-sm text-sm sm:text-base"
             >
               {t("buttonCancel")}
             </Button>

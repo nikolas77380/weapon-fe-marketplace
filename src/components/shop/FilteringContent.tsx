@@ -16,6 +16,7 @@ import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
+import { getChildCategories } from "@/lib/categoryUtils";
 
 interface FilterState {
   minPrice: number;
@@ -34,8 +35,8 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const { viewMode, setViewMode } = useViewMode("grid");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
-    minPrice: 1,
-    maxPrice: 500000,
+    minPrice: 0,
+    maxPrice: 0,
     categoryId: null,
     page: 1,
     sort: "id:desc",
@@ -53,7 +54,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       max: filters.maxPrice,
     },
     page: filters.page,
-    pageSize: 5,
+    pageSize: 8,
     availability:
       filters.availability.length > 0 ? filters.availability : undefined,
     condition: filters.condition.length > 0 ? filters.condition : undefined,
@@ -164,12 +165,12 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   // Memoize priceRange objects to prevent infinite re-renders
   const desktopPriceRange = useMemo(
     () => ({
-      min: elasticFilters?.priceStats?.min,
-      max: elasticFilters?.priceStats?.max,
+      min: filters.minPrice === 0 ? elasticFilters?.priceStats?.min : filters.minPrice,
+      max: filters.maxPrice === 0 ? elasticFilters?.priceStats?.max : filters.maxPrice,
     }),
-    [elasticFilters]
+    [elasticFilters, filters.minPrice, filters.maxPrice]
   );
-
+  console.log("RANGE", desktopPriceRange)
   const mobilePriceRange = useMemo(
     () => ({
       min: elasticFilters?.priceStats?.min,

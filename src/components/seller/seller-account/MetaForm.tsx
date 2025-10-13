@@ -135,7 +135,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
           <Tabs defaultValue="companyDetails" className="w-full h-full">
             <TabsList
               className="bg-gray-100 flex flex-col min-[400px]:flex-row 
-            min-[400px]:w-auto w-full h-full"
+            min-[400px]:w-auto w-full h-full rounded-sm"
             >
               <TabsTrigger
                 value="companyDetails"
@@ -163,7 +163,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                     label={t("labelBusinessType")}
                     type="select"
                     placeholder={t("placeholderBusinessType")}
-                    className="w-full min-[600px]:w-1/2"
+                    className="w-full min-[600px]:w-1/2 rounded-sm"
                     defaultValue={undefined}
                     options={SELLER_TYPES.map(({ key, label }) => ({
                       key,
@@ -219,7 +219,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                     label={t("labelCountry")}
                     type="select"
                     placeholder={t("placeholderCountry")}
-                    className="w-full min-[600px]:w-1/2"
+                    className="w-full min-[600px]:w-1/2 rounded-sm"
                     defaultValue={undefined}
                     options={COUNTRIES.map(({ name, iso2 }) => ({
                       key: iso2,
@@ -297,7 +297,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
             <TabsContent value="certificates" className="mt-6 md:mt-10">
               <div className="space-y-8">
                 {/* Existing Certificates List */}
-                <div className="border-t pt-8">
+                <div className="pt-8">
                   <CertificatesList
                     currentUser={currentUser}
                     onRefresh={() => setRefreshCertificates((prev) => prev + 1)}

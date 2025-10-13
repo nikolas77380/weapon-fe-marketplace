@@ -17,7 +17,7 @@ const AuthSwitcher = ({ authMode, onAuthModeChange }: AuthSwitcherProps) => {
         onValueChange={(value) =>
           onAuthModeChange(value as "login" | "register")
         }
-        className="w-full mt-6 border border-border-foreground "
+        className="w-full mt-6 border border-border-foreground rounded-sm"
       >
         <TabsList className="grid w-full h-11 grid-cols-2 bg-gray-100">
           <TabsTrigger value="login" className="md:text-lg font-normal">

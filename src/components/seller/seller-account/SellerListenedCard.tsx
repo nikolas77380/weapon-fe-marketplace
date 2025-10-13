@@ -89,7 +89,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row justify-between w-full bg-background gap-4">
+    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row 
+    justify-between w-full bg-background gap-4 rounded-sm">
       {/* Product info */}
       <div className="flex gap-2.5 items-start">
         <Image
@@ -101,7 +102,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           width={80}
           height={60}
           onError={(e) => handleImageError(e, "/shop/1.jpg")}
-          className="rounded-md object-cover aspect-square"
+          className="rounded-md object-contain aspect-square"
         />
         <div className="flex flex-col">
           <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>

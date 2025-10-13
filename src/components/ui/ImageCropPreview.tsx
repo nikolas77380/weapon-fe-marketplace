@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   getCroppedImg,
   getCroppedImgCircular,
-  makeDefaultCrop,
+  // makeDefaultCrop,
 } from "@/lib/cropUtils";
 import { Check, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -30,14 +30,74 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   cropShape = "rect",
 }) => {
   const t = useTranslations("ImageCrop");
-  const [crop, setCrop] = useState<Crop>(makeDefaultCrop());
+  const [crop, setCrop] = useState<Crop>({
+    unit: "px",
+    x: 50,
+    y: 50,
+    width: 300,
+    height: 300,
+  });
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const imgRef = useRef<HTMLImageElement>(null);
 
-  const onImageLoad = useCallback(() => {
-    // Set default crop to entire image
-    const defaultCrop = makeDefaultCrop();
-    setCrop(defaultCrop);
+  // const onImageLoad = useCallback(
+  //   (e: React.SyntheticEvent<HTMLImageElement>) => {
+  //     const img = e.target as HTMLImageElement;
+  //     const containerWidth = 400;
+  //     const containerHeight = 400;
+  //     const maxSize = 300;
+  //     const aspectRatio = img.naturalWidth / img.naturalHeight;
+
+  //     let width = maxSize;
+  //     let height = maxSize;
+
+  //     if (aspectRatio > 1) {
+  //       height = width / aspectRatio;
+  //     } else {
+  //       width = height * aspectRatio;
+  //     }
+
+  //     const x = (containerWidth - width) / 2;
+  //     const y = (containerHeight - height) / 2;
+
+  //     setCrop({
+  //       unit: "px",
+  //       x: Math.max(0, x),
+  //       y: Math.max(0, y),
+  //       width: Math.min(width, maxSize),
+  //       height: Math.min(height, maxSize),
+  //     });
+  //   },
+  //   []
+  // );
+
+  const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.target as HTMLImageElement;
+    const containerWidth = 400;
+    const containerHeight = 400;
+    const maxSize = 300;
+    const aspectRatio = img.naturalWidth / img.naturalHeight;
+
+    let width = maxSize;
+    let height = maxSize;
+
+    if (aspectRatio > 1) {
+      height = width / aspectRatio;
+    } else {
+      width = height * aspectRatio;
+    }
+
+    // Центрирование кропа в контейнере
+    const x = (containerWidth - width) / 2;
+    const y = (containerHeight - height) / 2;
+
+    setCrop({
+      unit: "px",
+      x: Math.max(0, x),
+      y: Math.max(0, y),
+      width: Math.min(width, maxSize),
+      height: Math.min(height, maxSize),
+    });
   }, []);
 
   const handleApplyCrop = useCallback(async () => {
@@ -88,37 +148,42 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   }, [completedCrop, fileName, onCropComplete, cropShape]);
 
   const handleResetCrop = useCallback(() => {
-    setCrop(makeDefaultCrop());
+    setCrop({ unit: "px", x: 50, y: 50, width: 300, height: 300 });
     setCompletedCrop(undefined);
   }, []);
 
   return (
     <div
-      className={`space-y-1 min-[320px]:space-y-2 sm:space-y-3 ${className}`}
+      className={`space-y-1 min-[320px]:space-y-2 sm:space-y-3 w-full max-w-full overflow-visible ${className}`}
     >
-      <div className="border rounded-lg overflow-hidden bg-gray-50 w-full min-w-0">
-        <ReactCrop
-          crop={crop}
-          onChange={(_, percentCrop) => setCrop(percentCrop)}
-          onComplete={(c) => setCompletedCrop(c)}
-          aspect={cropShape === "circle" ? 1 : undefined}
-          minWidth={20}
-          minHeight={20}
-          className="w-full"
-          circularCrop={cropShape === "circle"}
+      <div className="border rounded-lg overflow-hidden bg-gray-50 w-full max-w-[400px] mx-auto">
+        <div
+          className="relative w-[400px] h-[400px]"
+          style={{ position: "relative" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            ref={imgRef}
-            alt="Crop preview"
-            src={src}
-            onLoad={onImageLoad}
-            className="w-full max-w-full h-auto max-h-40 min-[320px]:max-h-48 sm:max-h-64 object-contain"
-          />
-        </ReactCrop>
+          <ReactCrop
+            crop={crop}
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            aspect={cropShape === "circle" ? 1 : undefined}
+            minWidth={50}
+            minHeight={50}
+            className="w-full h-full"
+            circularCrop={cropShape === "circle"}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              ref={imgRef}
+              alt="Crop preview"
+              src={src}
+              onLoad={onImageLoad}
+              className="w-full h-full object-contain aspect-square"
+            />
+          </ReactCrop>
+        </div>
       </div>
 
-      <div className="flex flex-col min-[440px]:flex-row gap-1 min-[320px]:gap-2 justify-end">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end w-full">
         <Button
           type="button"
           variant="outline"

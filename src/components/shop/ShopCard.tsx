@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface ShopCardProps {
   item: Product;
@@ -46,7 +47,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       }
     } catch (error) {
       console.error("Error creating channel:", error);
-      alert("Failed to create chat channel. Please try again.");
+      toast.error(t("taostErrorCreateChat"));
     } finally {
       setIsLoading(false);
     }
@@ -132,7 +133,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               </div>
             </div>
             <Button
-              className="flex items-center border border-border-foreground gap-2 rounded-none py-2 px-3 
+              className="flex items-center border border-border-foreground gap-2 rounded-sm py-2 px-3 
               sm:py-2.5 sm:px-5 hover:underline bg-transparent hover:bg-transparent 
               shadow-none text-gold-main self-start min-[400px]:self-auto"
               onClick={(e) => handleContactSeller(e)}

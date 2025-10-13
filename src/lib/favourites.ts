@@ -7,6 +7,7 @@ export interface FavouriteProduct {
   id: number;
   product: {
     id: number;
+    status?: string;
     title: string;
     description: string;
     price: number;

@@ -14,23 +14,26 @@ interface PriceRangeProps {
 
 const PriceRange = ({
   onPriceChange,
-  initialMin = 1,
-  initialMax = 500000,
-  minLimit = 1,
-  maxLimit = 500000,
+  initialMin = 0,
+  initialMax = 1000,
+  minLimit = 0,
+  maxLimit = 1000,
   isMobile = false,
 }: PriceRangeProps) => {
   const t = useTranslations("PriceRange");
 
+  const safeInitialMin = initialMin ?? 0;
+  const safeInitialMax = initialMax ?? 1000;
+
   // Price range state
-  const [minPrice, setMinPrice] = useState(initialMin);
-  const [maxPrice, setMaxPrice] = useState(initialMax);
+  const [minPrice, setMinPrice] = useState(safeInitialMin);
+  const [maxPrice, setMaxPrice] = useState(safeInitialMax);
 
   // Sync with external prop changes (for Clear All functionality)
   useEffect(() => {
-    setMinPrice(initialMin);
-    setMaxPrice(initialMax);
-  }, [initialMin, initialMax]);
+    setMinPrice(safeInitialMin);
+    setMaxPrice(safeInitialMax);
+  }, [safeInitialMin, safeInitialMax]);
 
   // Calculate percentages for slider positioning (we limit within the limits)
   const clampedMinPrice = useMemo(

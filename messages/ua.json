@@ -247,6 +247,7 @@
       "placeholderModel": "Введіть модель товару",
       "labelCondition": "Стан товару",
       "placeholderCondition": "Оберіть стан товару",
+      "titlePrice": "Ціна",
       "labelPrice": "Ціна (USD)",
       "titleDetails": "Деталі",
       "labelCount": "Кількість",
@@ -261,6 +262,8 @@
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
     "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
+    "toastSuccessDeleteImage": "Зображення успішно видалено!",
+    "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
     "titleEditProduct": "Редагування товару",
     "descriptionEditProduct": "Оновіть інформацію про свій товар",
     "labelProductImages": "Зображення товару",
@@ -279,7 +282,14 @@
     "buttonUpdate": "Оновити товар",
     "buttonCancel": "Скасувати",
     "error": "Помилка:",
-    "errorDescription": "Помилка оновлення товару"
+    "errorDescription": "Помилка оновлення товару",
+    "deleteModal": {
+      "dialogTitleDeleteImage": "Видалення зображення",
+      "dialogDescriptionDeleteImage": "Ви впевнені, що хочете видалити це зображення?",
+      "buttonCancel": "Скасувати",
+      "buttonDelete": "Видалити",
+      "buttonDeleting": "Видаляється..."
+    }
   },
   "NotFound": {
     "titleNotFound": "Сторінка не знайдена",
@@ -292,9 +302,14 @@
     "buttonProductCatalog": "Каталог товарів",
     "buttonLogReg": "Увійти / Зареєструватися"
   },
+  "NotFavourite": {
+    "titleNotFavourite": "Обраних товарів немає.",
+    "descriptionNotFavourite": "Почніть додавати товари до обраного!"
+  },
   "ShopCard": {
     "titleCardSeller": "Контакти продавця",
     "titlebuttonCreating": "Створення...",
+    "taostErrorCreateChat": "Не вдалося створити канал чату. Спробуйте ще раз.",
     "contactModal": {
       "title": "Контактна інформація",
       "titleCompanyName": "Назва компанії:",
@@ -336,7 +351,11 @@
     "titleManufacturer": "Виробник:",
     "titleProductDetails": "Деталі товару",
     "titleStatus": "Статус:",
-    "titleUnknown": "Невідомо"
+    "titleUnknown": "Невідомо",
+    "toastSuccessFavourite": "Додано до обраного",
+    "toastSuccessRemoveFavourite": "Видалено з обраного",
+    "toastErrorAddFavourite": "Не вдалося додати до обраного",
+    "toastErrorRemoveFavourite": "Не вдалося видалити з обраного"
   },
   "CompanyDetail": {
     "titleNotCountry": "Країна недоступна",
@@ -363,6 +382,7 @@
     },
     "tabProducts": {
       "titleProducts": "Товари",
+      "titleTags": "Теги",
       "titleFilter": "Фільтр",
       "buttonClearAll": "Очистити все",
       "titleQuickFilters": "Швидкі фільтри",

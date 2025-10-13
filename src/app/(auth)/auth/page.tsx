@@ -189,15 +189,16 @@ const AuthPage = () => {
               </div>
               {/* Language Switcher на мобильных */}
               <div className="lg:hidden">
-                <LanguageSwitcher />
+                <LanguageSwitcher classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]" />
               </div>
             </div>
             <div
-              className={`border border-border-foreground ${
+              className={`border border-border-foreground rounded-sm ${
                 authMode === "login" ? "mt-6 lg:mt-41" : "mt-4 lg:mt-6"
               } flex bg-background flex-col w-full lg:w-170 mx-auto`}
             >
-              <div className="flex flex-col items-center justify-center text-center border-b border-border-foreground px-4 sm:px-6">
+              <div className="flex flex-col items-center justify-center text-center border-b 
+              border-border-foreground px-4 sm:px-6">
                 <h2 className="font-medium text-xl sm:text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
                   {t("titleMain")}
                 </h2>
@@ -291,7 +292,7 @@ const AuthPage = () => {
 
           {/* Language Switcher - только на десктопе */}
           <div className="hidden lg:flex lg:justify-start lg:max-w-[200px] w-full lg:mt-0">
-            <LanguageSwitcher />
+            <LanguageSwitcher classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]" />
           </div>
         </div>
       </div>

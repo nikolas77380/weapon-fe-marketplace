@@ -52,7 +52,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             label={t("labelDisplayName")}
             type="input"
             placeholder={t("placeholderDisplayName")}
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -65,7 +65,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             inputType="email"
             placeholder={t("placeholderEmail")}
             autoComplete="email"
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -78,7 +78,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             inputType="password"
             placeholder={t("placeholderPassword")}
             autoComplete="new-password"
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -91,7 +91,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             inputType="password"
             placeholder={t("placeholderConfirmPassword")}
             autoComplete="new-password"
-            className="rounded-none outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="rounded-sm outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
             classNameLabel="bg-background"
           />
 
@@ -120,9 +120,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="font-medium rounded-none w-full py-3 bg-gold-main hover:bg-gold-main/90 
-              text-white duration-300 transition-all disabled:bg-gray-500 disabled:text-gray-100 
-              disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+              className="font-medium rounded-sm w-full py-3 bg-gold-main hover:bg-gold-main/90 
+              text-white duration-300 transition-all disabled:bg-gray-400 disabled:text-gray-100 
+              disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-base xl:text-lg"
             >
               {isLoading ? (
                 <div className="flex items-center gap-2">

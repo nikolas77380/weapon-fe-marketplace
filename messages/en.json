@@ -247,6 +247,7 @@
       "placeholderModel": "Enter your product model",
       "labelCondition": "Condition",
       "placeholderCondition": "Select condition",
+      "titlePrice": "Pricing",
       "labelPrice": "Price (USD)",
       "titleDetails": "Details",
       "labelCount": "Count",
@@ -261,6 +262,8 @@
   "EditProduct": {
     "toastSuccessUpdate": "Product updated successfully!",
     "toastErrorUpdate": "Failed to update product. Please try again.",
+    "toastSuccessDeleteImage": "Image deleted successfully!",
+    "toastErrorDeleteImage": "Failed to delete image. Please try again.",
     "titleEditProduct": "Edit Product",
     "descriptionEditProduct": "Update your product information",
     "labelProductImages": "Product Images",
@@ -279,7 +282,14 @@
     "buttonUpdate": "Update Product",
     "buttonCancel": "Cancel",
     "error": "Error:",
-    "errorDescription": "Failed to update product"
+    "errorDescription": "Failed to update product",
+    "deleteModal": {
+      "dialogTitleDeleteImage": "Deleting an image",
+      "dialogDescriptionDeleteImage": "Are you sure you want to delete this image?",
+      "buttonCancel": "Cancel",
+      "buttonDelete": "Delete",
+      "buttonDeleting": "Deleting..."
+    }
   },
   "NotFound": {
     "titleNotFound": "Page Not Found",
@@ -292,9 +302,14 @@
     "buttonProductCatalog": "Product Catalog",
     "buttonLogReg": "Login / Register"
   },
+  "NotFavourite": {
+    "titleNotFavourite": "No favourites yet.",
+    "descriptionNotFavourite": "Start adding products to your favourites!"
+  },
   "ShopCard": {
     "titleCardSeller": "Contact Seller",
     "titlebuttonCreating": "Creating...",
+    "taostErrorCreateChat": "Failed to create chat channel. Please try again.",
     "contactModal": {
       "title": "Contact Information",
       "titleCompanyName": "Company Name:",
@@ -336,7 +351,11 @@
     "titleManufacturer": "Manufacturer:",
     "titleProductDetails": "Product Details",
     "titleStatus": "Status:",
-    "titleUnknown": "Unknown"
+    "titleUnknown": "Unknown",
+    "toastSuccessFavourite": "Added to favourites",
+    "toastSuccessRemoveFavourite": "Removed from favourites",
+    "toastErrorAddFavourite": "Failed to add to favourites",
+    "toastErrorRemoveFavourite": "Failed to remove from favourites"
   },
   "CompanyDetail": {
     "titleNotCountry": "Country not available",
@@ -363,6 +382,7 @@
     },
     "tabProducts": {
       "titleProducts": "Products",
+      "titleTags": "Tags",
       "titleFilter": "Filter",
       "buttonClearAll": "Clear All",
       "titleQuickFilters": "Quick filters",

@@ -431,7 +431,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
             onValueChange={handleTabChange}
             className="w-full h-full"
           >
-            <TabsList className="bg-gray-100 flex flex-col min-[550px]:flex-row min-[550px]:w-auto w-full h-full">
+            <TabsList className="bg-gray-100 rounded-sm flex flex-col min-[550px]:flex-row min-[550px]:w-auto w-full h-full">
               <TabsTrigger
                 value="overview"
                 className="text-sm sm:text-base w-full min-[550px]:w-auto h-full py-2"
@@ -542,7 +542,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   </div>
                   {/* Right Side */}
                   <div className="w-full lg:w-1/5 mt-4 sm:mt-7.5">
-                    <div className="border border-border-foreground p-3 sm:p-5 flex flex-col">
+                    <div className="border border-border-foreground rounded-sm p-3 sm:p-5 flex flex-col">
                       <h1 className="text-lg sm:text-xl font-medium">
                         {t("tabOverview.titleQuickInfo")}
                       </h1>

@@ -1,14 +1,18 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import React from "react";
 
 const NotFavouriteState = () => {
+  const t = useTranslations("NotFavourite");
   return (
     <div className="col-span-full flex flex-col items-center justify-center py-12">
       <div className="text-6xl mb-4">💔</div>
       <p className="font-medium font-roboto text-lg text-gray-500">
-        No favourites yet.
+        {t("titleNotFavourite")}
       </p>
       <p className="font-light font-roboto text-sm text-gray-400 mt-2">
-        Start adding products to your favourites!
+        {t("descriptionNotFavourite")}
       </p>
     </div>
   );
