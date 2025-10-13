@@ -18,6 +18,7 @@ interface AuthContextContextValue {
   setCurrentUserLoading: React.Dispatch<React.SetStateAction<boolean>>;
   fetchUser: () => Promise<void>;
   handleLogout: () => Promise<void>;
+  handleEmailConfirmation: (confirmationToken: string) => Promise<boolean>;
 }
 
 export const AuthContext = createContext<AuthContextContextValue | null>(null);
@@ -42,6 +43,43 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     redirect("/auth");
   };
 
+  const handleEmailConfirmation = async (
+    confirmationToken: string
+  ): Promise<boolean> => {
+    try {
+      const response = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
+        }/api/auth/email-confirmation?confirmation=${confirmationToken}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Сохраняем JWT токен и пользователя в localStorage
+        if (data.jwt) {
+          localStorage.setItem("jwt", data.jwt);
+        }
+
+        // Обновляем текущего пользователя
+        setCurrentUser(data.user);
+        return true;
+      } else {
+        console.error("Email confirmation failed:", data.error || data.message);
+        return false;
+      }
+    } catch (error) {
+      console.error("Error confirming email:", error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -54,6 +92,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         setCurrentUserLoading,
         fetchUser,
         handleLogout,
+        handleEmailConfirmation,
       }}
     >
       {children}
