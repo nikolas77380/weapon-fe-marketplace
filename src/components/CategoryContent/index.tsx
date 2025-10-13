@@ -28,14 +28,12 @@ const FilteringContent = () => {
   console.log("promosResponse", promosResponse);
 
   const paginatedProducts = useMemo(() => {
-    const allProducts = response?.data || [];
-    return allProducts
-      .slice()
-      .sort(
-        (a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount)
-      )
-      .slice(0, 6);
-  }, [response]);
+  const allProducts = response?.data || [];
+  return allProducts
+    .slice()
+    .sort((a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount))
+    .slice(0, 6);
+}, [response]);
 
   const availableCategories = getMainCategories();
 
