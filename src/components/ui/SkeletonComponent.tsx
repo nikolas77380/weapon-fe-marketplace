@@ -7,7 +7,8 @@ interface SkeletonComponentProps {
     | "sellerCard"
     | "title"
     | "favouriteCard"
-    | "leftSidebar";
+    | "leftSidebar"
+    | "filters";
   count?: number;
   className?: string;
 }
@@ -111,6 +112,42 @@ const SkeletonComponent = ({
             <Skeleton className="h-5 w-28 rounded" />
             <Skeleton className="h-5 w-40 rounded" />
             <Skeleton className="h-5 w-34 rounded" />
+          </div>
+        );
+
+      case "filters":
+        return (
+          <div className="border-r border-t border-b border-border-foreground rounded-sm h-fit p-5 flex flex-col gap-3.5">
+            {/* Header with title and button */}
+            <div className="flex justify-between mb-4">
+              <Skeleton className="h-6 w-24" />
+              <Skeleton className="h-8 w-20" />
+            </div>
+
+            {/* Filter sections */}
+            {[1, 2, 3, 4].map((section) => (
+              <div
+                key={section}
+                className="border-b border-border-foreground pb-3.5"
+              >
+                <Skeleton className="h-5 w-32 mb-3" />
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                  <Skeleton className="h-4 w-4/5" />
+                </div>
+              </div>
+            ))}
+
+            {/* Price Range */}
+            <div>
+              <Skeleton className="h-5 w-20 mb-3" />
+              <Skeleton className="h-4 w-full mb-4" />
+              <div className="flex justify-between gap-3">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </div>
           </div>
         );
 

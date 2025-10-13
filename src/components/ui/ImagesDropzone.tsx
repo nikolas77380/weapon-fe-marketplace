@@ -18,6 +18,7 @@ interface ImagesDropzoneProps {
   enableCrop?: boolean;
   externalFiles?: File[];
   cropShape?: "rect" | "circle";
+  aspectRatio?: number;
 }
 
 const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
@@ -29,9 +30,10 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
   enableCrop = false,
   externalFiles = [],
   cropShape = "rect",
+  aspectRatio,
 }) => {
   const t = useTranslations("ImagesDropZone");
-  const tCrop = useTranslations("ImageCrop");
+  // const tCrop = useTranslations("ImageCrop");
 
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
@@ -231,11 +233,11 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     <div className={`space-y-4 ${className}`}>
       {/* Crop Interface - Show when tempImageData exists */}
       {tempImageData && (
-        <div className="border-2 border-dashed border-gold-main rounded-lg p-1 min-[320px]:p-2 
-        sm:p-4 bg-gold-main/5 mx-auto max-w-[95vw] flex flex-col items-center justify-center sm:max-w-lg md:max-w-3xl overflow-hidden">
-          <h4 className="font-medium text-gray-700 mb-1 min-[320px]:mb-2 sm:mb-3 text-xs min-[320px]:text-sm sm:text-base truncate">
-            {tCrop("titleCropImage")}: {tempImageData.file.name}
-          </h4>
+        <div
+          className="border-2 border-dashed border-gold-main rounded-lg p-1 min-[320px]:p-2 
+        sm:p-4 bg-gold-main/5 mx-auto max-w-[95vw] flex flex-col items-center justify-center sm:max-w-lg md:max-w-3xl 
+        overflow-hidden"
+        >
           <ImageCropPreview
             src={tempImageData.preview}
             fileName={tempImageData.file.name}
@@ -246,6 +248,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
             }
             onCancel={handleCropCancel}
             cropShape={cropShape}
+            aspectRatio={aspectRatio}
           />
         </div>
       )}
@@ -288,11 +291,11 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
           <h4 className="font-medium text-gray-700">
             {t("titleUploadedFiles")} ({files.length}/{maxFiles}):
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="w-full">
             {files.map((file, index) => (
               <div
                 key={index}
-                className="relative group border rounded-lg p-2 bg-gray-50 hover:bg-gray-100 transition-colors"
+                className="relative group size-28 rounded p-2 bg-transparent hover:bg-gray-100 transition-colors"
               >
                 {/* Preview */}
                 <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
@@ -319,35 +322,8 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                   )}
                 </div>
 
-                {/* File name */}
-                <p
-                  className="text-xs text-gray-600 truncate mb-1"
-                  title={file.name}
-                >
-                  {file.name}
-                </p>
-
-                {/* File size */}
-                <p className="text-xs text-gray-400">
-                  {(file.size / 1024).toFixed(1)} KB
-                </p>
-
                 {/* Action buttons */}
                 <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {/* Crop button - only for images when crop is enabled */}
-                  {/* {file.type.startsWith("image/") && enableCrop && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-6 w-6 p-0 bg-white/90 hover:bg-white"
-                      onClick={() => startCropMode(index)}
-                      title={tCrop("tooltipCropImage")}
-                    >
-                      <Crop className="h-3 w-3" />
-                    </Button>
-                  )} */}
-
                   {/* Delete button */}
                   <Button
                     type="button"

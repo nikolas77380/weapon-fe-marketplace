@@ -12,7 +12,7 @@
       "titleLogRegNotification": "Увійдіть в особистий кабінет"
     },
     "sellerNavbar": {
-      "titleAddProduct": "Додати продукт",
+      "titleAddProduct": "Додати товар",
       "titleUserName": "Ім'я користувача",
       "titleMyAccount": "Мій обліковий запис",
       "titleFavourites": "Обране",
@@ -104,6 +104,10 @@
       "registrationFailed": "Реєстрація не вдалася. Будь ласка, спробуйте ще раз.",
       "invalidCredentials": "Невірна пошта або пароль",
       "loginFailed": "Вхід не вдався. Будь ласка, спробуйте ще раз."
+    },
+    "error": {
+      "invalidEmailOrPassword": "Невірна електронна пошта або пароль",
+      "uniqueEmail": "Ця електронна адреса вже існує. Будь ласка, скористайтеся іншою."
     },
     "login": {
       "footerDescripotion": "Безпечна автентифікація за допомогою шифрування, що відповідає галузевим стандартам.",
@@ -212,6 +216,7 @@
   },
   "ImageCrop": {
     "titleCropImage": "Обрізати зображення",
+    "labelZoom": "Масштаб",
     "buttonReset": "Скинути",
     "buttonCancel": "Скасувати",
     "buttonApply": "Застосувати",
@@ -444,5 +449,8 @@
     "certificateNumber": "Номер сертифікату",
     "download": "Завантажити",
     "certificate": "Сертифікат"
+  },
+  "TopPropositions": {
+    "title": "Найкращі пропозиції для вас"
   }
 }

@@ -29,7 +29,11 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { X } from "lucide-react";
 import DeleteImageDialog from "./DeleteImageDialog";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface EditProductFormProps {
   product: Product;
@@ -101,7 +105,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
     product.attributesJson?.model,
   ]);
 
-  const handleDeleteImage = async () => {
+  const handleDeleteImage = async ({ imageId }: { imageId: number }) => {
     if (imageToDelete) {
       try {
         // await deleteImageMutation.mutateAsync({ imageId: imageToDelete });
@@ -158,56 +162,47 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
         </p>
       </div>
 
+      {product.images && product.images.length > 0 && (
+        <div className="mb-4 flex items-center flex-wrap w-full gap-4">
+          {product.images.map((image) => (
+            <div
+              key={image.id}
+              className="relative size-30 border border-border rounded-sm"
+            >
+              <Image
+                src={image.url}
+                alt={image.name}
+                fill
+                priority
+                className="object-contain size-full p-2"
+              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white 
+                    rounded-full group p-2 cursor-pointer transition duration-300 ease-in-out"
+                    onClick={() => {
+                      setImageToDelete(image.id);
+                      setOpenDialog(true);
+                    }}
+                  >
+                    <X className="h-4 w-4 group-hover:text-white" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t("deleteModal.buttonDelete")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          ))}
+        </div>
+      )}
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 sm:space-y-6"
         >
-          {product.images && product.images.length > 0 && (
-            <div className="mb-4 flex items-center flex-wrap w-full gap-4">
-              {product.images.map((image) => (
-                <div
-                  key={image.id}
-                  className="relative size-30 border border-border rounded-sm"
-                >
-                  <Image
-                    src={image.url}
-                    alt={image.name}
-                    fill
-                    priority
-                    className="object-contain size-full p-2"
-                  />
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white 
-                    rounded-full group p-2 cursor-pointer transition duration-300 ease-in-out"
-                        onClick={() => {
-                          setImageToDelete(image.id);
-                          setOpenDialog(true);
-                        }}
-                      >
-                        <X className="h-4 w-4 group-hover:text-white" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t("deleteModal.buttonDelete")}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <DeleteImageDialog
-            isOpen={openDialog}
-            onClose={() => {
-              setOpenDialog(false);
-              setImageToDelete(null);
-            }}
-            onConfirm={handleDeleteImage}
-          />
-
           {/* Product Images */}
           <FormField
             control={form.control}
@@ -393,6 +388,14 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
           )}
         </form>
       </Form>
+      {/* <DeleteImageDialog
+        isOpen={openDialog}
+        onClose={() => {
+          setOpenDialog(false);
+          setImageToDelete(null);
+        }}
+        onConfirm={handleDeleteImage}
+      /> */}
     </div>
   );
 };

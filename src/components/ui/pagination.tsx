@@ -58,6 +58,7 @@ function PaginationLink({
           variant: isActive ? "ghost" : "ghost",
           size,
         }),
+        isActive && "bg-transparent border border-border-foreground rounded-lg",
         className
       )}
       {...props}
@@ -75,7 +76,7 @@ function PaginationPrevious({
       className={cn("gap-1 hover:bg-transparent", className)}
       {...props}
     >
-      <div className="border border-border-foreground p-2 bg-primary-foreground hover:bg-primary-foreground/70">
+      <div className="border border-border-foreground p-2 bg-transparent rounded-lg hover:bg-gray-50">
         <ChevronLeftIcon />
       </div>
     </PaginationLink>
@@ -92,7 +93,7 @@ function PaginationNext({
       className={cn("gap-1 hover:bg-transparent", className)}
       {...props}
     >
-      <div className="border border-border-foreground p-2 bg-primary-foreground hover:bg-primary-foreground/70">
+      <div className="border border-border-foreground p-2 bg-transparent rounded-lg hover:bg-gray-50">
         <ChevronRightIcon />
       </div>
     </PaginationLink>
