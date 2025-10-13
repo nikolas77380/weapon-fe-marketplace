@@ -444,5 +444,8 @@
     "certificateNumber": "Номер сертифікату",
     "download": "Завантажити",
     "certificate": "Сертифікат"
+  },
+  "TopPropositions": {
+    "title": "Найкращі пропозиції для вас"
   }
 }

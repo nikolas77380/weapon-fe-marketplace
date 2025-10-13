@@ -10,8 +10,11 @@ import BannerSlider from "./BannerSlider";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import ViewedProductsSlider from "./ViewedProductsSlider";
 import CategoryDropdown from "./CategoryDropdown";
+import { useTranslations } from "next-intl";
 
 const FilteringContent = () => {
+
+  const t = useTranslations("TopPropositions");
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
       page: 1,
@@ -62,6 +65,9 @@ const FilteringContent = () => {
         <ViewedProductsSlider />
 
         {/* Products Grid */}
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
+          {t("title")}
+        </h3>
         <div
           className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 
         lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full"

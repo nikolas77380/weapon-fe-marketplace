@@ -292,7 +292,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
             {files.map((file, index) => (
               <div
                 key={index}
-                className="relative group border rounded-lg p-2 bg-gray-50 hover:bg-gray-100 transition-colors"
+                className="relative group rounded-lg p-2 bg-transparent hover:bg-gray-100 transition-colors"
               >
                 {/* Preview */}
                 <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
@@ -320,17 +320,17 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                 </div>
 
                 {/* File name */}
-                <p
+                {/* <p
                   className="text-xs text-gray-600 truncate mb-1"
                   title={file.name}
                 >
                   {file.name}
-                </p>
+                </p> */}
 
                 {/* File size */}
-                <p className="text-xs text-gray-400">
+                {/* <p className="text-xs text-gray-400">
                   {(file.size / 1024).toFixed(1)} KB
-                </p>
+                </p> */}
 
                 {/* Action buttons */}
                 <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

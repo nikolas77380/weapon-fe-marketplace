@@ -444,5 +444,8 @@
     "certificateNumber": "Certificate Number",
     "download": "Download",
     "certificate": "Certificate"
+  },
+  "TopPropositions": {
+    "title": "The best deals for you"
   }
 }
