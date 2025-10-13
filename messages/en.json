@@ -105,6 +105,10 @@
       "invalidCredentials": "Invalid email or password",
       "loginFailed": "Login failed. Please try again."
     },
+    "error": {
+      "invalidEmailOrPassword": "Invalid identifier or password",
+      "uniqueEmail": "This email already exists. Please use a different email"
+    },
     "login": {
       "footerDescripotion": "Secure authentication with industry-standard encryption.",
       "forgotPassword": "Forgot password?",
@@ -212,6 +216,7 @@
   },
   "ImageCrop": {
     "titleCropImage": "Crop Image",
+    "labelZoom": "Zoom",
     "buttonReset": "Reset",
     "buttonCancel": "Cancel",
     "buttonApply": "Apply",
@@ -447,5 +452,15 @@
   },
   "TopPropositions": {
     "title": "The best deals for you"
+  },
+  "ConfirmationSuccess": {
+    "title": "Email Confirmed!",
+    "subtitle": "Your account has been successfully activated",
+    "description": "Thank you for verifying your email address. Your account is now fully activated and ready to use.",
+    "loginPrompt": "You can now log in to access your account and start managing your products.",
+    "dividerText": "Ready to start?",
+    "buttonLogin": "Go to Login",
+    "welcomeMessage": "Welcome to our marketplace! Start selling your products today.",
+    "footerNote": "This confirmation link can only be used once."
   }
 }

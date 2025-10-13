@@ -9,12 +9,19 @@ import { RegisterFormValues, RegisterSchema } from "@/schemas/registerSchema";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import EmailConfirmationNotice from "./EmailConfirmationNotice";
 
 interface RegisterFormProps {
   onSubmit: (values: RegisterFormValues) => Promise<void>;
+  showEmailConfirmation?: boolean;
+  userEmail?: string;
 }
 
-const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+const RegisterForm = ({
+  onSubmit,
+  showEmailConfirmation = false,
+  userEmail,
+}: RegisterFormProps) => {
   const t = useTranslations("Auth.register");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +47,12 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
 
   return (
     <div className="select-none mb-6 px-3.5">
+      {showEmailConfirmation && userEmail && (
+        <div className="mb-6">
+          <EmailConfirmationNotice email={userEmail} showSuccess={true} />
+        </div>
+      )}
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleRegister)}
@@ -130,9 +143,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                   {t("creatingAccount")}
                 </div>
               ) : (
-                <>
-                  {t("createAccount")}
-                </>
+                <>{t("createAccount")}</>
               )}
             </Button>
           </div>

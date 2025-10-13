@@ -382,6 +382,7 @@ const AddProductForms = () => {
                       maxFiles={5}
                       maxSize={5 * 1024 * 1024}
                       enableCrop={true}
+                      aspectRatio={16 / 9}
                       onFilesChange={(files) => {
                         field.onChange(files);
                         console.log("Images updated in form:", files);
