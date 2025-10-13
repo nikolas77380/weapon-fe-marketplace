@@ -17,7 +17,6 @@ const FilteringContent = () => {
   const t = useTranslations("TopPropositions");
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6;
-
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
       page: currentPage,
