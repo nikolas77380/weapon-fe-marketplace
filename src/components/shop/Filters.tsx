@@ -28,6 +28,7 @@ interface FiltersProps {
   selectedCondition: string[];
   selectedCategories: string[];
   priceRange: { min: number; max: number };
+  selectedPriceRange?: { min: number; max: number };
   categories?: { [key: number]: number };
   hideCategoryFilter?: boolean;
   isMobile?: boolean;
@@ -47,6 +48,7 @@ const Filters = ({
   selectedCondition,
   selectedCategories,
   priceRange,
+  selectedPriceRange,
   categories = {},
   hideCategoryFilter = false,
   isMobile = false,
@@ -104,7 +106,9 @@ const Filters = ({
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="tags" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
-                <h2 className="text-sm font-medium font-roboto">{t("titleTags")}</h2>
+                <h2 className="text-sm font-medium font-roboto">
+                  {t("titleTags")}
+                </h2>
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
@@ -374,6 +378,8 @@ const Filters = ({
         onPriceChange={onPriceChange}
         minLimit={priceRange.min}
         maxLimit={priceRange.max}
+        initialMin={selectedPriceRange?.min}
+        initialMax={selectedPriceRange?.max}
         isMobile={isMobile}
       />
 

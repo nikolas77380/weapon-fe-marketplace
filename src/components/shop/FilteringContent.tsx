@@ -264,6 +264,11 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
               selectedCondition={filters.condition}
               selectedCategories={filters.categories}
               priceRange={desktopPriceRange}
+              selectedPriceRange={
+                filters.minPrice > 0 || filters.maxPrice > 0
+                  ? { min: filters.minPrice, max: filters.maxPrice }
+                  : undefined
+              }
               categories={memoizedCategoryCounts}
               hideCategoryFilter={!!categorySlug}
               elasticFilters={elasticFilters}
@@ -293,6 +298,11 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         onClearAll={handleClearAll}
         availableCategories={availableCategoriesList}
         priceRange={mobilePriceRange}
+        selectedPriceRange={
+          filters.minPrice > 0 || filters.maxPrice > 0
+            ? { min: filters.minPrice, max: filters.maxPrice }
+            : undefined
+        }
         categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
         elasticFilters={elasticFilters}

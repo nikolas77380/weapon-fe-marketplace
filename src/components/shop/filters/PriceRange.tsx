@@ -235,13 +235,15 @@
 
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Slider } from "@/components/ui/slider";
 
 interface PriceRangeProps {
   minLimit: number;
   maxLimit: number;
+  initialMin?: number;
+  initialMax?: number;
   onPriceChange: (min: number, max: number) => void;
   isMobile?: boolean;
 }
@@ -249,6 +251,8 @@ interface PriceRangeProps {
 const PriceRange = ({
   minLimit,
   maxLimit,
+  initialMin,
+  initialMax,
   onPriceChange,
   isMobile = false,
 }: PriceRangeProps) => {
@@ -259,34 +263,33 @@ const PriceRange = ({
   const safeMaxLimit = maxLimit ?? 100000;
 
   const [range, setRange] = useState<[number, number]>([
-    safeMinLimit,
-    safeMaxLimit,
+    initialMin ?? safeMinLimit,
+    initialMax ?? safeMaxLimit,
   ]);
 
   // Отдельное состояние для инпутов (чтобы можно было вводить пустую строку)
-  const [inputMin, setInputMin] = useState<string>("");
-  const [inputMax, setInputMax] = useState<string>("");
+  const [inputMin, setInputMin] = useState<string>(
+    String(initialMin ?? safeMinLimit)
+  );
+  const [inputMax, setInputMax] = useState<string>(
+    String(initialMax ?? safeMaxLimit)
+  );
 
   const isUserInteracting = useRef(false);
-  const isInitialized = useRef(false);
   const isEditingInput = useRef(false);
 
-  // Синхронизация при изменении лимитов только при первой загрузке
+  // Синхронизация при изменении initialMin/initialMax (когда родитель сбрасывает фильтры)
   useEffect(() => {
     if (
-      !isInitialized.current &&
-      minLimit !== undefined &&
-      maxLimit !== undefined &&
-      minLimit !== maxLimit &&
-      minLimit > 0 &&
-      maxLimit > 0
+      !isUserInteracting.current &&
+      initialMin !== undefined &&
+      initialMax !== undefined
     ) {
-      setRange([minLimit, maxLimit]);
-      setInputMin(String(minLimit));
-      setInputMax(String(maxLimit));
-      isInitialized.current = true;
+      setRange([initialMin, initialMax]);
+      setInputMin(String(initialMin));
+      setInputMax(String(initialMax));
     }
-  }, [minLimit, maxLimit]);
+  }, [initialMin, initialMax]);
 
   // Синхронизация инпутов с range при изменении слайдера (но не во время редактирования инпутов)
   useEffect(() => {
@@ -297,24 +300,26 @@ const PriceRange = ({
   }, [range]);
 
   // Обновляем локальное состояние во время перетаскивания
-  const handleChange = useCallback((value: number[]) => {
+  const handleChange = (value: number[]) => {
     isUserInteracting.current = true;
     const [min, max] = value;
     setRange([min, max]);
-  }, []);
+    // Обновляем инпуты сразу при движении слайдера
+    if (!isEditingInput.current) {
+      setInputMin(String(min));
+      setInputMax(String(max));
+    }
+  };
 
   // Обновляем родителя только когда пользователь отпустил слайдер
-  const handleCommit = useCallback(
-    (value: number[]) => {
-      const [min, max] = value;
-      onPriceChange(min, max);
-      // Даем время на обновление данных, затем разрешаем синхронизацию
-      setTimeout(() => {
-        isUserInteracting.current = false;
-      }, 100);
-    },
-    [onPriceChange]
-  );
+  const handleCommit = (value: number[]) => {
+    const [min, max] = value;
+    onPriceChange(min, max);
+    // Даем время на обновление данных, затем разрешаем синхронизацию
+    setTimeout(() => {
+      isUserInteracting.current = false;
+    }, 100);
+  };
 
   // Не рендерим, пока не получили валидные данные
   if (!minLimit || !maxLimit || minLimit === maxLimit) {
