@@ -105,6 +105,10 @@
       "invalidCredentials": "Invalid email or password",
       "loginFailed": "Login failed. Please try again."
     },
+    "error": {
+      "invalidEmailOrPassword": "Invalid identifier or password",
+      "uniqueEmail": "This email already exists. Please use a different email"
+    },
     "login": {
       "footerDescripotion": "Secure authentication with industry-standard encryption.",
       "forgotPassword": "Forgot password?",
@@ -212,6 +216,7 @@
   },
   "ImageCrop": {
     "titleCropImage": "Crop Image",
+    "labelZoom": "Zoom",
     "buttonReset": "Reset",
     "buttonCancel": "Cancel",
     "buttonApply": "Apply",

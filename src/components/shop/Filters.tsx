@@ -372,8 +372,6 @@ const Filters = ({
 
       <PriceRange
         onPriceChange={onPriceChange}
-        initialMin={priceRange.min}
-        initialMax={priceRange.max}
         minLimit={priceRange.min}
         maxLimit={priceRange.max}
         isMobile={isMobile}

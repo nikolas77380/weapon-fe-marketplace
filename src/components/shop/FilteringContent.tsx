@@ -16,7 +16,7 @@ import { Funnel } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
-import { getChildCategories } from "@/lib/categoryUtils";
+import SkeletonComponent from "../ui/SkeletonComponent";
 
 interface FilterState {
   minPrice: number;
@@ -34,6 +34,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const t = useTranslations("CategoryDetail");
   const { viewMode, setViewMode } = useViewMode("grid");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const [priceRangeKey, setPriceRangeKey] = useState(0);
   const [filters, setFilters] = useState<FilterState>({
     minPrice: 0,
     maxPrice: 0,
@@ -49,12 +50,15 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const { data: response, isLoading } = useCategoryProductsElastic({
     categorySlug: categorySlug,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
-    priceRange: {
-      min: filters.minPrice,
-      max: filters.maxPrice,
-    },
+    priceRange:
+      filters.minPrice > 0 || filters.maxPrice > 0
+        ? {
+            min: filters.minPrice,
+            max: filters.maxPrice,
+          }
+        : undefined,
     page: filters.page,
-    pageSize: 8,
+    pageSize: 12,
     availability:
       filters.availability.length > 0 ? filters.availability : undefined,
     condition: filters.condition.length > 0 ? filters.condition : undefined,
@@ -63,10 +67,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
   const { data: filtersData } = useCategoryFiltersElastic({
     categorySlug: categorySlug,
-    priceRange: {
-      min: filters.minPrice,
-      max: filters.maxPrice,
-    },
+    priceRange:
+      filters.minPrice > 0 || filters.maxPrice > 0
+        ? {
+            min: filters.minPrice,
+            max: filters.maxPrice,
+          }
+        : undefined,
   });
 
   const allProducts = response?.data || [];
@@ -133,8 +140,8 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
   const handleClearAll = () => {
     setFilters({
-      minPrice: 1,
-      maxPrice: 500000,
+      minPrice: 0,
+      maxPrice: 0,
       categoryId: null,
       subcategoryId: null,
       availability: [],
@@ -144,6 +151,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       sort: "id:desc",
     });
     setViewMode("grid");
+    setPriceRangeKey((prev) => prev + 1);
   };
 
   const handleOpenFilterDrawer = () => {
@@ -163,20 +171,21 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     : {};
 
   // Memoize priceRange objects to prevent infinite re-renders
+  // Используем статистику из elastic как лимиты для слайдера
   const desktopPriceRange = useMemo(
     () => ({
-      min: filters.minPrice === 0 ? elasticFilters?.priceStats?.min : filters.minPrice,
-      max: filters.maxPrice === 0 ? elasticFilters?.priceStats?.max : filters.maxPrice,
+      min: elasticFilters?.priceStats?.min ?? 0,
+      max: elasticFilters?.priceStats?.max ?? 100000,
     }),
-    [elasticFilters, filters.minPrice, filters.maxPrice]
+    [elasticFilters?.priceStats?.min, elasticFilters?.priceStats?.max]
   );
-  console.log("RANGE", desktopPriceRange)
+
   const mobilePriceRange = useMemo(
     () => ({
-      min: elasticFilters?.priceStats?.min,
-      max: elasticFilters?.priceStats?.max,
+      min: elasticFilters?.priceStats?.min ?? 0,
+      max: elasticFilters?.priceStats?.max ?? 100000,
     }),
-    [elasticFilters]
+    [elasticFilters?.priceStats?.min, elasticFilters?.priceStats?.max]
   );
 
   // Memoize other objects that might cause re-renders
@@ -238,23 +247,28 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
         {/* Filters - Hidden on mobile, visible on desktop */}
         <div className="hidden lg:block">
-          <Filters
-            onPriceChange={handlePriceChange}
-            onSubcategoryChange={handleSubcategoryChange}
-            onAvailabilityChange={handleAvailabilityChange}
-            onConditionChange={handleConditionChange}
-            onCategoriesChange={handleCategoriesChange}
-            onClearAll={handleClearAll}
-            availableCategories={availableCategoriesList}
-            selectedSubcategoryId={filters.subcategoryId}
-            selectedAvailability={filters.availability}
-            selectedCondition={filters.condition}
-            selectedCategories={filters.categories}
-            priceRange={desktopPriceRange}
-            categories={memoizedCategoryCounts}
-            hideCategoryFilter={!!categorySlug}
-            elasticFilters={elasticFilters}
-          />
+          {loading || !elasticFilters ? (
+            <SkeletonComponent type="filters" />
+          ) : (
+            <Filters
+              key={priceRangeKey}
+              onPriceChange={handlePriceChange}
+              onSubcategoryChange={handleSubcategoryChange}
+              onAvailabilityChange={handleAvailabilityChange}
+              onConditionChange={handleConditionChange}
+              onCategoriesChange={handleCategoriesChange}
+              onClearAll={handleClearAll}
+              availableCategories={availableCategoriesList}
+              selectedSubcategoryId={filters.subcategoryId}
+              selectedAvailability={filters.availability}
+              selectedCondition={filters.condition}
+              selectedCategories={filters.categories}
+              priceRange={desktopPriceRange}
+              categories={memoizedCategoryCounts}
+              hideCategoryFilter={!!categorySlug}
+              elasticFilters={elasticFilters}
+            />
+          )}
         </div>
         {/* Shop Content - Full width on mobile, flex-1 on desktop */}
         <div className="w-full lg:flex-1 h-full">
@@ -271,6 +285,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
       {/* Mobile Filter Drawer */}
       <FilterDrawer
+        key={priceRangeKey}
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}

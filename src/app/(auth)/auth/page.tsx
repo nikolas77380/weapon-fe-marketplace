@@ -134,9 +134,10 @@ const AuthPage = () => {
         console.error("Registration failed:", response);
         toast.error(t("toasts.registrationFailed"));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      toast.error(t("toasts.registrationFailed"));
+      const translatedMessage = t("error.uniqueEmail") || error.message;
+      toast.error(translatedMessage);
     }
   };
 
@@ -162,9 +163,23 @@ const AuthPage = () => {
         console.error("Login failed - no JWT in response:", response);
         toast.error(t("toasts.invalidCredentials"));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
-      toast.error(t("toasts.loginFailed"));
+      // let backendMessage = t("toasts.loginFailed");
+
+      // if (typeof error.message === "string" && error.message.includes("{")) {
+      //   try {
+      //     const jsonPart = error.message.substring(error.message.indexOf("{"));
+      //     const parsed = JSON.parse(jsonPart);
+      //     backendMessage = parsed?.error?.message || backendMessage;
+      //   } catch {
+      //     // ignore JSON parse error
+      //   }
+      // }
+
+      // toast.error(backendMessage);
+      const translatedMessage = t("error.invalidEmailOrPassword") || error.message;
+      toast.error(translatedMessage);
     }
   };
 
@@ -197,8 +212,10 @@ const AuthPage = () => {
                 authMode === "login" ? "mt-6 lg:mt-41" : "mt-4 lg:mt-6"
               } flex bg-background flex-col w-full lg:w-170 mx-auto`}
             >
-              <div className="flex flex-col items-center justify-center text-center border-b 
-              border-border-foreground px-4 sm:px-6">
+              <div
+                className="flex flex-col items-center justify-center text-center border-b 
+              border-border-foreground px-4 sm:px-6"
+              >
                 <h2 className="font-medium text-xl sm:text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
                   {t("titleMain")}
                 </h2>
