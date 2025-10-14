@@ -106,34 +106,9 @@ const AuthPage = () => {
   const onRegistrationSubmit = async (
     values: RegisterFormValues
   ): Promise<void> => {
-    console.log("Attempting registration with:", values);
     try {
-      // Always register as seller
-      // let response;
-      // if (activeType === "buyer") {
-      //   response = await registerBuyer(values);
-      //   console.log("Buyer registration response:", response);
-      // } else if (activeType === "seller") {
-      //   response = await registerSeller(values);
-      //   console.log("Seller registration response:", response);
-      // }
-
-      const response = await registerSeller(values);
-      console.log("Seller registration response:", response);
-
-      if (response && "jwt" in response) {
-        console.log("Registration successful! JWT cookie set");
-        await fetchUser();
-        // if (isSeller(response.user)) {
-        //   router.push("/account");
-        // } else {
-        //   router.push("/marketplace");
-        // }
-        router.push("/account");
-      } else {
-        console.error("Registration failed:", response);
-        toast.error(t("toasts.registrationFailed"));
-      }
+      await registerSeller(values);
+      toast.success(t("toasts.registrationSuccess"));
     } catch (error: any) {
       console.error("Registration error:", error);
       const translatedMessage = t("error.uniqueEmail") || error.message;
@@ -178,7 +153,8 @@ const AuthPage = () => {
       // }
 
       // toast.error(backendMessage);
-      const translatedMessage = t("error.invalidEmailOrPassword") || error.message;
+      const translatedMessage =
+        t("error.invalidEmailOrPassword") || error.message;
       toast.error(translatedMessage);
     }
   };
