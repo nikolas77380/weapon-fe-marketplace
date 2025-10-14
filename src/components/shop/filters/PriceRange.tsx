@@ -11,6 +11,7 @@ interface PriceRangeProps {
   initialMax?: number;
   onPriceChange: (min: number, max: number) => void;
   isMobile?: boolean;
+  isDisabled?: boolean;
 }
 
 const PriceRange = ({
@@ -20,6 +21,7 @@ const PriceRange = ({
   initialMax,
   onPriceChange,
   isMobile = false,
+  isDisabled = false,
 }: PriceRangeProps) => {
   const t = useTranslations("PriceRange");
 
@@ -105,6 +107,7 @@ const PriceRange = ({
               value={range}
               onValueChange={handleChange}
               onValueCommit={handleCommit}
+              disabled={isDisabled}
               className="w-full"
             />
           </div>
@@ -119,6 +122,7 @@ const PriceRange = ({
                 $
               </span>
               <input
+                disabled={isDisabled}
                 type="number"
                 value={inputMin}
                 onFocus={() => {
@@ -171,6 +175,7 @@ const PriceRange = ({
                 $
               </span>
               <input
+                disabled={isDisabled}
                 type="number"
                 value={inputMax}
                 onFocus={() => {

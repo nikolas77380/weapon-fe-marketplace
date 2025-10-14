@@ -1,7 +1,7 @@
 "use client";
 
 import { quickFilters } from "@/data/leftFilters";
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import PriceRange from "./filters/PriceRange";
@@ -59,6 +59,9 @@ const Filters = ({
   const t = useTranslations("CompanyDetail.tabProducts");
   const currentLocale = useLocale();
 
+  // Состояние для отслеживания открытых аккордеонов
+  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
+
   const getCategoryName = (category: Category) => {
     return currentLocale === "en"
       ? category.name
@@ -105,7 +108,19 @@ const Filters = ({
       {/* Elasticsearch Tags Filter */}
       {elasticFilters?.tags && elasticFilters.tags.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            value={openAccordions.includes("tags") ? "tags" : ""}
+            onValueChange={(value) => {
+              setOpenAccordions((prev) =>
+                prev.includes(value)
+                  ? prev.filter((item) => item !== value)
+                  : [...prev, value]
+              );
+            }}
+          >
             <AccordionItem value="tags" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
                 <h2 className="text-sm font-medium font-roboto">
@@ -135,7 +150,23 @@ const Filters = ({
       {/* Elasticsearch Categories Filter */}
       {elasticFilters?.categories && elasticFilters.categories.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            value={
+              openAccordions.includes("elastic-categories")
+                ? "elastic-categories"
+                : ""
+            }
+            onValueChange={(value) => {
+              setOpenAccordions((prev) =>
+                prev.includes(value)
+                  ? prev.filter((item) => item !== value)
+                  : [...prev, value]
+              );
+            }}
+          >
             <AccordionItem value="elastic-categories" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
                 <h2 className="text-sm font-medium font-roboto">
@@ -147,9 +178,9 @@ const Filters = ({
                   {elasticFilters.categories.map((category: any) => (
                     <div key={category.key} className="flex items-center gap-3">
                       <Checkbox
+                        disabled={isDisabled}
                         id={`elastic-category-${category.key}`}
                         checked={selectedCategories.includes(category.key)}
-                        disabled={isDisabled}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             onCategoriesChange([
@@ -185,7 +216,23 @@ const Filters = ({
       {elasticFilters?.availability &&
         elasticFilters.availability.length > 0 && (
           <div className="border-b border-border-foreground pb-3.5">
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full"
+              value={
+                openAccordions.includes("elastic-availability")
+                  ? "elastic-availability"
+                  : ""
+              }
+              onValueChange={(value) => {
+                setOpenAccordions((prev) =>
+                  prev.includes(value)
+                    ? prev.filter((item) => item !== value)
+                    : [...prev, value]
+                );
+              }}
+            >
               <AccordionItem
                 value="elastic-availability"
                 className="border-none"
@@ -200,9 +247,9 @@ const Filters = ({
                     {elasticFilters.availability.map((item: any) => (
                       <div key={item.key} className="flex items-center gap-3">
                         <Checkbox
+                          disabled={isDisabled}
                           id={`elastic-availability-${item.key}`}
                           checked={selectedAvailability.includes(item.key)}
-                          disabled={isDisabled}
                           onCheckedChange={(checked) => {
                             if (checked) {
                               onAvailabilityChange([
@@ -237,7 +284,23 @@ const Filters = ({
       {/* Elasticsearch Condition Filter */}
       {elasticFilters?.condition && elasticFilters.condition.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full"
+            value={
+              openAccordions.includes("elastic-condition")
+                ? "elastic-condition"
+                : ""
+            }
+            onValueChange={(value) => {
+              setOpenAccordions((prev) =>
+                prev.includes(value)
+                  ? prev.filter((item) => item !== value)
+                  : [...prev, value]
+              );
+            }}
+          >
             <AccordionItem value="elastic-condition" className="border-none">
               <AccordionTrigger className="py-0 hover:no-underline">
                 <h2 className="text-sm font-medium font-roboto">
@@ -249,9 +312,9 @@ const Filters = ({
                   {elasticFilters.condition.map((item: any) => (
                     <div key={item.key} className="flex items-center gap-3">
                       <Checkbox
+                        disabled={isDisabled}
                         id={`elastic-condition-${item.key}`}
                         checked={selectedCondition.includes(item.key)}
-                        disabled={isDisabled}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             onConditionChange([...selectedCondition, item.key]);
@@ -360,7 +423,6 @@ const Filters = ({
                   >
                     <Checkbox
                       id={`availability-${availability.id}`}
-                      disabled={isDisabled}
                       className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
                     />
                     <Label
@@ -387,6 +449,7 @@ const Filters = ({
         initialMin={selectedPriceRange?.min}
         initialMax={selectedPriceRange?.max}
         isMobile={isMobile}
+        isDisabled={isDisabled}
       />
 
       {/* <div>
