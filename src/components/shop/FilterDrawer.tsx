@@ -32,6 +32,7 @@ interface FilterDrawerProps {
   selectedAvailability: string[];
   selectedCondition: string[];
   selectedCategories: string[];
+  isDisabled?: boolean;
 }
 
 const FilterDrawer = ({
@@ -53,6 +54,7 @@ const FilterDrawer = ({
   selectedAvailability,
   selectedCondition,
   selectedCategories,
+  isDisabled = false,
 }: FilterDrawerProps) => {
   const t = useTranslations("CategoryDetail");
   return (
@@ -102,6 +104,7 @@ const FilterDrawer = ({
             selectedAvailability={selectedAvailability}
             selectedCondition={selectedCondition}
             selectedCategories={selectedCategories}
+            isDisabled={isDisabled}
           />
 
           {/* Separator */}

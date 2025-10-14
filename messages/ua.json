@@ -137,6 +137,31 @@
       "termsPolicy3": "Політики конфіденційності",
       "creatingAccount": "Створення облікового запису...",
       "createAccount": "Створити обліковий запис"
+    },
+    "forgotPassword": {
+      "title": "Забули пароль?",
+      "description": "Введіть вашу електронну адресу і ми надішлемо вам посилання для скидання пароля.",
+      "labelEmail": "Пошта",
+      "placeholderEmail": "Введіть вашу пошту",
+      "buttonSend": "Надіслати посилання",
+      "buttonSending": "Надсилання...",
+      "backToLogin": "Повернутися до входу",
+      "successMessage": "Посилання для скидання пароля надіслано! Перевірте вашу пошту.",
+      "errorMessage": "Не вдалося надіслати посилання для скидання. Будь ласка, спробуйте ще раз."
+    },
+    "resetPassword": {
+      "title": "Скинути пароль",
+      "description": "Введіть ваш новий пароль нижче.",
+      "labelNewPassword": "Новий пароль",
+      "placeholderNewPassword": "Введіть новий пароль",
+      "labelConfirmPassword": "Підтвердити новий пароль",
+      "placeholderConfirmPassword": "Підтвердіть новий пароль",
+      "buttonReset": "Скинути пароль",
+      "buttonResetting": "Скидання...",
+      "successMessage": "Пароль успішно оновлено!",
+      "passwordMismatch": "Паролі не співпадають",
+      "passwordMinLength": "Пароль повинен містити принаймні 6 символів",
+      "errorMessage": "Не вдалося скинути пароль. Будь ласка, спробуйте ще раз."
     }
   },
   "Settings": {

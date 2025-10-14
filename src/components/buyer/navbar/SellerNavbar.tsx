@@ -56,11 +56,10 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <div className="text-sm items-start flex flex-col ml-2">
-              <div className="font-medium text-white">
+            <div className="text-sm items-start flex ml-2">
+              <p className="font-medium text-white">
                 {user.displayName || user.username}
-              </div>
-              <div className="text-white/70 capitalize">{user.role.name}</div>
+              </p>
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent className="border-gold-main">

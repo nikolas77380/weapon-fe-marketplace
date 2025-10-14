@@ -132,11 +132,36 @@
       "placeholderPassword": "Enter your password",
       "labelConfirmPassword": "Confirm password",
       "placeholderConfirmPassword": "Confirm your password",
-      "termsPolicy1": "I’ve read and accept the",
+      "termsPolicy1": "I've read and accept the",
       "termsPolicy2": "Terms",
       "termsPolicy3": "Privacy Policy",
       "creatingAccount": "Creating Account...",
       "createAccount": "Create Account"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "labelEmail": "Email",
+      "placeholderEmail": "Enter your email",
+      "buttonSend": "Send Reset Link",
+      "buttonSending": "Sending...",
+      "backToLogin": "Back to Login",
+      "successMessage": "Password reset link sent! Check your email.",
+      "errorMessage": "Failed to send reset link. Please try again."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Enter your new password below.",
+      "labelNewPassword": "New Password",
+      "placeholderNewPassword": "Enter new password",
+      "labelConfirmPassword": "Confirm New Password",
+      "placeholderConfirmPassword": "Confirm new password",
+      "buttonReset": "Reset Password",
+      "buttonResetting": "Resetting...",
+      "successMessage": "Password successfully reset!",
+      "passwordMismatch": "Passwords do not match",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "errorMessage": "Failed to reset password. Please try again."
     }
   },
   "Settings": {

@@ -57,18 +57,6 @@ const BuyerMenuContent = ({
 
   return (
     <div className={containerClass}>
-      {!isMobile && (
-        <>
-          <div className="flex flex-col px-3 pt-2">
-            <p className="font-semibold">{t("titleUserName")}</p>
-            <p className="text-muted-foreground text-sm">
-              {user.displayName || user.username}
-            </p>
-          </div>
-          <Separator className="mt-2" />
-        </>
-      )}
-
       <div className={isMobile ? "space-y-1" : ""}>
         {isMobile ? (
           <>
