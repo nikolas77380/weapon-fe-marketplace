@@ -109,9 +109,10 @@ const AuthPage = () => {
     try {
       await registerSeller(values);
       toast.success(t("toasts.registrationSuccess"));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
-      toast.error(t("toasts.registrationFailed"));
+      const translatedMessage = t("error.uniqueEmail") || error.message;
+      toast.error(translatedMessage);
     }
   };
 
@@ -137,9 +138,24 @@ const AuthPage = () => {
         console.error("Login failed - no JWT in response:", response);
         toast.error(t("toasts.invalidCredentials"));
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
-      toast.error(t("toasts.loginFailed"));
+      // let backendMessage = t("toasts.loginFailed");
+
+      // if (typeof error.message === "string" && error.message.includes("{")) {
+      //   try {
+      //     const jsonPart = error.message.substring(error.message.indexOf("{"));
+      //     const parsed = JSON.parse(jsonPart);
+      //     backendMessage = parsed?.error?.message || backendMessage;
+      //   } catch {
+      //     // ignore JSON parse error
+      //   }
+      // }
+
+      // toast.error(backendMessage);
+      const translatedMessage =
+        t("error.invalidEmailOrPassword") || error.message;
+      toast.error(translatedMessage);
     }
   };
 

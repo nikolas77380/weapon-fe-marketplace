@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { useCategories } from "@/hooks/useCategories";
 import SkeletonComponent from "../ui/SkeletonComponent";
@@ -10,12 +10,17 @@ import BannerSlider from "./BannerSlider";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import ViewedProductsSlider from "./ViewedProductsSlider";
 import CategoryDropdown from "./CategoryDropdown";
+import { useTranslations } from "next-intl";
+import PaginationTopProduct from "../ui/PaginationTopProduct";
 
 const FilteringContent = () => {
+  const t = useTranslations("TopPropositions");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6;
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
-      page: 1,
-      pageSize: 8,
+      page: currentPage,
+      pageSize: pageSize,
     },
   });
 
@@ -24,15 +29,22 @@ const FilteringContent = () => {
   const { data: promosResponse } = usePromosQuery();
   console.log("promosResponse", promosResponse);
 
+  const pagination = response?.meta?.pagination;
+
   const paginatedProducts = useMemo(() => {
-  const allProducts = response?.data || [];
-  return allProducts
-    .slice()
-    .sort((a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount))
-    .slice(0, 6);
-}, [response]);
+    const allProducts = response?.data || [];
+    return allProducts
+      .slice()
+      .sort(
+        (a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount)
+      );
+  }, [response?.data]);
 
   const availableCategories = getMainCategories();
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
@@ -62,6 +74,9 @@ const FilteringContent = () => {
         <ViewedProductsSlider />
 
         {/* Products Grid */}
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
+          {t("title")}
+        </h3>
         <div
           className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 
         lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 w-full"
@@ -69,7 +84,7 @@ const FilteringContent = () => {
           {loading ? (
             <SkeletonComponent
               type="productCard"
-              count={18}
+              count={6}
               className="w-full"
             />
           ) : (
@@ -78,6 +93,15 @@ const FilteringContent = () => {
             ))
           )}
         </div>
+
+        {/* Pagination */}
+        {pagination && (
+          <PaginationTopProduct
+            currentPage={pagination.page}
+            totalPages={pagination.pageCount}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </div>
   );

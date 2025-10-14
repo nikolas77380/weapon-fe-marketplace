@@ -22,6 +22,7 @@ interface FilterDrawerProps {
   availableCategories: any[];
   selectedSubcategoryId: number | null;
   priceRange: { min: number; max: number };
+  selectedPriceRange?: { min: number; max: number };
   categories: Record<number, number>;
   hideCategoryFilter: boolean;
   elasticFilters: any;
@@ -42,6 +43,7 @@ const FilterDrawer = ({
   availableCategories,
   selectedSubcategoryId,
   priceRange,
+  selectedPriceRange,
   categories,
   hideCategoryFilter,
   elasticFilters,
@@ -89,6 +91,7 @@ const FilterDrawer = ({
             availableCategories={availableCategories}
             selectedSubcategoryId={selectedSubcategoryId}
             priceRange={priceRange}
+            selectedPriceRange={selectedPriceRange}
             categories={categories}
             hideCategoryFilter={hideCategoryFilter}
             isMobile={true}

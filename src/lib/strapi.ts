@@ -28,9 +28,14 @@ export const strapiFetch = async ({
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    console.error("Response error:", errorText);
-    throw new Error(`HTTP ${response.status}: ${errorText}`);
+    // const errorText = await response.text();
+    // console.error("Response error:", errorText);
+    // throw new Error(`HTTP ${response.status}: ${errorText}`);
+    const errorData = await response.json();
+    throw {
+      status: response.status,
+      message: errorData?.error?.message || "Unknown error",
+    };
   }
 
   const data = await response.json();
@@ -149,7 +154,6 @@ export const updateSellerMeta = async ({
   });
 };
 
-// Function to upload seller meta avatar
 export const uploadSellerAvatar = async ({
   id,
   avatar,

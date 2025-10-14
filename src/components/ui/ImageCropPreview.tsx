@@ -1,16 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
-import ReactCrop, { Crop, PixelCrop } from "react-image-crop";
+import React, { useState, useCallback } from "react";
+import Cropper from "react-easy-crop";
 import { Button } from "@/components/ui/button";
-import {
-  getCroppedImg,
-  getCroppedImgCircular,
-  // makeDefaultCrop,
-} from "@/lib/cropUtils";
-import { Check, RotateCcw } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import "react-image-crop/dist/ReactCrop.css";
 
 interface ImageCropPreviewProps {
   src: string;
@@ -19,7 +13,84 @@ interface ImageCropPreviewProps {
   onCancel?: () => void;
   className?: string;
   cropShape?: "rect" | "circle";
+  aspectRatio?: number;
 }
+
+interface CroppedArea {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const createImage = (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener("load", () => resolve(image));
+    image.addEventListener("error", (error) => reject(error));
+    image.src = url;
+  });
+
+const getCroppedImg = async (
+  imageSrc: string,
+  pixelCrop: CroppedArea,
+  fileName: string,
+  isCircle: boolean = false
+): Promise<File> => {
+  const image = await createImage(imageSrc);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) {
+    throw new Error("No 2d context");
+  }
+
+  canvas.width = pixelCrop.width;
+  canvas.height = pixelCrop.height;
+
+  if (isCircle) {
+    // Для круглого кропа создаем круглую маску
+    ctx.beginPath();
+    ctx.arc(
+      pixelCrop.width / 2,
+      pixelCrop.height / 2,
+      pixelCrop.width / 2,
+      0,
+      Math.PI * 2
+    );
+    ctx.closePath();
+    ctx.clip();
+  }
+
+  ctx.drawImage(
+    image,
+    pixelCrop.x,
+    pixelCrop.y,
+    pixelCrop.width,
+    pixelCrop.height,
+    0,
+    0,
+    pixelCrop.width,
+    pixelCrop.height
+  );
+
+  return new Promise((resolve) => {
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          throw new Error("Canvas is empty");
+        }
+        const file = new File([blob], fileName, {
+          type: "image/png",
+          lastModified: Date.now(),
+        });
+        resolve(file);
+      },
+      "image/png",
+      1
+    );
+  });
+};
 
 const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   src,
@@ -28,179 +99,89 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   onCancel,
   className = "",
   cropShape = "rect",
+  aspectRatio,
 }) => {
   const t = useTranslations("ImageCrop");
-  const [crop, setCrop] = useState<Crop>({
-    unit: "px",
-    x: 50,
-    y: 50,
-    width: 300,
-    height: 300,
-  });
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
-  const imgRef = useRef<HTMLImageElement>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] =
+    useState<CroppedArea | null>(null);
 
-  // const onImageLoad = useCallback(
-  //   (e: React.SyntheticEvent<HTMLImageElement>) => {
-  //     const img = e.target as HTMLImageElement;
-  //     const containerWidth = 400;
-  //     const containerHeight = 400;
-  //     const maxSize = 300;
-  //     const aspectRatio = img.naturalWidth / img.naturalHeight;
-
-  //     let width = maxSize;
-  //     let height = maxSize;
-
-  //     if (aspectRatio > 1) {
-  //       height = width / aspectRatio;
-  //     } else {
-  //       width = height * aspectRatio;
-  //     }
-
-  //     const x = (containerWidth - width) / 2;
-  //     const y = (containerHeight - height) / 2;
-
-  //     setCrop({
-  //       unit: "px",
-  //       x: Math.max(0, x),
-  //       y: Math.max(0, y),
-  //       width: Math.min(width, maxSize),
-  //       height: Math.min(height, maxSize),
-  //     });
-  //   },
-  //   []
-  // );
-
-  const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.target as HTMLImageElement;
-    const containerWidth = 400;
-    const containerHeight = 400;
-    const maxSize = 300;
-    const aspectRatio = img.naturalWidth / img.naturalHeight;
-
-    let width = maxSize;
-    let height = maxSize;
-
-    if (aspectRatio > 1) {
-      height = width / aspectRatio;
-    } else {
-      width = height * aspectRatio;
-    }
-
-    // Центрирование кропа в контейнере
-    const x = (containerWidth - width) / 2;
-    const y = (containerHeight - height) / 2;
-
-    setCrop({
-      unit: "px",
-      x: Math.max(0, x),
-      y: Math.max(0, y),
-      width: Math.min(width, maxSize),
-      height: Math.min(height, maxSize),
-    });
+  const onCropChange = useCallback((location: { x: number; y: number }) => {
+    setCrop(location);
   }, []);
 
-  const handleApplyCrop = useCallback(async () => {
-    if (
-      !imgRef.current ||
-      !completedCrop ||
-      !completedCrop.width ||
-      !completedCrop.height
-    ) {
-      // If no crop is made, use the entire image
-      const fullCrop = {
-        unit: "px" as const,
-        x: 0,
-        y: 0,
-        width: imgRef.current?.naturalWidth || 0,
-        height: imgRef.current?.naturalHeight || 0,
-      };
+  const onZoomChange = useCallback((zoom: number) => {
+    setZoom(zoom);
+  }, []);
 
-      if (imgRef.current) {
-        try {
-          const cropFunction =
-            cropShape === "circle" ? getCroppedImgCircular : getCroppedImg;
-          const croppedFile = await cropFunction(
-            imgRef.current,
-            fullCrop,
-            fileName
-          );
-          onCropComplete(croppedFile);
-        } catch (error) {
-          console.error("Error creating cropped image:", error);
-        }
-      }
+  const onCropCompleteCallback = useCallback(
+    (_croppedArea: CroppedArea, croppedAreaPixels: CroppedArea) => {
+      setCroppedAreaPixels(croppedAreaPixels);
+    },
+    []
+  );
+
+  const handleApplyCrop = useCallback(async () => {
+    if (!croppedAreaPixels) {
       return;
     }
 
     try {
-      const cropFunction =
-        cropShape === "circle" ? getCroppedImgCircular : getCroppedImg;
-      const croppedFile = await cropFunction(
-        imgRef.current,
-        completedCrop,
-        fileName
+      const croppedFile = await getCroppedImg(
+        src,
+        croppedAreaPixels,
+        fileName,
+        cropShape === "circle"
       );
       onCropComplete(croppedFile);
     } catch (error) {
       console.error("Error creating cropped image:", error);
     }
-  }, [completedCrop, fileName, onCropComplete, cropShape]);
-
-  const handleResetCrop = useCallback(() => {
-    setCrop({ unit: "px", x: 50, y: 50, width: 300, height: 300 });
-    setCompletedCrop(undefined);
-  }, []);
+  }, [croppedAreaPixels, src, fileName, cropShape, onCropComplete]);
 
   return (
-    <div
-      className={`space-y-1 min-[320px]:space-y-2 sm:space-y-3 w-full max-w-full overflow-visible ${className}`}
-    >
-      <div className="border rounded-lg overflow-hidden bg-gray-50 w-full max-w-[400px] mx-auto">
-        <div
-          className="relative w-[400px] h-[400px]"
-          style={{ position: "relative" }}
-        >
-          <ReactCrop
-            crop={crop}
-            onChange={(_, percentCrop) => setCrop(percentCrop)}
-            onComplete={(c) => setCompletedCrop(c)}
-            aspect={cropShape === "circle" ? 1 : undefined}
-            minWidth={50}
-            minHeight={50}
-            className="w-full h-full"
-            circularCrop={cropShape === "circle"}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              ref={imgRef}
-              alt="Crop preview"
-              src={src}
-              onLoad={onImageLoad}
-              className="w-full h-full object-contain aspect-square"
-            />
-          </ReactCrop>
-        </div>
+    <div className={`space-y-3 sm:space-y-4 w-full max-w-full ${className}`}>
+      {/* Cropper Container */}
+      <div className="relative w-full h-[300px] sm:h-[400px] bg-gray-900 rounded-lg overflow-hidden">
+        <Cropper
+          image={src}
+          crop={crop}
+          zoom={zoom}
+          aspect={aspectRatio || (cropShape === "circle" ? 1 : 4 / 3)}
+          cropShape={cropShape === "circle" ? "round" : "rect"}
+          showGrid={cropShape !== "circle"}
+          onCropChange={onCropChange}
+          onZoomChange={onZoomChange}
+          onCropComplete={onCropCompleteCallback}
+        />
       </div>
 
+      {/* Zoom Slider */}
+      <div className="w-full px-2">
+        <label className="text-sm font-medium text-gray-700 mb-2 block">
+          {t("labelZoom") || "Zoom"}
+        </label>
+        <input
+          type="range"
+          min={1}
+          max={3}
+          step={0.1}
+          value={zoom}
+          onChange={(e) => setZoom(Number(e.target.value))}
+          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-main"
+        />
+      </div>
+
+      {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end w-full">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleResetCrop}
-          className="gap-1 w-full min-[440px]:w-auto text-xs sm:text-sm py-1 min-[320px]:py-2"
-        >
-          <RotateCcw className="h-3 w-3" />
-          {t("buttonReset")}
-        </Button>
         {onCancel && (
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={onCancel}
-            className="w-full min-[440px]:w-auto text-xs sm:text-sm py-1 min-[320px]:py-2"
+            className="w-full sm:w-auto text-xs sm:text-sm py-2"
           >
             {t("buttonCancel")}
           </Button>
@@ -209,7 +190,7 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
           type="button"
           size="sm"
           onClick={handleApplyCrop}
-          className="gap-1 bg-gold-main hover:bg-gold-main/90 text-white w-full min-[440px]:w-auto text-xs sm:text-sm py-1 min-[320px]:py-2"
+          className="gap-1 bg-gold-main hover:bg-gold-main/90 text-white w-full sm:w-auto text-xs sm:text-sm py-2"
         >
           <Check className="h-3 w-3" />
           {t("buttonApply")}
