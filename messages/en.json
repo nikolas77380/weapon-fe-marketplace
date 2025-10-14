@@ -102,6 +102,7 @@
     },
     "toasts": {
       "registrationFailed": "Registration failed. Please try again.",
+      "registrationSuccess": "Registration successful. Please check your email to confirm your account.",
       "invalidCredentials": "Invalid email or password",
       "loginFailed": "Login failed. Please try again."
     },

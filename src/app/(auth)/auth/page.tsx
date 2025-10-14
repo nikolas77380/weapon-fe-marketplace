@@ -106,34 +106,9 @@ const AuthPage = () => {
   const onRegistrationSubmit = async (
     values: RegisterFormValues
   ): Promise<void> => {
-    console.log("Attempting registration with:", values);
     try {
-      // Always register as seller
-      // let response;
-      // if (activeType === "buyer") {
-      //   response = await registerBuyer(values);
-      //   console.log("Buyer registration response:", response);
-      // } else if (activeType === "seller") {
-      //   response = await registerSeller(values);
-      //   console.log("Seller registration response:", response);
-      // }
-
-      const response = await registerSeller(values);
-      console.log("Seller registration response:", response);
-
-      if (response && "jwt" in response) {
-        console.log("Registration successful! JWT cookie set");
-        await fetchUser();
-        // if (isSeller(response.user)) {
-        //   router.push("/account");
-        // } else {
-        //   router.push("/marketplace");
-        // }
-        router.push("/account");
-      } else {
-        console.error("Registration failed:", response);
-        toast.error(t("toasts.registrationFailed"));
-      }
+      await registerSeller(values);
+      toast.success(t("toasts.registrationSuccess"));
     } catch (error) {
       console.error("Registration error:", error);
       toast.error(t("toasts.registrationFailed"));
@@ -197,8 +172,10 @@ const AuthPage = () => {
                 authMode === "login" ? "mt-6 lg:mt-41" : "mt-4 lg:mt-6"
               } flex bg-background flex-col w-full lg:w-170 mx-auto`}
             >
-              <div className="flex flex-col items-center justify-center text-center border-b 
-              border-border-foreground px-4 sm:px-6">
+              <div
+                className="flex flex-col items-center justify-center text-center border-b 
+              border-border-foreground px-4 sm:px-6"
+              >
                 <h2 className="font-medium text-xl sm:text-2xl mt-3.5 bg-gradient-to-r from-foreground to-gray-secondary bg-clip-text text-transparent">
                   {t("titleMain")}
                 </h2>
