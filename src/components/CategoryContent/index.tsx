@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { useCategories } from "@/hooks/useCategories";
 import SkeletonComponent from "../ui/SkeletonComponent";
@@ -11,16 +11,14 @@ import { usePromosQuery } from "@/hooks/usePromosQuery";
 import ViewedProductsSlider from "./ViewedProductsSlider";
 import CategoryDropdown from "./CategoryDropdown";
 import { useTranslations } from "next-intl";
-import PaginationTopProduct from "../ui/PaginationTopProduct";
 
 const FilteringContent = () => {
   const t = useTranslations("TopPropositions");
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 6;
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
-      page: currentPage,
-      pageSize: pageSize,
+      page: 1,
+      pageSize: 6,
     },
   });
 
@@ -29,7 +27,12 @@ const FilteringContent = () => {
   const { data: promosResponse } = usePromosQuery();
   console.log("promosResponse", promosResponse);
 
-  const pagination = response?.meta?.pagination;
+  // Отключаем isInitialLoad после первой успешной загрузки
+  useEffect(() => {
+    if (!isLoading && response?.data) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading, response?.data]);
 
   const paginatedProducts = useMemo(() => {
     const allProducts = response?.data || [];
@@ -42,10 +45,6 @@ const FilteringContent = () => {
 
   const availableCategories = getMainCategories();
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
   return (
     <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
       {/* Filters - Hidden on mobile, visible on desktop */}
@@ -53,7 +52,7 @@ const FilteringContent = () => {
         className="hidden lg:flex flex-col gap-2 border-r border-b border-border-foreground py-5 w-64 
       flex-shrink-0 pr-2 rounded-br-sm"
       >
-        {loading ? (
+        {isInitialLoad && loading ? (
           <SkeletonComponent type="leftSidebar" />
         ) : (
           availableCategories.map((category) => (
@@ -93,15 +92,6 @@ const FilteringContent = () => {
             ))
           )}
         </div>
-
-        {/* Pagination */}
-        {pagination && (
-          <PaginationTopProduct
-            currentPage={pagination.page}
-            totalPages={pagination.pageCount}
-            onPageChange={handlePageChange}
-          />
-        )}
       </div>
     </div>
   );

@@ -33,6 +33,7 @@ interface FiltersProps {
   hideCategoryFilter?: boolean;
   isMobile?: boolean;
   elasticFilters?: any; // Elasticsearch aggregations data
+  isDisabled?: boolean;
 }
 
 const Filters = ({
@@ -53,6 +54,7 @@ const Filters = ({
   hideCategoryFilter = false,
   isMobile = false,
   elasticFilters,
+  isDisabled = false,
 }: FiltersProps) => {
   const t = useTranslations("CompanyDetail.tabProducts");
   const currentLocale = useLocale();
@@ -114,7 +116,7 @@ const Filters = ({
                 <div className="flex flex-col gap-2">
                   {elasticFilters.tags.map((tag: any) => (
                     <div key={tag.key} className="flex items-center gap-3">
-                      <Checkbox id={`tag-${tag.key}`} />
+                      <Checkbox id={`tag-${tag.key}`} disabled={isDisabled} />
                       <Label
                         htmlFor={`tag-${tag.key}`}
                         className="text-sm font-light"
@@ -147,6 +149,7 @@ const Filters = ({
                       <Checkbox
                         id={`elastic-category-${category.key}`}
                         checked={selectedCategories.includes(category.key)}
+                        disabled={isDisabled}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             onCategoriesChange([
@@ -199,6 +202,7 @@ const Filters = ({
                         <Checkbox
                           id={`elastic-availability-${item.key}`}
                           checked={selectedAvailability.includes(item.key)}
+                          disabled={isDisabled}
                           onCheckedChange={(checked) => {
                             if (checked) {
                               onAvailabilityChange([
@@ -247,6 +251,7 @@ const Filters = ({
                       <Checkbox
                         id={`elastic-condition-${item.key}`}
                         checked={selectedCondition.includes(item.key)}
+                        disabled={isDisabled}
                         onCheckedChange={(checked) => {
                           if (checked) {
                             onConditionChange([...selectedCondition, item.key]);
@@ -355,6 +360,7 @@ const Filters = ({
                   >
                     <Checkbox
                       id={`availability-${availability.id}`}
+                      disabled={isDisabled}
                       className="data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white rounded-none"
                     />
                     <Label
