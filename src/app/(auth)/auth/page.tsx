@@ -180,7 +180,10 @@ const AuthPage = () => {
               </div>
               {/* Language Switcher на мобильных */}
               <div className="lg:hidden">
-                <LanguageSwitcher classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]" />
+                <LanguageSwitcher
+                  classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]"
+                  classNameSelectValue="text-gold-main"
+                />
               </div>
             </div>
             <div
@@ -285,7 +288,10 @@ const AuthPage = () => {
 
           {/* Language Switcher - только на десктопе */}
           <div className="hidden lg:flex lg:justify-start lg:max-w-[200px] w-full lg:mt-0">
-            <LanguageSwitcher classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]" />
+            <LanguageSwitcher
+              classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]"
+              classNameSelectValue="text-gold-main"
+            />
           </div>
         </div>
       </div>

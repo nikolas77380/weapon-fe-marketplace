@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-        }/api/auth/confirm?confirmation=${confirmationToken}`,
+        }/api/auth/email-confirmation?confirmation=${confirmationToken}`,
         {
           method: "GET",
           headers: {

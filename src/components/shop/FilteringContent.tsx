@@ -34,7 +34,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const t = useTranslations("CategoryDetail");
   const { viewMode, setViewMode } = useViewMode("grid");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
-  const [priceRangeKey, setPriceRangeKey] = useState(0);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [filters, setFilters] = useState<FilterState>({
     minPrice: 0,
     maxPrice: 0,
@@ -58,7 +58,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           }
         : undefined,
     page: filters.page,
-    pageSize: 12,
+    pageSize: 24,
     availability:
       filters.availability.length > 0 ? filters.availability : undefined,
     condition: filters.condition.length > 0 ? filters.condition : undefined,
@@ -84,6 +84,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const elasticFilters = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
+
+  // Отключаем isInitialLoad после первой успешной загрузки
+  React.useEffect(() => {
+    if (!isLoading && elasticFilters) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading, elasticFilters]);
 
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
@@ -151,7 +158,6 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       sort: "id:desc",
     });
     setViewMode("grid");
-    setPriceRangeKey((prev) => prev + 1);
   };
 
   const handleOpenFilterDrawer = () => {
@@ -247,11 +253,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
         {/* Filters - Hidden on mobile, visible on desktop */}
         <div className="hidden lg:block">
-          {loading || !elasticFilters ? (
+          {isInitialLoad && !elasticFilters ? (
             <SkeletonComponent type="filters" />
           ) : (
             <Filters
-              key={priceRangeKey}
               onPriceChange={handlePriceChange}
               onSubcategoryChange={handleSubcategoryChange}
               onAvailabilityChange={handleAvailabilityChange}
@@ -272,6 +277,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
               categories={memoizedCategoryCounts}
               hideCategoryFilter={!!categorySlug}
               elasticFilters={elasticFilters}
+              isDisabled={loading}
             />
           )}
         </div>
@@ -290,7 +296,6 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
       {/* Mobile Filter Drawer */}
       <FilterDrawer
-        key={priceRangeKey}
         isOpen={isFilterDrawerOpen}
         onClose={handleCloseFilterDrawer}
         onPriceChange={handlePriceChange}
@@ -313,6 +318,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         selectedAvailability={filters.availability}
         selectedCondition={filters.condition}
         selectedCategories={filters.categories}
+        isDisabled={loading}
       />
     </div>
   );

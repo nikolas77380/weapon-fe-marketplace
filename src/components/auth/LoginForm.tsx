@@ -46,7 +46,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="email"
-            label={t('labelEmail')}
+            label={t("labelEmail")}
             type="input"
             inputType="email"
             placeholder="example@gmail.com"
@@ -58,7 +58,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           <FormFieldComponent
             control={form.control}
             name="password"
-            label={t('labelPassword')}
+            label={t("labelPassword")}
             type="input"
             inputType="password"
             placeholder="********"
@@ -68,8 +68,11 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
           />
 
           <div className="w-full flex justify-end">
-            <Link href="#" className="underline font-light text-sm">
-              {t('forgotPassword')}
+            <Link
+              href="/auth/forgot-password"
+              className="underline font-light text-sm"
+            >
+              {t("forgotPassword")}
             </Link>
           </div>
 
@@ -84,12 +87,10 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  {t('signingIn')}
+                  {t("signingIn")}
                 </div>
               ) : (
-                <>
-                  {t('signgIn')}
-                </>
+                <>{t("signgIn")}</>
               )}
             </Button>
           </div>

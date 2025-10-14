@@ -147,12 +147,9 @@ const MobileDrawer = ({
                       currentUser.username.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col">
+                <div className="flex">
                   <span className="text-sm xs:text-base font-medium">
                     {currentUser.displayName || currentUser.username}
-                  </span>
-                  <span className="text-xs xs:text-sm text-gray-500 capitalize">
-                    {currentUser.role.name}
                   </span>
                 </div>
               </div>

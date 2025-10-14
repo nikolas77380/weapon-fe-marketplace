@@ -5,15 +5,7 @@ import ShopCard from "./ShopCard";
 import { Product } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import PaginationTopProduct from "@/components/ui/PaginationTopProduct";
 import { useTranslations } from "next-intl";
 
 interface ShopContentProps {
@@ -81,76 +73,12 @@ const ShopContent = ({
 
       {/* Pagination */}
       {!loading && pagination && pagination.pageCount > 1 && (
-        <div className="mt-12.5 w-full flex items-center justify-center">
-          <Pagination className="w-full flex">
-            <PaginationContent>
-              {/* Previous Button */}
-              <div>
-                {pagination.page > 1 && (
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => onPageChange?.(pagination.page - 1)}
-                      className="cursor-pointer"
-                    />
-                  </PaginationItem>
-                )}
-              </div>
-
-              <div className="flex items-center">
-                {/* Page Numbers */}
-                {Array.from(
-                  { length: pagination.pageCount },
-                  (_, i) => i + 1
-                ).map((pageNum) => {
-                  // Show first page, last page, current page, and pages around current
-                  const showPage =
-                    pageNum === 1 ||
-                    pageNum === pagination.pageCount ||
-                    Math.abs(pageNum - pagination.page) <= 1;
-
-                  if (!showPage) {
-                    // Show ellipsis if there's a gap
-                    if (
-                      (pageNum === 2 && pagination.page > 4) ||
-                      (pageNum === pagination.pageCount - 1 &&
-                        pagination.page < pagination.pageCount - 3)
-                    ) {
-                      return (
-                        <PaginationItem key={pageNum}>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      );
-                    }
-                    return null;
-                  }
-
-                  return (
-                    <PaginationItem key={pageNum}>
-                      <PaginationLink
-                        onClick={() => onPageChange?.(pageNum)}
-                        isActive={pageNum === pagination.page}
-                        className="cursor-pointer"
-                      >
-                        {pageNum}
-                      </PaginationLink>
-                    </PaginationItem>
-                  );
-                })}
-              </div>
-
-              <div>
-                {/* Next Button */}
-                {pagination.page < pagination.pageCount && (
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => onPageChange?.(pagination.page + 1)}
-                      className="cursor-pointer"
-                    />
-                  </PaginationItem>
-                )}
-              </div>
-            </PaginationContent>
-          </Pagination>
+        <div className="mt-6">
+          <PaginationTopProduct
+            currentPage={pagination.page}
+            totalPages={pagination.pageCount}
+            onPageChange={onPageChange || (() => {})}
+          />
         </div>
       )}
     </div>
