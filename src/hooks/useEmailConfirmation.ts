@@ -31,7 +31,7 @@ export const useEmailConfirmation = () => {
       const response = await fetch(
         `${
           process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-        }/api/auth/email-confirmation?confirmation=${confirmationToken}`,
+        }/api/auth/confirm?confirmation=${confirmationToken}`,
         {
           method: "GET",
           headers: {
