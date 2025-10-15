@@ -1,4 +1,4 @@
-import { Product } from "@/lib/types";
+import { Product, SellerMeta, UserProfile } from "@/lib/types";
 import React, { useState } from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
@@ -9,8 +9,8 @@ import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
 import { formatPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
-import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { toast } from "sonner";
+import ContactModal from "../ContactModal";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
@@ -18,28 +18,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
   const { sellerData } = useSellerData(product?.seller?.id);
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    setIsLoading(true);
-
-    try {
-      const response = await createSendBirdChannel(product);
-
-      if (response.success) {
-        // Redirect to messages page with the channel URL
-        redirectToMessages();
-      }
-    } catch (error) {
-      console.error("Error creating channel:", error);
-      toast.error(tContact("taostErrorCreateChat"));
-    } finally {
-      setIsLoading(false);
-    }
+    setOpen(true);
   };
 
   return (
@@ -72,13 +56,11 @@ const ProductDetail = ({ product }: { product: Product }) => {
           {/* Contact Seller */}
           <Button
             onClick={(e) => handleContactSeller(e)}
-            disabled={isLoading}
+            disabled={false}
             className="py-2 px-3 min-[400px]:px-4 sm:px-6 bg-gold-main text-white rounded-sm
             text-xs min-[400px]:text-sm sm:text-base hover:bg-gold-main/90 duration-300"
           >
-            {isLoading
-              ? tContact("titlebuttonCreating")
-              : tContact("titleCardSeller")}
+            {tContact("titleCardSeller")}
           </Button>
         </div>
 
@@ -246,6 +228,11 @@ const ProductDetail = ({ product }: { product: Product }) => {
           </Tabs>
         </div>
       </div>
+      <ContactModal
+        open={open}
+        onOpenChange={setOpen}
+        sellerData={sellerData?.metadata as SellerMeta}
+      />
     </div>
   );
 };

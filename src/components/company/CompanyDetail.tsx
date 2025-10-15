@@ -23,10 +23,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
-import { useAuthContext } from "@/context/AuthContext";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
-import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
-import { toast } from "sonner";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -88,9 +85,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { currentUser } = useAuthContext();
   const { sellerMeta } = useSellerMetaBySeller(sellerData.id as number);
 
   const { categories } = useCategories();
@@ -99,34 +94,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    if (currentUser?.role.name !== "buyer" || !currentUser) {
-      setOpen(true);
-      return;
-    }
-
-    // Check if seller has products
-    if (!sellerProducts || sellerProducts.length === 0) {
-      toast.warning("This seller has no products available.");
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      // Use the first available product to create a channel with the seller
-      const response = await createSendBirdChannel(sellerProducts[0]);
-
-      if (response.success) {
-        // Redirect to messages page with the channel URL
-        redirectToMessages();
-      }
-    } catch (error) {
-      console.error("Error creating channel:", error);
-      toast.error("Failed to create chat channel. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    setOpen(true);
   };
 
   // Use Elasticsearch data if available, otherwise fallback to local filtering
@@ -417,11 +385,11 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
           </div>
           <Button
             onClick={handleContactSeller}
-            disabled={isLoading}
+            disabled={false}
             className="border py-2 sm:py-2.5 px-4 sm:px-5 text-white rounded-sm bg-gold-main 
             hover:bg-gold-main/80 duration-300 transition-colors text-sm sm:text-base w-full sm:w-auto"
           >
-            {isLoading ? t("buttonCreating") : t("buttonCardSeller")}
+            {t("buttonCardSeller")}
           </Button>
         </div>
 

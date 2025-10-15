@@ -265,3 +265,30 @@ export interface Promo {
   updatedAt: string;
   publishedAt?: string;
 }
+
+// User role management types
+export interface ChangeUserRoleParams {
+  userId: number;
+  role: UserRole;
+}
+
+export interface ChangeUserRoleResponse {
+  data: {
+    id: number;
+    username: string;
+    email: string;
+    displayName: string;
+    role: {
+      id: number;
+      name: UserRole;
+      description: string;
+    };
+    confirmed: boolean;
+    blocked: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+  previousRole: UserRole;
+  newRole: UserRole;
+}
