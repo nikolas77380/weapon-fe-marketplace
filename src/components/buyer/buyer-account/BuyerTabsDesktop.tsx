@@ -50,19 +50,19 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
         orientation="vertical"
         className="w-full flex-row gap-10"
       >
-        <TabsList className="flex-col w-64 h-45 bg-gray-100">
+        <TabsList className="flex-col w-64 h-25 bg-gray-100">
           <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
             {t("tabMyInquiries.titleTabMyInquiries")}
           </TabsTrigger>
           <TabsTrigger value="favourites" className={cn(triggerClasses)}>
             {t("tabFavourites.titleFavourites")} ({favourites.length || 0})
           </TabsTrigger>
-          <TabsTrigger value="messages" className={cn(triggerClasses)}>
+          {/* <TabsTrigger value="messages" className={cn(triggerClasses)}>
             {t("tabMessage.titleMessages")}
-          </TabsTrigger>
-          <TabsTrigger value="settings" className={cn(triggerClasses)}>
+          </TabsTrigger> */}
+          {/* <TabsTrigger value="settings" className={cn(triggerClasses)}>
             {t("tabSettings.titleSettings")}
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <div className="grow w-full">
           <BuyerAccountHeader
@@ -71,11 +71,11 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
           />
           <div className="mt-9 overflow-hidden">
             <TabsContent value="myInquiries">
-              <div className="p-5">
+              {/* <div className="p-5">
                 <p className="text-xl mb-8">
                   {t("tabMyInquiries.titleTabMyInquiries")}
                 </p>
-                {/* Card 1 */}
+                
                 <div className="bg-sidebar-accent p-5 flex flex-col">
                   <div className="flex items-center justify-between">
                     <p className="text-xl">Level IIIA Ballistic Vest</p>
@@ -99,7 +99,7 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
                     Perfect! Please send me the NIJ certification documents.
                   </p>
                 </div>
-                {/* Card 2 */}
+                
                 <div className="bg-sidebar-accent p-5 flex flex-col mt-5">
                   <div className="flex items-center justify-between">
                     <p className="text-xl">Glock 19 Gen 5 Pistol</p>
@@ -123,7 +123,7 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
                     I{"'"}ll send you our bulk pricing information.
                   </p>
                 </div>
-                {/* Card 3 */}
+                
                 <div className="bg-sidebar-accent p-5 flex flex-col mt-5">
                   <div className="flex items-center justify-between">
                     <p className="text-xl font-roboto">MICH Combat Helmet</p>
@@ -147,6 +147,9 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
                     Thank you for your purchase!
                   </p>
                 </div>
+              </div> */}
+              <div className="flex w-full items-center justify-center">
+                <p className="opacity-70">{t("noActiveInquiries")}</p>
               </div>
             </TabsContent>
             <TabsContent value="favourites">

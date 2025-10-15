@@ -39,9 +39,12 @@
     "titleActiveInquiries": "Active inquiries",
     "titleSavedProducts": "Saved product",
     "titleCompletedDeals": "Completed deals",
-    "titleWelcome": "Welcome"
+    "titleWelcome": "Welcome",
+    "becomeSellerText": "Want to place products in our marketplace?",
+    "becomeSellerButton": "Become a Seller"
   },
   "BuyerAccountTabs": {
+    "noActiveInquiries": "No active inquiries yet",
     "tabMyInquiries": {
       "titleTabMyInquiries": "My inquiries"
     },
