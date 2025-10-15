@@ -95,7 +95,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                 <Link
                   href={`/category/${category.slug}`}
                   className="cursor-pointer hover:text-gold-main transition-colors duration-200 py-2 px-2 rounded-md 
-                  w-50 truncate font-bold text-xl"
+                  w-50 truncate font-normal text-md"
                 >
                   {getCategoryName(category)}
                 </Link>
