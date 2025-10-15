@@ -252,7 +252,7 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
                         </p>
                         <div className="relative w-32 h-32">
                           <Image
-                            src={metadata.avatar}
+                            src={metadata.avatar.url}
                             alt="Current avatar"
                             fill
                             className="object-cover rounded-full"

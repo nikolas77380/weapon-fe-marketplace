@@ -9,7 +9,29 @@ export interface SellerMeta {
   phoneNumbers?: string;
   country?: string;
   address?: string;
-  avatar?: string;
+  avatar?: {
+    id: number;
+    documentId: string;
+    name: string;
+    url: string;
+    ext: string;
+    mime: string;
+    size: number;
+    width: number;
+    height: number;
+    hash: string;
+    provider: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+    folderPath: string;
+    alternativeText?: string;
+    caption?: string;
+    previewUrl?: string;
+    provider_metadata?: any;
+    locale?: string;
+    formats?: any;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -242,4 +264,31 @@ export interface Promo {
   createdAt: string;
   updatedAt: string;
   publishedAt?: string;
+}
+
+// User role management types
+export interface ChangeUserRoleParams {
+  userId: number;
+  role: UserRole;
+}
+
+export interface ChangeUserRoleResponse {
+  data: {
+    id: number;
+    username: string;
+    email: string;
+    displayName: string;
+    role: {
+      id: number;
+      name: UserRole;
+      description: string;
+    };
+    confirmed: boolean;
+    blocked: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+  previousRole: UserRole;
+  newRole: UserRole;
 }

@@ -1,16 +1,16 @@
-import { Product } from "@/lib/types";
+import { Product, SellerMeta, UserProfile } from "@/lib/types";
 import React, { useState } from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
 import { formatPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
-import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
 import { toast } from "sonner";
+import ContactModal from "../ContactModal";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
@@ -18,28 +18,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
   const { sellerData } = useSellerData(product?.seller?.id);
 
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    setIsLoading(true);
-
-    try {
-      const response = await createSendBirdChannel(product);
-
-      if (response.success) {
-        // Redirect to messages page with the channel URL
-        redirectToMessages();
-      }
-    } catch (error) {
-      console.error("Error creating channel:", error);
-      toast.error(tContact("taostErrorCreateChat"));
-    } finally {
-      setIsLoading(false);
-    }
+    setOpen(true);
   };
 
   return (
@@ -72,11 +56,11 @@ const ProductDetail = ({ product }: { product: Product }) => {
           {/* Contact Seller */}
           <Button
             onClick={(e) => handleContactSeller(e)}
-            disabled={isLoading}
+            disabled={false}
             className="py-2 px-3 min-[400px]:px-4 sm:px-6 bg-gold-main text-white rounded-sm
             text-xs min-[400px]:text-sm sm:text-base hover:bg-gold-main/90 duration-300"
           >
-            {isLoading ? tContact("titlebuttonCreating") : tContact("titleCardSeller")}
+            {tContact("titleCardSeller")}
           </Button>
         </div>
 
@@ -87,10 +71,15 @@ const ProductDetail = ({ product }: { product: Product }) => {
         >
           <div className="flex items-center gap-3">
             <Avatar className="size-15">
-              <AvatarFallback className="uppercase text-3xl">
-                {product?.seller?.username.charAt(0) || "U"}
+              <AvatarImage
+                src={sellerData?.metadata?.avatar?.url}
+                alt={sellerData?.username || product?.seller?.username}
+              />
+              <AvatarFallback className="bg-black text-white text-sm uppercase">
+                {sellerData?.username?.charAt(0) ||
+                  product?.seller?.username?.charAt(0) ||
+                  "?"}
               </AvatarFallback>
-              {/* <AvatarImage src={product?.seller?.avatar} /> */}
             </Avatar>
             <div className="flex flex-col">
               {/* Company name */}
@@ -239,6 +228,11 @@ const ProductDetail = ({ product }: { product: Product }) => {
           </Tabs>
         </div>
       </div>
+      <ContactModal
+        open={open}
+        onOpenChange={setOpen}
+        sellerData={sellerData?.metadata as SellerMeta}
+      />
     </div>
   );
 };

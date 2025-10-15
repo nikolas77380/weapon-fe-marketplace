@@ -14,6 +14,7 @@ import { cn, triggerClasses } from "@/lib/utils";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { MetaForm } from "@/components/seller/seller-account";
 
 interface BuyerTabsDesktopProps {
   currentUser: UserProfile;
@@ -198,14 +199,7 @@ const BuyerTabsDesktop = ({ currentUser }: BuyerTabsDesktopProps) => {
               </div>
             </TabsContent>
             <TabsContent value="settings">
-              <div className="border border-gray-primary rounded-xl p-7">
-                <p className="font-roboto text-xl mb-8">
-                  {t("tabSettings.titleSettings")}
-                </p>
-                <p className="text-gray-500">
-                  {t("tabSettings.titleContentSettings")}
-                </p>
-              </div>
+              <MetaForm currentUser={currentUser} />
             </TabsContent>
           </div>
         </div>

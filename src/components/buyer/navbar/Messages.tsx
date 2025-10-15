@@ -1,52 +1,29 @@
+import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useSendbirdSDK } from "@/hooks/useSendbird";
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
 import { Badge, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 
 const Messages = () => {
-  const t = useTranslations('Navbar');
+  const t = useTranslations("Navbar");
 
-  const { utils, isReady } = useSendbirdSDK();
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
-
-  useEffect(() => {
-    // Проверяем, что SDK готов перед выполнением запросов
-    if (!isReady || !utils) {
-      return;
-    }
-
-    const fetchUnreadMessagesCount = async () => {
-      try {
-        const result = await utils.getUnreadCount();
-        if (result?.success) {
-          setUnreadMessagesCount(Number(result.count) || 0);
-        }
-      } catch (error) {
-        console.error("Error fetching unread messages count:", error);
-      }
-    };
-
-    fetchUnreadMessagesCount();
-
-    const interval = setInterval(fetchUnreadMessagesCount, 60000);
-
-    return () => clearInterval(interval);
-  }, [utils, isReady]);
+  const [unreadMessagesCount, _setUnreadMessagesCount] = useState(0);
   return (
     <NavigationMenuLink asChild className="p-3">
       <Link href="/messages" className="relative">
         <Tooltip>
           <TooltipTrigger asChild>
-            <MessageCircle size={20} className="text-gold-main cursor-pointer" />
+            <MessageCircle
+              size={20}
+              className="text-gold-main cursor-pointer"
+            />
           </TooltipTrigger>
           <TooltipContent>
-            <p>{t('messagesToogle')}</p>
+            <p>{t("messagesToogle")}</p>
           </TooltipContent>
         </Tooltip>
 

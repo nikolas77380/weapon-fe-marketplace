@@ -3,7 +3,6 @@ import { Inter, Roboto, Outfit } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { AuthContextProvider } from "@/context/AuthContext";
-import { ProviderSendBird } from "@/context/SendbirdProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/lib/query-client";
 import { getLocale, getMessages } from "next-intl/server";
@@ -47,10 +46,8 @@ export default async function RootLayout({
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
             <AuthContextProvider>
-              <ProviderSendBird>
-                <ConditionalLayout>{children}</ConditionalLayout>
-                <Toaster />
-              </ProviderSendBird>
+              <ConditionalLayout>{children}</ConditionalLayout>
+              <Toaster />
             </AuthContextProvider>
           </NextIntlClientProvider>
         </QueryProvider>

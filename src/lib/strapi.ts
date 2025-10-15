@@ -1697,3 +1697,23 @@ export const getSellerProductFiltersElastic = async (params: {
     method: "GET",
   });
 };
+
+// User role management
+export const changeUserRole = async ({
+  userId,
+  role,
+  token,
+}: {
+  userId: number;
+  role: "buyer" | "seller";
+  token: string;
+}) => {
+  const path = `/api/users/${userId}/role`;
+
+  return strapiFetchAuth({
+    path,
+    method: "PUT",
+    body: { role },
+    token,
+  });
+};
