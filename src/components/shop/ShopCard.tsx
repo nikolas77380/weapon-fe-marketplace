@@ -2,8 +2,6 @@ import Image from "next/image";
 import { Eye, MessageSquare } from "lucide-react";
 import { Button } from "../ui/button";
 import { ImageType, Product } from "@/lib/types";
-import { createSendBirdChannel, redirectToMessages } from "@/lib/sendbird";
-import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { formatPrice } from "@/lib/formatUtils";
@@ -12,7 +10,6 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 
 interface ShopCardProps {
   item: Product;
@@ -22,35 +19,13 @@ interface ShopCardProps {
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
 
-  const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { sellerMeta } = useSellerMetaBySeller(item.seller?.id as number);
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    if (currentUser?.role.name !== "buyer" || !currentUser) {
-      setOpen(true);
-      return;
-    }
-
-    setIsLoading(true);
-
-    try {
-      const response = await createSendBirdChannel(item);
-
-      if (response.success) {
-        // Redirect to messages page with the channel URL
-        redirectToMessages();
-      }
-    } catch (error) {
-      console.error("Error creating channel:", error);
-      toast.error(t("taostErrorCreateChat"));
-    } finally {
-      setIsLoading(false);
-    }
+    setOpen(true);
   };
 
   if (viewMode === "list") {
@@ -137,11 +112,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               sm:py-2.5 sm:px-5 hover:underline bg-transparent hover:bg-transparent 
               shadow-none text-gold-main self-start min-[400px]:self-auto"
               onClick={(e) => handleContactSeller(e)}
-              disabled={isLoading}
+              disabled={false}
             >
               <MessageSquare size={14} className="sm:w-[15px] sm:h-[15px]" />
               <p className="text-xs sm:text-sm font-semibold">
-                {isLoading ? t("titlebuttonCreating") : t("titleCardSeller")}
+                {t("titleCardSeller")}
               </p>
             </Button>
           </div>
@@ -227,11 +202,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             <Button
               className="rounded-none py-1.5 xs:py-2 sm:py-2.5 px-0 hover:underline text-gold-main bg-transparent hover:bg-transparent border-none shadow-none"
               onClick={(e) => handleContactSeller(e)}
-              disabled={isLoading}
+              disabled={false}
             >
               {/* <MessageSquare size={15} /> */}
               <p className="font-semibold group-hover:underline text-xs xs:text-sm">
-                {isLoading ? t("titlebuttonCreating") : t("titleCardSeller")}
+                {t("titleCardSeller")}
               </p>
             </Button>
           </div>
