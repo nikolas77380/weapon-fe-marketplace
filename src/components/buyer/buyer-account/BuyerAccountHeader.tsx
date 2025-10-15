@@ -6,7 +6,7 @@ import { FavouriteProduct } from "@/lib/favourites";
 import Link from "next/link";
 import { FileText, HandHelping, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import BecomeSellerButton from "./BecomeSellerButton";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -73,16 +73,7 @@ const BuyerAccountHeader = ({
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col">
-                <p className="text-sm text-gold-main mb-4 text-center">
-                  {t("becomeSellerText")}
-                </p>
-                <div className="w-full flex justify-center">
-                  <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
-                    {t("becomeSellerButton")}
-                  </Button>
-                </div>
-              </div>
+              <BecomeSellerButton currentUser={currentUser} />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
               <BuyerActionCard
@@ -126,16 +117,7 @@ const BuyerAccountHeader = ({
             </p>
           </Link>
         </div>
-        <div className="flex flex-col mb-6">
-          <p className="text-sm text-gold-main mb-4 text-center">
-            {t("becomeSellerText")}
-          </p>
-          <div className="w-full flex justify-center">
-            <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
-              {t("becomeSellerButton")}
-            </Button>
-          </div>
-        </div>
+        <BecomeSellerButton currentUser={currentUser} className="mb-6" />
         <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3 sm:gap-4">
           <BuyerActionCard
             title={t("titleActiveInquiries")}

@@ -41,7 +41,10 @@
     "titleCompletedDeals": "Completed deals",
     "titleWelcome": "Welcome",
     "becomeSellerText": "Want to place products in our marketplace?",
-    "becomeSellerButton": "Become a Seller"
+    "becomeSellerButton": "Become a Seller",
+    "processing": "Processing...",
+    "successMessage": "Role successfully changed to seller!",
+    "errorMessage": "Error changing role. Please try again."
   },
   "BuyerAccountTabs": {
     "noActiveInquiries": "No active inquiries yet",
