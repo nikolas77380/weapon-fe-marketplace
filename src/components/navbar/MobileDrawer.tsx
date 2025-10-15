@@ -12,7 +12,7 @@ import {
 import { X, LayoutGrid, User, Plus } from "lucide-react";
 import { UserProfile } from "@/lib/types";
 import Link from "next/link";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
@@ -59,8 +59,10 @@ const MobileDrawer = ({
           {t("burgerMenu.srDescription")}
         </DrawerDescription>
 
-        <DrawerHeader className="flex items-center justify-between bg-gradient-to-br 
-      from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4">
+        <DrawerHeader
+          className="flex items-center justify-between bg-gradient-to-br 
+      from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4"
+        >
           <div className="flex items-center justify-between w-full">
             <Logo />
             <DrawerClose asChild>
@@ -111,7 +113,11 @@ const MobileDrawer = ({
               {/* Avatar without click */}
               <div className="flex items-center gap-3 p-3">
                 <Avatar className="h-8 w-8 border border-gray-300">
-                  <AvatarFallback className="bg-black text-white text-xs xs:text-sm">
+                  <AvatarImage
+                    src={currentUser.metadata?.avatar?.url}
+                    alt={currentUser.username}
+                  />
+                  <AvatarFallback className="bg-black text-white text-sm uppercase">
                     {currentUser.displayName?.charAt(0) ||
                       currentUser.username.charAt(0)}
                   </AvatarFallback>
@@ -142,7 +148,11 @@ const MobileDrawer = ({
               {/* Avatar without click */}
               <div className="flex items-center gap-3 p-3">
                 <Avatar className="h-8 w-8 border border-gray-300">
-                  <AvatarFallback className="bg-black text-white text-xs xs:text-sm uppercase">
+                  <AvatarImage
+                    src={currentUser.metadata?.avatar?.url}
+                    alt={currentUser.username}
+                  />
+                  <AvatarFallback className="bg-black text-white text-sm uppercase">
                     {currentUser.displayName?.charAt(0) ||
                       currentUser.username.charAt(0)}
                   </AvatarFallback>

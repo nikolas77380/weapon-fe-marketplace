@@ -11,7 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
-import { Avatar, AvatarFallback } from "../../ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import type { UserProfile } from "@/lib/types";
 import Messages from "./Messages";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
@@ -52,6 +52,10 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
             <Avatar className="h-8 w-8 border border-gold-main cursor-pointer">
+              <AvatarImage
+                src={user.metadata?.avatar?.url}
+                alt={user.username}
+              />
               <AvatarFallback className="bg-black text-white text-sm uppercase">
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
