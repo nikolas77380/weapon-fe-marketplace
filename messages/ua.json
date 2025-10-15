@@ -39,9 +39,12 @@
     "titleActiveInquiries": "Активні запити",
     "titleSavedProducts": "Збережені товари",
     "titleCompletedDeals": "Завершені угоди",
-    "titleWelcome": "Вітаємо"
+    "titleWelcome": "Вітаємо",
+    "becomeSellerText": "Хочете розташувати товари у нашому маркетплеі?",
+    "becomeSellerButton": "Стати Продавцем"
   },
   "BuyerAccountTabs": {
+    "noActiveInquiries": "Поки немає активних запитів",
     "tabMyInquiries": {
       "titleTabMyInquiries": "Мої запити"
     },

@@ -51,7 +51,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
 
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
-            <Avatar className="h-8 w-8 border border-gold-main cursor-pointer">
+            <Avatar className="h-8 w-8 cursor-pointer">
               <AvatarImage
                 src={user.metadata?.avatar?.url}
                 alt={user.username}

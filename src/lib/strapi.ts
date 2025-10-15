@@ -1708,7 +1708,7 @@ export const changeUserRole = async ({
   role: "buyer" | "seller";
   token: string;
 }) => {
-  const path = `/api/users/${userId}/role`;
+  const path = `/api/user-role/${userId}`;
 
   return strapiFetchAuth({
     path,

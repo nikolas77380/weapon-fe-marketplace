@@ -52,7 +52,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-100 grid grid-cols-1 min-[400px]:grid-cols-2 min-[500px]:grid-cols-4 w-full h-full gap-1">
+          <TabsList className="bg-gray-100 grid grid-cols-1 min-[400px]:grid-cols-2 min-[500px]:grid-cols-2 w-full h-full gap-1">
             <TabsTrigger
               value="myInquiries"
               className={cn(
@@ -71,7 +71,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
             >
               {t("tabFavourites.titleFavourites")} ({favourites.length || 0})
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               value="messages"
               className={cn(
                 triggerClasses,
@@ -79,8 +79,8 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
               )}
             >
               {t("tabMessage.titleMessages")}
-            </TabsTrigger>
-            <TabsTrigger
+            </TabsTrigger> */}
+            {/* <TabsTrigger
               value="settings"
               className={cn(
                 triggerClasses,
@@ -88,15 +88,15 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
               )}
             >
               {t("tabSettings.titleSettings")}
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
           <div className="mt-6 overflow-hidden">
             <TabsContent value="myInquiries">
-              <div className="space-y-4">
+              {/* <div className="space-y-4">
                 <p className="text-lg sm:text-xl font-medium">
                   {t("tabMyInquiries.titleTabMyInquiries")}
                 </p>
-                {/* Card 1 */}
+                
                 <div className="bg-sidebar-accent p-4 flex flex-col space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                     <p className="text-base sm:text-lg font-medium">
@@ -122,7 +122,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
                     Perfect! Please send me the NIJ certification documents.
                   </p>
                 </div>
-                {/* Card 2 */}
+                
                 <div className="bg-sidebar-accent p-4 flex flex-col space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                     <p className="text-base sm:text-lg font-medium">
@@ -148,7 +148,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
                     I{"'"}ll send you our bulk pricing information.
                   </p>
                 </div>
-                {/* Card 3 */}
+                
                 <div className="bg-sidebar-accent p-4 flex flex-col space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                     <p className="text-base sm:text-lg font-medium">
@@ -174,6 +174,9 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
                     Thank you for your purchase!
                   </p>
                 </div>
+              </div> */}
+              <div className="flex w-full items-center justify-center">
+                <p className="opacity-70">{t("noActiveInquiries")}</p>
               </div>
             </TabsContent>
             <TabsContent value="favourites">
