@@ -112,7 +112,7 @@ const MobileDrawer = ({
             <>
               {/* Avatar without click */}
               <div className="flex items-center gap-3 p-3">
-                <Avatar className="h-8 w-8 border border-gray-300">
+                <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={currentUser.metadata?.avatar?.url}
                     alt={currentUser.username}
@@ -125,9 +125,6 @@ const MobileDrawer = ({
                 <div className="flex flex-col">
                   <span className="text-sm xs:text-base font-medium">
                     {currentUser.displayName || currentUser.username}
-                  </span>
-                  <span className="text-xs xs:text-sm text-gray-500 capitalize">
-                    {currentUser.role.name}
                   </span>
                 </div>
               </div>
@@ -147,7 +144,7 @@ const MobileDrawer = ({
             <>
               {/* Avatar without click */}
               <div className="flex items-center gap-3 p-3">
-                <Avatar className="h-8 w-8 border border-gray-300">
+                <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={currentUser.metadata?.avatar?.url}
                     alt={currentUser.username}

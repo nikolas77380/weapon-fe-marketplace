@@ -27,16 +27,15 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
         <LanguageSwitcher classNameSelectValue="text-gold-main" />
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>
-            <Avatar className="h-8 w-8 border border-gold-main cursor-pointer">
+            <Avatar className="h-8 w-8 cursor-pointer">
               <AvatarFallback className="bg-black text-white text-sm">
                 {user.displayName?.charAt(0) || user.username.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <div className="text-sm items-start flex flex-col ml-2">
+            <div className="text-sm items-start flex ml-2">
               <div className="font-medium text-white">
                 {user.displayName || user.username}
               </div>
-              <div className="text-white/70 capitalize">{user.role.name}</div>
             </div>
           </NavigationMenuTrigger>
           <NavigationMenuContent className="border-gold-main">

@@ -1,6 +1,6 @@
 import { UserProfile } from "@/lib/types";
 import React, { useState, useMemo, useCallback } from "react";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { useSellerProducts } from "@/hooks/useSellerProducts";
@@ -355,6 +355,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mt-4 sm:mt-7.5 p-3 sm:p-5">
           <div className="flex items-center gap-2 sm:gap-3">
             <Avatar className="size-12 sm:size-15">
+              <AvatarImage src={sellerData?.metadata?.avatar?.url} />
               <AvatarFallback className="uppercase text-xl sm:text-3xl">
                 {sellerData?.username.charAt(0) || "U"}
               </AvatarFallback>

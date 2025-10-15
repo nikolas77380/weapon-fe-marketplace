@@ -6,6 +6,7 @@ import { FavouriteProduct } from "@/lib/favourites";
 import Link from "next/link";
 import { FileText, HandHelping, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -24,7 +25,9 @@ const BuyerAccountHeader = ({
       {/* Desktop Header */}
       <div className="hidden md:flex flex-col">
         <div className="flex items-center justify-between lg:border-l-2 lg:border-gold-main">
-          <p className="text-2xl font-medium lg:ml-5">{t("titleUserDetails")}</p>
+          <p className="text-2xl font-medium lg:ml-5">
+            {t("titleUserDetails")}
+          </p>
           <div>
             <Link
               href={"/"}
@@ -38,28 +41,46 @@ const BuyerAccountHeader = ({
 
         <div className="mt-8">
           <div className="flex flex-col p-5">
-            <div className="flex items-center gap-5">
-              <Avatar className="size-18 lg:size-25 border border-gray-300 cursor-pointer">
-                <AvatarFallback className="bg-black text-white text-4xl lg:text-6xl uppercase">
-                  {currentUser?.displayName?.charAt(0) ||
-                    currentUser?.username.charAt(0)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <p className="text-xl lg:text-2xl font-medium">
-                  {currentUser?.displayName || currentUser?.username}
-                </p>
-                <div className="flex items-center gap-10">
-                  <div className="flex flex-col mt-3.5">
-                    <p className="text-muted-foreground text-sm lg:text-base">{t("titleEmail")}</p>
-                    <p className="text-sm lg:text-base">{currentUser?.email}</p>
-                  </div>
-                  {currentUser?.metadata?.phoneNumbers && (
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-5 w-full">
+                <Avatar className="size-18 lg:size-25 border border-gray-300 cursor-pointer">
+                  <AvatarFallback className="bg-black text-white text-4xl lg:text-6xl uppercase">
+                    {currentUser?.displayName?.charAt(0) ||
+                      currentUser?.username.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <p className="text-xl lg:text-2xl font-medium">
+                    {currentUser?.displayName || currentUser?.username}
+                  </p>
+                  <div className="flex items-center gap-10">
                     <div className="flex flex-col mt-3.5">
-                      <p className="text-muted-foreground text-sm lg:text-base">{t("titlePhone")}</p>
-                      <p>{currentUser?.metadata?.phoneNumbers}</p>
+                      <p className="text-muted-foreground text-sm lg:text-base">
+                        {t("titleEmail")}
+                      </p>
+                      <p className="text-sm lg:text-base">
+                        {currentUser?.email}
+                      </p>
                     </div>
-                  )}
+                    {currentUser?.metadata?.phoneNumbers && (
+                      <div className="flex flex-col mt-3.5">
+                        <p className="text-muted-foreground text-sm lg:text-base">
+                          {t("titlePhone")}
+                        </p>
+                        <p>{currentUser?.metadata?.phoneNumbers}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-sm text-gold-main mb-4 text-center">
+                  {t("becomeSellerText")}
+                </p>
+                <div className="w-full flex justify-center">
+                  <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
+                    {t("becomeSellerButton")}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -67,7 +88,9 @@ const BuyerAccountHeader = ({
               <BuyerActionCard
                 title={t("titleActiveInquiries")}
                 count={2}
-                icons={<FileText className="size-5 lg:size-7" strokeWidth={0.5} />}
+                icons={
+                  <FileText className="size-5 lg:size-7" strokeWidth={0.5} />
+                }
               />
               <BuyerActionCard
                 title={t("titleSavedProducts")}
@@ -77,7 +100,9 @@ const BuyerAccountHeader = ({
               <BuyerActionCard
                 title={t("titleCompletedDeals")}
                 count={5}
-                icons={<HandHelping className="size-5 lg:size-7" strokeWidth={0.5} />}
+                icons={
+                  <HandHelping className="size-5 lg:size-7" strokeWidth={0.5} />
+                }
               />
             </div>
           </div>
@@ -100,6 +125,16 @@ const BuyerAccountHeader = ({
               {t("titleBrowseMarketplace")}
             </p>
           </Link>
+        </div>
+        <div className="flex flex-col mb-6">
+          <p className="text-sm text-gold-main mb-4 text-center">
+            {t("becomeSellerText")}
+          </p>
+          <div className="w-full flex justify-center">
+            <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
+              {t("becomeSellerButton")}
+            </Button>
+          </div>
         </div>
         <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3 sm:gap-4">
           <BuyerActionCard
