@@ -1702,18 +1702,17 @@ export const getSellerProductFiltersElastic = async (params: {
 export const changeUserRole = async ({
   userId,
   role,
-  token,
 }: {
   userId: number;
   role: "buyer" | "seller";
-  token: string;
 }) => {
+  const token = getSessionTokenFromCookie();
   const path = `/api/user-role/${userId}`;
 
   return strapiFetchAuth({
     path,
     method: "PUT",
     body: { role },
-    token,
+    token: token || "",
   });
 };

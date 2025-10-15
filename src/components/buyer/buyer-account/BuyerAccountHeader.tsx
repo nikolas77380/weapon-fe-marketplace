@@ -7,6 +7,8 @@ import Link from "next/link";
 import { FileText, HandHelping, Heart } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { useUserRoleManagement } from "@/hooks/useChangeUserRole";
+import { toast } from "sonner";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -20,6 +22,16 @@ const BuyerAccountHeader = ({
   className,
 }: BuyerAccountHeaderProps) => {
   const t = useTranslations("BuyerAccountHeader");
+  const { changeUserRole, isLoading, isSuccess, error } =
+    useUserRoleManagement();
+  const handleBecomeSeller = async () => {
+    try {
+      await changeUserRole(currentUser?.id, "seller");
+      toast.success(t("becomeSellerSuccess"));
+    } catch (error) {
+      toast.error(t("becomeSellerError"));
+    }
+  };
   return (
     <div className={className}>
       {/* Desktop Header */}
@@ -78,7 +90,11 @@ const BuyerAccountHeader = ({
                   {t("becomeSellerText")}
                 </p>
                 <div className="w-full flex justify-center">
-                  <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
+                  <Button
+                    disabled={isLoading}
+                    onClick={handleBecomeSeller}
+                    className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white"
+                  >
                     {t("becomeSellerButton")}
                   </Button>
                 </div>
