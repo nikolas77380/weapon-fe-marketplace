@@ -3,7 +3,6 @@ import { changeUserRole } from "@/lib/strapi";
 import { ChangeUserRoleResponse } from "@/lib/types";
 import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 interface ChangeUserRoleMutationParams {
   userId: number;
