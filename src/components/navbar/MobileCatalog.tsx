@@ -86,7 +86,7 @@ const MobileSubCategories: React.FC<MobileSubCategoriesProps> = ({
               <Link
                 href={`/category/${subCategory.slug}`}
                 onClick={onClose}
-                className="block font-semibold text-lg text-gray-800 hover:text-gold-main transition-colors py-2 border-b border-gray-100"
+                className="block font-normal text-md text-gray-800 hover:text-gold-main transition-colors py-2 border-b border-gray-100"
               >
                 {getCategoryName(subCategory)}
               </Link>
