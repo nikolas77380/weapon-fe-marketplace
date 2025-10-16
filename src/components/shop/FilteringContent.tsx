@@ -13,10 +13,11 @@ import { useViewMode } from "@/hooks/useViewMode";
 import Sorting from "./Sorting";
 import BreadcrumbComponent from "../ui/BreadcrumbComponent";
 import { Funnel } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
 import SkeletonComponent from "../ui/SkeletonComponent";
+import { Category } from "@/lib/types";
 
 interface FilterState {
   minPrice: number;
@@ -32,6 +33,7 @@ interface FilterState {
 
 const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const t = useTranslations("CategoryDetail");
+  const currentLocale = useLocale();
   const { viewMode, setViewMode } = useViewMode("grid");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -170,9 +172,14 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
   const count = pagination?.total || allProducts.length;
 
+  // Get localized category name
+  const getLocalizedCategoryName = (cat: Category) => {
+    return currentLocale === "en" ? cat.name : cat.translate_ua || cat.name;
+  };
+
   const customLabels = currentCategory
     ? {
-        [categorySlug]: currentCategory.name,
+        [categorySlug]: getLocalizedCategoryName(currentCategory),
       }
     : {};
 
@@ -210,7 +217,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       {currentCategory && (
         <div className="mt-5 mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-            {currentCategory.name}
+            {getLocalizedCategoryName(currentCategory)}
           </h1>
           {currentCategory.description && (
             <p className="text-muted-foreground mt-2 text-sm sm:text-base">

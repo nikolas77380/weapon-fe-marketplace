@@ -325,6 +325,7 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
       order: data.data.order,
       createdAt: data.data.createdAt,
       updatedAt: data.data.updatedAt,
+      translate_ua: data.data.translate_ua,
       parent: data.data.parent
         ? {
             id: data.data.parent.id,
@@ -346,6 +347,7 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
               order: number;
               createdAt: string;
               updatedAt: string;
+              translate_ua?: string;
             };
             return {
               id: typedChild.id,
@@ -355,6 +357,7 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
               order: typedChild.order,
               createdAt: typedChild.createdAt,
               updatedAt: typedChild.updatedAt,
+              translate_ua: (typedChild as any).translate_ua,
             };
           })
         : undefined,
