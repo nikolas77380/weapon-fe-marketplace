@@ -147,7 +147,11 @@ const BuyerAccountHeader = ({
             {t("becomeSellerText")}
           </p>
           <div className="w-full flex justify-center">
-            <Button className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white">
+            <Button
+              disabled={isLoading}
+              onClick={handleBecomeSeller}
+              className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white"
+            >
               {t("becomeSellerButton")}
             </Button>
           </div>
