@@ -53,16 +53,16 @@ const Footer = () => {
           </ul>
         </div>
 
-        <div>
+        {/* <div>
           <Separator
             orientation="horizontal"
             className="w-full mt-8 sm:mt-12 lg:mt-20 bg-gray-primary"
           />
-        </div>
+        </div> */}
 
-        <div className=" sm:my-3 text-center">
+        <div className="mt-5 md:mt-10 text-center">
           <h2 className="font-light text-xs sm:text-sm lg:text-base">
-            <span className="font-medium">
+            <span className="font-medium text-sm">
               © {new Date().getFullYear()} Esviem Defence.
             </span>{" "}
             {t("titleRightsReserved")}

@@ -103,7 +103,7 @@ const BuyerAccountHeader = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
               <BuyerActionCard
                 title={t("titleActiveInquiries")}
-                count={2}
+                count={0}
                 icons={
                   <FileText className="size-5 lg:size-7" strokeWidth={0.5} />
                 }
@@ -115,7 +115,7 @@ const BuyerAccountHeader = ({
               />
               <BuyerActionCard
                 title={t("titleCompletedDeals")}
-                count={5}
+                count={0}
                 icons={
                   <HandHelping className="size-5 lg:size-7" strokeWidth={0.5} />
                 }
@@ -159,7 +159,7 @@ const BuyerAccountHeader = ({
         <div className="grid grid-cols-1 min-[400px]:grid-cols-3 gap-3 sm:gap-4">
           <BuyerActionCard
             title={t("titleActiveInquiries")}
-            count={2}
+            count={0}
             icons={<FileText className="size-8 sm:size-10" strokeWidth={0.5} />}
           />
           <BuyerActionCard
@@ -169,7 +169,7 @@ const BuyerAccountHeader = ({
           />
           <BuyerActionCard
             title={t("titleCompletedDeals")}
-            count={5}
+            count={0}
             icons={
               <HandHelping className="size-8 sm:size-10" strokeWidth={0.5} />
             }
