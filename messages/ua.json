@@ -41,7 +41,7 @@
     "titleCompletedDeals": "Завершені угоди",
     "titleWelcome": "Вітаємо",
     "becomeSellerText": "Хочете розташувати товари у нашому маркетплейсі?",
-    "becomeSellerButton": "Стати Продавцем",
+    "becomeSellerButton": "Стати продавцем",
     "becomeSellerSuccess": "Роль успішно змінена на продавця!",
     "becomeSellerError": "Помилка при зміні ролі"
   },
@@ -357,7 +357,7 @@
     }
   },
   "Footer": {
-    "description": "Надійний ринок зброї та амуніції",
+    "description": "Світовий ринок зброї та амуніції",
     "mainTitle": "Загальні",
     "mainTitle2": "Контакти",
     "subtitleGeneral": "Найчастіші запитання",

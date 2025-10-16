@@ -76,7 +76,7 @@ const Filters = ({
           : "border-r border-t border-b border-border-foreground rounded-sm"
       } h-fit ${isMobile ? "p-0" : "p-5"} flex flex-col gap-3.5`}
     >
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-4 w-full min-w-0 lg:min-w-50">
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-medium">{t("titleFilter")}</h2>
         </div>
