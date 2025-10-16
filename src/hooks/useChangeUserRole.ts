@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { changeUserRole } from "@/lib/strapi";
-import { getSessionTokenFromCookie } from "@/lib/auth";
-import { ChangeUserRoleParams, ChangeUserRoleResponse } from "@/lib/types";
+import { ChangeUserRoleResponse } from "@/lib/types";
+import { useAuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface ChangeUserRoleMutationParams {
   userId: number;
@@ -10,6 +11,8 @@ interface ChangeUserRoleMutationParams {
 
 export const useChangeUserRole = () => {
   const queryClient = useQueryClient();
+  const { fetchUser } = useAuthContext();
+  const router = useRouter();
 
   return useMutation<
     ChangeUserRoleResponse,
@@ -17,14 +20,9 @@ export const useChangeUserRole = () => {
     ChangeUserRoleMutationParams
   >({
     mutationFn: async ({ userId, role }: ChangeUserRoleMutationParams) => {
-      const token = getSessionTokenFromCookie();
-      if (!token) {
-        throw new Error("Authentication required");
-      }
-
-      return changeUserRole({ userId, role, token });
+      return changeUserRole({ userId, role });
     },
-    onSuccess: (data, variables) => {
+    onSuccess: async (data, variables) => {
       // Invalidate user-related queries to refetch updated data
       queryClient.invalidateQueries({
         queryKey: ["users"],
@@ -33,6 +31,16 @@ export const useChangeUserRole = () => {
       // Invalidate specific user query if it exists
       queryClient.invalidateQueries({
         queryKey: ["user", variables.userId],
+      });
+
+      // Invalidate /me endpoint queries
+      queryClient.invalidateQueries({
+        queryKey: ["me"],
+      });
+
+      // Invalidate any user profile queries
+      queryClient.invalidateQueries({
+        queryKey: ["user-profile"],
       });
 
       // Invalidate seller-related queries if role changed to/from seller
@@ -45,10 +53,11 @@ export const useChangeUserRole = () => {
         });
       }
 
-      // Show success message (you can customize this based on your notification system)
-      console.log(
-        `User role successfully changed from ${data.previousRole} to ${data.newRole}`
-      );
+      // Force refresh current user data to get updated role
+      await fetchUser();
+
+      // Redirect to refresh the page and show updated UI
+      router.refresh();
     },
     onError: (error) => {
       console.error("Failed to change user role:", error);

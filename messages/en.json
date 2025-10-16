@@ -42,9 +42,8 @@
     "titleWelcome": "Welcome",
     "becomeSellerText": "Want to place products in our marketplace?",
     "becomeSellerButton": "Become a Seller",
-    "processing": "Processing...",
-    "successMessage": "Role successfully changed to seller!",
-    "errorMessage": "Error changing role. Please try again."
+    "becomeSellerSuccess": "Role successfully changed to seller!",
+    "becomeSellerError": "Error changing role"
   },
   "BuyerAccountTabs": {
     "noActiveInquiries": "No active inquiries yet",

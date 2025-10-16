@@ -60,9 +60,12 @@ const Footer = () => {
           />
         </div>
 
-        <div className="my-4 sm:my-6 text-center">
-          <h2 className="font-light text-sm sm:text-lg lg:text-2xl">
-            © 2025 Esviem Defence. {t("titleRightsReserved")}
+        <div className=" sm:my-3 text-center">
+          <h2 className="font-light text-xs sm:text-sm lg:text-base">
+            <span className="font-medium">
+              © {new Date().getFullYear()} Esviem Defence.
+            </span>{" "}
+            {t("titleRightsReserved")}
           </h2>
         </div>
       </div>
