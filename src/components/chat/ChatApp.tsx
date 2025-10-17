@@ -66,7 +66,7 @@ export const ChatApp: React.FC = () => {
 
   const handleChatSelect = async (chat: Chat) => {
     try {
-      await loadChat(chat.id, currentUser?.id);
+      await loadChat(chat.id);
     } catch (error) {
       console.error("Failed to load chat:", error);
     }
