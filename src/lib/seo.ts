@@ -1,41 +1,9 @@
-import type { Metadata } from "next";
-import { Inter, Roboto, Outfit } from "next/font/google";
-import "./globals.css";
-import ConditionalLayout from "@/components/layout/ConditionalLayout";
-import { AuthContextProvider } from "@/context/AuthContext";
-import { Toaster } from "@/components/ui/sonner";
-import { QueryProvider } from "@/lib/query-client";
-import { getLocale, getMessages } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
-import StructuredData from "@/components/seo/StructuredData";
+import { Metadata } from "next";
 
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-  weight: ["100", "300", "400", "500", "700", "900"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
-
-export const metadata: Metadata = {
+export const defaultSEO: Metadata = {
   title: {
     default: "Esviem Defence - Global Arms and Ammunition Marketplace",
     template: "%s | Esviem Defence",
-  },
-  icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
   },
   description:
     "Global marketplace for weapons, ammunition, and military equipment. Connect buyers and sellers worldwide. Secure transactions, verified sellers, comprehensive catalog.",
@@ -50,6 +18,16 @@ export const metadata: Metadata = {
     "tactical gear",
     "firearms marketplace",
     "military surplus",
+    "weapon parts",
+    "tactical accessories",
+    "military clothing",
+    "defense industry",
+    "arms dealer",
+    "weapon collector",
+    "military hardware",
+    "tactical equipment",
+    "defense contractor",
+    "military supplier",
   ],
   authors: [{ name: "Esviem Defence" }],
   creator: "Esviem Defence",
@@ -105,31 +83,29 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-  return (
-    <html lang={locale}>
-      <body
-        className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}
-      >
-        <QueryProvider>
-          <NextIntlClientProvider messages={messages}>
-            <AuthContextProvider>
-              <ConditionalLayout>{children}</ConditionalLayout>
-              <Toaster />
-            </AuthContextProvider>
-          </NextIntlClientProvider>
-        </QueryProvider>
-
-        {/* Structured Data */}
-        <StructuredData type="Organization" data={{}} />
-        <StructuredData type="WebSite" data={{}} />
-      </body>
-    </html>
-  );
+export function generatePageSEO(
+  title: string,
+  description: string,
+  keywords: string[] = [],
+  path: string = "/"
+): Metadata {
+  return {
+    title,
+    description,
+    keywords: [...(defaultSEO.keywords as string[]), ...keywords],
+    openGraph: {
+      ...defaultSEO.openGraph,
+      title,
+      description,
+      url: `https://esviem-defence.com${path}`,
+    },
+    twitter: {
+      ...defaultSEO.twitter,
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://esviem-defence.com${path}`,
+    },
+  };
 }
