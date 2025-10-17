@@ -493,5 +493,16 @@
     "buttonLogin": "Go to Login",
     "welcomeMessage": "Welcome to our marketplace! Start selling your products today.",
     "footerNote": "This confirmation link can only be used once."
+  },
+  "Chat": {
+    "title": "Messages",
+    "searchPlaceholder": "Search conversations...",
+    "online": "Online",
+    "lastSeen": "Last seen recently",
+    "noChatSelected": "No chat selected",
+    "selectChatDescription": "Select a conversation from the list to start chatting",
+    "messagePlaceholder": "Type a message...",
+    "sendButton": "Send message",
+    "backToChats": "Back to chats"
   }
 }

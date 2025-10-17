@@ -5,10 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Send, Search, Phone, Video, Info } from "lucide-react";
+import { Send, Search, ArrowLeft, Info, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-// Mock data for chats
 const mockChats = [
   {
     id: 1,
@@ -28,77 +33,58 @@ const mockChats = [
     avatar: "/avatars/sarah.jpg",
     isOnline: false,
   },
-  {
-    id: 3,
-    name: "Mike Wilson",
-    lastMessage: "The product looks great!",
-    time: "3 hours ago",
-    unread: 1,
-    avatar: "/avatars/mike.jpg",
-    isOnline: true,
-  },
-  {
-    id: 4,
-    name: "Emma Davis",
-    lastMessage: "I'll send you the details",
-    time: "1 day ago",
-    unread: 0,
-    avatar: "/avatars/emma.jpg",
-    isOnline: false,
-  },
 ];
 
-// Mock data for messages
 const mockMessages = [
   {
     id: 1,
     text: "Hello! I'm interested in your product",
     sender: "user",
     time: "10:30 AM",
-    isRead: true,
   },
   {
     id: 2,
     text: "Hi! Great to hear from you. What would you like to know?",
     sender: "other",
     time: "10:32 AM",
-    isRead: true,
-  },
-  {
-    id: 3,
-    text: "Can you tell me more about the specifications?",
-    sender: "user",
-    time: "10:35 AM",
-    isRead: true,
-  },
-  {
-    id: 4,
-    text: "Of course! I'll send you the detailed specs right away.",
-    sender: "other",
-    time: "10:36 AM",
-    isRead: false,
   },
 ];
 
 const ChatPage = () => {
-  const [selectedChat, setSelectedChat] = useState(mockChats[0]);
+  const t = useTranslations("Chat");
+  const [selectedChat, setSelectedChat] = useState<any | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [message, setMessage] = useState("");
 
   const filteredChats = mockChats.filter((chat) =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    console.log("Send:", message);
+    setMessage("");
+  };
+
+  const handleBack = () => setSelectedChat(null);
+
   return (
-    <div className="h-screen bg-[#E8E8E8] flex">
-      {/* Sidebar - Chat List */}
-      <div className="w-80 bg-white border-r border-gray-200 flex flex-col">
-        {/* Header */}
+    <div className="h-screen flex bg-gray-100">
+      {/* Sidebar */}
+      <div
+        className={cn(
+          "w-full md:w-80 bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
+          selectedChat ? "hidden md:flex" : "flex"
+        )}
+      >
         <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-semibold text-gray-900 mb-4">Messages</h1>
+          <h1 className="text-xl font-semibold text-gray-900 mb-3">
+            {t("title")}
+          </h1>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
-              placeholder="Search conversations..."
+              placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-gray-50 border-gray-200 focus:border-gold-main focus:ring-gold-main"
@@ -106,7 +92,6 @@ const ChatPage = () => {
           </div>
         </div>
 
-        {/* Chat List */}
         <div className="flex-1 overflow-y-auto">
           {filteredChats.map((chat) => (
             <div
@@ -114,7 +99,7 @@ const ChatPage = () => {
               onClick={() => setSelectedChat(chat)}
               className={cn(
                 "p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors",
-                selectedChat.id === chat.id &&
+                selectedChat?.id === chat.id &&
                   "bg-gold-main/10 border-l-4 border-l-gold-main"
               )}
             >
@@ -130,7 +115,7 @@ const ChatPage = () => {
                     </AvatarFallback>
                   </Avatar>
                   {chat.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 border-2 border-white rounded-full"></div>
+                    <div className="absolute -bottom-1 -right-1 h-3.5 w-3.5 bg-green-500 border-2 border-white rounded-full"></div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -157,48 +142,57 @@ const ChatPage = () => {
         </div>
       </div>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-white">
-        {/* Chat Header */}
-        <div className="p-4 border-b border-gray-200 bg-white">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage
-                  src={selectedChat.avatar}
-                  alt={selectedChat.name}
-                />
-                <AvatarFallback className="bg-gold-main/20 text-gold-main font-semibold">
-                  {selectedChat.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {selectedChat.name}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  {selectedChat.isOnline ? "Online" : "Last seen recently"}
-                </p>
+      {/* Chat Window */}
+      <div
+        className={cn(
+          "flex-1 flex flex-col bg-white transition-all duration-300",
+          !selectedChat && "hidden md:flex"
+        )}
+      >
+        {selectedChat ? (
+          <>
+            {/* Header */}
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-white">
+              <div className="flex items-center space-x-3">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleBack}
+                      className="md:hidden text-gray-500 hover:text-gold-main"
+                    >
+                      <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t("backToChats")}</p>
+                  </TooltipContent>
+                </Tooltip>
+
+                <Avatar className="h-10 w-10">
+                  <AvatarImage
+                    src={selectedChat.avatar}
+                    alt={selectedChat.name}
+                  />
+                  <AvatarFallback className="bg-gold-main/20 text-gold-main font-semibold">
+                    {selectedChat.name
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+
+                <div>
+                  <h2 className="text-base font-semibold text-gray-900">
+                    {selectedChat.name}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {selectedChat.isOnline ? t("online") : t("lastSeen")}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-500 hover:text-gold-main"
-              >
-                <Phone className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-500 hover:text-gold-main"
-              >
-                <Video className="h-5 w-5" />
-              </Button>
+
               <Button
                 variant="ghost"
                 size="icon"
@@ -207,60 +201,81 @@ const ChatPage = () => {
                 <Info className="h-5 w-5" />
               </Button>
             </div>
-          </div>
-        </div>
 
-        {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-          {mockMessages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                "flex",
-                message.sender === "user" ? "justify-end" : "justify-start"
-              )}
-            >
-              <div
-                className={cn(
-                  "max-w-xs lg:max-w-md px-4 py-2 rounded-lg",
-                  message.sender === "user"
-                    ? "bg-gold-main text-white"
-                    : "bg-white text-gray-900 border border-gray-200"
-                )}
-              >
-                <p className="text-sm">{message.text}</p>
-                <p
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+              {mockMessages.map((message) => (
+                <div
+                  key={message.id}
                   className={cn(
-                    "text-xs mt-1",
-                    message.sender === "user"
-                      ? "text-gold-main/80"
-                      : "text-gray-500"
+                    "flex",
+                    message.sender === "user" ? "justify-end" : "justify-start"
                   )}
                 >
-                  {message.time}
-                </p>
+                  <div
+                    className={cn(
+                      "max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-lg",
+                      message.sender === "user"
+                        ? "bg-gold-main text-white"
+                        : "bg-white border border-gray-200 text-gray-900"
+                    )}
+                  >
+                    <p className="text-sm">{message.text}</p>
+                    <p
+                      className={cn(
+                        "text-xs mt-1",
+                        message.sender === "user"
+                          ? "text-gold-main/80"
+                          : "text-gray-500"
+                      )}
+                    >
+                      {message.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Input */}
+            <div className="p-4 border-t border-gray-200 bg-white">
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 relative">
+                  <Input
+                    placeholder={t("messagePlaceholder")}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main"
+                  />
+                  <Button
+                    size="icon"
+                    disabled={!message.trim()}
+                    onClick={handleSendMessage}
+                    className={cn(
+                      "absolute right-1 top-1/2 -translate-y-1/2 text-white",
+                      message.trim()
+                        ? "bg-gold-main hover:bg-gold-main/90"
+                        : "bg-gray-300 cursor-not-allowed"
+                    )}
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Message Input */}
-        <div className="p-4 border-t border-gray-200 bg-white">
-          <div className="flex items-center space-x-2">
-            <div className="flex-1 relative">
-              <Input
-                placeholder="Type a message..."
-                className="pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main"
-              />
-              <Button
-                size="icon"
-                className="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gold-main hover:bg-gold-main/90 text-white"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center flex-1 text-gray-400 bg-gradient-to-b from-gray-50 to-gray-100 animate-fadeIn">
+            <div className="p-6 rounded-full bg-gold-main/10 mb-4">
+              <MessageSquare className="h-10 w-10 text-gold-main" />
             </div>
+            <h2 className="text-lg font-semibold text-gray-700">
+              {t("noChatSelected")}
+            </h2>
+            <p className="text-sm text-gray-500 mt-1 text-center px-8">
+              {t("selectChatDescription")}
+            </p>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
