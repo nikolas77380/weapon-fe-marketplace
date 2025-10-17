@@ -493,5 +493,39 @@
     "buttonLogin": "Перейти до входу",
     "welcomeMessage": "Ласкаво просимо на наш маркетплейс! Почніть продавати свої товари сьогодні.",
     "footerNote": "Це посилання підтвердження можна використати лише один раз."
+  },
+  "Chat": {
+    "title": "Чати",
+    "selectChat": "Виберіть чат",
+    "selectChatDescription": "Виберіть чат зі списку зліва",
+    "noChats": "У вас поки немає чатів",
+    "authRequired": "Необхідна авторизація",
+    "authRequiredDescription": "Увійдіть в систему, щоб використовувати чат",
+    "loginButton": "Увійти",
+    "loadingError": "Помилка завантаження чатів",
+    "retryButton": "Спробувати знову",
+    "participants": "учасників",
+    "status": {
+      "active": "Активний",
+      "successfully_completed": "Успішно завершений",
+      "unsuccessfully_completed": "Неуспішно завершений",
+      "closed": "Закритий"
+    },
+    "actions": {
+      "finishSuccessfully": "Завершити успішно",
+      "finishUnsuccessfully": "Завершити неуспішно",
+      "closeChat": "Закрити чат"
+    },
+    "messageInput": {
+      "placeholder": "Введіть повідомлення...",
+      "placeholderInactive": "Чат завершено. Нові повідомлення відправляти не можна.",
+      "disabledMessage": "Чат завершено. Нові повідомлення відправляти не можна."
+    },
+    "messageArea": {
+      "startConversation": "Почніть спілкування, відправивши перше повідомлення"
+    },
+    "messageItem": {
+      "readBy": "Прочитано {count} учасниками"
+    }
   }
 }

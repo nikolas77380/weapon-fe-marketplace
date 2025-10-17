@@ -493,5 +493,39 @@
     "buttonLogin": "Go to Login",
     "welcomeMessage": "Welcome to our marketplace! Start selling your products today.",
     "footerNote": "This confirmation link can only be used once."
+  },
+  "Chat": {
+    "title": "Chats",
+    "selectChat": "Select a chat",
+    "selectChatDescription": "Choose a chat from the list on the left",
+    "noChats": "You don't have any chats yet",
+    "authRequired": "Authentication required",
+    "authRequiredDescription": "Please log in to use the chat",
+    "loginButton": "Log in",
+    "loadingError": "Error loading chats",
+    "retryButton": "Try again",
+    "participants": "participants",
+    "status": {
+      "active": "Active",
+      "successfully_completed": "Successfully completed",
+      "unsuccessfully_completed": "Unsuccessfully completed",
+      "closed": "Closed"
+    },
+    "actions": {
+      "finishSuccessfully": "Finish successfully",
+      "finishUnsuccessfully": "Finish unsuccessfully",
+      "closeChat": "Close chat"
+    },
+    "messageInput": {
+      "placeholder": "Type a message...",
+      "placeholderInactive": "Chat is finished. New messages cannot be sent.",
+      "disabledMessage": "Chat is finished. New messages cannot be sent."
+    },
+    "messageArea": {
+      "startConversation": "Start a conversation by sending your first message"
+    },
+    "messageItem": {
+      "readBy": "Read by {count} participants"
+    }
   }
 }

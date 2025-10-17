@@ -27,23 +27,25 @@ const ContactModal = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t('title')}</DialogTitle>
-          <DialogDescription className="flex flex-col gap-2 mt-2">
-            <p>
-              <b>{t('titleCompanyName')} </b> {sellerData?.companyName}
-            </p>
-            <p>
-              <b>{t('titlePhoneNumbers')} </b> {sellerData?.phoneNumbers}
-            </p>
-            <p>
-              <b>{t('titleWebSite')} </b> {sellerData?.webSite}
-            </p>
-            <p>
-              <b>{t('titleCountry')} </b> {sellerData?.country}
-            </p>
-            <p>
-              <b>{t('titleAddress')} </b> {sellerData?.address}
-            </p>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription asChild>
+            <div className="flex flex-col gap-2 mt-2">
+              <div>
+                <b>{t("titleCompanyName")} </b> {sellerData?.companyName}
+              </div>
+              <div>
+                <b>{t("titlePhoneNumbers")} </b> {sellerData?.phoneNumbers}
+              </div>
+              <div>
+                <b>{t("titleWebSite")} </b> {sellerData?.webSite}
+              </div>
+              <div>
+                <b>{t("titleCountry")} </b> {sellerData?.country}
+              </div>
+              <div>
+                <b>{t("titleAddress")} </b> {sellerData?.address}
+              </div>
+            </div>
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-center mt-6">
@@ -52,7 +54,7 @@ const ContactModal = ({
             onClick={() => onOpenChange(false)}
             className="py-2.5 px-6"
           >
-            {t('buttonClose')}
+            {t("buttonClose")}
           </Button>
         </div>
       </DialogContent>
