@@ -1,4 +1,4 @@
-import { Product, SellerMeta, UserProfile } from "@/lib/types";
+import { Product, SellerMeta } from "@/lib/types";
 import React, { useState } from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
@@ -9,20 +9,28 @@ import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
 import { formatPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 import ContactModal from "../ContactModal";
+import { useContactSeller } from "@/hooks/useContactSeller";
+import { useAuthContext } from "@/context/AuthContext";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
   const tContact = useTranslations("ShopCard");
 
   const { sellerData } = useSellerData(product?.seller?.id);
-
+  const { contactSeller } = useContactSeller();
+  const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
   const handleContactSeller = async (e: React.MouseEvent) => {
-    // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
+
+    if (currentUser && product?.seller?.id) {
+      const success = await contactSeller(product.seller.id, product.title);
+      if (success) {
+        return;
+      }
+    }
     setOpen(true);
   };
 
