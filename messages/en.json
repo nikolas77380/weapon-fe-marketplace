@@ -82,7 +82,11 @@
       "titleNoMessagesYet": "No messages yet",
       "titleCustomerMessages": "Customer messages",
       "titleOpenFullMessenger": "Open Messenger",
-      "descriptionCustomerMessages": "Manage inquires and customer communications"
+      "descriptionCustomerMessages": "Manage inquires and customer communications",
+      "titleUnreadChats": "Unread messages",
+      "titleActiveConversations": "Active conversations",
+      "titleFinishedChats": "Finished chats",
+      "titleLatestMessages": "Latest messages"
     },
     "tabSettings": {
       "titleSettings": "Settings"
@@ -526,6 +530,18 @@
     },
     "messageItem": {
       "readBy": "Read by {count} participants"
+    },
+    "stats": {
+      "activeChats": "Active Chats",
+      "activeChatsDescription": "Currently active conversations",
+      "closedChats": "Closed Chats",
+      "closedChatsDescription": "Completed conversations",
+      "totalChats": "Total Chats",
+      "totalChatsDescription": "All your conversations",
+      "latestMessages": "Latest Messages",
+      "noMessages": "No messages yet",
+      "read": "Read",
+      "unread": "Unread"
     }
   }
 }

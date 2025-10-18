@@ -82,7 +82,11 @@
       "titleNoMessagesYet": "Поки що немає повідомлень",
       "titleCustomerMessages": "Ваші повідомлення",
       "titleOpenFullMessenger": "Відкрити Месенджер",
-      "descriptionCustomerMessages": "Керувати запитами та комунікувати з продавцями"
+      "descriptionCustomerMessages": "Керувати запитами та комунікувати з продавцями",
+      "titleUnreadChats": "Непрочитаних повідомлень",
+      "titleActiveConversations": "Активні спілкування",
+      "titleFinishedChats": "Завершені спілкування",
+      "titleLatestMessages": "Останні повідомлення"
     },
     "tabSettings": {
       "titleSettings": "Налаштування"
@@ -526,6 +530,18 @@
     },
     "messageItem": {
       "readBy": "Прочитано {count} учасниками"
+    },
+    "stats": {
+      "activeChats": "Активні чати",
+      "activeChatsDescription": "Поточні активні розмови",
+      "closedChats": "Закриті чати",
+      "closedChatsDescription": "Завершені розмови",
+      "totalChats": "Всього чатів",
+      "totalChatsDescription": "Всі ваші розмови",
+      "latestMessages": "Останні повідомлення",
+      "noMessages": "Поки немає повідомлень",
+      "read": "Прочитано",
+      "unread": "Непрочитано"
     }
   }
 }

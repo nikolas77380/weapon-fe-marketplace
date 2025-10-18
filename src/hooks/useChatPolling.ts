@@ -31,7 +31,8 @@ export const useChatPolling = ({
 
   useEffect(() => {
     const handleVisibilityChange = () => {
-      setIsPageVisible(!document.hidden);
+      const visible = !document.hidden;
+      setIsPageVisible(visible);
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -43,7 +44,9 @@ export const useChatPolling = ({
   const pollChatRef = useRef<(() => Promise<void>) | null>(null);
 
   pollChatRef.current = async () => {
-    if (!chatId || !enabled || !isPageVisible) return;
+    if (!chatId || !enabled) {
+      return;
+    }
 
     try {
       const messages = await getChatMessages(chatId);
@@ -59,19 +62,23 @@ export const useChatPolling = ({
   };
 
   useEffect(() => {
-    if (enabled && chatId && isPageVisible) {
+    if (enabled && chatId) {
       lastMessageIdRef.current = null;
 
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
 
+      // Используем разные интервалы в зависимости от видимости страницы
+      const interval = isPageVisible ? pollingInterval : pollingInterval * 3; // В 3 раза реже когда неактивна
+
       intervalRef.current = setInterval(() => {
         if (pollChatRef.current) {
           pollChatRef.current();
         }
-      }, pollingInterval);
+      }, interval);
 
+      // Первый запрос делаем сразу
       if (pollChatRef.current) {
         pollChatRef.current();
       }

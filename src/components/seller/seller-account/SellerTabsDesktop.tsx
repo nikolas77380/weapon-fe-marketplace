@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
 import { MessageSquare, Users } from "lucide-react";
-import { Message } from "@/types/message";
-import { mockMessages } from "@/mockup/messages";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
@@ -17,6 +15,8 @@ import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteStat
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import { usePathname } from "next/navigation";
 import MetaForm from "./MetaForm";
+import { useUnreadChats } from "@/context/UnreadChatsContext";
+import { useChatStats } from "@/hooks/useChatStats";
 
 interface SellerTabsDesktopProps {
   products: Product[];
@@ -34,11 +34,11 @@ const SellerTabsDesktop = ({
   const tBuyer = useTranslations("BuyerAccountTabs");
   const pathname = usePathname();
 
-  const [messages, setMessages] = useState<Message[]>(mockMessages);
+  const { stats } = useChatStats();
   const { favourites, loading: favouritesLoading } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
-
+  const { unreadChatsCount } = useUnreadChats();
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
     const savedTab = sessionStorage.getItem("accountTab");
@@ -52,14 +52,6 @@ const SellerTabsDesktop = ({
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-  };
-
-  const markAsRead = (messageId: number) => {
-    setMessages((prev) =>
-      prev.map((message) =>
-        message.id === messageId ? { ...message, isRead: true } : message
-      )
-    );
   };
 
   return (
@@ -181,9 +173,11 @@ const SellerTabsDesktop = ({
                         <MessageSquare size={22} className="text-red-500" />
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">2</p>
+                        <p className="font-roboto text-xl font-medium">
+                          {unreadChatsCount}
+                        </p>
                         <p className="font-roboto font-light">
-                          Unread Messages
+                          {t("tabMessage.titleUnreadChats")}
                         </p>
                       </div>
                     </div>
@@ -194,9 +188,11 @@ const SellerTabsDesktop = ({
                         <Users size={22} className="text-blue-500" />
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">12</p>
+                        <p className="font-roboto text-xl font-medium">
+                          {stats?.activeChatsCount}
+                        </p>
                         <p className="font-roboto font-light">
-                          Active conversations
+                          {t("tabMessage.titleActiveConversations")}
                         </p>
                       </div>
                     </div>
@@ -207,17 +203,21 @@ const SellerTabsDesktop = ({
                         <MessageSquare size={22} className="text-red-500" />
                       </div>
                       <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">2</p>
+                        <p className="font-roboto text-xl font-medium">
+                          {stats?.closedChatsCount}
+                        </p>
                         <p className="font-roboto font-light">
-                          Unread Messages
+                          {t("tabMessage.titleFinishedChats")}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-9 border border-gray-primary rounded-xl p-5 flex flex-col gap-5">
-                  <h2 className="font-roboto">Recent messages</h2>
-                  {messages.slice(0, 3).map((message) => (
+                  <h2 className="font-roboto">
+                    {t("tabMessage.titleLatestMessages")}
+                  </h2>
+                  {stats?.latestMessages?.map((message) => (
                     <div
                       key={message.id}
                       className={`border rounded-xl w-full flex gap-5 py-3 px-6 cursor-pointer transition-all duration-200 ${
@@ -225,26 +225,25 @@ const SellerTabsDesktop = ({
                           ? "border-black bg-gray-primary hover:bg-gray-200"
                           : "border-gray-primary hover:bg-gray-50"
                       }`}
-                      onClick={() => markAsRead(message.id)}
                     >
                       <div className="rounded-full bg-[#CED8EE] p-1 size-fit">
                         <Users size={20} />
                       </div>
                       <div className="flex flex-col font-roboto">
                         <div className="flex items-center gap-2">
-                          <p>{message.sender}</p>
+                          <p>{message.sender?.username || "Unknown"}</p>
                           {!message.isRead && (
                             <div className="w-2 h-2 bg-black rounded-full"></div>
                           )}
                         </div>
                         <p className="text-[15px] font-semibold text-[#727070]">
-                          {message.product}
+                          {message.chat?.topic || "No topic"}
                         </p>
                         <p className="text-[15px] font-semibold">
-                          {message.content}
+                          {message.text}
                         </p>
                         <p className="text-[15px] font-extrabold text-[#7C7A7A]">
-                          {message.timestamp}
+                          {new Date(message.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>

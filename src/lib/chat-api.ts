@@ -155,3 +155,23 @@ export const getUnreadChatsCount = async (): Promise<{
 
   return response.data;
 };
+
+// Получение статистики чатов
+export const getChatStats = async (): Promise<{
+  activeChatsCount: number;
+  closedChatsCount: number;
+  latestMessages: Message[];
+}> => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("No authentication token found");
+  }
+
+  const response = await strapiFetchAuth({
+    path: `/api/chats/stats`,
+    method: "GET",
+    token,
+  });
+
+  return response.data;
+};

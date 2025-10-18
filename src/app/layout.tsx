@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/lib/query-client";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -46,8 +47,10 @@ export default async function RootLayout({
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
             <AuthContextProvider>
-              <ConditionalLayout>{children}</ConditionalLayout>
-              <Toaster />
+              <UnreadChatsProvider>
+                <ConditionalLayout>{children}</ConditionalLayout>
+                <Toaster />
+              </UnreadChatsProvider>
             </AuthContextProvider>
           </NextIntlClientProvider>
         </QueryProvider>

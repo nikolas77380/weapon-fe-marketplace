@@ -6,16 +6,16 @@ import {
   sendMessage,
   markChatAsRead,
   finishChat,
-  getUnreadChatsCount,
 } from "@/lib/chat-api";
+import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 export const useChat = () => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [currentChat, setCurrentChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [unreadChatsCount, setUnreadChatsCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { refreshUnreadCount } = useUnreadChats();
 
   // Загрузка списка чатов пользователя
   const loadUserChats = useCallback(async () => {
@@ -24,21 +24,14 @@ export const useChat = () => {
       setError(null);
       const userChats = await getUserChats();
       setChats(userChats);
+      // Обновляем счетчик непрочитанных чатов
+      await refreshUnreadCount();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load chats");
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  const loadUnreadChatsCount = useCallback(async () => {
-    try {
-      const { unreadCount } = await getUnreadChatsCount();
-      setUnreadChatsCount(unreadCount);
-    } catch (err) {
-      console.error("Error loading unread chats count:", err);
-    }
-  }, []);
+  }, [refreshUnreadCount]);
 
   const loadChat = useCallback(
     async (chatId: number) => {
@@ -46,14 +39,11 @@ export const useChat = () => {
         setLoading(true);
         setError(null);
 
-        // Небольшая задержка для обеспечения готовности токена
         await new Promise((resolve) => setTimeout(resolve, 100));
 
-        // Загружаем сообщения напрямую
         const messages = await getChatMessages(chatId);
         setMessages(messages);
 
-        // Находим чат в списке чатов пользователя
         let chat = chats.find((c) => c.id === chatId);
         console.log(
           "Loading chat:",
@@ -64,7 +54,6 @@ export const useChat = () => {
           chats
         );
 
-        // Если чат не найден в списке, создаем временный объект чата
         if (!chat) {
           console.log("Chat not found in list, creating temporary chat object");
           chat = {
@@ -80,8 +69,10 @@ export const useChat = () => {
 
         setCurrentChat(chat);
 
-        // Отмечаем все непрочитанные сообщения в чате как прочитанные
         await markChatAsRead(chatId);
+
+        // Обновляем счетчик непрочитанных чатов
+        await refreshUnreadCount();
       } catch (err) {
         console.error("Error loading chat:", err);
         setError(err instanceof Error ? err.message : "Failed to load chat");
@@ -89,21 +80,18 @@ export const useChat = () => {
         setLoading(false);
       }
     },
-    [chats]
+    [chats, refreshUnreadCount]
   );
 
-  // Отправка сообщения
   const sendNewMessage = useCallback(async (text: string, chatId: number) => {
     try {
       setError(null);
 
-      // Небольшая задержка для обеспечения готовности токена
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       const newMessage = await sendMessage({ text, chatId });
       setMessages((prev) => [...prev, newMessage]);
 
-      // Обновляем время последнего обновления чата в списке
       setChats((prev) =>
         prev.map((chat) =>
           chat.id === chatId
@@ -112,8 +100,7 @@ export const useChat = () => {
         )
       );
 
-      // Обновляем счетчик непрочитанных чатов
-      await loadUnreadChatsCount();
+      await refreshUnreadCount();
 
       return newMessage;
     } catch (err) {
@@ -123,7 +110,6 @@ export const useChat = () => {
     }
   }, []);
 
-  // Завершение чата
   const finishCurrentChat = useCallback(
     async (
       status: "successfully_completed" | "unsuccessfully_completed" | "closed"
@@ -147,7 +133,7 @@ export const useChat = () => {
     [currentChat]
   );
 
-  // Очистка текущего чата
+  // Очистка т  екущего чата
   const clearCurrentChat = useCallback(() => {
     setCurrentChat(null);
     setMessages([]);
@@ -157,11 +143,9 @@ export const useChat = () => {
     chats,
     currentChat,
     messages,
-    unreadChatsCount,
     loading,
     error,
     loadUserChats,
-    loadUnreadChatsCount,
     loadChat,
     sendNewMessage,
     finishCurrentChat,

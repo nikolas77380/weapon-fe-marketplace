@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -7,19 +6,11 @@ import {
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
 import { Badge, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useChat } from "@/hooks/useChat";
+import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 const Messages = () => {
   const t = useTranslations("Navbar");
-  const { unreadChatsCount, loadUnreadChatsCount } = useChat();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      loadUnreadChatsCount();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [loadUnreadChatsCount]);
+  const { unreadChatsCount } = useUnreadChats();
 
   return (
     <NavigationMenuLink asChild className="p-3">
