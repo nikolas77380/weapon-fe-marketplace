@@ -64,7 +64,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
   return (
     <div className="border-b bg-white p-4 border-gray-200">
-      <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-3">
+      <div className="flex items-center flex-wrap justify-between gap-2 sm:gap-3">
         {/* Back button (mobile only) */}
         <Button
           variant="ghost"
@@ -75,29 +75,37 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-2">
+          <div className="flex items-start min-[380px]:items-center flex-col min-[380px]:flex-row space-x-3 mb-2">
             <h2 className="text-lg font-semibold truncate">{chat.topic}</h2>
             <Badge className={getStatusColor(chat.status)}>
               {t(`status.${chat.status}`)}
             </Badge>
           </div>
 
-          <div className="flex items-center text-sm text-gray-500">
-            <Users className="h-4 w-4 mr-1" />
-            <span>
-              {chat.participants.length} {t("participants")}
-            </span>
-            <span className="mx-2">•</span>
-            <span>
-              {chat.participants.map((p) => p.displayName).join(", ")}
-            </span>
+          <div className="flex items-start min-[380px]:items-center text-sm text-gray-500 flex-col min-[380px]:flex-row">
+            <div className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              <span>
+                {chat.participants.length} {t("participants")}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="mx-2 hidden min-[380px]:block">•</span>
+              <span>
+                {chat.participants.map((p) => p.displayName).join(", ")}
+              </span>
+            </div>
           </div>
         </div>
-
         {canFinish && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" disabled={loading} className="border-gray-300">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={loading}
+                className="border-gray-300"
+              >
                 <MoreVertical className="h-4 w-4 text-gold-main" />
               </Button>
             </DropdownMenuTrigger>

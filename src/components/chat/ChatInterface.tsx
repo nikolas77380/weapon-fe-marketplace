@@ -7,7 +7,6 @@ import { MessageArea } from "./MessageArea";
 import { MessageInput } from "./MessageInput";
 import { useChatPolling } from "@/hooks/useChatPolling";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
 
 interface ChatInterfaceProps {
   chat: Chat;
@@ -56,7 +55,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const isChatActive = currentChat.status === "active";
 
   return (
-    <div>
+    <div className="min-w-0">
       <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
         <ChatHeader
           chat={currentChat}
@@ -73,7 +72,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         />
       </div>
 
-      <div className="sticky bottom-0 z-20 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+      <div className="sticky bottom-0 z-20 pb-[env(safe-area-inset-bottom)]">
         <MessageInput
           onSendMessage={onSendMessage}
           disabled={!isChatActive}

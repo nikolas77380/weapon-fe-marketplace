@@ -112,7 +112,7 @@ export const ChatApp: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20">
+    <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20 min-w-0">
       {/* Боковая панель со списком чатов */}
       <div
         className={cn(
@@ -120,7 +120,7 @@ export const ChatApp: React.FC = () => {
           currentChat ? "hidden md:flex" : "flex"
         )}
       >
-        <div className="p-4 border-b border-gray-200 bg-white sticky top-0 z-10">
+        <div className="px-4 py-6 border-b border-gray-200 bg-white sticky top-0 z-10">
           <h1 className="text-xl font-semibold text-gray-900 mb-3">
             {t("title")}
           </h1>
@@ -139,7 +139,7 @@ export const ChatApp: React.FC = () => {
       {/* Основная область чата */}
       <div
         className={cn(
-          "flex-1 flex flex-col bg-white transition-all duration-300",
+          "flex-1 flex flex-col bg-white transition-all duration-300 min-w-0",
           !currentChat && "hidden md:flex"
         )}
       >

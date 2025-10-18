@@ -68,9 +68,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-4 border-t border-gray-200 bg-white"
+      className="p-2 xs:p-4 border-t border-gray-200 bg-white"
     >
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center">
         <div className="flex-1 relative">
           <Textarea
             ref={textareaRef}

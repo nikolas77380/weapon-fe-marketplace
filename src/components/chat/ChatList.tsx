@@ -40,9 +40,9 @@ export const ChatList: React.FC<ChatListProps> = ({
   const t = useTranslations("Chat");
   if (loading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 p-2">
         {[...Array(3)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
+          <Card key={i} className="animate-pulse border-gray-300">
             <CardContent className="p-4">
               <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
               <div className="h-3 bg-gray-200 rounded w-1/2"></div>

@@ -38,7 +38,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       className={`flex ${isOwnMessage ? "justify-end" : "justify-start"} mb-4`}
     >
       <div
-        className={`flex items-center max-w-xs sm:max-w-sm md:max-w-md ${
+        className={`flex items-center max-w-[280px] xs:max-w-xs sm:max-w-sm md:max-w-md ${
           isOwnMessage ? "flex-row-reverse" : "flex-row"
         } gap-2`}
       >
@@ -56,14 +56,18 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           }`}
         >
           <div
-            className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-lg break-words ${
+            className={`max-w-[280px] xs:max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-lg break-words ${
               isOwnMessage
                 ? "bg-gold-main text-white"
                 : "bg-white border border-gray-200 text-gray-900"
             }`}
           >
             <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-            <div className={`flex items-center ${isOwnMessage ? "gap-0" : "gap-4"}`}>
+            <div
+              className={`flex items-center ${
+                isOwnMessage ? "gap-0" : "gap-4"
+              }`}
+            >
               <div>
                 {!isOwnMessage && (
                   <span className="text-xs text-gray-500 mb-1">
@@ -79,7 +83,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
                 {isOwnMessage && (
                   <div className="ml-1">
                     {isRead ? (
-                      <CheckCheck className="h-3 w-3 text-blue-700" />
+                      <CheckCheck className="h-3 w-3 text-white" />
                     ) : (
                       <Check className="h-3 w-3 text-white" />
                     )}
