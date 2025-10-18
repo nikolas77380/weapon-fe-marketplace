@@ -4,7 +4,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
-import { Badge, MessageCircle } from "lucide-react";
+import { Badge, Circle, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
 
@@ -28,9 +28,9 @@ const Messages = () => {
         </Tooltip>
 
         {unreadChatsCount > 0 && (
-          <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] size-5 rounded-full">
+          <Circle className="absolute top-1.5 right-1 bg-red-500 border-none text-[10px] size-2.5 rounded-full animate-pulse">
             {unreadChatsCount}
-          </Badge>
+          </Circle>
         )}
       </Link>
     </NavigationMenuLink>

@@ -10,7 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, CheckCircle, XCircle, Lock, Users } from "lucide-react";
+import {
+  MoreVertical,
+  CheckCircle,
+  XCircle,
+  Lock,
+  Users,
+  ArrowLeft,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface ChatHeaderProps {
@@ -51,9 +58,22 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     onFinishChat(status);
   };
 
+  const handleBack = () => {
+    window.location.reload();
+  };
+
   return (
-    <div className="border-b bg-white p-4">
-      <div className="flex items-center justify-between">
+    <div className="border-b bg-white p-4 border-gray-200">
+      <div className="flex items-center space-x-3">
+        {/* Back button (mobile only) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleBack}
+          className="md:hidden text-gray-500 hover:text-gold-main"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
             <h2 className="text-lg font-semibold truncate">{chat.topic}</h2>
@@ -77,11 +97,11 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         {canFinish && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" disabled={loading}>
-                <MoreVertical className="h-4 w-4" />
+              <Button variant="outline" size="sm" disabled={loading} className="border-gray-300">
+                <MoreVertical className="h-4 w-4 text-gold-main" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="border-gray-200">
               <DropdownMenuItem
                 onClick={() => handleFinishChat("successfully_completed")}
                 className="text-green-700"

@@ -7,6 +7,7 @@ import { MessageArea } from "./MessageArea";
 import { MessageInput } from "./MessageInput";
 import { useChatPolling } from "@/hooks/useChatPolling";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface ChatInterfaceProps {
   chat: Chat;
@@ -55,7 +56,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const isChatActive = currentChat.status === "active";
 
   return (
-    <div className="flex flex-col h-full">
+    <div
+      className={cn(
+        "flex-1 flex flex-col bg-white transition-all duration-300",
+        !currentChat && "hidden md:flex"
+      )}
+    >
       <ChatHeader
         chat={currentChat}
         onFinishChat={onFinishChat}
