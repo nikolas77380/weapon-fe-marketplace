@@ -14,7 +14,7 @@ export const useChatPolling = ({
   chatId,
   onMessagesUpdate,
   onChatUpdate,
-  pollingInterval = 10000, // 10 секунд по умолчанию
+  pollingInterval = 10000,
   enabled = true,
 }: UseChatPollingProps) => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
