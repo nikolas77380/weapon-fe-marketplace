@@ -64,7 +64,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 
   return (
     <div className="border-b bg-white p-4 border-gray-200">
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-3">
         {/* Back button (mobile only) */}
         <Button
           variant="ghost"

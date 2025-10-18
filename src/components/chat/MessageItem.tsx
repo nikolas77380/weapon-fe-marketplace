@@ -17,7 +17,6 @@ interface MessageItemProps {
 export const MessageItem: React.FC<MessageItemProps> = ({
   message,
   currentUserId,
-  ref,
 }) => {
   const t = useTranslations("Chat");
   const isOwnMessage = message.sender.id === currentUserId;
@@ -39,12 +38,12 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       className={`flex ${isOwnMessage ? "justify-end" : "justify-start"} mb-4`}
     >
       <div
-        className={`flex items-center max-w-[80%] sm:max-w-[70%] ${
+        className={`flex items-center max-w-xs sm:max-w-sm md:max-w-md ${
           isOwnMessage ? "flex-row-reverse" : "flex-row"
         } gap-2`}
       >
         {!isOwnMessage && (
-          <Avatar className="h-8 w-8 mr-2 flex-shrink-0">
+          <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
               {getInitials(message.sender.username)}
             </AvatarFallback>
@@ -57,7 +56,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           }`}
         >
           <div
-            className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-lg ${
+            className={`max-w-xs sm:max-w-sm md:max-w-md px-4 py-2 rounded-lg break-words ${
               isOwnMessage
                 ? "bg-gold-main text-white"
                 : "bg-white border border-gray-200 text-gray-900"

@@ -7,7 +7,7 @@ import { ChatList } from "./ChatList";
 import { ChatInterface } from "./ChatInterface";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, AlertCircle, ArrowLeft, MessageSquare } from "lucide-react";
+import { AlertCircle, MessageSquare } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -38,7 +38,7 @@ export const ChatApp: React.FC = () => {
   // Если пользователь не авторизован, показываем сообщение
   if (!currentUser) {
     return (
-      <div className="h-screen flex items-center justify-center mx-10">
+      <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 mb-4">
             <svg
@@ -112,7 +112,7 @@ export const ChatApp: React.FC = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-100px)] flex bg-transparent md:rounded-xl shadow-sm overflow-hidden mb-20">
+    <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20">
       {/* Боковая панель со списком чатов */}
       <div
         className={cn(
@@ -144,22 +144,22 @@ export const ChatApp: React.FC = () => {
         )}
       >
         {currentChat ? (
-          <>
-            <ChatInterface
-              chat={currentChat}
-              messages={messages}
-              currentUserId={currentUser?.id}
-              onSendMessage={handleSendMessage}
-              onFinishChat={handleFinishChat}
-              loading={loading}
-            />
-          </>
+          <ChatInterface
+            chat={currentChat}
+            messages={messages}
+            currentUserId={currentUser?.id}
+            onSendMessage={handleSendMessage}
+            onFinishChat={handleFinishChat}
+            loading={loading}
+          />
         ) : (
           <div className="flex flex-col items-center justify-center flex-1 text-gray-400 bg-gradient-to-b from-gray-50 to-gray-100 animate-fadeIn">
             <div className="p-6 rounded-full bg-gold-main/10 mb-4">
               <MessageSquare className="h-10 w-10 text-gold-main" />
             </div>
-            <h2 className="text-lg font-semibold text-gray-700">{t("selectChat")}</h2>
+            <h2 className="text-lg font-semibold text-gray-700">
+              {t("selectChat")}
+            </h2>
             <p className="text-sm text-gray-500 mt-1 text-center px-8">
               {t("selectChatDescription")}
             </p>
