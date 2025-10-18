@@ -7,6 +7,7 @@ import { MessageArea } from "./MessageArea";
 import { MessageInput } from "./MessageInput";
 import { useChatPolling } from "@/hooks/useChatPolling";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface ChatInterfaceProps {
   chat: Chat;
@@ -55,29 +56,35 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const isChatActive = currentChat.status === "active";
 
   return (
-    <div className="flex flex-col h-full">
-      <ChatHeader
-        chat={currentChat}
-        onFinishChat={onFinishChat}
-        loading={loading}
-      />
+    <div>
+      <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
+        <ChatHeader
+          chat={currentChat}
+          onFinishChat={onFinishChat}
+          loading={loading}
+        />
+      </div>
 
-      <MessageArea
-        messages={localMessages}
-        currentUserId={currentUserId}
-        loading={loading}
-      />
+      <div className="flex-1 bg-gray-50">
+        <MessageArea
+          messages={localMessages}
+          currentUserId={currentUserId}
+          loading={loading}
+        />
+      </div>
 
-      <MessageInput
-        onSendMessage={onSendMessage}
-        disabled={!isChatActive}
-        loading={sendingMessage}
-        placeholder={
-          isChatActive
-            ? t("messageInput.placeholder")
-            : t("messageInput.placeholderInactive")
-        }
-      />
+      <div className="sticky bottom-0 z-20 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+        <MessageInput
+          onSendMessage={onSendMessage}
+          disabled={!isChatActive}
+          loading={sendingMessage}
+          placeholder={
+            isChatActive
+              ? t("messageInput.placeholder")
+              : t("messageInput.placeholderInactive")
+          }
+        />
+      </div>
     </div>
   );
 };

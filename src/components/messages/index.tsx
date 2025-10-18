@@ -4,11 +4,7 @@ import React from "react";
 import { ChatApp } from "@/components/chat/ChatApp";
 
 const Messages = () => {
-  return (
-    <div className="h-full">
-      <ChatApp />
-    </div>
-  );
+  return <ChatApp />;
 };
 
 export default Messages;

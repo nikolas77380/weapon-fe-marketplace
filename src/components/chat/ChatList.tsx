@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MessageCircle, Users, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { ru } from "date-fns/locale";
+import { uk } from "date-fns/locale";
 import { useTranslations } from "next-intl";
 
 interface ChatListProps {
@@ -55,8 +55,8 @@ export const ChatList: React.FC<ChatListProps> = ({
 
   if (chats.length === 0) {
     return (
-      <Card>
-        <CardContent className="p-6 text-center">
+      <Card className="shadow-none border-none bg-transparent">
+        <CardContent className="p-6 text-center text-gray-500">
           <MessageCircle className="h-12 w-12 mx-auto text-gray-400 mb-4" />
           <p className="text-gray-500">{t("noChats")}</p>
         </CardContent>
@@ -65,39 +65,51 @@ export const ChatList: React.FC<ChatListProps> = ({
   }
 
   return (
-    <div className="space-y-3">
+    <div className="">
       {chats.map((chat) => {
         const lastMessage = chat.messages?.[0]; // Последнее сообщение
         const isActive = currentChatId === chat.id;
 
         return (
-          <Card
+          <div
             key={chat.id}
-            className={`cursor-pointer transition-all hover:shadow-md ${
-              isActive ? "ring-2 ring-blue-500 bg-blue-50" : ""
+            className={`p-2 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
+              isActive
+                ? "border-l-4 border-l-gold-main bg-gold-main/10"
+                : "border-gray-200"
             }`}
             onClick={() => onChatSelect(chat)}
           >
-            <CardContent className="p-4">
+            <div className="p-4 sm:p-5">
               <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-lg truncate">{chat.topic}</h3>
-                <Badge className={getStatusColor(chat.status)}>
+                <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900">
+                  {chat.topic}
+                </h3>
+                <Badge
+                  className={`${getStatusColor(
+                    chat.status
+                  )} text-xs sm:text-sm whitespace-nowrap`}
+                >
                   {t(`status.${chat.status}`)}
                 </Badge>
               </div>
 
-              <div className="flex items-center text-sm text-gray-500 mb-2">
-                <Users className="h-4 w-4 mr-1" />
-                <span>
-                  {chat.participants.length} {t("participants")}
-                </span>
-                <Clock className="h-4 w-4 ml-3 mr-1" />
-                <span>
-                  {formatDistanceToNow(new Date(chat.updatedAt), {
-                    addSuffix: true,
-                    locale: ru,
-                  })}
-                </span>
+              <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 items-center text-sm text-gray-500 mb-2">
+                <div className="flex items-center gap-1">
+                  <Users className="h-4 w-4 mr-1 shrink-0 text-xs" />
+                  <span className="text-xs">
+                    {chat.participants.length} {t("participants")}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock className="h-4 w-4 mr-1 shrink-0 text-xs" />
+                  <span className="text-xs">
+                    {formatDistanceToNow(new Date(chat.updatedAt), {
+                      addSuffix: true,
+                      locale: uk,
+                    })}
+                  </span>
+                </div>
               </div>
 
               {lastMessage && (
@@ -108,8 +120,8 @@ export const ChatList: React.FC<ChatListProps> = ({
                   <span className="ml-1">{lastMessage.text}</span>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         );
       })}
     </div>
