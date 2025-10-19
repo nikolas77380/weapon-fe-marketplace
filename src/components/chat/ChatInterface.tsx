@@ -16,6 +16,7 @@ interface ChatInterfaceProps {
   onFinishChat: (
     status: "successfully_completed" | "unsuccessfully_completed" | "closed"
   ) => void;
+  onBackToChatList: () => void;
   loading?: boolean;
   sendingMessage?: boolean;
 }
@@ -26,6 +27,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   currentUserId,
   onSendMessage,
   onFinishChat,
+  onBackToChatList,
   loading = false,
   sendingMessage = false,
 }) => {
@@ -54,6 +56,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const isChatActive = currentChat.status === "active";
 
+  const handleBack = () => onBackToChatList();
+
   return (
     <div className="min-w-0">
       <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
@@ -61,6 +65,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           chat={currentChat}
           onFinishChat={onFinishChat}
           loading={loading}
+          onBack={handleBack}
         />
       </div>
 

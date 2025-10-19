@@ -26,6 +26,7 @@ export const ChatApp: React.FC = () => {
     loadChat,
     sendNewMessage,
     finishCurrentChat,
+    clearCurrentChat,
   } = useChat();
 
   // Загружаем чаты при монтировании компонента
@@ -96,6 +97,10 @@ export const ChatApp: React.FC = () => {
     }
   };
 
+  const handleBackToChatList = () => {
+    clearCurrentChat();
+  };
+
   if (error) {
     return (
       <Card className="h-full">
@@ -150,6 +155,7 @@ export const ChatApp: React.FC = () => {
             currentUserId={currentUser?.id}
             onSendMessage={handleSendMessage}
             onFinishChat={handleFinishChat}
+            onBackToChatList={handleBackToChatList}
             loading={loading}
           />
         ) : (

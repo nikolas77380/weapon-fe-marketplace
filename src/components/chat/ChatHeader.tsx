@@ -26,6 +26,7 @@ interface ChatHeaderProps {
     status: "successfully_completed" | "unsuccessfully_completed" | "closed"
   ) => void;
   loading?: boolean;
+  onBack: () => void;
 }
 
 const getStatusColor = (status: Chat["status"]) => {
@@ -47,6 +48,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   chat,
   onFinishChat,
   loading = false,
+  onBack,
+
 }) => {
   const t = useTranslations("Chat");
   const isActive = chat.status === "active";
@@ -69,7 +72,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={handleBack}
+          onClick={onBack}
           className="md:hidden text-gray-500 hover:text-gold-main"
         >
           <ArrowLeft className="h-5 w-5" />
