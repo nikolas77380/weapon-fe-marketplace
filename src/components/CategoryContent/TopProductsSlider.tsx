@@ -43,11 +43,12 @@ const TopProductsSlider = () => {
     setCanScrollRight(!swiper.isEnd);
   };
 
-  // Получаем все товары
+  // Получаем товары с сортировкой по просмотрам
   const { data: response, isLoading } = useProductsQuery({
+    sort: "viewsCount:desc",
     pagination: {
       page: 1,
-      pageSize: 1000, // Большое количество чтобы получить все товары
+      pageSize: 20,
     },
   });
 
@@ -56,66 +57,34 @@ const TopProductsSlider = () => {
     const allProducts = response?.data || [];
     const mainCategories = getMainCategories();
     const topProductsByCategory: Product[] = [];
+    const usedCategories = new Set<number>(); // Отслеживаем уже использованные категории
 
-    // Функция для получения всех подкатегорий (рекурсивно)
-    const getAllSubCategories = (parentId: number): number[] => {
-      const directChildren = categories.filter(
-        (cat) => cat.parent?.id === parentId
-      );
-      let allChildren: any[] = [...directChildren];
+    // Проходим по товарам (уже отсортированным по viewsCount)
+    for (const product of allProducts) {
+      if (!product.category?.id) continue;
 
-      // Рекурсивно получаем всех потомков
-      directChildren.forEach((child) => {
-        const subChildren = getAllSubCategories(child.id);
-        allChildren = [
-          ...allChildren,
-          ...subChildren
-            .map((id) => categories.find((cat) => cat.id === id))
-            .filter(Boolean),
-        ];
-      });
+      // Находим главную категорию для этого товара
+      const findMainCategory = (categoryId: number): any => {
+        const category = categories.find((cat) => cat.id === categoryId);
+        if (!category) return null;
 
-      return allChildren.map((cat) => cat.id);
-    };
+        // Если это главная категория
+        if (!category.parent) return category;
 
-    mainCategories.forEach((mainCategory) => {
-      // Получаем все подкатегории для главной категории
-      const subCategoryIds = getAllSubCategories(mainCategory.id);
+        // Иначе ищем родительскую категорию
+        return findMainCategory(category.parent.id);
+      };
 
-      // Создаем массив всех ID категорий (главная + все подкатегории)
-      const allCategoryIds = [mainCategory.id, ...subCategoryIds];
+      const mainCategory = findMainCategory(product.category.id);
+      if (!mainCategory || usedCategories.has(mainCategory.id)) continue;
 
-      console.log(`Main category: ${mainCategory.name} (${mainCategory.id})`);
-      console.log(`Sub categories:`, subCategoryIds);
-      console.log(`All category IDs:`, allCategoryIds);
+      // Добавляем товар и отмечаем категорию как использованную
+      topProductsByCategory.push(product);
+      usedCategories.add(mainCategory.id);
 
-      // Фильтруем товары по всем категориям (главная + подкатегории)
-      const categoryProducts = allProducts.filter(
-        (product: Product) =>
-          product.category?.id && allCategoryIds.includes(product.category.id)
-      );
-
-      console.log(
-        `Found ${categoryProducts.length} products for category ${mainCategory.name}`
-      );
-
-      if (categoryProducts.length > 0) {
-        // Сортируем по viewsCount и берем первый (самый популярный)
-        const topProduct = categoryProducts.sort(
-          (a: Product, b: Product) =>
-            Number(b.viewsCount) - Number(a.viewsCount)
-        )[0];
-
-        console.log(
-          `Top product for ${mainCategory.name}:`,
-          topProduct.name,
-          `views: ${topProduct.viewsCount}`
-        );
-        topProductsByCategory.push(topProduct);
-      }
-    });
-
-    console.log(`Total top products found: ${topProductsByCategory.length}`);
+      // Если нашли товар для каждой главной категории, останавливаемся
+      if (topProductsByCategory.length >= mainCategories.length) break;
+    }
 
     return topProductsByCategory;
   }, [response?.data, getMainCategories, categories]);
