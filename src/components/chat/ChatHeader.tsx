@@ -10,7 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, CheckCircle, XCircle, Lock, Users } from "lucide-react";
+import {
+  MoreVertical,
+  CheckCircle,
+  XCircle,
+  Lock,
+  Users,
+  ArrowLeft,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface ChatHeaderProps {
@@ -19,6 +26,7 @@ interface ChatHeaderProps {
     status: "successfully_completed" | "unsuccessfully_completed" | "closed"
   ) => void;
   loading?: boolean;
+  onBack: () => void;
 }
 
 const getStatusColor = (status: Chat["status"]) => {
@@ -40,6 +48,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   chat,
   onFinishChat,
   loading = false,
+  onBack,
+
 }) => {
   const t = useTranslations("Chat");
   const isActive = chat.status === "active";
@@ -51,37 +61,58 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     onFinishChat(status);
   };
 
+  const handleBack = () => {
+    window.location.reload();
+  };
+
   return (
-    <div className="border-b bg-white p-4">
-      <div className="flex items-center justify-between">
+    <div className="border-b bg-white p-4 border-gray-200">
+      <div className="flex items-center flex-wrap justify-between gap-2 sm:gap-3">
+        {/* Back button (mobile only) */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onBack}
+          className="md:hidden text-gray-500 hover:text-gold-main"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
         <div className="flex-1">
-          <div className="flex items-center space-x-3 mb-2">
+          <div className="flex items-start min-[380px]:items-center flex-col min-[380px]:flex-row space-x-3 mb-2">
             <h2 className="text-lg font-semibold truncate">{chat.topic}</h2>
             <Badge className={getStatusColor(chat.status)}>
               {t(`status.${chat.status}`)}
             </Badge>
           </div>
 
-          <div className="flex items-center text-sm text-gray-500">
-            <Users className="h-4 w-4 mr-1" />
-            <span>
-              {chat.participants.length} {t("participants")}
-            </span>
-            <span className="mx-2">•</span>
-            <span>
-              {chat.participants.map((p) => p.displayName).join(", ")}
-            </span>
+          <div className="flex items-start min-[380px]:items-center text-sm text-gray-500 flex-col min-[380px]:flex-row">
+            <div className="flex items-center gap-1">
+              <Users className="h-4 w-4" />
+              <span>
+                {chat.participants.length} {t("participants")}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="mx-2 hidden min-[380px]:block">•</span>
+              <span>
+                {chat.participants.map((p) => p.displayName).join(", ")}
+              </span>
+            </div>
           </div>
         </div>
-
         {canFinish && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" disabled={loading}>
-                <MoreVertical className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={loading}
+                className="border-gray-300"
+              >
+                <MoreVertical className="h-4 w-4 text-gold-main" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
+            <DropdownMenuContent align="end" className="border-gray-200">
               <DropdownMenuItem
                 onClick={() => handleFinishChat("successfully_completed")}
                 className="text-green-700"

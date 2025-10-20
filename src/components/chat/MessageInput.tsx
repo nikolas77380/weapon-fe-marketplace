@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface MessageInputProps {
   onSendMessage: (text: string) => Promise<void>;
@@ -65,9 +66,12 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     message.trim().length > 0 && !isSending && !disabled && !loading;
 
   return (
-    <form onSubmit={handleSubmit} className="border-t bg-white p-4">
-      <div className="flex items-end space-x-2">
-        <div className="flex-1">
+    <form
+      onSubmit={handleSubmit}
+      className="p-2 xs:p-4 border-t border-gray-200 bg-white"
+    >
+      <div className="flex items-center">
+        <div className="flex-1 relative">
           <Textarea
             ref={textareaRef}
             value={message}
@@ -75,22 +79,28 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onKeyDown={handleKeyDown}
             placeholder={placeholder || t("messageInput.placeholder")}
             disabled={disabled || loading || isSending}
-            className="min-h-[40px] max-h-[120px] resize-none"
+            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main"
             rows={1}
           />
+
+          <Button
+            type="submit"
+            size="icon"
+            disabled={!canSend}
+            className={cn(
+              "absolute right-1 top-1/2 -translate-y-1/2 text-white",
+              canSend
+                ? "bg-gold-main hover:bg-gold-main/90"
+                : "bg-gray-300 cursor-not-allowed"
+            )}
+          >
+            {isSending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+          </Button>
         </div>
-        <Button
-          type="submit"
-          size="sm"
-          disabled={!canSend}
-          className="h-10 w-10 p-0"
-        >
-          {isSending ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Send className="h-4 w-4" />
-          )}
-        </Button>
       </div>
 
       {disabled && (

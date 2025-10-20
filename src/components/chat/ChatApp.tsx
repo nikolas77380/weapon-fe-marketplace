@@ -7,9 +7,10 @@ import { ChatList } from "./ChatList";
 import { ChatInterface } from "./ChatInterface";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { MessageCircle, AlertCircle } from "lucide-react";
+import { AlertCircle, MessageSquare } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 export const ChatApp: React.FC = () => {
   const { currentUser } = useAuthContext();
@@ -25,6 +26,7 @@ export const ChatApp: React.FC = () => {
     loadChat,
     sendNewMessage,
     finishCurrentChat,
+    clearCurrentChat,
   } = useChat();
 
   // Загружаем чаты при монтировании компонента
@@ -37,7 +39,7 @@ export const ChatApp: React.FC = () => {
   // Если пользователь не авторизован, показываем сообщение
   if (!currentUser) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 mb-4">
             <svg
@@ -95,6 +97,10 @@ export const ChatApp: React.FC = () => {
     }
   };
 
+  const handleBackToChatList = () => {
+    clearCurrentChat();
+  };
+
   if (error) {
     return (
       <Card className="h-full">
@@ -111,16 +117,21 @@ export const ChatApp: React.FC = () => {
   }
 
   return (
-    <div className="h-full flex">
+    <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20 min-w-0">
       {/* Боковая панель со списком чатов */}
-      <div className="w-80 border-r bg-gray-50 flex flex-col">
-        <div className="p-4 border-b bg-white">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl font-semibold">{t("title")}</h1>
-          </div>
+      <div
+        className={cn(
+          "w-full md:w-80 bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
+          currentChat ? "hidden md:flex" : "flex"
+        )}
+      >
+        <div className="px-4 py-6 border-b border-gray-200 bg-white sticky top-0 z-10">
+          <h1 className="text-xl font-semibold text-gray-900 mb-3">
+            {t("title")}
+          </h1>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto">
           <ChatList
             chats={chats}
             currentChatId={currentChat?.id}
@@ -131,7 +142,12 @@ export const ChatApp: React.FC = () => {
       </div>
 
       {/* Основная область чата */}
-      <div className="flex-1 flex flex-col">
+      <div
+        className={cn(
+          "flex-1 flex flex-col bg-white transition-all duration-300 min-w-0",
+          !currentChat && "hidden md:flex"
+        )}
+      >
         {currentChat ? (
           <ChatInterface
             chat={currentChat}
@@ -139,15 +155,20 @@ export const ChatApp: React.FC = () => {
             currentUserId={currentUser?.id}
             onSendMessage={handleSendMessage}
             onFinishChat={handleFinishChat}
+            onBackToChatList={handleBackToChatList}
             loading={loading}
           />
         ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="text-center">
-              <MessageCircle className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">{t("selectChat")}</h3>
-              <p className="text-gray-500 mb-4">{t("selectChatDescription")}</p>
+          <div className="flex flex-col items-center justify-center flex-1 text-gray-400 bg-gradient-to-b from-gray-50 to-gray-100 animate-fadeIn">
+            <div className="p-6 rounded-full bg-gold-main/10 mb-4">
+              <MessageSquare className="h-10 w-10 text-gold-main" />
             </div>
+            <h2 className="text-lg font-semibold text-gray-700">
+              {t("selectChat")}
+            </h2>
+            <p className="text-sm text-gray-500 mt-1 text-center px-8">
+              {t("selectChatDescription")}
+            </p>
           </div>
         )}
       </div>
