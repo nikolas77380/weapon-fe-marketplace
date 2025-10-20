@@ -1,10 +1,6 @@
-"use client";
-
 import React from "react";
 import { ChatApp } from "@/components/chat/ChatApp";
 
-const Messages = () => {
+export default function ChatPage() {
   return <ChatApp />;
-};
-
-export default Messages;
+}

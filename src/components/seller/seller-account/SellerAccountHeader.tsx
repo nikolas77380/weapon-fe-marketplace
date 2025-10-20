@@ -7,6 +7,7 @@ import { calculateTotalViews } from "@/lib/productUtils";
 import { Product, UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
+import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 interface SellerAccountHeaderProps {
   currentUser: UserProfile;
@@ -21,7 +22,7 @@ const SellerAccountHeader = ({
 }: SellerAccountHeaderProps) => {
   const t = useTranslations("SellerAccountHeader");
   const { favourites } = useFavourites();
-
+  const { unreadChatsCount } = useUnreadChats();
   const router = useRouter();
   const totalViews = calculateTotalViews(products);
   const activeListings = useMemo(
@@ -56,7 +57,7 @@ const SellerAccountHeader = ({
       <div className="grid grid-cols-1 min-[450px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-7 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
         <SellerActionCard
           title={t("titleUnreadChats")}
-          count={0}
+          count={unreadChatsCount}
           icon={<MessageSquare className="size-5 lg:size-7" />}
         />
         <SellerActionCard

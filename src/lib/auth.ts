@@ -181,12 +181,18 @@ export const resetPassword = async (
 
 // Protected routes (JWT required)
 export const getCurrentUser = async (
-  token: string
+  token?: string
 ): Promise<ApiResponse<UserProfile>> => {
+  const tokenJwt = getSessionTokenFromCookie()
+    ? getSessionTokenFromCookie()
+    : token;
+  if (!tokenJwt) {
+    throw new Error("No authentication token found");
+  }
   const response = await strapiFetchAuth({
     path: "/api/users/me",
     method: "GET",
-    token,
+    token: tokenJwt,
   });
 
   return response;
@@ -249,8 +255,14 @@ export const getSessionTokenFromCookie = (): string | null => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; sessionToken=`);
   if (parts.length === 2) {
-    return parts.pop()?.split(";").shift() || null;
+    const token = parts.pop()?.split(";").shift() || null;
+    console.log(
+      "Token from cookie:",
+      token ? token.substring(0, 20) + "..." : "null"
+    );
+    return token;
   }
+  console.log("No sessionToken found in cookies");
   return null;
 };
 
