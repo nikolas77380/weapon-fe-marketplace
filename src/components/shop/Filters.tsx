@@ -74,7 +74,9 @@ const Filters = ({
         isMobile
           ? "border-0"
           : "border-r border-t border-b border-border-foreground rounded-sm"
-      } h-fit ${isMobile ? "p-0" : "p-5"} flex flex-col gap-3.5`}
+      } h-fit ${
+        isMobile ? "p-0" : "p-5"
+      } flex flex-col gap-3.5 w-80 max-w-80 min-w-80`}
     >
       <div className="flex justify-between mb-4 w-full min-w-0 lg:min-w-50">
         <div className="flex items-center gap-2">
@@ -199,9 +201,11 @@ const Filters = ({
                       />
                       <Label
                         htmlFor={`elastic-category-${category.key}`}
-                        className="text-sm font-light cursor-pointer"
+                        className="text-sm font-light cursor-pointer truncate max-w-[200px] block"
+                        title={getCategoryName(category) || category.key}
                       >
-                        {category.key} ({category.doc_count})
+                        {getCategoryName(category) || category.key} (
+                        {category.doc_count})
                       </Label>
                     </div>
                   ))}
@@ -381,11 +385,12 @@ const Filters = ({
                         />
                         <Label
                           htmlFor={`subcategory-${categoryId}`}
-                          className={`text-sm font-light cursor-pointer truncate max-w-[150px] block ${
+                          className={`text-sm font-light cursor-pointer truncate max-w-[200px] block ${
                             selectedSubcategoryId === parseInt(categoryId)
                               ? "text-foreground"
                               : "text-foreground/80"
                           }`}
+                          title={getCategoryName(category)}
                         >
                           {getCategoryName(category)}
                         </Label>

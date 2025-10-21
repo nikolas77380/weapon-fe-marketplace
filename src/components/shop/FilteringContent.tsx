@@ -87,6 +87,27 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const { categories } = useCategories();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
+  // Обогащаем elasticFilters.categories данными из categories
+  const enrichedElasticFilters = useMemo(() => {
+    if (!elasticFilters || !categories) return elasticFilters;
+
+    return {
+      ...elasticFilters,
+      categories:
+        elasticFilters.categories?.map((elasticCategory: any) => {
+          // Находим полные данные категории по slug
+          const fullCategory = categories.find(
+            (cat) => cat.slug === elasticCategory.key
+          );
+          return {
+            ...elasticCategory,
+            name: fullCategory?.name || elasticCategory.key,
+            translate_ua: fullCategory?.translate_ua,
+          };
+        }) || [],
+    };
+  }, [elasticFilters, categories]);
+
   // Отключаем isInitialLoad после первой успешной загрузки
   React.useEffect(() => {
     if (!isLoading && elasticFilters) {
@@ -260,7 +281,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
         {/* Filters - Hidden on mobile, visible on desktop */}
         <div className="hidden lg:block">
-          {isInitialLoad && !elasticFilters ? (
+          {isInitialLoad && !enrichedElasticFilters ? (
             <SkeletonComponent type="filters" />
           ) : (
             <Filters
@@ -283,7 +304,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
               }
               categories={memoizedCategoryCounts}
               hideCategoryFilter={!!categorySlug}
-              elasticFilters={elasticFilters}
+              elasticFilters={enrichedElasticFilters}
               isDisabled={loading}
             />
           )}
@@ -317,7 +338,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         }
         categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-        elasticFilters={elasticFilters}
+        elasticFilters={enrichedElasticFilters}
         selectedSubcategoryId={filters.subcategoryId}
         onAvailabilityChange={handleAvailabilityChange}
         onConditionChange={handleConditionChange}
