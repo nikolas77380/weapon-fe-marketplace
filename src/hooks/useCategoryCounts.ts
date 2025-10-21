@@ -23,7 +23,7 @@ export const useCategoryCounts = () => {
       const response = await getProducts({
         pagination: {
           page: 1,
-          pageSize: 1000, // Большое число чтобы получить все продукты
+          pageSize: 100, // Большое число чтобы получить все продукты
         },
       });
 

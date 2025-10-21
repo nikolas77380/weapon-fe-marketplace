@@ -488,6 +488,9 @@
   "TopPropositions": {
     "title": "Найкращі пропозиції для вас"
   },
+  "TopProducts": {
+    "title": "Топ товари"
+  },
   "ConfirmationSuccess": {
     "title": "Підтверджено!",
     "subtitle": "Ваш акаунт успішно активовано",
