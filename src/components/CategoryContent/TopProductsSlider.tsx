@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import { useProductsQuery } from "@/hooks/useProductsQuery";
-import { useCategories } from "@/hooks/useCategories";
+import { useTopProductsByCategory } from "@/hooks/useTopProductsByCategory";
 import ShopCard from "../shop/ShopCard";
-import { Product } from "@/lib/types";
 import NavigationButton from "../ui/NavigationButton";
 import CustomScrollbar from "../ui/CustomScrollbar";
 import { useTranslations } from "next-intl";
@@ -19,7 +17,6 @@ import { VIEWED_PRODUCTS_BREAKPOINTS } from "@/lib/swiperBreakpoints";
 const TopProductsSlider = () => {
   const t = useTranslations("TopProducts");
   const { currentSlidesPerView } = useBreakpoint();
-  const { getMainCategories, categories } = useCategories();
   const [swiperRef, setSwiperRef] = useState<any>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -43,51 +40,8 @@ const TopProductsSlider = () => {
     setCanScrollRight(!swiper.isEnd);
   };
 
-  // Получаем товары с сортировкой по просмотрам
-  const { data: response, isLoading } = useProductsQuery({
-    sort: "viewsCount:desc",
-    pagination: {
-      page: 1,
-      pageSize: 20,
-    },
-  });
-
-  // Получаем топ товар из каждой главной категории (включая все подкатегории)
-  const topProducts = useMemo(() => {
-    const allProducts = response?.data || [];
-    const mainCategories = getMainCategories();
-    const topProductsByCategory: Product[] = [];
-    const usedCategories = new Set<number>(); // Отслеживаем уже использованные категории
-
-    // Проходим по товарам (уже отсортированным по viewsCount)
-    for (const product of allProducts) {
-      if (!product.category?.id) continue;
-
-      // Находим главную категорию для этого товара
-      const findMainCategory = (categoryId: number): any => {
-        const category = categories.find((cat) => cat.id === categoryId);
-        if (!category) return null;
-
-        // Если это главная категория
-        if (!category.parent) return category;
-
-        // Иначе ищем родительскую категорию
-        return findMainCategory(category.parent.id);
-      };
-
-      const mainCategory = findMainCategory(product.category.id);
-      if (!mainCategory || usedCategories.has(mainCategory.id)) continue;
-
-      // Добавляем товар и отмечаем категорию как использованную
-      topProductsByCategory.push(product);
-      usedCategories.add(mainCategory.id);
-
-      // Если нашли товар для каждой главной категории, останавливаемся
-      if (topProductsByCategory.length >= mainCategories.length) break;
-    }
-
-    return topProductsByCategory;
-  }, [response?.data, getMainCategories, categories]);
+  // Получаем топ товар из каждой основной категории (22 отдельных запроса)
+  const { data: topProducts = [] } = useTopProductsByCategory();
 
   // Tracking changes in Swiper
   const handleSlideChange = (swiper: any) => {
@@ -123,7 +77,7 @@ const TopProductsSlider = () => {
   }, [swiperRef]);
 
   // Не показываем слайдер если нет товаров
-  if (isLoading || topProducts.length === 0) {
+  if (topProducts.length === 0) {
     return null;
   }
 
