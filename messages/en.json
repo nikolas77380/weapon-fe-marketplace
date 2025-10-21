@@ -488,6 +488,9 @@
   "TopPropositions": {
     "title": "The best deals for you"
   },
+  "TopProducts": {
+    "title": "Top Products"
+  },
   "ConfirmationSuccess": {
     "title": "Email Confirmed!",
     "subtitle": "Your account has been successfully activated",

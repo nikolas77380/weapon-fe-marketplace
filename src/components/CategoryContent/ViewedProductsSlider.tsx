@@ -1,49 +1,17 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import React from "react";
 import { useViewedProducts } from "@/hooks/useViewedProducts";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { useAuthContext } from "@/context/AuthContext";
-import ShopCard from "../shop/ShopCard";
 import { Product } from "@/lib/types";
-import NavigationButton from "../ui/NavigationButton";
-import CustomScrollbar from "../ui/CustomScrollbar";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import { VIEWED_PRODUCTS_BREAKPOINTS } from "@/lib/swiperBreakpoints";
 import { useTranslations } from "next-intl";
-import useBreakpoint from "@/hooks/useBreakpoint";
+import ProductsSlider from "../ui/ProductsSlider";
 
 const ViewedProductsSlider = () => {
   const t = useTranslations("ViewedRecommendedProductsSlider");
   const { currentUser } = useAuthContext();
   const { viewedProductIds, hasViewedProducts } = useViewedProducts();
-  const { currentSlidesPerView } = useBreakpoint();
-  const [swiperRef, setSwiperRef] = useState<any>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-  const [progress, setProgress] = useState(0);
-
-  const handleScrollLeft = () => {
-    if (swiperRef) {
-      swiperRef.slidePrev();
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (swiperRef) {
-      swiperRef.slideNext();
-    }
-  };
-
-  // Checking the scrolling capability
-  const checkScrollPosition = (swiper: any) => {
-    setCanScrollLeft(!swiper.isBeginning);
-    setCanScrollRight(!swiper.isEnd);
-  };
 
   const { data: response } = useProductsQuery({
     pagination: {
@@ -59,104 +27,17 @@ const ViewedProductsSlider = () => {
     .map((id) => allProducts.find((product: Product) => product.id === id))
     .filter((product): product is Product => product !== undefined);
 
-  // Tracking changes in Swiper
-  const handleSlideChange = (swiper: any) => {
-    checkScrollPosition(swiper);
-  };
-
-  // Updating progress for a custom scrollbar
-  const handleProgress = (swiper: any, progress: number) => {
-    setProgress(progress);
-  };
-
-  // Handling progress changes from the scrollbar
-  const handleScrollbarProgressChange = useCallback(
-    (newProgress: number) => {
-      if (!swiperRef) return;
-      swiperRef.setProgress(newProgress);
-      checkScrollPosition(swiperRef);
-    },
-    [swiperRef]
-  );
-
-  // Callbacks for drag state
-  const handleDragStart = useCallback(() => {
-    if (swiperRef) {
-      swiperRef.setTransition(0);
-    }
-  }, [swiperRef]);
-
-  const handleDragEnd = useCallback(() => {
-    if (swiperRef) {
-      swiperRef.setTransition(100);
-    }
-  }, [swiperRef]);
-
   if (!currentUser || !hasViewedProducts || viewedProducts.length === 0) {
     return null;
   }
 
   return (
-    <div className="mb-10">
-      <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
-        {t("title")}
-      </h3>
-
-      <div className="relative">
-        <Swiper
-          modules={[Navigation]}
-          slidesPerView={1}
-          spaceBetween={16}
-          onSwiper={setSwiperRef}
-          onSlideChange={handleSlideChange}
-          onProgress={handleProgress}
-          navigation={{
-            prevEl: ".viewed-prev",
-            nextEl: ".viewed-next",
-          }}
-          breakpoints={VIEWED_PRODUCTS_BREAKPOINTS}
-          className="viewed-products-slider custom-scrollbar"
-        >
-          {viewedProducts.map((product) => (
-            <SwiperSlide key={product.id}>
-              <ShopCard item={product} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-
-        {/* Custom scrollbar */}
-        {viewedProducts.length > currentSlidesPerView && (
-          <CustomScrollbar
-            progress={progress}
-            onProgressChange={handleScrollbarProgressChange}
-            totalItems={viewedProducts.length}
-            visibleItems={currentSlidesPerView}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          />
-        )}
-
-        {/* Navigation buttons */}
-        {viewedProducts.length > currentSlidesPerView && (
-          <>
-            <div className="viewed-prev">
-              <NavigationButton
-                direction="left"
-                onClick={handleScrollLeft}
-                showLeftButton={canScrollLeft}
-              />
-            </div>
-            <div className="viewed-next">
-              <NavigationButton
-                direction="right"
-                onClick={handleScrollRight}
-                showLeftButton={canScrollRight}
-              />
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+    <ProductsSlider
+      products={viewedProducts}
+      title={t("title")}
+      navigationPrefix="viewed"
+      sliderClassName="viewed-products-slider custom-scrollbar"
+    />
   );
 };
 
