@@ -1,11 +1,21 @@
-import React from "react";
-import { Separator } from "../ui/separator";
+import React, { useState } from "react";
 import Link from "next/link";
 import Logo from "../ui/Logo";
 import { useTranslations } from "next-intl";
+import PrivacyPolicyModal from "../ui/PrivacyPolicyModal";
 
 const Footer = () => {
   const t = useTranslations("Footer");
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+
+  const handlePrivacyClick = () => {
+    setIsPrivacyModalOpen(true);
+  };
+
+  const handleClosePrivacyModal = () => {
+    setIsPrivacyModalOpen(false);
+  };
+
   return (
     <div className="py-4 sm:py-6 lg:py-7 bg-sidebar-accent">
       <div className="container mx-auto px-2 sm:px-4 lg:px-6 flex flex-col items-center">
@@ -31,9 +41,21 @@ const Footer = () => {
                 {t("subtitleGeneral")}
               </li>
             </Link>
-            <li className="text-xs sm:text-sm mb-1">{t("subtitleGeneral2")}</li>
-            <li className="text-xs sm:text-sm mb-1">{t("subtitleGeneral3")}</li>
-            <li className="text-xs sm:text-sm">{t("subtitleGeneral4")}</li>
+            <Link
+              href="/account"
+              className="hover:text-gold-main transition-colors duration-300"
+            >
+              <li className="text-xs sm:text-sm mb-1">
+                {t("subtitleGeneral2")}
+              </li>
+            </Link>
+            <li
+              className="text-xs sm:text-sm mb-1 cursor-pointer hover:text-gold-main transition-colors duration-300"
+              onClick={handlePrivacyClick}
+            >
+              {t("subtitleGeneral3")}
+            </li>
+            {/* <li className="text-xs sm:text-sm">{t("subtitleGeneral4")}</li> */}
           </ul>
 
           <ul className="text-center sm:text-left">
@@ -69,6 +91,12 @@ const Footer = () => {
           </h2>
         </div>
       </div>
+
+      {/* Privacy Policy Modal */}
+      <PrivacyPolicyModal
+        isOpen={isPrivacyModalOpen}
+        onClose={handleClosePrivacyModal}
+      />
     </div>
   );
 };

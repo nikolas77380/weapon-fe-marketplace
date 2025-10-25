@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import EmailConfirmationNotice from "./EmailConfirmationNotice";
+import PrivacyPolicyModal from "../ui/PrivacyPolicyModal";
 
 interface RegisterFormProps {
   onSubmit: (values: RegisterFormValues) => Promise<void>;
@@ -25,6 +26,16 @@ const RegisterForm = ({
   const t = useTranslations("Auth.register");
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+
+  const handlePrivacyClick = () => {
+    setIsPrivacyModalOpen(true);
+  };
+
+  const handleClosePrivacyModal = () => {
+    setIsPrivacyModalOpen(false);
+  };
+
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -117,16 +128,16 @@ const RegisterForm = ({
                 <span className="font-light opacity-60">
                   {t("termsPolicy1")}
                 </span>{" "}
-                <span className="underline font-normal opacity-100">
-                  {t("termsPolicy2")}
-                </span>{" "}
-                <span className="font-light opacity-60">&</span>{" "}
-                <span className="underline font-normal opacity-100">
-                  {t("termsPolicy3")}
+                <span
+                  className="underline font-normal opacity-100 cursor-pointer hover:text-gold-main transition-colors duration-300"
+                  onClick={handlePrivacyClick}
+                >
+                  {t("termsPolicy2")} {t("termsPolicy3")}
                 </span>
               </p>
             }
             type="checkbox"
+            className="border-gold-main focus:ring-gold-main focus:ring-offset-0 data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white"
           />
 
           <div className="flex items-center justify-center">
@@ -149,6 +160,12 @@ const RegisterForm = ({
           </div>
         </form>
       </Form>
+
+      {/* Privacy Policy Modal */}
+      <PrivacyPolicyModal
+        isOpen={isPrivacyModalOpen}
+        onClose={handleClosePrivacyModal}
+      />
     </div>
   );
 };

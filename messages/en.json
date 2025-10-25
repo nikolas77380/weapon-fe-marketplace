@@ -638,5 +638,48 @@
       },
       "closeButton": "Close"
     }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Information We Collect",
+      "content": "We collect information you provide directly to us, such as when you create an account, list products, or communicate with other users. This may include your name, email address, phone number, and product information."
+    },
+    "section2": {
+      "title": "2. How We Use Your Information",
+      "content": "We use the information we collect to provide, maintain, and improve our platform services, facilitate communication between users, and ensure platform security. We do not sell your personal information to third parties."
+    },
+    "section3": {
+      "title": "3. Platform Liability Disclaimer",
+      "content": "Esviem Defence Marketplace is a platform that connects buyers and sellers. We are not responsible for the quality, safety, or legality of products listed by users. All transactions are conducted directly between users, and we do not guarantee the accuracy of product descriptions or user communications."
+    },
+    "section4": {
+      "title": "4. User Responsibilities",
+      "content": "Users are solely responsible for their listings, communications, and transactions. You must ensure that all products comply with applicable laws and regulations. We reserve the right to remove any content that violates our terms of service."
+    },
+    "section5": {
+      "title": "5. Data Security",
+      "content": "We implement appropriate security measures to protect your personal information and ensure the security of our platform."
+    },
+    "section6": {
+      "title": "6. Information Sharing",
+      "content": "We may share your information with other users as necessary to facilitate platform operations (e.g., displaying your contact information to potential buyers). We do not share your information with third parties for marketing purposes."
+    },
+    "section7": {
+      "title": "7. Cookies and Tracking",
+      "content": "We use cookies and similar technologies to improve your experience on our platform. You can control cookie settings through your browser preferences."
+    },
+    "section8": {
+      "title": "8. Your Rights",
+      "content": "You have the right to access, update, or delete your personal information. You can also opt out of certain communications from us. Contact us to exercise these rights."
+    },
+    "section9": {
+      "title": "9. Changes to This Policy",
+      "content": "We may update this privacy policy from time to time. We will notify you of any material changes by posting the new policy on our platform."
+    },
+    "section10": {
+      "title": "10. Contact Information",
+      "content": "If you have any questions about this privacy policy, please contact us through our platform's contact form or email us directly."
+    }
   }
 }
