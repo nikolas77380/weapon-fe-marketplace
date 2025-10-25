@@ -1,68 +1,114 @@
-import { CreditCard, FileText, Shield, Users } from "lucide-react";
+import { CreditCard, FileText, Shield, Users, Package } from "lucide-react";
 
 export const faqData = [
+  // Безопасность и верификация
   {
-    question: "How do I verify my account as a buyer?",
-    answer:
-      "To verify your buyer account, you'll need to provide valid government-issued identification, proof of employment in law enforcement, military, or security sectors, and complete our background verification process. This typically takes 2-3 business days.",
+    questionKey: "questions.security.verifyBuyer",
+    answerKey: "questions.security.verifyBuyerAnswer",
+    categoryKey: "categories.security.title",
   },
   {
-    question: "What documents are required for seller verification?",
-    answer:
-      "Sellers must provide business licenses, federal firearms licenses (if applicable), tax identification numbers, and proof of compliance with all relevant regulations. We also conduct thorough background checks on all seller applications.",
+    questionKey: "questions.security.becomeSeller",
+    answerKey: "questions.security.becomeSellerAnswer",
+    categoryKey: "categories.security.title",
   },
   {
-    question: "How secure are transactions on the platform?",
-    answer:
-      "All transactions are protected by military-grade encryption. We use escrow services to ensure both parties are protected, and all payments are processed through secure, compliant payment gateways that meet industry standards.",
+    questionKey: "questions.security.reportSuspicious",
+    answerKey: "questions.security.reportSuspiciousAnswer",
+    categoryKey: "categories.security.title",
   },
   {
-    question: "What types of weapons are allowed on the platform?",
-    answer:
-      "We allow all legally permitted weapons and equipment that comply with federal, state, and local regulations. This includes firearms, tactical gear, surveillance equipment, and other security-related products. All listings are reviewed for compliance.",
+    questionKey: "questions.security.dataProtection",
+    answerKey: "questions.security.dataProtectionAnswer",
+    categoryKey: "categories.security.title",
   },
   {
-    question: "How do I report suspicious activity?",
-    answer:
-      "You can report suspicious activity through our dedicated security hotline, email security@weaponmarketplace.com, or use the report button on any listing. All reports are investigated within 24 hours by our security team.",
+    questionKey: "questions.security.documentsRequired",
+    answerKey: "questions.security.documentsRequiredAnswer",
+    categoryKey: "categories.security.title",
+  },
+
+  // Управление аккаунтом
+  {
+    questionKey: "questions.account.changeProfile",
+    answerKey: "questions.account.changeProfileAnswer",
+    categoryKey: "categories.account.title",
   },
   {
-    question: "What are the platform fees?",
-    answer:
-      "We charge a 3% transaction fee on all successful sales. There are no monthly fees or listing fees. Premium sellers with verified status may qualify for reduced fees of 2%.",
+    questionKey: "questions.account.deleteAccount",
+    answerKey: "questions.account.deleteAccountAnswer",
+    categoryKey: "categories.account.title",
   },
   {
-    question: "How do I resolve disputes with other users?",
-    answer:
-      "Our dispute resolution team handles all conflicts between buyers and sellers. You can initiate a dispute through your account dashboard, and our team will investigate and mediate the situation according to our platform policies.",
+    questionKey: "questions.account.changeRole",
+    answerKey: "questions.account.changeRoleAnswer",
+    categoryKey: "categories.account.title",
+  },
+
+  // Добавление товара
+  {
+    questionKey: "questions.products.addProduct",
+    answerKey: "questions.products.addProductAnswer",
+    categoryKey: "categories.products.title",
   },
   {
-    question: "Is my personal information protected?",
-    answer:
-      "Yes, we follow strict data protection protocols and never share your personal information with third parties without your explicit consent. All data is encrypted and stored securely in compliance with industry standards.",
+    questionKey: "questions.products.photoRequirements",
+    answerKey: "questions.products.photoRequirementsAnswer",
+    categoryKey: "categories.products.title",
+  },
+  {
+    questionKey: "questions.products.editProduct",
+    answerKey: "questions.products.editProductAnswer",
+    categoryKey: "categories.products.title",
+  },
+  {
+    questionKey: "questions.products.deleteProduct",
+    answerKey: "questions.products.deleteProductAnswer",
+    categoryKey: "categories.products.title",
+  },
+
+  // Правовые вопросы
+  {
+    questionKey: "questions.legal.prohibitedProducts",
+    answerKey: "questions.legal.prohibitedProductsAnswer",
+    categoryKey: "categories.legal.title",
+  },
+  {
+    questionKey: "questions.legal.chatSystem",
+    answerKey: "questions.legal.chatSystemAnswer",
+    categoryKey: "categories.legal.title",
+  },
+  {
+    questionKey: "questions.legal.platformFees",
+    answerKey: "questions.legal.platformFeesAnswer",
+    categoryKey: "categories.legal.title",
+  },
+  {
+    questionKey: "questions.legal.resolveDisputes",
+    answerKey: "questions.legal.resolveDisputesAnswer",
+    categoryKey: "categories.legal.title",
   },
 ];
 
 export const faqCategories = [
   {
     icon: Shield,
-    title: "Security & Verification",
-    description:
-      "Learn about our security protocols and verification processes",
+    titleKey: "categories.security.title",
+    descriptionKey: "categories.security.description",
   },
   {
     icon: Users,
-    title: "Account Management",
-    description: "How to manage your account and profile settings",
+    titleKey: "categories.account.title",
+    descriptionKey: "categories.account.description",
   },
   {
-    icon: CreditCard,
-    title: "Payments & Transactions",
-    description: "Information about payment methods and transaction security",
+    icon: Package,
+    titleKey: "categories.products.title",
+    descriptionKey: "categories.products.description",
   },
   {
     icon: FileText,
-    title: "Legal & Compliance",
-    description: "Understanding legal requirements and platform policies",
+    titleKey: "categories.legal.title",
+    descriptionKey: "categories.legal.description",
   },
 ];
