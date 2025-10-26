@@ -235,12 +235,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </TabsContent>
           </Tabs>
         </div>
+        <ContactModal
+          open={open}
+          onOpenChange={setOpen}
+          sellerData={sellerData?.metadata as SellerMeta}
+        />
       </div>
-      <ContactModal
-        open={open}
-        onOpenChange={setOpen}
-        sellerData={sellerData?.metadata as SellerMeta}
-      />
     </div>
   );
 };

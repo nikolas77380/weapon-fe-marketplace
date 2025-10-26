@@ -352,6 +352,7 @@
     "taostErrorCreateChat": "Failed to create chat channel. Please try again.",
     "contactModal": {
       "title": "Contact Information",
+      "description": "Seller's contact information",
       "titleCompanyName": "Company Name:",
       "titlePhoneNumbers": "Phone Numbers:",
       "titleWebSite": "Web Site:",
@@ -545,6 +546,141 @@
       "noMessages": "No messages yet",
       "read": "Read",
       "unread": "Unread"
+    }
+  },
+  "FAQ": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to popular questions about our weapon marketplace platform",
+    "searchPlaceholder": "Search questions...",
+    "categories": {
+      "security": {
+        "title": "Security & Verification",
+        "description": "Learn about our security protocols and verification processes"
+      },
+      "account": {
+        "title": "Account Management",
+        "description": "How to manage your account and profile settings"
+      },
+      "products": {
+        "title": "Add Products",
+        "description": "How to list and manage products on the platform"
+      },
+      "legal": {
+        "title": "Legal Issues",
+        "description": "Understanding legal requirements and platform policies"
+      }
+    },
+    "questions": {
+      "security": {
+        "verifyBuyer": "How to verify a buyer account?",
+        "verifyBuyerAnswer": "For registration on the platform, just regular registration is enough. No additional documents are required. After registration, you can immediately start using the platform as a buyer.",
+        "becomeSeller": "How to become a seller on the platform?",
+        "becomeSellerAnswer": "In your personal account, click the 'Become a Seller' button. After that, you will be able to list products. Be sure to fill in the company information in your profile settings. If you have certificates, you can upload them to increase buyer confidence.",
+        "reportSuspicious": "How to report suspicious activity?",
+        "reportSuspiciousAnswer": "You can report suspicious activity through our security hotline, email example@weaponmarketplace.com. All reports are investigated within 24 hours by our security team.",
+        "dataProtection": "Is my personal information protected?",
+        "dataProtectionAnswer": "Yes, we follow strict data protection protocols and never share your personal information with third parties without your explicit consent. All data is encrypted and stored securely in compliance with industry standards.",
+        "documentsRequired": "Do I need to provide documents for registration?",
+        "documentsRequiredAnswer": "No, documents are not required for platform registration. Just fill out the registration form with basic information. Documents may only be needed when listing certain categories of products, which is regulated by relevant laws."
+      },
+      "account": {
+        "changeProfile": "How to change profile settings?",
+        "changeProfileAnswer": "Go to the 'Account Settings' section in your profile. There you can update personal information, change password, configure notifications and manage contact details.",
+        "deleteAccount": "How to delete an account?",
+        "deleteAccountAnswer": "To delete an account, contact support. We will process your request within 24 hours and delete all your data in accordance with the privacy policy.",
+        "changeRole": "How to change user role?",
+        "changeRoleAnswer": "In your profile settings, you can switch from a regular account to the 'Seller' role by clicking 'Become a Seller'. Important: this transition is only possible once and is irreversible. After switching to the seller role, you cannot return to a regular account."
+      },
+      "products": {
+        "addProduct": "How to add a product to the platform?",
+        "addProductAnswer": "Log into your seller account, go to the 'Add Product' section and fill out the form with description, photos and product characteristics. After adding, the product will appear in the catalog.",
+        "photoRequirements": "What are the requirements for product photos?",
+        "photoRequirementsAnswer": "Photos should be clear, show the product from different angles, without watermarks. Minimum 1 photo, maximum 5. File size should not exceed 5MB each.",
+        "editProduct": "How to edit a product?",
+        "editProductAnswer": "In the 'My Products' section, click the 'Edit' button next to the desired product. Make changes and save.",
+        "deleteProduct": "How to delete a product from the platform?",
+        "deleteProductAnswer": "In the 'My Products' section, find the desired product and click the 'Delete' button. After confirmation, the product will be removed from the platform. Deleted products cannot be restored."
+      },
+      "legal": {
+        "prohibitedProducts": "What products are prohibited on the platform?",
+        "prohibitedProductsAnswer": "Products without appropriate licenses, counterfeit products, expired goods, and any products whose sale contradicts current legislation are prohibited.",
+        "chatSystem": "How does the chat system between users work?",
+        "chatSystemAnswer": "Our platform provides a secure chat for communication between buyers and sellers. All correspondence is encrypted, and we do not have access to the content of your messages. Chat is only available to registered users.",
+        "platformFees": "What fees does the platform charge?",
+        "platformFeesAnswer": "We do not charge fees for sales. The platform provides free services for listing products and organizing communication between users. All financial transactions occur directly between deal participants.",
+        "resolveDisputes": "How to resolve disputes with other users?",
+        "resolveDisputesAnswer": "Our moderation team can help resolve disputes between users. Contact support with a description of the situation, and we will try to find a fair solution within the platform rules."
+      }
+    },
+    "sections": {
+      "popularQuestions": "Popular Questions",
+      "searchResults": "Search Results",
+      "questionsByCategory": "Questions by category",
+      "noQuestionsFound": "No questions found",
+      "tryDifferentSearch": "Try changing your search query",
+      "needHelp": "Need additional help?",
+      "supportDescription": "Can't find the answer to your question? Our support team is ready to help you with any questions about our platform.",
+      "contactSupport": "Contact Support"
+    },
+    "contactModal": {
+      "title": "Contact Support",
+      "description": "Fill out the form below and our support team will get back to you as soon as possible.",
+      "form": {
+        "nameLabel": "Your Name",
+        "namePlaceholder": "Enter your name",
+        "emailLabel": "Email Address",
+        "emailPlaceholder": "Enter your email address",
+        "messageLabel": "Message (Optional)",
+        "messagePlaceholder": "Describe your question or issue",
+        "submitButton": "Send Request",
+        "submittingButton": "Sending...",
+        "successMessage": "Your request has been sent successfully! We will contact you soon.",
+        "errorMessage": "Error sending request. Please try again."
+      },
+      "closeButton": "Close"
+    }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Information We Collect",
+      "content": "We collect information you provide directly to us, such as when you create an account, list products, or communicate with other users. This may include your name, email address, phone number, and product information."
+    },
+    "section2": {
+      "title": "2. How We Use Your Information",
+      "content": "We use the information we collect to provide, maintain, and improve our platform services, facilitate communication between users, and ensure platform security. We do not sell your personal information to third parties."
+    },
+    "section3": {
+      "title": "3. Platform Liability Disclaimer",
+      "content": "Esviem Defence Marketplace is a platform that connects buyers and sellers. We are not responsible for the quality, safety, or legality of products listed by users. All transactions are conducted directly between users, and we do not guarantee the accuracy of product descriptions or user communications."
+    },
+    "section4": {
+      "title": "4. User Responsibilities",
+      "content": "Users are solely responsible for their listings, communications, and transactions. You must ensure that all products comply with applicable laws and regulations. We reserve the right to remove any content that violates our terms of service."
+    },
+    "section5": {
+      "title": "5. Data Security",
+      "content": "We implement appropriate security measures to protect your personal information and ensure the security of our platform."
+    },
+    "section6": {
+      "title": "6. Information Sharing",
+      "content": "We may share your information with other users as necessary to facilitate platform operations (e.g., displaying your contact information to potential buyers). We do not share your information with third parties for marketing purposes."
+    },
+    "section7": {
+      "title": "7. Cookies and Tracking",
+      "content": "We use cookies and similar technologies to improve your experience on our platform. You can control cookie settings through your browser preferences."
+    },
+    "section8": {
+      "title": "8. Your Rights",
+      "content": "You have the right to access, update, or delete your personal information. You can also opt out of certain communications from us. Contact us to exercise these rights."
+    },
+    "section9": {
+      "title": "9. Changes to This Policy",
+      "content": "We may update this privacy policy from time to time. We will notify you of any material changes by posting the new policy on our platform."
+    },
+    "section10": {
+      "title": "10. Contact Information",
+      "content": "If you have any questions about this privacy policy, please contact us through our platform's contact form or email us directly."
     }
   }
 }
