@@ -89,7 +89,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
                 {formatPrice(item.price, "$")}
               </p>
             </div>
-            <p className="font-extrabold text-base sm:text-lg mb-2 line-clamp-2">
+            <p className="font-extrabold text-base sm:text-lg mb-2 truncate">
               {item.title}
             </p>
             <p className="font-light text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
@@ -185,7 +185,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           </div>
           <Link
             href={`/marketplace/${item.id}`}
-            className="font-medium text-base xs:text-lg sm:text-xl hover:text-gold-main transition-colors duration-300 w-fit line-clamp-2"
+            className="font-medium text-sm xs:text-base sm:text-lg hover:text-gold-main transition-colors duration-300 w-full min-w-0 truncate"
           >
             {item.title}
           </Link>

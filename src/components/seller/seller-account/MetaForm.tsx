@@ -23,7 +23,13 @@ import CertificatesList from "./CertificatesList";
 import { useTranslations } from "next-intl";
 import { useUploadSellerAvatar } from "@/hooks/useUploadSellerAvatar";
 
-const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
+const MetaForm = ({
+  currentUser,
+  onSuccess,
+}: {
+  currentUser: UserProfile;
+  onSuccess?: () => void;
+}) => {
   const t = useTranslations("Settings");
 
   const { metadata } = currentUser;
@@ -97,6 +103,11 @@ const MetaForm = ({ currentUser }: { currentUser: UserProfile }) => {
       }
 
       toast.success(metadata ? t("toastUpdate") : t("toastCreate"));
+
+      // Переключаем на первый таб после успешного сохранения
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error: unknown) {
       console.error("Error saving seller data:", error);
 

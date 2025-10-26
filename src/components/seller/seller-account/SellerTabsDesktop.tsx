@@ -252,7 +252,10 @@ const SellerTabsDesktop = ({
               </div>
             </TabsContent>
             <TabsContent value="settings">
-              <MetaForm currentUser={currentUser} />
+              <MetaForm
+                currentUser={currentUser}
+                onSuccess={() => setActiveTab("myInquiries")}
+              />
             </TabsContent>
           </div>
         </div>
