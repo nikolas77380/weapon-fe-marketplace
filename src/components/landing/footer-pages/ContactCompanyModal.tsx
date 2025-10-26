@@ -4,13 +4,17 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, User, MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { strapiFetch } from "@/lib/strapi";
 
 interface ContactModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ContactCompanyModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
+const ContactCompanyModal: React.FC<ContactModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const t = useTranslations("FAQ.contactModal");
   const [formData, setFormData] = useState({
     name: "",
@@ -37,18 +41,27 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     setIsSubmitting(true);
 
     try {
-      // Здесь будет API вызов для отправки формы
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Имитация API вызова
+      // API вызов для отправки формы поддержки
+      const result = await strapiFetch({
+        path: "/api/support-form/send-email",
+        method: "POST",
+        body: formData,
+      });
 
-      setSubmitStatus("success");
-      setFormData({ name: "", email: "", message: "" });
+      if (result.success) {
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", message: "" });
 
-      // Автоматически закрываем модалку через 2 секунды после успешной отправки
-      setTimeout(() => {
-        onClose();
-        setSubmitStatus("idle");
-      }, 2000);
-    } catch {
+        // Автоматически закрываем модалку через 2 секунды после успешной отправки
+        setTimeout(() => {
+          onClose();
+          setSubmitStatus("idle");
+        }, 2000);
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Error sending support message:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
