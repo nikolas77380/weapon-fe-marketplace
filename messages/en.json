@@ -352,6 +352,7 @@
     "taostErrorCreateChat": "Failed to create chat channel. Please try again.",
     "contactModal": {
       "title": "Contact Information",
+      "description": "Seller's contact information",
       "titleCompanyName": "Company Name:",
       "titlePhoneNumbers": "Phone Numbers:",
       "titleWebSite": "Web Site:",

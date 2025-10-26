@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { ChevronDown, Search, HelpCircle, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { faqCategories, faqData } from "@/data/faq";
-import ContactModal from "./ContactModal";
 import { faqContainerVariants, faqItemVariants } from "@/lib/faqAnimations";
+import ContactCompanyModal from "./ContactCompanyModal";
 
 const FaqContent = () => {
   const t = useTranslations("FAQ");
@@ -327,7 +327,7 @@ const FaqContent = () => {
       </motion.section>
 
       {/* Contact Modal */}
-      <ContactModal
+      <ContactCompanyModal
         isOpen={isContactModalOpen}
         onClose={() => setIsContactModalOpen(false)}
       />

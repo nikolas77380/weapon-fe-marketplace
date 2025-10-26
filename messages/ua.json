@@ -352,6 +352,7 @@
     "taostErrorCreateChat": "Не вдалося створити канал чату. Спробуйте ще раз.",
     "contactModal": {
       "title": "Контактна інформація",
+      "description": "Контактна інформація продавця",
       "titleCompanyName": "Назва компанії:",
       "titlePhoneNumbers": "Номери телефонів:",
       "titleWebSite": "Веб-сторінка:",

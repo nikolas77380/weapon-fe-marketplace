@@ -10,7 +10,7 @@ interface ContactModalProps {
   onClose: () => void;
 }
 
-const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
+const ContactCompanyModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
   const t = useTranslations("FAQ.contactModal");
   const [formData, setFormData] = useState({
     name: "",
@@ -249,4 +249,4 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default ContactModal;
+export default ContactCompanyModal;
