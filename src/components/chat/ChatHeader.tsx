@@ -49,7 +49,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onFinishChat,
   loading = false,
   onBack,
-
 }) => {
   const t = useTranslations("Chat");
   const isActive = chat.status === "active";
@@ -59,10 +58,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
     status: "successfully_completed" | "unsuccessfully_completed" | "closed"
   ) => {
     onFinishChat(status);
-  };
-
-  const handleBack = () => {
-    window.location.reload();
   };
 
   return (

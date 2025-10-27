@@ -11,9 +11,14 @@ import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import EmailConfirmationNotice from "./EmailConfirmationNotice";
 import PrivacyPolicyModal from "../ui/PrivacyPolicyModal";
+import Turnstile from "@/components/ui/turnstile";
+import { useTurnstile } from "@/hooks/useTurnstile";
+import { turnstileConfig } from "@/lib/turnstile";
 
 interface RegisterFormProps {
-  onSubmit: (values: RegisterFormValues) => Promise<void>;
+  onSubmit: (
+    values: RegisterFormValues & { turnstileToken?: string | null }
+  ) => Promise<void>;
   showEmailConfirmation?: boolean;
   userEmail?: string;
 }
@@ -27,6 +32,16 @@ const RegisterForm = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [showTurnstile, setShowTurnstile] = useState(false);
+
+  // Turnstile configuration
+  const turnstileFrontendConfig = turnstileConfig.getFrontendConfig();
+  const turnstile = useTurnstile({
+    siteKey: turnstileFrontendConfig?.siteKey || "",
+    onError: (error) => {
+      console.error("Turnstile error:", error);
+    },
+  });
 
   const handlePrivacyClick = () => {
     setIsPrivacyModalOpen(true);
@@ -48,9 +63,23 @@ const RegisterForm = ({
   });
 
   const handleRegister = async (values: RegisterFormValues) => {
+    // Если Turnstile настроен, показываем его вместо отправки формы
+    if (turnstileFrontendConfig && !showTurnstile) {
+      setShowTurnstile(true);
+      return;
+    }
+
+    // Проверяем валидацию Turnstile только если он показан
+    if (turnstileFrontendConfig && showTurnstile && !turnstile.isVerified) {
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await onSubmit(values);
+      await onSubmit({
+        ...values,
+        turnstileToken: turnstileFrontendConfig ? turnstile.token : null,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -140,10 +169,36 @@ const RegisterForm = ({
             className="border-gold-main focus:ring-gold-main focus:ring-offset-0 data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white"
           />
 
+          {/* Turnstile Widget - показываем только после нажатия кнопки */}
+          {turnstileFrontendConfig && showTurnstile && (
+            <div className="flex justify-center my-4">
+              <Turnstile
+                siteKey={turnstileFrontendConfig.siteKey}
+                onVerify={turnstile.onVerify}
+                onError={turnstile.onError}
+                onExpire={turnstile.onExpire}
+                theme="auto"
+                size="normal"
+              />
+            </div>
+          )}
+
+          {/* Turnstile Error Message */}
+          {turnstile.error && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm mb-4">
+              Security verification failed. Please try again.
+            </div>
+          )}
+
           <div className="flex items-center justify-center">
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                (turnstileFrontendConfig && showTurnstile
+                  ? !turnstile.isVerified
+                  : false)
+              }
               className="font-medium rounded-sm w-full py-3 bg-gold-main hover:bg-gold-main/90 
               text-white duration-300 transition-all disabled:bg-gray-400 disabled:text-gray-100 
               disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-base xl:text-lg"
@@ -153,8 +208,10 @@ const RegisterForm = ({
                   <Loader2 className="h-4 w-4 animate-spin" />
                   {t("creatingAccount")}
                 </div>
+              ) : turnstileFrontendConfig && !showTurnstile ? (
+                t("createAccount")
               ) : (
-                <>{t("createAccount")}</>
+                t("createAccount")
               )}
             </Button>
           </div>

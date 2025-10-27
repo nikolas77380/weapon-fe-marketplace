@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, User, MessageSquare } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { strapiFetch } from "@/lib/strapi";
+import Turnstile from "@/components/ui/turnstile";
+import { useTurnstile } from "@/hooks/useTurnstile";
+import { turnstileConfig } from "@/lib/turnstile";
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -25,6 +28,15 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [showTurnstile, setShowTurnstile] = useState(false);
+
+  const turnstileFrontendConfig = turnstileConfig.getFrontendConfig();
+  const turnstile = useTurnstile({
+    siteKey: turnstileFrontendConfig?.siteKey || "",
+    onError: (error) => {
+      // Не устанавливаем ошибку сразу, только логируем
+    },
+  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -38,21 +50,44 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Проверяем базовую валидацию полей
+    if (!formData.name.trim() || !formData.email.trim()) {
+      setSubmitStatus("error");
+      return;
+    }
+
+    // Если Turnstile настроен, показываем его вместо отправки формы
+    if (turnstileFrontendConfig && !showTurnstile) {
+      setShowTurnstile(true);
+      return;
+    }
+
+    // Проверяем валидацию Turnstile только если он показан
+    if (turnstileFrontendConfig && showTurnstile && !turnstile.isVerified) {
+      setSubmitStatus("error");
+      return;
+    }
+
     setIsSubmitting(true);
+    setSubmitStatus("idle"); // Сбрасываем предыдущие ошибки
 
     try {
-      // API вызов для отправки формы поддержки
       const result = await strapiFetch({
         path: "/api/support-form/send-email",
         method: "POST",
-        body: formData,
+        body: {
+          ...formData,
+          turnstileToken: turnstileFrontendConfig ? turnstile.token : null,
+        },
       });
 
       if (result.success) {
         setSubmitStatus("success");
         setFormData({ name: "", email: "", message: "" });
+        turnstile.reset();
+        setShowTurnstile(false);
 
-        // Автоматически закрываем модалку через 2 секунды после успешной отправки
         setTimeout(() => {
           onClose();
           setSubmitStatus("idle");
@@ -73,8 +108,18 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
       onClose();
       setSubmitStatus("idle");
       setFormData({ name: "", email: "", message: "" });
+      turnstile.reset();
+      setShowTurnstile(false);
     }
   };
+
+  // Сбрасываем ошибки при открытии модалки
+  React.useEffect(() => {
+    if (isOpen) {
+      setSubmitStatus("idle");
+      setShowTurnstile(false);
+    }
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -220,10 +265,42 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
                     />
                   </div>
 
+                  {/* Turnstile Widget - показываем только после нажатия кнопки */}
+                  {turnstileFrontendConfig && showTurnstile && (
+                    <div className="flex justify-center">
+                      <Turnstile
+                        siteKey={turnstileFrontendConfig.siteKey}
+                        onVerify={turnstile.onVerify}
+                        onError={turnstile.onError}
+                        onExpire={turnstile.onExpire}
+                        theme="auto"
+                        size="normal"
+                        className="mb-4"
+                      />
+                    </div>
+                  )}
+
+                  {/* Turnstile Error Message */}
+                  {turnstile.error && (
+                    <motion.div
+                      className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {t("form.errorMessageTurnstile")}
+                    </motion.div>
+                  )}
+
                   {/* Submit Button */}
                   <motion.button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={
+                      isSubmitting ||
+                      (turnstileFrontendConfig && showTurnstile
+                        ? !turnstile.isVerified
+                        : false)
+                    }
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full bg-gold-main text-background py-3 px-6 rounded-lg font-semibold hover:bg-gold-main/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -232,6 +309,11 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
                       <>
                         <div className="w-4 h-4 border-2 border-background border-t-transparent rounded-full animate-spin" />
                         {t("form.submittingButton")}
+                      </>
+                    ) : turnstileFrontendConfig && !showTurnstile ? (
+                      <>
+                        <Mail className="w-4 h-4" />
+                        {t("form.submitButton")}
                       </>
                     ) : (
                       <>
