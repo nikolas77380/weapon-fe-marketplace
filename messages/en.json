@@ -194,6 +194,13 @@
     "placeholderAddress": "Enter company address",
     "labelAvatar": "Company Avatar",
     "labelCurrentAvatar": "Current Avatar:",
+    "workTime": {
+      "title": "Working Hours",
+      "monFri": "Mon-Fri:",
+      "saturday": "Saturday:",
+      "sunday": "Sunday:",
+      "nonWorking": "Non-working"
+    },
     "buttonSaving": "Saving...",
     "buttonUpdate": "Update Company Details",
     "buttonSubmit": "Submit Company Details",

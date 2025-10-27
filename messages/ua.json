@@ -194,6 +194,13 @@
     "placeholderAddress": "Введіть адресу компанії",
     "labelAvatar": "Аватар компанії",
     "labelCurrentAvatar": "Поточний аватар:",
+    "workTime": {
+      "title": "График роботи",
+      "monFri": "Пн-Пт:",
+      "saturday": "Субота:",
+      "sunday": "Неділя:",
+      "nonWorking": "Неробочий"
+    },
     "buttonSaving": "Збереження...",
     "buttonUpdate": "Оновити інформацію про компанію",
     "buttonSubmit": "Підтвердити інформацію про компанію",
