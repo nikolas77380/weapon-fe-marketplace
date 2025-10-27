@@ -300,6 +300,12 @@
       "labelCount": "Кількість",
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
+      "productStatus": {
+        "available": "Доступний",
+        "reserved": "Зарезервований",
+        "sold": "Проданий",
+        "archived": "Архівний"
+      },
       "titleImages": "Зображення",
       "buttonClear": "Очистити форму",
       "buttonCreating": "Створюється...",

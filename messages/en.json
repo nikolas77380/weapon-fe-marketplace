@@ -300,6 +300,12 @@
       "labelCount": "Count",
       "labelStatus": "Status",
       "placeholderStatus": "Select Status",
+      "productStatus": {
+        "available": "Available",
+        "reserved": "Reserved",
+        "sold": "Sold",
+        "archived": "Archived"
+      },
       "titleImages": "Images",
       "buttonClear": "Clear Draft",
       "buttonCreating": "Creating...",
