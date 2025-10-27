@@ -74,6 +74,13 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     }
   };
 
+  const getTranslatedStatusOptions = () => {
+    return updateStatus.map((status) => ({
+      ...status,
+      label: getTranslatedStatus(status.value),
+    }));
+  };
+
   const handleDeleteProduct = async () => {
     try {
       await deleteProduct({ id: product.id });
@@ -234,7 +241,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              {updateStatus
+              {getTranslatedStatusOptions()
                 .filter((status) => status.value !== currentStatus)
                 .map((status) => (
                   <DropdownMenuItem
