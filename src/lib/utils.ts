@@ -400,6 +400,27 @@ export const PRODUCT_STATUS_FORM = [
   },
 ] as const;
 
+// Function to get translated product status options
+export const getProductStatusOptions = (t: (key: string) => string) =>
+  [
+    {
+      key: "available",
+      label: t("productStatus.available"),
+    },
+    {
+      key: "reserved",
+      label: t("productStatus.reserved"),
+    },
+    {
+      key: "sold",
+      label: t("productStatus.sold"),
+    },
+    {
+      key: "archived",
+      label: t("productStatus.archived"),
+    },
+  ] as const;
+
 export const PRODUCT_CURRENCY_FORM = [
   {
     key: "usd",
@@ -511,4 +532,3 @@ export const handleEnterPress = (
 
 export const triggerClasses =
   "w-full text-lg font-medium text-muted-foreground flex justify-start px-3.5";
-

@@ -38,6 +38,7 @@ interface SellerListenedCardProps {
 
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
 
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -56,6 +57,28 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
       default:
         return "bg-black text-white";
     }
+  };
+
+  const getTranslatedStatus = (status: string) => {
+    switch (status) {
+      case "available":
+        return tStatus("available");
+      case "reserved":
+        return tStatus("reserved");
+      case "sold":
+        return tStatus("sold");
+      case "archived":
+        return tStatus("archived");
+      default:
+        return status;
+    }
+  };
+
+  const getTranslatedStatusOptions = () => {
+    return updateStatus.map((status) => ({
+      ...status,
+      label: getTranslatedStatus(status.value),
+    }));
   };
 
   const handleDeleteProduct = async () => {
@@ -89,8 +112,10 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     setCurrentStatus(product.status);
   }, [product.status]);
   return (
-    <div className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row 
-    justify-between w-full bg-background gap-4 rounded-sm">
+    <div
+      className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row 
+    justify-between w-full bg-background gap-4 rounded-sm"
+    >
       {/* Product info */}
       <div className="flex gap-2.5 items-start">
         <Image
@@ -134,7 +159,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
             currentStatus
           )}`}
         >
-          {currentStatus}
+          {getTranslatedStatus(currentStatus)}
         </div>
         <div className="flex items-center gap-3">
           <Link href={`/account/edit-product/${product.slug}`}>
@@ -216,7 +241,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              {updateStatus
+              {getTranslatedStatusOptions()
                 .filter((status) => status.value !== currentStatus)
                 .map((status) => (
                   <DropdownMenuItem
