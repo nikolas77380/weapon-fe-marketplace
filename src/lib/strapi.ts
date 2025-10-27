@@ -137,6 +137,9 @@ export const updateSellerMeta = async ({
     phoneNumbers?: string;
     country?: string;
     address?: string;
+    workTimeMonFri?: string;
+    workTimeSaturday?: string;
+    workTimeSunday?: string;
   };
   token: string;
 }) => {

@@ -16,11 +16,31 @@ import { useAuthContext } from "@/context/AuthContext";
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
   const tContact = useTranslations("ShopCard");
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
 
   const { sellerData } = useSellerData(product?.seller?.id);
   const { contactSeller } = useContactSeller();
   const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
+
+  const getTranslatedStatus = (status: string) => {
+    switch (status) {
+      case "available":
+        return tStatus("available");
+      case "reserved":
+        return tStatus("reserved");
+      case "sold":
+        return tStatus("sold");
+      case "archived":
+        return tStatus("archived");
+      default:
+        return (
+          status?.charAt(0).toUpperCase() + status?.slice(1) ||
+          t("titleUnknown")
+        );
+    }
+  };
+
   const handleContactSeller = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -225,8 +245,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {product?.status?.charAt(0).toUpperCase() +
-                          product?.status?.slice(1) || t("titleUnknown")}
+                        {getTranslatedStatus(product?.status || "")}
                       </span>
                     </div>
                   </div>

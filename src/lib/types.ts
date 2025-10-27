@@ -9,6 +9,9 @@ export interface SellerMeta {
   phoneNumbers?: string;
   country?: string;
   address?: string;
+  workTimeMonFri?: string;
+  workTimeSaturday?: string;
+  workTimeSunday?: string;
   avatar?: {
     id: number;
     documentId: string;

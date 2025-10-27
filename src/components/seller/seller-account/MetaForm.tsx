@@ -22,6 +22,7 @@ import CertificateForm from "./CertificateForm";
 import CertificatesList from "./CertificatesList";
 import { useTranslations } from "next-intl";
 import { useUploadSellerAvatar } from "@/hooks/useUploadSellerAvatar";
+import WorkTimeField from "@/components/ui/WorkTimeField";
 
 const MetaForm = ({
   currentUser,
@@ -49,6 +50,9 @@ const MetaForm = ({
       phoneNumbers: metadata?.phoneNumbers || "",
       country: metadata?.country || "UA",
       address: metadata?.address || "",
+      workTimeMonFri: metadata?.workTimeMonFri || "09:00-18:00",
+      workTimeSaturday: metadata?.workTimeSaturday || "10:00-16:00",
+      workTimeSunday: metadata?.workTimeSunday || "closed",
     },
   });
 
@@ -248,6 +252,40 @@ const MetaForm = ({
                     classNameLabel="bg-background"
                     className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
+
+                  {/* Working Hours */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {t("workTime.title")}
+                    </h3>
+
+                    <WorkTimeField
+                      label={t("workTime.monFri")}
+                      value={form.watch("workTimeMonFri") || "09:00-18:00"}
+                      onChange={(value) =>
+                        form.setValue("workTimeMonFri", value)
+                      }
+                      showNonWorkingCheckbox={false}
+                    />
+
+                    <WorkTimeField
+                      label={t("workTime.saturday")}
+                      value={form.watch("workTimeSaturday") || "10:00-16:00"}
+                      onChange={(value) =>
+                        form.setValue("workTimeSaturday", value)
+                      }
+                      showNonWorkingCheckbox={true}
+                    />
+
+                    <WorkTimeField
+                      label={t("workTime.sunday")}
+                      value={form.watch("workTimeSunday") || "closed"}
+                      onChange={(value) =>
+                        form.setValue("workTimeSunday", value)
+                      }
+                      showNonWorkingCheckbox={true}
+                    />
+                  </div>
 
                   {/* Avatar Upload */}
                   <div className="space-y-2">
