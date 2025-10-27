@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext";
 import { createChat } from "@/lib/chat-api";
+import { getSellerMetaBySellerId } from "@/lib/strapi";
 
 export const useContactSeller = () => {
   const { currentUser } = useAuthContext();
@@ -14,9 +15,34 @@ export const useContactSeller = () => {
       }
 
       try {
-        const topic = productTitle
-          ? `Question about the product: ${productTitle}`
-          : "Conversation with the seller";
+        let topic = productTitle;
+
+        if (!topic) {
+          try {
+            const metaResponse = await getSellerMetaBySellerId(sellerId);
+            if (
+              metaResponse &&
+              metaResponse.data &&
+              metaResponse.data.length > 0
+            ) {
+              const meta = metaResponse.data[0];
+              const username = meta.sellerEntity?.username;
+              if (username) {
+                topic = username;
+              }
+            }
+          } catch (error) {
+            console.error("Failed to fetch seller username:", error);
+          }
+
+          if (!topic) {
+            topic = "";
+          }
+        }
+
+        if (!topic) {
+          return false;
+        }
 
         await createChat({
           topic,

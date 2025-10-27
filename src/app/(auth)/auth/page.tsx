@@ -109,6 +109,9 @@ const AuthPage = () => {
     try {
       await registerSeller(values);
       toast.success(t("toasts.registrationSuccess"));
+      setTimeout(() => {
+        router.push("/auth?mode=login");
+      }, 2000);
     } catch (error: any) {
       console.error("Registration error:", error);
       const translatedMessage = t("error.uniqueEmail") || error.message;
