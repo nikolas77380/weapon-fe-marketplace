@@ -265,6 +265,7 @@ const MetaForm = ({
                       onChange={(value) =>
                         form.setValue("workTimeMonFri", value)
                       }
+                      showNonWorkingCheckbox={false}
                     />
 
                     <WorkTimeField
@@ -273,6 +274,7 @@ const MetaForm = ({
                       onChange={(value) =>
                         form.setValue("workTimeSaturday", value)
                       }
+                      showNonWorkingCheckbox={true}
                     />
 
                     <WorkTimeField
@@ -281,6 +283,7 @@ const MetaForm = ({
                       onChange={(value) =>
                         form.setValue("workTimeSunday", value)
                       }
+                      showNonWorkingCheckbox={true}
                     />
                   </div>
 

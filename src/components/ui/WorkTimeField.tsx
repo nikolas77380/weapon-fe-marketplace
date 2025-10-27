@@ -12,6 +12,7 @@ interface WorkTimeFieldProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  showNonWorkingCheckbox?: boolean;
 }
 
 const WorkTimeField: React.FC<WorkTimeFieldProps> = ({
@@ -19,9 +20,12 @@ const WorkTimeField: React.FC<WorkTimeFieldProps> = ({
   value,
   onChange,
   className = "",
+  showNonWorkingCheckbox = true,
 }) => {
   const t = useTranslations("Settings.workTime");
-  const [isClosed, setIsClosed] = useState(value === "closed");
+  const [isClosed, setIsClosed] = useState(
+    value === "closed" && showNonWorkingCheckbox
+  );
   const [startTime, setStartTime] = useState(
     value && value !== "closed" ? value.split("-")[0] || "09:00" : "09:00"
   );
@@ -40,14 +44,14 @@ const WorkTimeField: React.FC<WorkTimeFieldProps> = ({
 
   const handleStartTimeChange = (time: string) => {
     setStartTime(time);
-    if (!isClosed) {
+    if (!isClosed || !showNonWorkingCheckbox) {
       onChange(`${time}-${endTime}`);
     }
   };
 
   const handleEndTimeChange = (time: string) => {
     setEndTime(time);
-    if (!isClosed) {
+    if (!isClosed || !showNonWorkingCheckbox) {
       onChange(`${startTime}-${time}`);
     }
   };
@@ -92,21 +96,23 @@ const WorkTimeField: React.FC<WorkTimeFieldProps> = ({
           </div>
         </div>
 
-        {/* Closed checkbox */}
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id={`closed-${label}`}
-            checked={isClosed}
-            onCheckedChange={handleClosedChange}
-            className="border-gray-300 focus:ring-gold-main focus:ring-offset-0 data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white"
-          />
-          <Label
-            htmlFor={`closed-${label}`}
-            className="text-sm text-gray-600 cursor-pointer"
-          >
-            {t("nonWorking")}
-          </Label>
-        </div>
+        {/* Closed checkbox - only show for weekends */}
+        {showNonWorkingCheckbox && (
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id={`closed-${label}`}
+              checked={isClosed}
+              onCheckedChange={handleClosedChange}
+              className="border-gray-300 focus:ring-gold-main focus:ring-offset-0 data-[state=checked]:bg-gold-main data-[state=checked]:border-gold-main data-[state=checked]:text-white"
+            />
+            <Label
+              htmlFor={`closed-${label}`}
+              className="text-sm text-gray-600 cursor-pointer"
+            >
+              {t("nonWorking")}
+            </Label>
+          </div>
+        )}
       </div>
     </div>
   );
