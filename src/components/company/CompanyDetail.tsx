@@ -535,21 +535,37 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           {t("tabOverview.titleWorkingTime")}
                         </h2>
                         <div className="flex flex-col gap-2 sm:gap-2.5">
-                          {workTimeCompany.map((schedule, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center gap-2 sm:gap-2.5"
-                            >
-                              <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                                {t(`tabOverview.workTime.${schedule.dayKey}`)}
-                              </p>
-                              <p className="font-light text-xs sm:text-sm">
-                                {schedule.time === "closed"
-                                  ? t("tabOverview.workTime.closed")
-                                  : schedule.time}
-                              </p>
-                            </div>
-                          ))}
+                          <div className="flex items-center gap-2 sm:gap-2.5">
+                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                              {t(`tabOverview.workTime.monFri`)}
+                            </p>
+                            <p className="font-light text-xs sm:text-sm">
+                              {sellerData?.metadata?.workTimeMonFri === "closed"
+                                ? t("tabOverview.workTime.closed")
+                                : sellerData?.metadata?.workTimeMonFri}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 sm:gap-2.5">
+                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                              {t(`tabOverview.workTime.sat`)}
+                            </p>
+                            <p className="font-light text-xs sm:text-sm">
+                              {sellerData?.metadata?.workTimeSaturday ===
+                              "closed"
+                                ? t("tabOverview.workTime.closed")
+                                : sellerData?.metadata?.workTimeSaturday}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 sm:gap-2.5">
+                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                              {t(`tabOverview.workTime.sun`)}
+                            </p>
+                            <p className="font-light text-xs sm:text-sm">
+                              {sellerData?.metadata?.workTimeSunday === "closed"
+                                ? t("tabOverview.workTime.closed")
+                                : sellerData?.metadata?.workTimeSunday}
+                            </p>
+                          </div>
                         </div>
                         <h2 className="text-lg sm:text-xl font-light">
                           {t("tabOverview.titleContact")}

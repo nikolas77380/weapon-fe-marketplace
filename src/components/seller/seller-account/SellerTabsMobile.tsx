@@ -23,12 +23,14 @@ interface SellerTabsMobileProps {
   loading: boolean;
   refetch: () => void;
   currentUser: UserProfile;
+  onUserUpdate?: (updatedUser: UserProfile) => void;
 }
 
 const SellerTabsMobile = ({
   products,
   loading,
   currentUser,
+  onUserUpdate,
 }: SellerTabsMobileProps) => {
   const t = useTranslations("SellerAccountTabs");
   const tBuyer = useTranslations("BuyerAccountTabs");
@@ -277,6 +279,7 @@ const SellerTabsMobile = ({
               <MetaForm
                 currentUser={currentUser}
                 onSuccess={() => setActiveTab("myInquiries")}
+                onUserUpdate={onUserUpdate}
               />
             </TabsContent>
           </div>
