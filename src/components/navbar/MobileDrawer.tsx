@@ -14,6 +14,7 @@ import { UserProfile } from "@/lib/types";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import CurrencySwitcher from "../ui/CurrencySwitcher";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
 import Logo from "../ui/Logo";
@@ -189,6 +190,10 @@ const MobileDrawer = ({
           <Separator className="my-2" />
 
           <div className="flex items-center gap-3 p-3">
+            <CurrencySwitcher
+              classNameSelectTrigger="border-gray-500"
+              classNameSelectValue="text-gold-main"
+            />
             <LanguageSwitcher
               classNameSelectTrigger="border-gray-500"
               classNameSelectValue="text-gold-main"

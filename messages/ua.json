@@ -31,6 +31,11 @@
       "titleSignOut": "Вийти"
     }
   },
+  "Breadcrumb": {
+    "home": "Головна",
+    "account": "Обліковий запис",
+    "addProduct": "Додати товар"
+  },
   "BuyerAccountHeader": {
     "titleUserDetails": "Відомості про користувача",
     "titleBrowseMarketplace": "Перейти на майданчик",
@@ -281,8 +286,8 @@
       "titleBasicInfo": "Базова інформація",
       "labelProductName": "Назва товару",
       "placeholderProductName": "Введіть назву товару",
-      "labelSku": "Product SKU (Optional)",
-      "placeholderSku": "Enter your product SKU (optional)",
+      "labelSku": "SKU товару (Необов'язково)",
+      "placeholderSku": "Введіть SKU товару",
       "labelDescription": "Опис",
       "placeholderDescription": "Введіть опис товару",
       "labelCategory": "Категорія",

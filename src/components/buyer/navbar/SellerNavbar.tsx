@@ -15,6 +15,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import type { UserProfile } from "@/lib/types";
 import Messages from "./Messages";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import CurrencySwitcher from "@/components/ui/CurrencySwitcher";
 import { useTranslations } from "next-intl";
 import SellerMenuContent from "./SellerMenuContent";
 
@@ -44,6 +45,10 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
         </NavigationMenuLink>
 
         <Messages />
+
+        <NavigationMenuLink asChild>
+          <CurrencySwitcher classNameSelectValue="text-gold-main" />
+        </NavigationMenuLink>
 
         <NavigationMenuLink asChild>
           <LanguageSwitcher classNameSelectValue="text-gold-main" />
