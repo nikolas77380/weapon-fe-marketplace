@@ -405,19 +405,35 @@ export const getProductStatusOptions = (t: (key: string) => string) =>
   [
     {
       key: "available",
-      label: t("productStatus.available"),
+      label: t("available"),
     },
     {
       key: "reserved",
-      label: t("productStatus.reserved"),
+      label: t("reserved"),
     },
     {
       key: "sold",
-      label: t("productStatus.sold"),
+      label: t("sold"),
     },
     {
       key: "archived",
-      label: t("productStatus.archived"),
+      label: t("archived"),
+    },
+  ] as const;
+
+export const getProductConditionOptions = (t: (key: string) => string) =>
+  [
+    {
+      key: "New",
+      label: t("New"),
+    },
+    {
+      key: "In-Stock",
+      label: t("In-Stock"),
+    },
+    {
+      key: "Pre-Order",
+      label: t("Pre-Order"),
     },
   ] as const;
 

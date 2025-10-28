@@ -306,6 +306,11 @@
         "sold": "Проданий",
         "archived": "Архівний"
       },
+      "productCondition": {
+        "New": "Новий",
+        "In-Stock": "В наявності",
+        "Pre-Order": "Передзамовлення"
+      },
       "titleImages": "Зображення",
       "buttonClear": "Очистити форму",
       "buttonCreating": "Створюється...",
@@ -430,6 +435,7 @@
         "sun": "Нд:",
         "closed": "Вихідний"
       },
+      "titleWebsite": "Веб:",
       "titlePhone": "Телефон:",
       "titleEmail": "Пошта:",
       "titleAddress": "Адреса:"

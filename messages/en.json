@@ -306,6 +306,11 @@
         "sold": "Sold",
         "archived": "Archived"
       },
+      "productCondition": {
+        "New": "New",
+        "In-Stock": "In Stock",
+        "Pre-Order": "Pre-Order"
+      },
       "titleImages": "Images",
       "buttonClear": "Clear Draft",
       "buttonCreating": "Creating...",
@@ -430,6 +435,7 @@
         "sun": "Sun:",
         "closed": "Closed"
       },
+      "titleWebsite": "Website:",
       "titlePhone": "Phone:",
       "titleEmail": "Email:",
       "titleAddress": "Address:"

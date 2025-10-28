@@ -9,7 +9,6 @@ import {
   useSellerFiltersElastic,
 } from "@/hooks/useProductsQuery";
 import ShopCard from "../shop/ShopCard";
-import { workTimeCompany } from "@/mockup/workTimeCompany";
 import SkeletonComponent from "../ui/SkeletonComponent";
 import { Skeleton } from "../ui/skeleton";
 import Filters from "../shop/Filters";
@@ -23,7 +22,6 @@ import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
-import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useContactSeller } from "@/hooks/useContactSeller";
 import { toast } from "sonner";
 import { useAuthContext } from "@/context/AuthContext";
@@ -90,7 +88,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const [open, setOpen] = useState(false);
   const { contactSeller } = useContactSeller();
   const { currentUser } = useAuthContext();
-  const { sellerMeta } = useSellerMetaBySeller(sellerData.id as number);
 
   const { categories } = useCategories();
 
@@ -575,9 +572,31 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                             <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
                               {t("tabOverview.titlePhone")}
                             </p>
-                            <p className="font-light text-xs sm:text-sm break-all">
-                              {sellerData?.metadata?.phoneNumbers}
+                            <a
+                              href="tel:+380507697777"
+                              className="hover:text-gold-main transition-colors duration-300"
+                            >
+                              <p className="font-light text-xs sm:text-sm break-all">
+                                {sellerData?.metadata?.phoneNumbers}
+                              </p>
+                            </a>
+                          </div>
+                          <div className="flex items-center gap-2 sm:gap-2.5">
+                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                              {t("tabOverview.titleWebsite")}
                             </p>
+                            <a
+                              href={
+                                sellerData?.metadata?.webSite?.startsWith("http")
+                                  ? sellerData?.metadata?.webSite
+                                  : `https://${sellerData?.metadata?.webSite}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-light text-xs sm:text-sm hover:text-gold-main/80 break-words underline"
+                            >
+                              {sellerData?.metadata?.webSite}
+                            </a>
                           </div>
                           <div className="flex items-center gap-2 sm:gap-2.5">
                             <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
@@ -596,11 +615,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                             </p>
                           </div>
                           <div>
-                            <ContactModal
-                              open={open}
-                              onOpenChange={setOpen}
-                              sellerData={sellerMeta}
-                            />
+                            {open && (
+                              <ContactModal
+                                open={open}
+                                onOpenChange={setOpen}
+                                sellerId={sellerData?.id}
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
