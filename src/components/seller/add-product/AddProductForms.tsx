@@ -195,12 +195,12 @@ const AddProductForms = () => {
     toast.success(t("toastSuccessClear"));
   };
   return (
-    <>
+    <div className="w-full mt-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
           {/* Product Basic Info Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700 max-w-[200px] truncate">
               {t("titleBasicInfo")}
             </h2>
             {/* Product name */}
@@ -333,7 +333,7 @@ const AddProductForms = () => {
 
           {/* Product Details */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700 max-w-[200px] truncate">
               {t("titleDetails")}
             </h2>
             {/* Product Count */}
@@ -423,7 +423,7 @@ const AddProductForms = () => {
           </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
 

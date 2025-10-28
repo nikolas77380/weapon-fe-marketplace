@@ -63,7 +63,7 @@ const Navbar = () => {
             <Menu size={16} className="text-white sm:w-5 sm:h-5" />
           </button>
 
-          <div className="hidden xs:block">
+          <div className="mr-1 lg:mr-0">
             <Logo />
           </div>
 

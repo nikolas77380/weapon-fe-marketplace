@@ -26,12 +26,12 @@ const AddProductPageComponent = ({
   }
 
   return (
-    <>
+    <div className="w-full">
       <MetadataRequiredDialog open={showDialog} onOpenChange={setShowDialog} />
       <div className="text-center py-12 text-gray-500">
         {t('errorAddProduct')}
       </div>
-    </>
+    </div>
   );
 };
 
