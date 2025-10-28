@@ -387,11 +387,9 @@ export const getCategoryBySlug = async (slug: string): Promise<Category> => {
 export const createProduct = async ({
   data,
   images,
-  turnstileToken,
 }: {
   data: CreateProductData;
   images?: File[];
-  turnstileToken?: string | null;
 }) => {
   const token = getSessionTokenFromCookie();
   if (!token) {
@@ -409,10 +407,6 @@ export const createProduct = async ({
       formData.append(`files.images`, image);
     });
 
-    if (turnstileToken) {
-      formData.append("turnstileToken", turnstileToken);
-    }
-
     return strapiFetchAuth({
       path: "/api/products",
       method: "POST",
@@ -428,7 +422,6 @@ export const createProduct = async ({
     method: "POST",
     body: {
       data,
-      ...(turnstileToken && { turnstileToken }),
     },
     token,
   });

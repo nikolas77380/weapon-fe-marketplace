@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
@@ -31,26 +31,12 @@ import { useCategories } from "@/hooks/useCategories";
 import CategorySelect from "@/components/ui/CategorySelect";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { useTranslations } from "next-intl";
-import Turnstile from "@/components/ui/turnstile";
-import { useTurnstile } from "@/hooks/useTurnstile";
-import { turnstileConfig } from "@/lib/turnstile";
 
 const AddProductForms = () => {
   const t = useTranslations("AddProduct.addProductForm");
 
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
-
-  const [showTurnstile, setShowTurnstile] = useState(false);
-
-  // Turnstile configuration
-  const turnstileFrontendConfig = turnstileConfig.getFrontendConfig();
-  const turnstile = useTurnstile({
-    siteKey: turnstileFrontendConfig?.siteKey || "",
-    onError: (error) => {
-      console.error("Turnstile error:", error);
-    },
-  });
 
   const {
     categories,
@@ -121,15 +107,6 @@ const AddProductForms = () => {
   }, [createError]);
 
   const onSubmit = async (values: AddProductSchemaValues) => {
-    if (turnstileFrontendConfig && !showTurnstile) {
-      setShowTurnstile(true);
-      return;
-    }
-
-    if (turnstileFrontendConfig && showTurnstile && !turnstile.isVerified) {
-      return;
-    }
-
     try {
       const selectedCategory = categories.find(
         (cat) => cat.id.toString() === values.productCategory
@@ -168,13 +145,10 @@ const AddProductForms = () => {
       await createProduct({
         data: productData,
         images: values.productImages,
-        turnstileToken: turnstileFrontendConfig ? turnstile.token : null,
       });
 
       // Clear localStorage and reset the form
       removeSavedFormData();
-      turnstile.reset();
-      setShowTurnstile(false);
 
       // Resetting the form to its initial values
       form.reset({
@@ -433,36 +407,9 @@ const AddProductForms = () => {
               </Button>
             )}
 
-            {/* Turnstile Widget - показываем только после нажатия кнопки */}
-            {turnstileFrontendConfig && showTurnstile && (
-              <div className="flex justify-center my-4">
-                <Turnstile
-                  siteKey={turnstileFrontendConfig.siteKey}
-                  onVerify={turnstile.onVerify}
-                  onError={turnstile.onError}
-                  onExpire={turnstile.onExpire}
-                  theme="auto"
-                  size="normal"
-                />
-              </div>
-            )}
-
-            {/* Turnstile Error Message */}
-            {turnstile.error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm mb-4">
-                Security verification failed. Please try again.
-              </div>
-            )}
-
             <Button
               type="submit"
-              disabled={
-                createLoading ||
-                !form.formState.isValid ||
-                (turnstileFrontendConfig && showTurnstile
-                  ? !turnstile.isVerified
-                  : false)
-              }
+              disabled={createLoading || !form.formState.isValid}
               className="w-full rounded-sm text-white bg-gold-main min-[600px]:w-auto px-6 py-2 
               min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium
               hover:bg-gold-main/90"
