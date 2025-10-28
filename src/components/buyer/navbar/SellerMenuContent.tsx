@@ -55,6 +55,13 @@ const SellerMenuContent = ({
     router.push("/account");
   };
 
+  const handleAddProductClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.setItem("accountTab", "addProduct");
+    handleLinkClick();
+    router.push("/account");
+  };
+
   const containerClass = isMobile ? "space-y-2" : "grid w-[200px] gap-1";
 
   const linkClass = isMobile
@@ -108,10 +115,9 @@ const SellerMenuContent = ({
               </div>
             </Link>
 
-            <Link
-              href="/account/add-product"
-              onClick={handleLinkClick}
-              className={linkClass}
+            <button
+              onClick={handleAddProductClick}
+              className={`${linkClass} w-full text-left`}
             >
               <div className="flex items-center gap-3">
                 <PackageSearch size={18} />
@@ -119,7 +125,7 @@ const SellerMenuContent = ({
                   {t("titlAddNewProduct")}
                 </p>
               </div>
-            </Link>
+            </button>
 
             <Link
               href="/messages"
@@ -213,14 +219,17 @@ const SellerMenuContent = ({
             </NavigationMenuLink>
 
             <NavigationMenuLink asChild className={linkClass}>
-              <Link href="/account/add-product" onClick={handleLinkClick}>
+              <button
+                onClick={handleAddProductClick}
+                className="w-full text-left"
+              >
                 <div className="flex items-center gap-3">
                   <PackageSearch size={18} />
                   <p className={`font-semibold ${textClass}`}>
                     {t("titlAddNewProduct")}
                   </p>
                 </div>
-              </Link>
+              </button>
             </NavigationMenuLink>
 
             <NavigationMenuLink asChild className={linkClass}>

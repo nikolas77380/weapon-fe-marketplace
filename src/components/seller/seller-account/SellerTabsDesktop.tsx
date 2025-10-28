@@ -45,7 +45,11 @@ const SellerTabsDesktop = ({
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
     const savedTab = sessionStorage.getItem("accountTab");
-    if (savedTab === "favourites" || savedTab === "settings") {
+    if (
+      savedTab === "favourites" ||
+      savedTab === "settings" ||
+      savedTab === "addProduct"
+    ) {
       setActiveTab(savedTab);
       setTimeout(() => {
         sessionStorage.removeItem("accountTab");
