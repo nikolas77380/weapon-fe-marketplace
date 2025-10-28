@@ -1,4 +1,4 @@
-import { Product, SellerMeta } from "@/lib/types";
+import { Product } from "@/lib/types";
 import React, { useState } from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
 import { formatPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import ContactModal from "../ContactModal";
 import { useContactSeller } from "@/hooks/useContactSeller";
 import { useAuthContext } from "@/context/AuthContext";
@@ -17,11 +18,31 @@ const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
   const tContact = useTranslations("ShopCard");
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const currentLocale = useLocale();
 
   const { sellerData } = useSellerData(product?.seller?.id);
   const { contactSeller } = useContactSeller();
   const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
+
+  const getCategoryDisplayName = (category: any) => {
+    return currentLocale === "ua" && category?.translate_ua
+      ? category.translate_ua
+      : category?.name;
+  };
+
+  const getTranslatedCondition = (condition: string) => {
+    switch (condition) {
+      case "New":
+        return currentLocale === "ua" ? "Новий" : "New";
+      case "In-Stock":
+        return currentLocale === "ua" ? "В наявності" : "In Stock";
+      case "Pre-Order":
+        return currentLocale === "ua" ? "Передзамовлення" : "Pre-Order";
+      default:
+        return condition;
+    }
+  };
 
   const getTranslatedStatus = (status: string) => {
     switch (status) {
@@ -177,7 +198,8 @@ const ProductDetail = ({ product }: { product: Product }) => {
                       {t("titleCategory")}
                     </h4>
                     <p className="text-sm sm:text-base lg:text-lg">
-                      {product?.category?.name || t("titleNotCategory")}
+                      {getCategoryDisplayName(product?.category) ||
+                        t("titleNotCategory")}
                     </p>
                   </div>
                 </div>
@@ -198,7 +220,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                                 {t("titleCondition")}
                               </span>
                               <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                {attrs.condition}
+                                {getTranslatedCondition(attrs.condition)}
                               </span>
                             </div>
                           )}
@@ -254,11 +276,13 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </TabsContent>
           </Tabs>
         </div>
-        <ContactModal
-          open={open}
-          onOpenChange={setOpen}
-          sellerData={sellerData?.metadata as SellerMeta}
-        />
+        {open && (
+          <ContactModal
+            open={open}
+            onOpenChange={setOpen}
+            sellerId={product?.seller?.id}
+          />
+        )}
       </div>
     </div>
   );

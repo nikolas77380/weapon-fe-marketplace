@@ -21,9 +21,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
 import {
-  PRODUCT_CONDITION_FORM,
-  PRODUCT_STATUS_FORM,
   STORAGE_KEY,
+  getProductConditionOptions,
+  getProductStatusOptions,
 } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
@@ -37,6 +37,10 @@ import { turnstileConfig } from "@/lib/turnstile";
 
 const AddProductForms = () => {
   const t = useTranslations("AddProduct.addProductForm");
+  const tCondition = useTranslations(
+    "AddProduct.addProductForm.productCondition"
+  );
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
 
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
@@ -319,7 +323,7 @@ const AddProductForms = () => {
               type="select"
               placeholder={t("placeholderCondition")}
               className="w-full min-[600px]:w-1/2 rounded-sm"
-              options={PRODUCT_CONDITION_FORM}
+              options={getProductConditionOptions(tCondition)}
               selectValue={undefined}
             />
           </div>
@@ -388,7 +392,7 @@ const AddProductForms = () => {
               type="select"
               placeholder={t("placeholderStatus")}
               className="w-full min-[600px]:w-1/2 rounded-sm"
-              options={PRODUCT_STATUS_FORM}
+              options={getProductStatusOptions(tStatus)}
             />
           </div>
 

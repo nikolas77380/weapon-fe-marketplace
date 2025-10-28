@@ -2,22 +2,24 @@
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { SellerMeta } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Building2, Phone, Globe, MapPin, Flag } from "lucide-react";
+import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 
 interface MetadataRequiredDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  sellerData: SellerMeta;
+  sellerId?: number;
 }
 
 const ContactModal = ({
   open,
   onOpenChange,
-  sellerData,
+  sellerId,
 }: MetadataRequiredDialogProps) => {
   const t = useTranslations("ShopCard.contactModal");
+
+  const { sellerMeta } = useSellerMetaBySeller(sellerId || 0);
 
   return (
     <div className="px-2 w-full">
@@ -44,7 +46,7 @@ const ContactModal = ({
           <div className="p-3 xs:p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
             <div className="space-y-4">
               {/* Company Name */}
-              {sellerData?.companyName && (
+              {sellerMeta?.companyName && (
                 <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
                   <Building2 className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -52,14 +54,14 @@ const ContactModal = ({
                       {t("titleCompanyName")}
                     </p>
                     <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerData.companyName}
+                      {sellerMeta.companyName}
                     </p>
                   </div>
                 </div>
               )}
 
               {/* Phone Numbers */}
-              {sellerData?.phoneNumbers && (
+              {sellerMeta?.phoneNumbers && (
                 <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
                   <Phone className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -67,17 +69,17 @@ const ContactModal = ({
                       {t("titlePhoneNumbers")}
                     </p>
                     <a
-                      href={`tel:${sellerData.phoneNumbers.replace(/\s/g, "")}`}
+                      href={`tel:${sellerMeta.phoneNumbers.replace(/\s/g, "")}`}
                       className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
                     >
-                      {sellerData.phoneNumbers}
+                      {sellerMeta.phoneNumbers}
                     </a>
                   </div>
                 </div>
               )}
 
               {/* Website */}
-              {sellerData?.webSite && (
+              {sellerMeta?.webSite && (
                 <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
                   <Globe className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -86,22 +88,22 @@ const ContactModal = ({
                     </p>
                     <a
                       href={
-                        sellerData.webSite.startsWith("http")
-                          ? sellerData.webSite
-                          : `https://${sellerData.webSite}`
+                        sellerMeta.webSite.startsWith("http")
+                          ? sellerMeta.webSite
+                          : `https://${sellerMeta.webSite}`
                       }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
                     >
-                      {sellerData.webSite}
+                      {sellerMeta.webSite}
                     </a>
                   </div>
                 </div>
               )}
 
               {/* Country */}
-              {sellerData?.country && (
+              {sellerMeta?.country && (
                 <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
                   <Flag className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -109,14 +111,14 @@ const ContactModal = ({
                       {t("titleCountry")}
                     </p>
                     <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerData.country}
+                      {sellerMeta.country}
                     </p>
                   </div>
                 </div>
               )}
 
               {/* Address */}
-              {sellerData?.address && (
+              {sellerMeta?.address && (
                 <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
                   <MapPin className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
@@ -124,7 +126,7 @@ const ContactModal = ({
                       {t("titleAddress")}
                     </p>
                     <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerData.address}
+                      {sellerMeta.address}
                     </p>
                   </div>
                 </div>
