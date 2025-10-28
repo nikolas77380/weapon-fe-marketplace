@@ -23,12 +23,14 @@ interface SellerTabsDesktopProps {
   loading: boolean;
   refetch: () => void;
   currentUser: UserProfile;
+  onUserUpdate?: (updatedUser: UserProfile) => void;
 }
 
 const SellerTabsDesktop = ({
   products,
   loading,
   currentUser,
+  onUserUpdate,
 }: SellerTabsDesktopProps) => {
   const t = useTranslations("SellerAccountTabs");
   const tBuyer = useTranslations("BuyerAccountTabs");
@@ -255,6 +257,7 @@ const SellerTabsDesktop = ({
               <MetaForm
                 currentUser={currentUser}
                 onSuccess={() => setActiveTab("myInquiries")}
+                onUserUpdate={onUserUpdate}
               />
             </TabsContent>
           </div>

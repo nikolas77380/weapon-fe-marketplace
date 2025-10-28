@@ -3,13 +3,16 @@
 import { UserProfile } from "@/lib/types";
 import SellerAccountTabs from "./SellerTabs";
 import { useSellerProductsQuery } from "@/hooks/useProductsQuery";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
+  const { currentUser: user, updateUserData } = useCurrentUser(currentUser);
+
   const {
     data: response,
     isLoading,
     refetch,
-  } = useSellerProductsQuery(currentUser.id);
+  } = useSellerProductsQuery(user.id);
 
   const products = response?.data || [];
   const loading = isLoading;
@@ -21,7 +24,8 @@ const SellerAccount = ({ currentUser }: { currentUser: UserProfile }) => {
         products={products}
         loading={loading}
         refetch={refetch}
-        currentUser={currentUser}
+        currentUser={user}
+        onUserUpdate={updateUserData}
       />
     </div>
   );

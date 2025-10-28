@@ -15,7 +15,7 @@ import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import Image from "next/image";
 
 import { createSellerMeta, updateSellerMeta } from "@/lib/strapi";
-import { getSessionTokenFromCookie } from "@/lib/auth";
+import { getSessionTokenFromCookie, getCurrentUser } from "@/lib/auth";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
@@ -27,9 +27,11 @@ import WorkTimeField from "@/components/ui/WorkTimeField";
 const MetaForm = ({
   currentUser,
   onSuccess,
+  onUserUpdate,
 }: {
   currentUser: UserProfile;
   onSuccess?: () => void;
+  onUserUpdate?: (updatedUser: UserProfile) => void;
 }) => {
   const t = useTranslations("Settings");
 
@@ -107,6 +109,17 @@ const MetaForm = ({
       }
 
       toast.success(metadata ? t("toastUpdate") : t("toastCreate"));
+
+      // Обновляем данные пользователя после успешного сохранения
+      try {
+        const updatedUser = await getCurrentUser(token);
+        if (updatedUser && "id" in updatedUser && onUserUpdate) {
+          onUserUpdate(updatedUser);
+        }
+      } catch (updateError) {
+        console.error("Error updating user data:", updateError);
+        // Не показываем ошибку пользователю, так как основная операция прошла успешно
+      }
 
       // Переключаем на первый таб после успешного сохранения
       if (onSuccess) {
