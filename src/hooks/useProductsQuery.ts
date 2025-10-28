@@ -69,12 +69,10 @@ export const useCreateProductMutation = () => {
     mutationFn: ({
       data,
       images,
-      turnstileToken,
     }: {
       data: CreateProductData;
       images?: File[];
-      turnstileToken?: string | null;
-    }) => createProduct({ data, images, turnstileToken }),
+    }) => createProduct({ data, images }),
     onSuccess: (newProduct) => {
       // Invalidate and refetch products lists
       queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
