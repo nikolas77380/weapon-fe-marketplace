@@ -6,6 +6,7 @@ import SellerNavbar from "../buyer/navbar/SellerNavbar";
 import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import CurrencySwitcher from "../ui/CurrencySwitcher";
 import { LayoutGrid, User, X, Menu } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useTranslations } from "next-intl";
@@ -80,7 +81,10 @@ const Navbar = () => {
                 {isCatalogOpen ? (
                   <X size={14} className="text-white lg:w-4 lg:h-4" />
                 ) : (
-                  <LayoutGrid size={14} className="text-gold-main lg:w-4 lg:h-4" />
+                  <LayoutGrid
+                    size={14}
+                    className="text-gold-main lg:w-4 lg:h-4"
+                  />
                 )}
                 <p className="text-xs lg:text-sm font-medium text-white">
                   {t("titleCatalog")}
@@ -117,6 +121,14 @@ const Navbar = () => {
           </>
         ) : (
           <ul className="flex items-center gap-6">
+            {/* Desktop CurrencySwitcher - скрывается на мобильных */}
+            <div className="hidden lg:block">
+              <CurrencySwitcher
+                classNameSelectTrigger="border-gray-500"
+                classNameSelectValue="text-gold-main"
+              />
+            </div>
+
             {/* Desktop LanguageSwitcher - скрывается на мобильных */}
             <div className="hidden lg:block">
               <LanguageSwitcher
@@ -153,8 +165,10 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-2.5 relative bg-gradient-to-br 
-      from-slate-800 via-gray-500 to-slate-900 shadow-2xl">
+      <nav
+        className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-2.5 relative bg-gradient-to-br 
+      from-slate-800 via-gray-500 to-slate-900 shadow-2xl"
+      >
         <NavbarContent />
       </nav>
 

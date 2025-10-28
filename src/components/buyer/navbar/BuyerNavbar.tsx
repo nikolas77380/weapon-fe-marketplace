@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback } from "../../ui/avatar";
 import type { UserProfile } from "@/lib/types";
 import Messages from "./Messages";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import CurrencySwitcher from "@/components/ui/CurrencySwitcher";
 import BuyerMenuContent from "./BuyerMenuContent";
 
 interface BuyerNavbarAuthProps {
@@ -24,6 +25,7 @@ const BuyerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
         <Messages />
+        <CurrencySwitcher classNameSelectValue="text-gold-main" />
         <LanguageSwitcher classNameSelectValue="text-gold-main" />
         <NavigationMenuItem className="flex items-center gap-3">
           <NavigationMenuTrigger>

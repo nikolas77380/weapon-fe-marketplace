@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { generateBreadcrumbs } from "@/lib/breadcrumbs";
 import { UserProfile } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface BreadcrumbComponentProps {
   currentUser?: UserProfile;
@@ -25,14 +26,15 @@ const BreadcrumbComponent = ({
   customLabels = {},
 }: BreadcrumbComponentProps) => {
   const pathname = usePathname();
-  const crumbs = generateBreadcrumbs(pathname, customLabels);
+  const t = useTranslations();
+  const crumbs = generateBreadcrumbs(pathname, customLabels, t);
 
   return (
     <Breadcrumb className={className}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/">Home</Link>
+            <Link href="/">{t("Breadcrumb.home")}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {crumbs.map(({ href, label, isLast }) => (
@@ -40,9 +42,7 @@ const BreadcrumbComponent = ({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               {isLast ? (
-                <BreadcrumbPage>
-                  {label}
-                </BreadcrumbPage>
+                <BreadcrumbPage>{label}</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
                   <Link href={href}>{label}</Link>
