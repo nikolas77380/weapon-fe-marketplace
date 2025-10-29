@@ -73,7 +73,9 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
               />
             </svg>
           </div>
-          <p className="text-gray-500">{t("messageArea.startConversation")}</p>
+          <p className="text-gray-500 min-h-[400px]">
+            {t("messageArea.startConversation")}
+          </p>
         </div>
       </div>
     );

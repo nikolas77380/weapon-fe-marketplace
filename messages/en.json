@@ -31,6 +31,11 @@
       "titleSignOut": "Sign Out"
     }
   },
+  "Breadcrumb": {
+    "home": "Home",
+    "account": "Account",
+    "addProduct": "Add Product"
+  },
   "BuyerAccountHeader": {
     "titleUserDetails": "User Details",
     "titleBrowseMarketplace": "Browse marketplace",
@@ -87,6 +92,10 @@
       "titleActiveConversations": "Active conversations",
       "titleFinishedChats": "Finished chats",
       "titleLatestMessages": "Latest messages"
+    },
+    "tabAddProduct": {
+      "titleAddProduct": "Add Product",
+      "descriptionAddNewProduct": "Add a new product to your listings"
     },
     "tabSettings": {
       "titleSettings": "Settings"
@@ -282,7 +291,7 @@
       "labelProductName": "Product Name",
       "placeholderProductName": "Enter your product name",
       "labelSku": "Product SKU (Optional)",
-      "placeholderSku": "Enter your product SKU (optional)",
+      "placeholderSku": "Enter your product SKU",
       "labelDescription": "Description",
       "placeholderDescription": "Enter product description",
       "labelCategory": "Category",
@@ -305,6 +314,11 @@
         "reserved": "Reserved",
         "sold": "Sold",
         "archived": "Archived"
+      },
+      "productCondition": {
+        "New": "New",
+        "In-Stock": "In Stock",
+        "Pre-Order": "Pre-Order"
       },
       "titleImages": "Images",
       "buttonClear": "Clear Draft",
@@ -430,6 +444,7 @@
         "sun": "Sun:",
         "closed": "Closed"
       },
+      "titleWebsite": "Website:",
       "titlePhone": "Phone:",
       "titleEmail": "Email:",
       "titleAddress": "Address:"
@@ -649,7 +664,8 @@
         "submittingButton": "Sending...",
         "successMessage": "Your request has been sent successfully! We will contact you soon.",
         "errorMessage": "Error sending request. Please try again.",
-        "errorMessageTurnstile": "Security verification failed. Please try again."
+        "errorMessageTurnstile": "Security verification failed. Please try again.",
+        "buttonContactSeller": "Contact Seller"
       },
       "closeButton": "Close"
     }

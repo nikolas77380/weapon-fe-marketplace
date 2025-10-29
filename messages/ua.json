@@ -31,6 +31,11 @@
       "titleSignOut": "Вийти"
     }
   },
+  "Breadcrumb": {
+    "home": "Головна",
+    "account": "Обліковий запис",
+    "addProduct": "Додати товар"
+  },
   "BuyerAccountHeader": {
     "titleUserDetails": "Відомості про користувача",
     "titleBrowseMarketplace": "Перейти на майданчик",
@@ -87,6 +92,10 @@
       "titleActiveConversations": "Активні спілкування",
       "titleFinishedChats": "Завершені спілкування",
       "titleLatestMessages": "Останні повідомлення"
+    },
+    "tabAddProduct": {
+      "titleAddProduct": "Додати товар",
+      "descriptionAddNewProduct": "Додати новий товар до ваших оголошень"
     },
     "tabSettings": {
       "titleSettings": "Налаштування"
@@ -281,8 +290,8 @@
       "titleBasicInfo": "Базова інформація",
       "labelProductName": "Назва товару",
       "placeholderProductName": "Введіть назву товару",
-      "labelSku": "Product SKU (Optional)",
-      "placeholderSku": "Enter your product SKU (optional)",
+      "labelSku": "SKU товару (Необов'язково)",
+      "placeholderSku": "Введіть SKU товару",
       "labelDescription": "Опис",
       "placeholderDescription": "Введіть опис товару",
       "labelCategory": "Категорія",
@@ -305,6 +314,11 @@
         "reserved": "Зарезервований",
         "sold": "Проданий",
         "archived": "Архівний"
+      },
+      "productCondition": {
+        "New": "Новий",
+        "In-Stock": "В наявності",
+        "Pre-Order": "Передзамовлення"
       },
       "titleImages": "Зображення",
       "buttonClear": "Очистити форму",
@@ -371,7 +385,8 @@
       "titleWebSite": "Веб-сторінка:",
       "titleCountry": "Країна:",
       "titleAddress": "Адреса:",
-      "buttonClose": "Закрити"
+      "buttonClose": "Закрити",
+      "buttonContactSeller": "Зв'язатися з продавцем"
     }
   },
   "Footer": {
@@ -430,6 +445,7 @@
         "sun": "Нд:",
         "closed": "Вихідний"
       },
+      "titleWebsite": "Веб:",
       "titlePhone": "Телефон:",
       "titleEmail": "Пошта:",
       "titleAddress": "Адреса:"

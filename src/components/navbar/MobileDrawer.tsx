@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Drawer,
   DrawerContent,
@@ -14,6 +15,7 @@ import { UserProfile } from "@/lib/types";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
+import CurrencySwitcher from "../ui/CurrencySwitcher";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
 import Logo from "../ui/Logo";
@@ -36,6 +38,13 @@ const MobileDrawer = ({
   onLogout,
 }: MobileDrawerProps) => {
   const t = useTranslations("Navbar");
+  const router = useRouter();
+
+  const handleAddProductClick = () => {
+    sessionStorage.setItem("accountTab", "addProduct");
+    onClose();
+    router.push("/account");
+  };
 
   // Block body scrolling when the drawer is open
   useEffect(() => {
@@ -162,9 +171,8 @@ const MobileDrawer = ({
               </div>
 
               {/* Add Product Button for Seller on <2xl */}
-              <Link
-                href="/account/add-product"
-                onClick={onClose}
+              <button
+                onClick={handleAddProductClick}
                 className="bg-transparent rounded-md cursor-pointer duration-300 transition-all 
                 hover:bg-gray-100 w-full block"
               >
@@ -174,7 +182,7 @@ const MobileDrawer = ({
                     {t("sellerNavbar.titleAddProduct")}
                   </p>
                 </div>
-              </Link>
+              </button>
 
               {/* Seller menu content */}
               <SellerMenuContent
@@ -189,6 +197,10 @@ const MobileDrawer = ({
           <Separator className="my-2" />
 
           <div className="flex items-center gap-3 p-3">
+            <CurrencySwitcher
+              classNameSelectTrigger="border-gray-500"
+              classNameSelectValue="text-gold-main"
+            />
             <LanguageSwitcher
               classNameSelectTrigger="border-gray-500"
               classNameSelectValue="text-gold-main"

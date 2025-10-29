@@ -18,7 +18,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { SelectItem } from "@/components/ui/select";
-import { PRODUCT_CONDITION_FORM } from "@/lib/utils";
+import {
+  getProductConditionOptions,
+  getProductStatusOptions,
+} from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
@@ -26,6 +29,7 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { Product, UpdateProductData } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { X } from "lucide-react";
 import DeleteImageDialog from "./DeleteImageDialog";
@@ -37,10 +41,25 @@ import {
 
 interface EditProductFormProps {
   product: Product;
+  customLabels?: Record<string, string>;
 }
 
-const EditProductForm = ({ product }: EditProductFormProps) => {
+const EditProductForm = ({
+  product,
+  customLabels = {},
+}: EditProductFormProps) => {
   const t = useTranslations("EditProduct");
+  const tCondition = useTranslations(
+    "AddProduct.addProductForm.productCondition"
+  );
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const currentLocale = useLocale();
+
+  const getCategoryDisplayName = (category: any) => {
+    return currentLocale === "ua" && category?.translate_ua
+      ? category.translate_ua
+      : category?.name;
+  };
 
   const [openDialog, setOpenDialog] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
@@ -264,7 +283,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
             {/* Category */}
             <FormFieldComponent
               control={form.control}
-              className="rounded-sm"
+              className="rounded-sm max-w-full overflow-hidden"
               name="category"
               label={t("labelCategory")}
               type="select"
@@ -278,7 +297,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
                       key={category.id}
                       value={category.id.toString()}
                     >
-                      {category.name}
+                      {getCategoryDisplayName(category)}
                     </SelectItem>
                   ))}
                 </>
@@ -293,7 +312,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               label={t("labelCondition")}
               type="select"
               placeholder="Select condition"
-              options={PRODUCT_CONDITION_FORM}
+              options={getProductConditionOptions(tCondition)}
             />
 
             {/* Status */}
@@ -304,12 +323,7 @@ const EditProductForm = ({ product }: EditProductFormProps) => {
               label={t("labelStatus")}
               type="select"
               placeholder="Select status"
-              options={[
-                { key: "available", label: "Available" },
-                { key: "reserved", label: "Reserved" },
-                { key: "sold", label: "Sold" },
-                { key: "archived", label: "Archived" },
-              ]}
+              options={getProductStatusOptions(tStatus)}
             />
           </div>
 

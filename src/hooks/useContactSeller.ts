@@ -44,16 +44,17 @@ export const useContactSeller = () => {
           return false;
         }
 
-        await createChat({
+        // API will automatically find an existing chat or create a new one
+        const chat = await createChat({
           topic,
-          participantIds: [currentUser.id, sellerId],
+          participantIds: [sellerId], // currentUser.id добавляется автоматически на бэкенде
         });
 
-        router.push("/messages");
+        router.push(`/messages?chatId=${chat.id}`);
 
         return true;
       } catch (error) {
-        console.error("Failed to create chat with seller:", error);
+        console.error("Failed to create/find chat with seller:", error);
         return false;
       }
     },

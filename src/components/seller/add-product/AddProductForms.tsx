@@ -21,9 +21,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 
 import {
-  PRODUCT_CONDITION_FORM,
-  PRODUCT_STATUS_FORM,
   STORAGE_KEY,
+  getProductConditionOptions,
+  getProductStatusOptions,
 } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
@@ -34,6 +34,10 @@ import { useTranslations } from "next-intl";
 
 const AddProductForms = () => {
   const t = useTranslations("AddProduct.addProductForm");
+  const tCondition = useTranslations(
+    "AddProduct.addProductForm.productCondition"
+  );
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
 
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
@@ -191,12 +195,12 @@ const AddProductForms = () => {
     toast.success(t("toastSuccessClear"));
   };
   return (
-    <>
+    <div className="w-full mt-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
           {/* Product Basic Info Form */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700 max-w-[200px] truncate">
               {t("titleBasicInfo")}
             </h2>
             {/* Product name */}
@@ -293,7 +297,7 @@ const AddProductForms = () => {
               type="select"
               placeholder={t("placeholderCondition")}
               className="w-full min-[600px]:w-1/2 rounded-sm"
-              options={PRODUCT_CONDITION_FORM}
+              options={getProductConditionOptions(tCondition)}
               selectValue={undefined}
             />
           </div>
@@ -329,7 +333,7 @@ const AddProductForms = () => {
 
           {/* Product Details */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">
-            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
+            <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700 max-w-[200px] truncate">
               {t("titleDetails")}
             </h2>
             {/* Product Count */}
@@ -362,7 +366,7 @@ const AddProductForms = () => {
               type="select"
               placeholder={t("placeholderStatus")}
               className="w-full min-[600px]:w-1/2 rounded-sm"
-              options={PRODUCT_STATUS_FORM}
+              options={getProductStatusOptions(tStatus)}
             />
           </div>
 
@@ -419,7 +423,7 @@ const AddProductForms = () => {
           </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
 

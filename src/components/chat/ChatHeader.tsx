@@ -4,6 +4,7 @@ import React from "react";
 import { Chat } from "@/types/chat";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +45,17 @@ const getStatusColor = (status: Chat["status"]) => {
   }
 };
 
+// Функция для получения инициалов
+const getInitials = (name: string | null | undefined) => {
+  if (!name) return "??";
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
+
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
   chat,
   onFinishChat,
@@ -81,12 +93,42 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
           </div>
 
           <div className="flex items-start min-[380px]:items-center text-sm text-gray-500 flex-col min-[380px]:flex-row">
-            <div className="flex items-center gap-1">
-              <Users className="h-4 w-4" />
-              <span>
-                {chat.participants.length} {t("participants")}
-              </span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                <span>
+                  {chat.participants.length} {t("participants")}
+                </span>
+              </div>
+
+              {/* Аватары участников */}
+              <div className="flex -space-x-1">
+                {chat.participants.slice(0, 3).map((participant) => (
+                  <Avatar
+                    key={participant.id}
+                    className="h-6 w-6 border border-white"
+                  >
+                    <AvatarImage
+                      src={participant.metadata?.avatar?.url}
+                      alt={participant.displayName || participant.username}
+                    />
+                    <AvatarFallback className="bg-gray-100 text-gray-600 text-xs">
+                      {getInitials(
+                        participant.displayName || participant.username
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+                {chat.participants.length > 3 && (
+                  <div className="h-6 w-6 rounded-full bg-gray-100 border border-white flex items-center justify-center">
+                    <span className="text-xs text-gray-600">
+                      +{chat.participants.length - 3}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
+
             <div className="flex items-center">
               <span className="mx-2 hidden min-[380px]:block">•</span>
               <span>

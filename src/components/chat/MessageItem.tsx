@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Message } from "@/types/chat";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { uk } from "date-fns/locale";
@@ -44,8 +44,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       >
         {!isOwnMessage && (
           <Avatar className="h-8 w-8">
+            <AvatarImage
+              src={message.sender.metadata?.avatar?.url}
+              alt={message.sender.displayName || message.sender.username}
+            />
             <AvatarFallback className="bg-blue-100 text-blue-800 text-xs">
-              {getInitials(message.sender.username)}
+              {getInitials(
+                message.sender.displayName || message.sender.username
+              )}
             </AvatarFallback>
           </Avatar>
         )}
@@ -110,8 +116,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
         {/* Аватар для собственных сообщений */}
         {isOwnMessage && (
           <Avatar className="h-8 w-8 ml-2 flex-shrink-0">
+            <AvatarImage
+              src={message.sender.metadata?.avatar?.url}
+              alt={message.sender.displayName || message.sender.username}
+            />
             <AvatarFallback className="bg-green-100 text-green-800 text-xs">
-              {getInitials(message.sender.username)}
+              {getInitials(
+                message.sender.displayName || message.sender.username
+              )}
             </AvatarFallback>
           </Avatar>
         )}

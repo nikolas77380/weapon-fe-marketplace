@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Form } from "@/components/ui/form";
 import CertificateForm from "./CertificateForm";
 import CertificatesList from "./CertificatesList";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useUploadSellerAvatar } from "@/hooks/useUploadSellerAvatar";
 import WorkTimeField from "@/components/ui/WorkTimeField";
 
@@ -34,6 +34,7 @@ const MetaForm = ({
   onUserUpdate?: (updatedUser: UserProfile) => void;
 }) => {
   const t = useTranslations("Settings");
+  const locale = useLocale();
 
   const { metadata } = currentUser;
   const [isLoading, setIsLoading] = useState(false);
@@ -193,10 +194,10 @@ const MetaForm = ({
                     placeholder={t("placeholderBusinessType")}
                     className="w-full min-[600px]:w-1/2 rounded-sm"
                     defaultValue={undefined}
-                    options={SELLER_TYPES.map(({ key, label }) => ({
+                    options={SELLER_TYPES.map(({ key, label, ua }) => ({
                       key,
-                      label,
-                      value: label,
+                      label: locale === "ua" ? ua : label,
+                      value: locale === "ua" ? ua : label,
                     }))}
                   />
 
@@ -249,10 +250,10 @@ const MetaForm = ({
                     placeholder={t("placeholderCountry")}
                     className="w-full min-[600px]:w-1/2 rounded-sm"
                     defaultValue={undefined}
-                    options={COUNTRIES.map(({ name, iso2 }) => ({
+                    options={COUNTRIES.map(({ name, iso2, ua }) => ({
                       key: iso2,
-                      label: name,
-                      value: name,
+                      label: locale === "ua" ? ua : name,
+                      value: iso2,
                     }))}
                   />
                   {/* address */}

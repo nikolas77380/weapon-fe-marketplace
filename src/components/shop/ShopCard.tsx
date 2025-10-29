@@ -8,7 +8,6 @@ import { formatPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
-import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useTranslations } from "next-intl";
 import { useContactSeller } from "@/hooks/useContactSeller";
 
@@ -21,20 +20,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
 
   const [open, setOpen] = useState(false);
-  const { sellerMeta } = useSellerMetaBySeller(item.seller?.id as number);
   const { contactSeller } = useContactSeller();
 
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    if (item.seller?.id) {
-      const success = await contactSeller(item.seller.id, item.title);
-      if (success) {
-        return;
-      }
-    }
 
     setOpen(true);
   };
@@ -222,11 +213,13 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             </Button>
           </div>
         </div>
-        <ContactModal
-          open={open}
-          onOpenChange={setOpen}
-          sellerData={sellerMeta}
-        />
+        {open && (
+          <ContactModal
+            open={open}
+            onOpenChange={setOpen}
+            sellerId={item.seller?.id}
+          />
+        )}
       </div>
     </div>
   );
