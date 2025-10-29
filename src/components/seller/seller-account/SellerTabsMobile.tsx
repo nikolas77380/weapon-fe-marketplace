@@ -15,6 +15,7 @@ import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteStat
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import { usePathname } from "next/navigation";
 import MetaForm from "./MetaForm";
+import AddProductPageComponent from "../add-product/AddProductPageComponent";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
 import { useChatStats } from "@/hooks/useChatStats";
 
@@ -45,7 +46,11 @@ const SellerTabsMobile = ({
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
     const savedTab = sessionStorage.getItem("accountTab");
-    if (savedTab === "favourites" || savedTab === "settings") {
+    if (
+      savedTab === "favourites" ||
+      savedTab === "settings" ||
+      savedTab === "addProduct"
+    ) {
       setActiveTab(savedTab);
       setTimeout(() => {
         sessionStorage.removeItem("accountTab");
@@ -67,7 +72,7 @@ const SellerTabsMobile = ({
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-100 grid grid-cols-2 min-[400px]:grid-cols-4 w-full h-full gap-1 rounded-sm">
+          <TabsList className="bg-gray-100 grid grid-cols-2 min-[400px]:grid-cols-5 w-full h-full gap-1 rounded-sm">
             <TabsTrigger
               value="myInquiries"
               className={cn(
@@ -95,6 +100,15 @@ const SellerTabsMobile = ({
               )}
             >
               {t("tabMessage.titleMessages")}
+            </TabsTrigger>
+            <TabsTrigger
+              value="addProduct"
+              className={cn(
+                triggerClasses,
+                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
+              )}
+            >
+              {t("tabAddProduct.titleAddProduct")}
             </TabsTrigger>
             <TabsTrigger
               value="settings"
@@ -274,6 +288,9 @@ const SellerTabsMobile = ({
                   ))}
                 </div>
               </div>
+            </TabsContent>
+            <TabsContent value="addProduct">
+              <AddProductPageComponent currentUser={currentUser} />
             </TabsContent>
             <TabsContent value="settings">
               <MetaForm

@@ -9,7 +9,7 @@ const AddProductPage = async () => {
   const t = await getTranslations("AddProduct");
   return (
     <div className="w-full min-h-screen h-full mb-20">
-      <div className="container mx-auto px-2 sm:px-4 lg:px-6">
+      <div className="">
         {/* Breadcrumb - Hidden on mobile, visible on desktop */}
         <div className="hidden md:block mt-4">
           <BreadcrumbComponent currentUser={currentUser} />

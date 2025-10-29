@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -26,12 +26,19 @@ interface BuyerNavbarAuthProps {
 
 const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
   const t = useTranslations("Navbar.sellerNavbar");
+  const router = useRouter();
+
+  const handleAddProductClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.setItem("accountTab", "addProduct");
+    router.push("/account");
+  };
   return (
     <NavigationMenu viewport={false} className="z-50">
       <NavigationMenuList className="flex items-center gap-6">
         <NavigationMenuLink asChild className="hidden 2xl:block">
-          <Link
-            href="/account/add-product"
+          <button
+            onClick={handleAddProductClick}
             className="border-none cursor-pointer duration-500 transition-all
             hover:bg-white/70"
           >
@@ -41,7 +48,7 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
                 {t("titleAddProduct")}
               </p>
             </div>
-          </Link>
+          </button>
         </NavigationMenuLink>
 
         <Messages />

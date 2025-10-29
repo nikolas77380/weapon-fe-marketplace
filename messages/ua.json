@@ -93,6 +93,10 @@
       "titleFinishedChats": "Завершені спілкування",
       "titleLatestMessages": "Останні повідомлення"
     },
+    "tabAddProduct": {
+      "titleAddProduct": "Додати товар",
+      "descriptionAddNewProduct": "Додати новий товар до ваших оголошень"
+    },
     "tabSettings": {
       "titleSettings": "Налаштування"
     }
