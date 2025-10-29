@@ -5,11 +5,8 @@ import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
 } from "../../ui/navigation-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import type { UserProfile } from "@/lib/types";
@@ -17,14 +14,14 @@ import Messages from "./Messages";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import CurrencySwitcher from "@/components/ui/CurrencySwitcher";
 import { useTranslations } from "next-intl";
-import SellerMenuContent from "./SellerMenuContent";
+import Link from "next/link";
 
 interface BuyerNavbarAuthProps {
   user: UserProfile;
   onLogout: () => void;
 }
 
-const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
+const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
   const t = useTranslations("Navbar.sellerNavbar");
   const router = useRouter();
 
@@ -61,27 +58,23 @@ const SellerNavbar = ({ user, onLogout }: BuyerNavbarAuthProps) => {
           <LanguageSwitcher classNameSelectValue="text-gold-main" />
         </NavigationMenuLink>
 
-        <NavigationMenuItem className="flex items-center gap-3">
-          <NavigationMenuTrigger>
-            <Avatar className="h-8 w-8 cursor-pointer">
-              <AvatarImage
-                src={user.metadata?.avatar?.url}
-                alt={user.username}
-              />
-              <AvatarFallback className="bg-black text-white text-sm uppercase">
-                {user.displayName?.charAt(0) || user.username.charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-            <div className="text-sm items-start flex ml-2">
-              <p className="font-medium text-white">
-                {user.displayName || user.username}
-              </p>
-            </div>
-          </NavigationMenuTrigger>
-          <NavigationMenuContent className="border-gold-main">
+        <Link href="/account" className="flex items-center">
+          <Avatar className="h-8 w-8 cursor-pointer">
+            <AvatarImage src={user.metadata?.avatar?.url} alt={user.username} />
+            <AvatarFallback className="bg-black text-white text-sm uppercase">
+              {user.displayName?.charAt(0) || user.username.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="text-sm items-start flex ml-2">
+            <p className="font-medium text-white">
+              {user.displayName || user.username}
+            </p>
+          </div>
+
+          {/* <NavigationMenuContent className="border-gold-main">
             <SellerMenuContent user={user} onLogout={onLogout} />
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          </NavigationMenuContent> */}
+        </Link>
       </NavigationMenuList>
     </NavigationMenu>
   );

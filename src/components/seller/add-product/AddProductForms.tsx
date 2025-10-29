@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import {
@@ -14,7 +14,7 @@ import {
 import FormFieldComponent from "@/components/ui/FormFieldComponent";
 import { useForm } from "react-hook-form";
 import {
-  addProductSchema,
+  createAddProductSchema,
   AddProductSchemaValues,
 } from "@/schemas/addProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,8 +58,12 @@ const AddProductForms = () => {
 
   const router = useRouter();
 
+  // Create schema with translations
+  const schema = useMemo(() => createAddProductSchema(t), [t]);
+
   const form = useForm<AddProductSchemaValues>({
-    resolver: zodResolver(addProductSchema),
+    resolver: zodResolver(schema),
+    mode: "onSubmit",
     defaultValues: {
       productName: "",
       productSku: "",
@@ -112,6 +116,11 @@ const AddProductForms = () => {
   }, [createError]);
 
   const onSubmit = async (values: AddProductSchemaValues) => {
+    // Trigger validation to show errors
+    const isValid = await form.trigger();
+    if (!isValid) {
+      return;
+    }
     try {
       const selectedCategory = categories.find(
         (cat) => cat.id.toString() === values.productCategory
@@ -464,7 +473,7 @@ const AddProductForms = () => {
 
             <Button
               type="submit"
-              disabled={createLoading || !form.formState.isValid}
+              disabled={createLoading}
               className="w-full rounded-sm text-white bg-gold-main min-[600px]:w-auto px-6 py-2 
               min-[600px]:px-8.5 min-[600px]:py-2.5 text-lg min-[600px]:text-xl font-medium
               hover:bg-gold-main/90"

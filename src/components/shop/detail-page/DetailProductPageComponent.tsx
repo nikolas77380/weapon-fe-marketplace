@@ -8,7 +8,7 @@ import ProductDetail from "./ProductDetail";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { useViewedProducts } from "@/hooks/useViewedProducts";
 import { useEffect, useMemo } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface DetailProductPageComponentProps {
   productId: number;
@@ -21,6 +21,7 @@ const DetailProductPageComponent = ({
   const { addViewedProduct } = useViewedProducts();
   const loading = isLoading;
   const currentLocale = useLocale();
+  const t = useTranslations("ProductDetail");
 
   // We save the product to viewed items when it is loaded.
   useEffect(() => {
@@ -57,19 +58,19 @@ const DetailProductPageComponent = ({
       intermediateCrumbs={intermediateCrumbs}
     >
       <div className="container mx-auto px-2 sm:px-4 lg:px-6">
-        {loading && <LoadingState title="Loading product..." />}
+        {loading && <LoadingState title={t("loadingProduct")} />}
 
         {error && (
           <ErrorState
-            title="Error loading product"
-            message={error.message || "Failed to load product"}
+            title={t("errorLoadingProduct")}
+            message={error.message || t("messageErrorLoading")}
           />
         )}
 
         {!loading && !error && !product && (
           <NotFoundState
-            title="Product not found"
-            message={`The product with slug "${productId}" doesn't exist or you don't have permission to edit it.`}
+            title={t("productNotFound")}
+            message={t("messageProductNotFound")}
           />
         )}
 

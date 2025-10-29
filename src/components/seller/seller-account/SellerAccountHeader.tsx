@@ -6,6 +6,8 @@ import { Product, UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
+import { useAuthContext } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button";
 
 interface SellerAccountHeaderProps {
   currentUser: UserProfile;
@@ -18,6 +20,7 @@ const SellerAccountHeader = ({
   products,
   className,
 }: SellerAccountHeaderProps) => {
+  const { handleLogout } = useAuthContext();
   const t = useTranslations("SellerAccountHeader");
   const { favourites } = useFavourites();
   const { unreadChatsCount } = useUnreadChats();
@@ -33,19 +36,18 @@ const SellerAccountHeader = ({
         {t("titleWelcome")}, {currentUser.username}
       </h2>
       {/* Right Buttons */}
-      {/* <div className="flex items-center lg:justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
+      <div className="flex items-center lg:justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
         <Button
           className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all px-1 hover:bg-gold-main/90"
-          onClick={handleClickToAddProduct}
+          onClick={handleLogout}
         >
-          <div className="flex items-center gap-2 py-2 px-3">
-            <Plus size={16} className="text-white" />
+          <div className="py-2 px-3">
             <p className="text-xs sm:text-sm font-semibold text-white">
-              {t("titleAddProduct")}
+              {t("titleLogout")}
             </p>
           </div>
         </Button>
-      </div> */}
+      </div>
       {/* Action Cards */}
       <div className="grid grid-cols-1 min-[450px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-7 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
         {products.length > 0 && (
