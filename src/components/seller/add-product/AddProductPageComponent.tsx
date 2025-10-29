@@ -8,10 +8,12 @@ import { useTranslations } from "next-intl";
 
 const AddProductPageComponent = ({
   currentUser,
+  onProductCreated,
 }: {
   currentUser: UserProfile;
+  onProductCreated?: () => void;
 }) => {
-  const t = useTranslations('AddProduct');
+  const t = useTranslations("AddProduct");
 
   const [showDialog, setShowDialog] = useState(false);
 
@@ -22,14 +24,14 @@ const AddProductPageComponent = ({
   }, [currentUser.metadata]);
 
   if (currentUser.metadata) {
-    return <AddProductForms />;
+    return <AddProductForms onProductCreated={onProductCreated} />;
   }
 
   return (
     <div className="w-full">
       <MetadataRequiredDialog open={showDialog} onOpenChange={setShowDialog} />
       <div className="text-center py-12 text-gray-500">
-        {t('errorAddProduct')}
+        {t("errorAddProduct")}
       </div>
     </div>
   );

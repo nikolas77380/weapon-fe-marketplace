@@ -57,6 +57,28 @@ const SellerTabsDesktop = ({
     }
   }, [pathname]);
 
+  // Listen for custom event when already on /account page
+  useEffect(() => {
+    const handleTabChange = (event: CustomEvent<string>) => {
+      const tab = event.detail;
+      if (tab === "addProduct" || tab === "favourites" || tab === "settings") {
+        setActiveTab(tab);
+        sessionStorage.removeItem("accountTab");
+      }
+    };
+
+    window.addEventListener(
+      "accountTabChange",
+      handleTabChange as EventListener
+    );
+    return () => {
+      window.removeEventListener(
+        "accountTabChange",
+        handleTabChange as EventListener
+      );
+    };
+  }, []);
+
   const handleTabChange = (value: string) => {
     setActiveTab(value);
   };
@@ -263,7 +285,10 @@ const SellerTabsDesktop = ({
               </div>
             </TabsContent>
             <TabsContent value="addProduct">
-              <AddProductPageComponent currentUser={currentUser} />
+              <AddProductPageComponent
+                currentUser={currentUser}
+                onProductCreated={() => setActiveTab("myInquiries")}
+              />
             </TabsContent>
             <TabsContent value="settings">
               <MetaForm
