@@ -311,10 +311,10 @@
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
       "productStatus": {
-        "available": "Доступний",
+        "available": "Активний",
         "reserved": "Зарезервований",
         "sold": "Проданий",
-        "archived": "Архівний"
+        "archived": "Не активний"
       },
       "productCondition": {
         "New": "Новий",

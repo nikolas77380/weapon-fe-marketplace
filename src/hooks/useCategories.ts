@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Category } from "@/lib/types";
 import { getCategories, getCategoryBySlug } from "@/lib/strapi";
 import { queryKeys } from "@/lib/query-keys";
+import { useLocale } from "next-intl";
 
 // Fallback категории на случай, если API недоступен
 const fallbackCategories: Category[] = [
@@ -38,6 +39,7 @@ const fallbackCategories: Category[] = [
 ];
 
 export const useCategories = () => {
+  const locale = useLocale();
   const {
     data: categories = [],
     isLoading: loading,
@@ -59,7 +61,17 @@ export const useCategories = () => {
   });
 
   const getMainCategories = () => {
-    return categories.filter((category) => !category.parent);
+    const mainCategories = categories.filter((category) => !category.parent);
+
+    return mainCategories.sort((a, b) => {
+      if (locale === "en") {
+        return (a.name || "").localeCompare(b.name || "", "en");
+      } else {
+        const aTrans = a.translate_ua || a.name || "";
+        const bTrans = b.translate_ua || b.name || "";
+        return aTrans.localeCompare(bTrans, "uk");
+      }
+    });
   };
 
   const getSubCategories = (parentId: number) => {

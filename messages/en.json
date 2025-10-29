@@ -314,7 +314,7 @@
         "available": "Available",
         "reserved": "Reserved",
         "sold": "Sold",
-        "archived": "Archived"
+        "archived": "Unavailable"
       },
       "productCondition": {
         "New": "New",
