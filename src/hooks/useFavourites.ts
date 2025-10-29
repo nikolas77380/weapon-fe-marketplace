@@ -73,7 +73,6 @@ export const useFavourites = () => {
           // Перезагружаем список избранного
           await loadFavourites();
 
-          toast.success(t("toastSuccessFavourite"));
           return true;
         } else {
           toast.error(result.error || t("toastErrorAddFavourite"));

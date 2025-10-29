@@ -39,7 +39,7 @@
   "BuyerAccountHeader": {
     "titleUserDetails": "Відомості про користувача",
     "titleBrowseMarketplace": "Перейти на майданчик",
-    "titleEmail": "Пошта",
+    "titleEmail": "E-mail",
     "titlePhone": "Телефон",
     "titleActiveInquiries": "Активні запити",
     "titleSavedProducts": "Збережені товари",
@@ -117,11 +117,11 @@
     "toasts": {
       "registrationFailed": "Реєстрація не вдалася. Будь ласка, спробуйте ще раз.",
       "registrationSuccess": "Реєстрація успішна. Будь ласка, перевірте вашу пошту та підтвердіть акаунт.",
-      "invalidCredentials": "Невірна пошта або пароль",
+      "invalidCredentials": "Невірний E-mail або пароль",
       "loginFailed": "Вхід не вдався. Будь ласка, спробуйте ще раз."
     },
     "error": {
-      "invalidEmailOrPassword": "Невірна електронна пошта або пароль",
+      "invalidEmailOrPassword": "Невірний E-mail або пароль",
       "uniqueEmail": "Ця електронна адреса вже існує. Будь ласка, скористайтеся іншою."
     },
     "login": {
@@ -129,7 +129,7 @@
       "forgotPassword": "Забули пароль?",
       "signingIn": "Вхід...",
       "signgIn": "Увійти",
-      "labelEmail": "Пошта",
+      "labelEmail": "E-mail",
       "labelPassword": "Пароль"
     },
     "register": {
@@ -140,7 +140,7 @@
       "footerDescripotion": "Створюючи обліковий запис, ви погоджуєтеся дотримуватися всіх федеральних, державних та місцевих законів щодо продажу та передачі тактичного спорядження.",
       "labelDisplayName": "Відображуване ім'я",
       "placeholderDisplayName": "Введіть ваше відображуване ім'я",
-      "labelEmail": "Пошта",
+      "labelEmail": "E-mail",
       "placeholderEmail": "Введіть вашу пошту",
       "labelPassword": "Пароль",
       "placeholderPassword": "Введіть ваш пароль",
@@ -155,7 +155,7 @@
     "forgotPassword": {
       "title": "Забули пароль?",
       "description": "Введіть вашу електронну адресу і ми надішлемо вам посилання для скидання пароля.",
-      "labelEmail": "Пошта",
+      "labelEmail": "E-mail",
       "placeholderEmail": "Введіть вашу пошту",
       "buttonSend": "Надіслати посилання",
       "buttonSending": "Надсилання...",
@@ -443,7 +443,7 @@
       },
       "titleWebsite": "Веб:",
       "titlePhone": "Телефон:",
-      "titleEmail": "Пошта:",
+      "titleEmail": "E-mail",
       "titleAddress": "Адреса:"
     },
     "tabProducts": {
@@ -653,7 +653,7 @@
       "form": {
         "nameLabel": "Ваше ім'я",
         "namePlaceholder": "Введіть ваше ім'я",
-        "emailLabel": "Електронна пошта",
+        "emailLabel": "E-mail",
         "emailPlaceholder": "Введіть вашу електронну пошту",
         "messageLabel": "Повідомлення (необов'язково)",
         "messagePlaceholder": "Опишіть ваше питання або проблему",
