@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto, Outfit } from "next/font/google";
+import { Inter, Roboto, Outfit, Manrope } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { AuthContextProvider } from "@/context/AuthContext";
@@ -21,10 +21,10 @@ const inter = Inter({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -42,7 +42,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body
-        className={`${roboto.variable} ${inter.variable} ${outfit.variable} antialiased`}
+        className={`${roboto.variable} ${inter.variable} ${manrope.variable} antialiased`}
       >
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>

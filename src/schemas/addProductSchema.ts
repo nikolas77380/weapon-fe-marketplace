@@ -24,8 +24,8 @@ export const createAddProductSchema = (t: (key: string) => string) => {
     }),
     productImages: z
       .array(z.instanceof(File))
-      .max(5, t("validation.maxImages"))
-      .optional(),
+      .min(1, t("validation.minImages"))
+      .max(5, t("validation.maxImages")),
   });
 };
 
@@ -47,8 +47,8 @@ export const addProductSchema = z.object({
   }),
   productImages: z
     .array(z.instanceof(File))
-    .max(5, "Maximum 5 images allowed")
-    .optional(),
+    .min(1, "At least one image is required")
+    .max(5, "Maximum 5 images allowed"),
 });
 
 export type AddProductSchemaValues = z.infer<typeof addProductSchema>;

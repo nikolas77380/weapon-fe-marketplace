@@ -30,9 +30,14 @@ import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
 import CategorySelect from "@/components/ui/CategorySelect";
 import { useProductActions } from "@/hooks/useProductsQuery";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
-const AddProductForms = () => {
+const AddProductForms = ({
+  onProductCreated,
+}: {
+  onProductCreated?: () => void;
+}) => {
+  const locale = useLocale();
   const t = useTranslations("AddProduct.addProductForm");
   const tCondition = useTranslations(
     "AddProduct.addProductForm.productCondition"
@@ -58,12 +63,14 @@ const AddProductForms = () => {
 
   const router = useRouter();
 
-  // Create schema with translations
+  // Create schema and resolver with translations - rebuild when translations or locale change
   const schema = useMemo(() => createAddProductSchema(t), [t]);
+  const resolver = useMemo(() => zodResolver(schema), [schema]);
 
   const form = useForm<AddProductSchemaValues>({
-    resolver: zodResolver(schema),
+    resolver,
     mode: "onSubmit",
+    reValidateMode: "onSubmit",
     defaultValues: {
       productName: "",
       productSku: "",
@@ -76,14 +83,28 @@ const AddProductForms = () => {
       productPriceEUR: 0,
       productPriceUAH: 0,
       productCount: 0,
-      productImages: undefined,
+      productImages: [],
       productStatus: "available",
     },
   });
 
+  // Re-validate form when locale changes to update validation messages
+  useEffect(() => {
+    // Only re-validate if there are existing errors
+    if (Object.keys(form.formState.errors).length > 0) {
+      // Trigger validation again to get messages in new language
+      form.trigger();
+    }
+  }, [locale, form]);
+
   useEffect(() => {
     if (savedFormData) {
       form.reset(savedFormData);
+    }
+    // Initialize productImages if it's undefined
+    const currentImages = form.getValues("productImages");
+    if (!currentImages || !Array.isArray(currentImages)) {
+      form.setValue("productImages", []);
     }
   }, [savedFormData, form]);
 
@@ -116,9 +137,23 @@ const AddProductForms = () => {
   }, [createError]);
 
   const onSubmit = async (values: AddProductSchemaValues) => {
-    // Trigger validation to show errors
+    // Ensure productImages is always an array before validation
+    const currentImages = Array.isArray(values.productImages)
+      ? values.productImages
+      : [];
+    if (currentImages.length === 0 || !Array.isArray(values.productImages)) {
+      form.setValue("productImages", [], {
+        shouldValidate: false,
+        shouldTouch: true,
+      });
+    }
+
+    // Trigger validation to show errors - this will mark all fields as touched after submit attempt
     const isValid = await form.trigger();
+
+    // Force re-validation of productImages if it's empty
     if (!isValid) {
+      await form.trigger("productImages");
       return;
     }
     try {
@@ -177,11 +212,20 @@ const AddProductForms = () => {
         productPriceEUR: 0,
         productPriceUAH: 0,
         productCount: 0,
+        productImages: [],
         productStatus: "available",
       });
 
       toast.success(t("toastSuccessAdd"));
-      router.push("/account");
+
+      // Switch to myInquiries tab after successful submission
+      if (onProductCreated) {
+        onProductCreated();
+      } else {
+        // Fallback: use sessionStorage if callback not provided
+        sessionStorage.setItem("accountTab", "myInquiries");
+        router.push("/account");
+      }
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error(error instanceof Error ? error.message : t("toastErrorAdd"));
@@ -202,6 +246,7 @@ const AddProductForms = () => {
       productPriceEUR: 0,
       productPriceUAH: 0,
       productCount: 0,
+      productImages: [],
       productStatus: "available",
     });
 
@@ -438,23 +483,26 @@ const AddProductForms = () => {
             <FormField
               control={form.control}
               name="productImages"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <ImagesDropzone
-                      maxFiles={5}
-                      maxSize={5 * 1024 * 1024}
-                      enableCrop={true}
-                      aspectRatio={16 / 9}
-                      onFilesChange={(files) => {
-                        field.onChange(files);
-                        console.log("Images updated in form:", files);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormControl>
+                      <ImagesDropzone
+                        maxFiles={5}
+                        maxSize={5 * 1024 * 1024}
+                        enableCrop={true}
+                        aspectRatio={16 / 9}
+                        externalFiles={field.value || []}
+                        onFilesChange={(files) => {
+                          field.onChange(files || []);
+                          console.log("Images updated in form:", files);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500 text-sm mt-1" />
+                  </FormItem>
+                );
+              }}
             />
           </div>
 
