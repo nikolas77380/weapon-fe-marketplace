@@ -68,9 +68,10 @@ const AddProductForms = () => {
       productManufacturer: "",
       productModel: "",
       productCondition: "",
-      productPrice: 0,
+      productPriceUSD: 0,
+      productPriceEUR: 0,
+      productPriceUAH: 0,
       productCount: 0,
-      productCurrency: "USD",
       productImages: undefined,
       productStatus: "available",
     },
@@ -133,8 +134,9 @@ const AddProductForms = () => {
       const productData = {
         title: values.productName,
         description: values.productDescription,
-        price: values.productPrice,
-        currency: values.productCurrency,
+        priceUSD: values.productPriceUSD,
+        priceEUR: values.productPriceEUR,
+        priceUAH: values.productPriceUAH,
         category: selectedCategory.id,
         sku: values.productSku || undefined,
         status: values.productStatus,
@@ -162,9 +164,10 @@ const AddProductForms = () => {
         productManufacturer: "",
         productModel: "",
         productCondition: "",
-        productPrice: 0,
+        productPriceUSD: 0,
+        productPriceEUR: 0,
+        productPriceUAH: 0,
         productCount: 0,
-        productCurrency: "USD",
         productStatus: "available",
       });
 
@@ -186,9 +189,10 @@ const AddProductForms = () => {
       productManufacturer: "",
       productModel: "",
       productCondition: "",
-      productPrice: 0,
+      productPriceUSD: 0,
+      productPriceEUR: 0,
+      productPriceUAH: 0,
       productCount: 0,
-      productCurrency: "USD",
       productStatus: "available",
     });
 
@@ -307,28 +311,75 @@ const AddProductForms = () => {
             <h2 className="absolute -top-3.5 left-9 bg-background px-2 text-lg font-bold text-gray-700">
               {t("titlePrice")}
             </h2>
-            {/* Product Price */}
-            <FormFieldComponent
-              control={form.control}
-              name="productPrice"
-              label={t("labelPrice")}
-              type="input"
-              inputType="number"
-              className="w-full min-[600px]:w-1/2"
-              classNameLabel="bg-background"
-              min="1"
-              step="1"
-              customOnChange={(e, fieldOnChange) => {
-                const value = e.target.value;
-                const numValue = value === "" ? 0 : Math.max(1, Number(value));
-                fieldOnChange(numValue);
-              }}
-              customOnFocus={(e) => {
-                if (e.target.value === "0") {
-                  e.target.value = "";
-                }
-              }}
-            />
+            {/* Product Prices */}
+            <div className="space-y-4">
+              <FormFieldComponent
+                control={form.control}
+                name="productPriceUSD"
+                label="Price (USD)"
+                type="input"
+                inputType="number"
+                className="w-full sm:w-1/3"
+                classNameLabel="bg-background"
+                min="0.01"
+                step="0.01"
+                customOnChange={(e, fieldOnChange) => {
+                  const value = e.target.value;
+                  const numValue =
+                    value === "" ? 0 : Math.max(0.01, Number(value));
+                  fieldOnChange(numValue);
+                }}
+                customOnFocus={(e) => {
+                  if (e.target.value === "0") {
+                    e.target.value = "";
+                  }
+                }}
+              />
+              <FormFieldComponent
+                control={form.control}
+                name="productPriceEUR"
+                label="Price (EUR)"
+                type="input"
+                inputType="number"
+                className="w-full sm:w-1/3"
+                classNameLabel="bg-background"
+                min="0.01"
+                step="0.01"
+                customOnChange={(e, fieldOnChange) => {
+                  const value = e.target.value;
+                  const numValue =
+                    value === "" ? 0 : Math.max(0.01, Number(value));
+                  fieldOnChange(numValue);
+                }}
+                customOnFocus={(e) => {
+                  if (e.target.value === "0") {
+                    e.target.value = "";
+                  }
+                }}
+              />
+              <FormFieldComponent
+                control={form.control}
+                name="productPriceUAH"
+                label="Price (UAH)"
+                type="input"
+                inputType="number"
+                className="w-full sm:w-1/3"
+                classNameLabel="bg-background"
+                min="0.01"
+                step="0.01"
+                customOnChange={(e, fieldOnChange) => {
+                  const value = e.target.value;
+                  const numValue =
+                    value === "" ? 0 : Math.max(0.01, Number(value));
+                  fieldOnChange(numValue);
+                }}
+                customOnFocus={(e) => {
+                  if (e.target.value === "0") {
+                    e.target.value = "";
+                  }
+                }}
+              />
+            </div>
           </div>
 
           {/* Product Details */}

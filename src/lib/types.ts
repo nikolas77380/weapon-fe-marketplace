@@ -146,8 +146,12 @@ export interface Product {
   title: string;
   slug: string;
   description?: string;
-  price: number;
-  currency: string;
+  priceUSD?: number;
+  priceEUR?: number;
+  priceUAH?: number;
+  // Legacy fields for backward compatibility
+  price?: number;
+  currency?: string;
   sku?: string;
   status: "available" | "reserved" | "sold" | "archived";
   category?: Category;
@@ -178,8 +182,9 @@ export interface Tag {
 export interface CreateProductData {
   title: string;
   description?: string;
-  price: number;
-  currency?: string;
+  priceUSD?: number;
+  priceEUR?: number;
+  priceUAH?: number;
   category: number;
   tags?: number[];
   sku?: string;
@@ -190,8 +195,9 @@ export interface CreateProductData {
 export interface UpdateProductData {
   title?: string;
   description?: string;
-  price?: number;
-  currency?: string;
+  priceUSD?: number;
+  priceEUR?: number;
+  priceUAH?: number;
   category?: number;
   tags?: number[];
   sku?: string;

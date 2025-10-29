@@ -1,6 +1,8 @@
 import { ImageType, Product } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 import { Ellipsis, Eye, SquarePen, Trash2 } from "lucide-react";
+import { getDisplayPrice } from "@/lib/formatUtils";
+import { useCurrency } from "@/hooks/useCurrency";
 import {
   Tooltip,
   TooltipContent,
@@ -38,6 +40,7 @@ interface SellerListenedCardProps {
 
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
+  const { selectedCurrency } = useCurrency();
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
 
   const { deleteProduct, updateProduct, loading } = useProductActions();
@@ -133,7 +136,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>
           <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-roboto font-extralight text-sm text-black">
             <p>{product.category?.name}</p>
-            <p>{product.price}$</p>
+            <p>{getDisplayPrice(product, selectedCurrency)}</p>
             <p>Posted: {formatDate(product.createdAt)}</p>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-3 sm:gap-6 font-roboto font-medium text-xs sm:text-sm text-gray-400">

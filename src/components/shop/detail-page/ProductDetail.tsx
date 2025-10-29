@@ -7,16 +7,18 @@ import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
 import { useSellerData } from "@/hooks/useSellerData";
-import { formatPrice } from "@/lib/formatUtils";
+import { getDisplayPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import ContactModal from "../ContactModal";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
   const tContact = useTranslations("ShopCard");
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const currentLocale = useLocale();
+  const { selectedCurrency } = useCurrency();
 
   const { sellerData } = useSellerData(product?.seller?.id);
   const [open, setOpen] = useState(false);
@@ -86,9 +88,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
         <div className="flex flex-col items-start min-[400px]:flex-row min-[400px]:items-center justify-between mt-4 lg:mt-5 gap-3">
           {/* Price */}
-          {product.price && (
+          {(product.priceUSD ||
+            product.priceEUR ||
+            product.priceUAH ||
+            product.price) && (
             <span className="font-medium text-xl sm:text-2xl lg:text-[25px]">
-              {formatPrice(product.price, "$")}
+              {getDisplayPrice(product, selectedCurrency)}
             </span>
           )}
           {/* Contact Seller */}

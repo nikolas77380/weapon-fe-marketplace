@@ -4,12 +4,12 @@ import { Button } from "../ui/button";
 import { ImageType, Product } from "@/lib/types";
 import { useState } from "react";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
-import { formatPrice } from "@/lib/formatUtils";
+import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
 import { useTranslations } from "next-intl";
-import { useContactSeller } from "@/hooks/useContactSeller";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface ShopCardProps {
   item: Product;
@@ -18,10 +18,9 @@ interface ShopCardProps {
 
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
+  const { selectedCurrency } = useCurrency();
 
   const [open, setOpen] = useState(false);
-  const { contactSeller } = useContactSeller();
-
   const handleContactSeller = async (e: React.MouseEvent) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
@@ -77,7 +76,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-base sm:text-lg font-semibold">
-                {formatPrice(item.price, "$")}
+                {getDisplayPrice(item, selectedCurrency)}
               </p>
             </div>
             <p className="font-extrabold text-base sm:text-lg mb-2 truncate">
@@ -171,7 +170,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
         <div className="flex flex-col gap-1.5 xs:gap-2">
           <div className="flex justify-end w-full">
             <p className="text-sm xs:text-base sm:text-lg font-medium text-gold-main">
-              {formatPrice(item.price, "$")}
+              {getDisplayPrice(item, selectedCurrency)}
             </p>
           </div>
           <Link

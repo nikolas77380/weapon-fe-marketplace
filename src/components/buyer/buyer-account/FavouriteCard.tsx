@@ -2,9 +2,10 @@ import Image from "next/image";
 import { Heart } from "lucide-react";
 import { FavouriteProduct } from "@/lib/favourites";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
-import { formatPrice } from "@/lib/formatUtils";
+import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface FavouriteCardProps {
   favourite: FavouriteProduct;
@@ -16,6 +17,7 @@ const FavouriteCard = ({
   viewMode = "grid",
 }: FavouriteCardProps) => {
   const t = useTranslations("BuyerAccountTabs.tabFavourites");
+  const { selectedCurrency } = useCurrency();
 
   const product = favourite.product;
 
@@ -50,14 +52,16 @@ const FavouriteCard = ({
                 {product.title}
               </h3>
               <p className="hidden min-[400px]:block text-sm md:text-base lg:text-lg font-semibold text-gold-main flex-shrink-0 ">
-                {formatPrice(product.price)}
+                {getDisplayPrice(product, selectedCurrency)}
               </p>
             </div>
           </div>
           <div className="flex flex-col gap-2 lg:flex-row items-start lg:items-center lg:justify-between">
             <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
               <div className="hidden min-[400px]:block bg-green-500 py-1 px-2 rounded-sm">
-                <p className="text-xs lg:text-sm text-white font-semibold">{product.status}</p>
+                <p className="text-xs lg:text-sm text-white font-semibold">
+                  {product.status}
+                </p>
               </div>
               <div>
                 <p className="hidden min-[400px]:block text-xs lg:text-sm font-bold text-muted-foreground">
@@ -109,7 +113,7 @@ const FavouriteCard = ({
             {product.title}
           </h3>
           <p className="text-sm font-semibold text-gold-main flex-shrink-0">
-            {formatPrice(product.price)}
+            {getDisplayPrice(product, selectedCurrency)}
           </p>
         </div>
 

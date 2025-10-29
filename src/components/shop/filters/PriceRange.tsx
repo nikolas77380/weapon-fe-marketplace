@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Slider } from "@/components/ui/slider";
+import { useCurrency, getCurrencySymbol } from "@/hooks/useCurrency";
 
 interface PriceRangeProps {
   minLimit: number;
@@ -24,6 +25,8 @@ const PriceRange = ({
   isDisabled = false,
 }: PriceRangeProps) => {
   const t = useTranslations("PriceRange");
+  const { selectedCurrency } = useCurrency();
+  const currencySymbol = getCurrencySymbol(selectedCurrency);
 
   // Безопасные значения по умолчанию
   const safeMinLimit = minLimit ?? 0;
@@ -119,7 +122,7 @@ const PriceRange = ({
                 {t("titleMin")}
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                $
+                {currencySymbol}
               </span>
               <input
                 disabled={isDisabled}
@@ -172,7 +175,7 @@ const PriceRange = ({
                 {t("titleMax")}
               </span>
               <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-500">
-                $
+                {currencySymbol}
               </span>
               <input
                 disabled={isDisabled}

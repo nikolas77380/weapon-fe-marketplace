@@ -532,15 +532,15 @@ export const getProductConditionOptions = (t: (key: string) => string) =>
 
 export const PRODUCT_CURRENCY_FORM = [
   {
-    key: "usd",
+    key: "USD",
     label: "USD",
   },
   {
-    key: "eur",
+    key: "EUR",
     label: "EUR",
   },
   {
-    key: "uah",
+    key: "UAH",
     label: "UAH",
   },
 ] as const;
