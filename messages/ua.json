@@ -324,7 +324,20 @@
       "titleImages": "Зображення",
       "buttonClear": "Очистити форму",
       "buttonCreating": "Створюється...",
-      "buttonSubmit": "Підтвердити"
+      "buttonSubmit": "Підтвердити",
+      "validation": {
+        "productNameRequired": "Назва товару є обов'язковою",
+        "productSkuRequired": "SKU товару є обов'язковим",
+        "productDescriptionRequired": "Опис товару є обов'язковим",
+        "productCategoryRequired": "Категорія товару є обов'язковою",
+        "productManufacturerRequired": "Виробник товару є обов'язковим",
+        "productModelRequired": "Модель товару є обов'язковою",
+        "productConditionRequired": "Стан товару є обов'язковим",
+        "priceGreaterThanZero": "Ціна повинна бути більше 0",
+        "countGreaterThanZero": "Кількість повинна бути більше 0",
+        "productStatusRequired": "Статус товару є обов'язковим",
+        "maxImages": "Максимум 5 зображень дозволено"
+      }
     }
   },
   "EditProduct": {

@@ -324,7 +324,20 @@
       "titleImages": "Images",
       "buttonClear": "Clear Draft",
       "buttonCreating": "Creating...",
-      "buttonSubmit": "Submit"
+      "buttonSubmit": "Submit",
+      "validation": {
+        "productNameRequired": "Product name is required",
+        "productSkuRequired": "Product SKU is required",
+        "productDescriptionRequired": "Product description is required",
+        "productCategoryRequired": "Product category is required",
+        "productManufacturerRequired": "Product manufacturer is required",
+        "productModelRequired": "Product model is required",
+        "productConditionRequired": "Product condition is required",
+        "priceGreaterThanZero": "Price must be greater than 0",
+        "countGreaterThanZero": "Count must be greater than 0",
+        "productStatusRequired": "Product status is required",
+        "maxImages": "Maximum 5 images allowed"
+      }
     }
   },
   "EditProduct": {
