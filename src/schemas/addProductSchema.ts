@@ -8,12 +8,13 @@ export const addProductSchema = z.object({
   productManufacturer: z.string().min(1, "Product manufacturer is required"),
   productModel: z.string().min(1, "Product model is required"),
   productCondition: z.string().min(1, "Product condition is required"),
-  productPrice: z.number().min(1, "Price must be greater than 0"),
+  productPriceUSD: z.number().min(0.01, "Price must be greater than 0"),
+  productPriceEUR: z.number().min(0.01, "Price must be greater than 0"),
+  productPriceUAH: z.number().min(0.01, "Price must be greater than 0"),
   productCount: z.number().min(1, "Count must be greater than 0"),
   productStatus: z.enum(["available", "reserved", "sold", "archived"], {
     message: "Product status is required",
   }),
-  productCurrency: z.string(),
   productImages: z
     .array(z.instanceof(File))
     .max(5, "Maximum 5 images allowed")

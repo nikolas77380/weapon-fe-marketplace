@@ -79,6 +79,10 @@ const EditProductForm = ({
     defaultValues: {
       title: product.title || "",
       description: product.description || "",
+      priceUSD: product.priceUSD ?? product.price ?? 0,
+      priceEUR: product.priceEUR ?? 0,
+      priceUAH: product.priceUAH ?? 0,
+      // Legacy support
       price: product.price || 0,
       category: product.category?.id || 0,
       sku: product.sku || "",
@@ -97,6 +101,10 @@ const EditProductForm = ({
       form.reset({
         title: product.title || "",
         description: product.description || "",
+        priceUSD: product.priceUSD ?? product.price ?? 0,
+        priceEUR: product.priceEUR ?? 0,
+        priceUAH: product.priceUAH ?? 0,
+        // Legacy support
         price: product.price || 0,
         category: product.category?.id || 0,
         sku: product.sku || "",
@@ -114,6 +122,9 @@ const EditProductForm = ({
     product.id,
     product.title,
     product.description,
+    product.priceUSD,
+    product.priceEUR,
+    product.priceUAH,
     product.price,
     product.category?.id,
     product.sku,
@@ -143,8 +154,9 @@ const EditProductForm = ({
       const updateData: UpdateProductData = {
         title: values.title,
         description: values.description,
-        price: values.price,
-        currency: "USD", // Always use USD
+        priceUSD: values.priceUSD,
+        priceEUR: values.priceEUR,
+        priceUAH: values.priceUAH,
         category: values.category,
         sku: values.sku,
         status: values.status,
@@ -263,20 +275,63 @@ const EditProductForm = ({
             rows={4}
           />
 
-          {/* Price */}
-          <FormFieldComponent
-            control={form.control}
-            name="price"
-            label={t("labelPrice")}
-            type="input"
-            inputType="number"
-            placeholder="0.00"
-            className="w-full sm:w-1/2"
-            classNameLabel="bg-background"
-            customOnChange={(e, fieldOnChange) =>
-              fieldOnChange(Number(e.target.value))
-            }
-          />
+          {/* Prices */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+            <FormFieldComponent
+              control={form.control}
+              name="priceUSD"
+              label="Price (USD)"
+              type="input"
+              inputType="number"
+              placeholder="0.00"
+              className="w-full"
+              classNameLabel="bg-background"
+              min="0.01"
+              step="0.01"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue =
+                  value === "" ? 0 : Math.max(0.01, Number(value));
+                fieldOnChange(numValue);
+              }}
+            />
+            <FormFieldComponent
+              control={form.control}
+              name="priceEUR"
+              label="Price (EUR)"
+              type="input"
+              inputType="number"
+              placeholder="0.00"
+              className="w-full"
+              classNameLabel="bg-background"
+              min="0.01"
+              step="0.01"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue =
+                  value === "" ? 0 : Math.max(0.01, Number(value));
+                fieldOnChange(numValue);
+              }}
+            />
+            <FormFieldComponent
+              control={form.control}
+              name="priceUAH"
+              label="Price (UAH)"
+              type="input"
+              inputType="number"
+              placeholder="0.00"
+              className="w-full"
+              classNameLabel="bg-background"
+              min="0.01"
+              step="0.01"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue =
+                  value === "" ? 0 : Math.max(0.01, Number(value));
+                fieldOnChange(numValue);
+              }}
+            />
+          </div>
 
           {/* Category, Condition, Status - 3 in a row on desktop, stacked on mobile */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full">

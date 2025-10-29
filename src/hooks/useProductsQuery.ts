@@ -163,6 +163,7 @@ export interface CategoryProductsElasticParams {
     min?: number;
     max?: number;
   };
+  currency?: string;
   tags?: string[];
   status?: string;
   sort?: string;
@@ -179,6 +180,7 @@ export interface CategoryFiltersElasticParams {
     min?: number;
     max?: number;
   };
+  currency?: string;
   tags?: string[];
   status?: string;
 }

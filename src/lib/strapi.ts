@@ -1457,6 +1457,7 @@ export const getCategoryProductsElastic = async (params: {
     min?: number;
     max?: number;
   };
+  currency?: string;
   tags?: string[];
   status?: string;
   sort?: string;
@@ -1474,6 +1475,10 @@ export const getCategoryProductsElastic = async (params: {
 
   if (params.priceRange) {
     queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.currency) {
+    queryParams.append("currency", params.currency);
   }
 
   if (params.tags && params.tags.length > 0) {
@@ -1514,12 +1519,6 @@ export const getCategoryProductsElastic = async (params: {
     );
   }
 
-  if (params.tags && params.tags.length > 0) {
-    params.tags.forEach((tag) => {
-      queryParams.append("tags", tag);
-    });
-  }
-
   const queryString = queryParams.toString();
   const path = `/api/categories/public/slug/${params.categorySlug}/products${
     queryString ? `?${queryString}` : ""
@@ -1538,6 +1537,7 @@ export const getCategoryFiltersElastic = async (params: {
     min?: number;
     max?: number;
   };
+  currency?: string;
   tags?: string[];
   status?: string;
 }) => {
@@ -1545,6 +1545,10 @@ export const getCategoryFiltersElastic = async (params: {
 
   if (params.priceRange) {
     queryParams.append("priceRange", JSON.stringify(params.priceRange));
+  }
+
+  if (params.currency) {
+    queryParams.append("currency", params.currency);
   }
 
   if (params.tags && params.tags.length > 0) {

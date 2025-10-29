@@ -18,6 +18,7 @@ import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
 import SkeletonComponent from "../ui/SkeletonComponent";
 import { Category } from "@/lib/types";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface FilterState {
   minPrice: number;
@@ -34,6 +35,7 @@ interface FilterState {
 const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const t = useTranslations("CategoryDetail");
   const currentLocale = useLocale();
+  const { selectedCurrency } = useCurrency();
   const { viewMode, setViewMode } = useViewMode("grid");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -59,6 +61,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
             max: filters.maxPrice,
           }
         : undefined,
+    currency: selectedCurrency,
     page: filters.page,
     pageSize: 24,
     availability:
@@ -76,6 +79,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
             max: filters.maxPrice,
           }
         : undefined,
+    currency: selectedCurrency,
   });
 
   const allProducts = response?.data || [];

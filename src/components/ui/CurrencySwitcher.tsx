@@ -37,17 +37,32 @@ export default function CurrencySwitcher({
   // Load currency from localStorage on mount
   useEffect(() => {
     const savedCurrency = localStorage.getItem("selectedCurrency");
-    if (
-      savedCurrency &&
-      currencies.some((curr) => curr.code === savedCurrency)
-    ) {
-      setCurrentCurrency(savedCurrency);
+    if (savedCurrency) {
+      try {
+        // Try to parse as JSON first
+        const parsed = JSON.parse(savedCurrency);
+        if (currencies.some((curr) => curr.code === parsed)) {
+          setCurrentCurrency(parsed);
+        }
+      } catch {
+        // If not JSON, treat as plain string (backward compatibility)
+        if (currencies.some((curr) => curr.code === savedCurrency)) {
+          setCurrentCurrency(savedCurrency);
+          // Normalize to JSON format
+          localStorage.setItem(
+            "selectedCurrency",
+            JSON.stringify(savedCurrency)
+          );
+        }
+      }
     }
   }, []);
 
   const handleCurrencyChange = (newCurrency: string) => {
     setCurrentCurrency(newCurrency);
-    localStorage.setItem("selectedCurrency", newCurrency);
+    localStorage.setItem("selectedCurrency", JSON.stringify(newCurrency));
+    // Trigger custom event to notify all components
+    window.dispatchEvent(new Event("currencyChanged"));
   };
 
   const getCurrentCurrencyConfig = () => {

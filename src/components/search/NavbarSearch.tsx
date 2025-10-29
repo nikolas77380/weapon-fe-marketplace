@@ -5,6 +5,8 @@ import { useProductSearchManual } from "@/hooks/useProductSearch";
 import { useSellerSearchManual } from "@/hooks/useSellerSearch";
 import { Product } from "@/lib/types";
 import { Seller } from "@/hooks/useSellerSearch";
+import { getDisplayPrice } from "@/lib/formatUtils";
+import { useCurrency } from "@/hooks/useCurrency";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Package, Users, Loader2 } from "lucide-react";
@@ -27,6 +29,7 @@ export const NavbarSearch = ({
   className = "",
 }: NavbarSearchProps) => {
   const t = useTranslations("Navbar");
+  const { selectedCurrency } = useCurrency();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
@@ -231,7 +234,7 @@ export const NavbarSearch = ({
                             {product.title}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {product.price} {product.currency}
+                            {getDisplayPrice(product, selectedCurrency)}
                             {product.seller && (
                               <span className="ml-2">
                                 • {product.seller.username}
