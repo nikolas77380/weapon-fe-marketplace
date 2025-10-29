@@ -7,7 +7,8 @@ import { useProductQuery } from "@/hooks/useProductsQuery";
 import ProductDetail from "./ProductDetail";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { useViewedProducts } from "@/hooks/useViewedProducts";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useLocale } from "next-intl";
 
 interface DetailProductPageComponentProps {
   productId: number;
@@ -19,6 +20,7 @@ const DetailProductPageComponent = ({
   const { data: product, isLoading, error } = useProductQuery(productId);
   const { addViewedProduct } = useViewedProducts();
   const loading = isLoading;
+  const currentLocale = useLocale();
 
   // We save the product to viewed items when it is loaded.
   useEffect(() => {
@@ -31,8 +33,29 @@ const DetailProductPageComponent = ({
     [productId.toString()]: product?.title || "Product",
   };
 
+  // Prepare intermediate crumbs for category
+  const intermediateCrumbs = useMemo(() => {
+    if (!product?.category) return undefined;
+
+    const getCategoryDisplayName = (category: any) => {
+      return currentLocale === "ua" && category?.translate_ua
+        ? category.translate_ua
+        : category?.name;
+    };
+
+    return [
+      {
+        href: `/category/${product.category.slug}`,
+        label: getCategoryDisplayName(product.category),
+      },
+    ];
+  }, [product?.category, currentLocale]);
+
   return (
-    <PageWrapper customLabels={customLabels}>
+    <PageWrapper
+      customLabels={customLabels}
+      intermediateCrumbs={intermediateCrumbs}
+    >
       <div className="container mx-auto px-2 sm:px-4 lg:px-6">
         {loading && <LoadingState title="Loading product..." />}
 
