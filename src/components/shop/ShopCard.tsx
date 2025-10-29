@@ -90,10 +90,14 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             <p className="font-extrabold text-base sm:text-lg mb-2 truncate">
               {item.title}
             </p>
-            {item.category && (
-              <p className="text-sm truncate font-light text-gray-700 my-1">
+            {item.category && item.category.slug && (
+              <Link
+                href={`/category/${item.category.slug}`}
+                className="text-sm truncate font-light text-gray-700 my-1 hover:text-gold-main transition-colors duration-300 cursor-pointer"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {getCategoryDisplayName(item.category)}
-              </p>
+              </Link>
             )}
             <p className="font-light text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
               {item.description}
@@ -192,10 +196,14 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           >
             {item.title}
           </Link>
-          {item.category && (
-            <p className="text-sm truncate font-light text-gray-700 my-1">
+          {item.category && item.category.slug && (
+            <Link
+              href={`/category/${item.category.slug}`}
+              className="text-sm truncate font-light text-gray-700 my-1 hover:text-gold-main transition-colors duration-300 cursor-pointer"
+              onClick={(e) => e.stopPropagation()}
+            >
               {getCategoryDisplayName(item.category)}
-            </p>
+            </Link>
           )}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
