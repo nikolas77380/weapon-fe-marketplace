@@ -26,14 +26,13 @@ const Logo = ({ className }: LogoProps) => {
           </div>
           <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold-main/20 to-gray-secondary/20"></div>
         </div>
-        <div className="flex flex-col items-start">
+        <div className="flex-col items-start hidden lg:flex">
           <span
-            className="text-lg sm:text-xl font-bold bg-gradient-to-r from-gold-main to-gray-secondary
-            bg-clip-text text-transparent"
+            className="text-base sm:text-xl font-bold text-gold-main"
           >
             Esviem
           </span>
-          <span className="text-xs sm:text-sm font-semibold text-gold-main -mt-1">
+          <span className="text-[10px] sm:text-sm font-semibold text-gold-main -mt-1">
             Defence
           </span>
         </div>

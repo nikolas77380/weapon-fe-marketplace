@@ -93,6 +93,10 @@
       "titleFinishedChats": "Finished chats",
       "titleLatestMessages": "Latest messages"
     },
+    "tabAddProduct": {
+      "titleAddProduct": "Add Product",
+      "descriptionAddNewProduct": "Add a new product to your listings"
+    },
     "tabSettings": {
       "titleSettings": "Settings"
     }
