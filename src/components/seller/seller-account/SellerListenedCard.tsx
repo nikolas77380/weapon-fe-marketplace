@@ -204,7 +204,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 </Tooltip>
               </div>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="rounded-lg border-gold-main">
               <DialogHeader>
                 <DialogTitle>
                   {t("tabMyInquiries.titleToogleDeleteCard")}
@@ -215,19 +215,20 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                   {t("tabMyInquiries.descriptionModalDeleteProduct2")}
                 </DialogDescription>
               </DialogHeader>
-              <DialogFooter>
+              <DialogFooter className="gap-2">
                 <Button
                   variant="outline"
                   onClick={() => setIsDeleteDialogOpen(false)}
                   disabled={loading}
-                  className="py-2"
+                  className="py-2 border-gold-main"
                 >
                   {t("tabMyInquiries.descriptionModalCancel")}
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="default"
                   onClick={handleDeleteProduct}
                   disabled={loading}
+                  className="py-2 bg-gold-main hover:bg-gold-main/80 text-white"
                 >
                   {loading
                     ? t("tabMyInquiries.descriptionModalDeleting")
