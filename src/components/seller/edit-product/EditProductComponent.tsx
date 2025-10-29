@@ -8,6 +8,7 @@ import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
 import NotFoundState from "@/components/ui/NotFoundState";
 import EditPageWrapper from "@/components/ui/PageWrapper";
+import { useTranslations } from "next-intl";
 
 interface EditProductComponentProps {
   productSlug: string;
@@ -26,6 +27,7 @@ const EditProductComponent = ({
   const products = response?.data || [];
   const loading = isLoading;
   const product = products.find((p: Product) => p.slug === productSlug);
+  const t = useTranslations("EditProduct");
 
   return (
     <EditPageWrapper
@@ -38,19 +40,19 @@ const EditProductComponent = ({
           : {}
       }
     >
-      {loading && <LoadingState title="Loading product..." />}
+      {loading && <LoadingState title={t("loadingProduct")} />}
 
       {error && (
         <ErrorState
-          title="Error loading product"
-          message={error.message || "Failed to load product"}
+          title={t("errorLoadingProduct")}
+          message={error.message || t("messageErrorLoading")}
         />
       )}
 
       {!loading && !error && !product && (
         <NotFoundState
-          title="Product not found"
-          message={`The product with slug "${productSlug}" doesn't exist or you don't have permission to edit it.`}
+          title={t("productNotFound")}
+          message={t("messageProductNotFound")}
         />
       )}
 
