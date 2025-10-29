@@ -26,7 +26,7 @@ const Logo = ({ className }: LogoProps) => {
           </div>
           <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold-main/20 to-gray-secondary/20"></div>
         </div>
-        <div className="flex-col items-start hidden lg:flex">
+        <div className="flex-col items-start flex">
           <span
             className="text-base sm:text-xl font-bold text-gold-main"
           >

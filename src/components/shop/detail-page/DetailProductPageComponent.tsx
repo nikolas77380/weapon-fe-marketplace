@@ -7,7 +7,8 @@ import { useProductQuery } from "@/hooks/useProductsQuery";
 import ProductDetail from "./ProductDetail";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { useViewedProducts } from "@/hooks/useViewedProducts";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 interface DetailProductPageComponentProps {
   productId: number;
@@ -19,6 +20,8 @@ const DetailProductPageComponent = ({
   const { data: product, isLoading, error } = useProductQuery(productId);
   const { addViewedProduct } = useViewedProducts();
   const loading = isLoading;
+  const currentLocale = useLocale();
+  const t = useTranslations("ProductDetail");
 
   // We save the product to viewed items when it is loaded.
   useEffect(() => {
@@ -31,22 +34,43 @@ const DetailProductPageComponent = ({
     [productId.toString()]: product?.title || "Product",
   };
 
+  // Prepare intermediate crumbs for category
+  const intermediateCrumbs = useMemo(() => {
+    if (!product?.category) return undefined;
+
+    const getCategoryDisplayName = (category: any) => {
+      return currentLocale === "ua" && category?.translate_ua
+        ? category.translate_ua
+        : category?.name;
+    };
+
+    return [
+      {
+        href: `/category/${product.category.slug}`,
+        label: getCategoryDisplayName(product.category),
+      },
+    ];
+  }, [product?.category, currentLocale]);
+
   return (
-    <PageWrapper customLabels={customLabels}>
+    <PageWrapper
+      customLabels={customLabels}
+      intermediateCrumbs={intermediateCrumbs}
+    >
       <div className="container mx-auto px-2 sm:px-4 lg:px-6">
-        {loading && <LoadingState title="Loading product..." />}
+        {loading && <LoadingState title={t("loadingProduct")} />}
 
         {error && (
           <ErrorState
-            title="Error loading product"
-            message={error.message || "Failed to load product"}
+            title={t("errorLoadingProduct")}
+            message={error.message || t("messageErrorLoading")}
           />
         )}
 
         {!loading && !error && !product && (
           <NotFoundState
-            title="Product not found"
-            message={`The product with slug "${productId}" doesn't exist or you don't have permission to edit it.`}
+            title={t("productNotFound")}
+            message={t("messageProductNotFound")}
           />
         )}
 
