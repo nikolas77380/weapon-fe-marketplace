@@ -17,7 +17,13 @@ import {
 } from "@/schemas/editProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   getProductConditionOptions,
   getProductStatusOptions,
@@ -343,8 +349,6 @@ const EditProductForm = ({
               label={t("labelCategory")}
               type="select"
               placeholder="Select category"
-              onValueChange={(value) => Number(value)}
-              selectValue={undefined}
               customSelectOptions={
                 <>
                   {categories.map((category) => (
