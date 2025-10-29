@@ -108,7 +108,8 @@
     "titleActiveListings": "Активні списки",
     "titleSavedProducts": "Збережені товари",
     "titleTotalViews": "Всього переглядів",
-    "titleUnreadChats": "Непрочитаних повідомлень"
+    "titleUnreadChats": "Непрочитаних повідомлень",
+    "titleLogout": "Вийти"
   },
   "Auth": {
     "breadcrumb": "Повернутися на головну",
@@ -356,7 +357,12 @@
       "buttonCancel": "Скасувати",
       "buttonDelete": "Видалити",
       "buttonDeleting": "Видаляється..."
-    }
+    },
+    "loadingProduct": "Завантаження товару...",
+    "errorLoadingProduct": "Помилка завантаження товару",
+    "messageErrorLoading": "Не вдалося завантажити товар",
+    "productNotFound": "Товар не знайдено",
+    "messageProductNotFound": "Товар не існує або у вас немає дозволу на його редагування."
   },
   "NotFound": {
     "titleNotFound": "Сторінка не знайдена",
@@ -424,13 +430,23 @@
     "toastSuccessFavourite": "Додано до обраного",
     "toastSuccessRemoveFavourite": "Видалено з обраного",
     "toastErrorAddFavourite": "Не вдалося додати до обраного",
-    "toastErrorRemoveFavourite": "Не вдалося видалити з обраного"
+    "toastErrorRemoveFavourite": "Не вдалося видалити з обраного",
+    "loadingProduct": "Завантаження товару...",
+    "errorLoadingProduct": "Помилка завантаження товару",
+    "messageErrorLoading": "Не вдалося завантажити товар",
+    "productNotFound": "Товар не знайдено",
+    "messageProductNotFound": "Товар не існує або у вас немає дозволу на його перегляд."
   },
   "CompanyDetail": {
     "titleNotCountry": "Країна недоступна",
     "titleNotAddress": "Адреса недоступна",
     "buttonCardSeller": "Контакти продавця",
     "buttonCreating": "Створюється...",
+    "loadingCompany": "Завантаження компанії...",
+    "errorLoadingCompany": "Помилка завантаження компанії",
+    "messageErrorLoading": "Не вдалося завантажити компанію",
+    "companyNotFound": "Компанія не знайдена",
+    "messageCompanyNotFound": "Компанія не існує або у вас немає дозволу на її перегляд.",
     "tabOverview": {
       "titleOverview": "Огляд",
       "titleAbout": "Про",

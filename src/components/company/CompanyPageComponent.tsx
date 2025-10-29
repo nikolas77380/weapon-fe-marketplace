@@ -7,6 +7,7 @@ import LoadingState from "../ui/LoadingState";
 import ErrorState from "../ui/ErrorState";
 import NotFoundState from "../ui/NotFoundState";
 import CompanyDetail from "./CompanyDetail";
+import { useTranslations } from "next-intl";
 
 interface CompanyPageComponentProps {
   companyId: number;
@@ -14,6 +15,7 @@ interface CompanyPageComponentProps {
 
 const CompanyPageComponent = ({ companyId }: CompanyPageComponentProps) => {
   const { sellerData, loading, error } = useSellerData(companyId);
+  const t = useTranslations("CompanyDetail");
 
   // Создаем кастомные названия для хлебных крошек
   const customLabels = {
@@ -22,14 +24,19 @@ const CompanyPageComponent = ({ companyId }: CompanyPageComponentProps) => {
 
   return (
     <PageWrapper customLabels={customLabels}>
-      {loading && <LoadingState title="Loading company..." />}
+      {loading && <LoadingState title={t("loadingCompany")} />}
 
-      {error && <ErrorState title="Error loading company" message={error} />}
+      {error && (
+        <ErrorState
+          title={t("errorLoadingCompany")}
+          message={error || t("messageErrorLoading")}
+        />
+      )}
 
       {!loading && !error && !sellerData && (
         <NotFoundState
-          title="Company not found"
-          message={`The product with slug "${companyId}" doesn't exist or you don't have permission to edit it.`}
+          title={t("companyNotFound")}
+          message={t("messageCompanyNotFound")}
         />
       )}
 

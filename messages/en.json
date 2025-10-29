@@ -108,7 +108,8 @@
     "titleActiveListings": "Active listings",
     "titleSavedProducts": "Saved products",
     "titleTotalViews": "Total views",
-    "titleUnreadChats": "Unread messages"
+    "titleUnreadChats": "Unread messages",
+    "titleLogout": "Logout"
   },
   "Auth": {
     "breadcrumb": "Back to home",
@@ -356,7 +357,12 @@
       "buttonCancel": "Cancel",
       "buttonDelete": "Delete",
       "buttonDeleting": "Deleting..."
-    }
+    },
+    "loadingProduct": "Loading product...",
+    "errorLoadingProduct": "Error loading product",
+    "messageErrorLoading": "Failed to load product",
+    "productNotFound": "Product not found",
+    "messageProductNotFound": "The product doesn't exist or you don't have permission to edit it."
   },
   "NotFound": {
     "titleNotFound": "Page Not Found",
@@ -423,13 +429,23 @@
     "toastSuccessFavourite": "Added to favourites",
     "toastSuccessRemoveFavourite": "Removed from favourites",
     "toastErrorAddFavourite": "Failed to add to favourites",
-    "toastErrorRemoveFavourite": "Failed to remove from favourites"
+    "toastErrorRemoveFavourite": "Failed to remove from favourites",
+    "loadingProduct": "Loading product...",
+    "errorLoadingProduct": "Error loading product",
+    "messageErrorLoading": "Failed to load product",
+    "productNotFound": "Product not found",
+    "messageProductNotFound": "The product doesn't exist or you don't have permission to view it."
   },
   "CompanyDetail": {
     "titleNotCountry": "Country not available",
     "titleNotAddress": "Address not available",
     "buttonCardSeller": "Contact Seller",
     "buttonCreating": "Creating...",
+    "loadingCompany": "Loading company...",
+    "errorLoadingCompany": "Error loading company",
+    "messageErrorLoading": "Failed to load company",
+    "companyNotFound": "Company not found",
+    "messageCompanyNotFound": "The company doesn't exist or you don't have permission to view it.",
     "tabOverview": {
       "titleOverview": "Overview",
       "titleAbout": "About",
