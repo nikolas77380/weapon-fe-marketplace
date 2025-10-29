@@ -501,14 +501,6 @@ export const getProductStatusOptions = (t: (key: string) => string) =>
       label: t("available"),
     },
     {
-      key: "reserved",
-      label: t("reserved"),
-    },
-    {
-      key: "sold",
-      label: t("sold"),
-    },
-    {
       key: "archived",
       label: t("archived"),
     },

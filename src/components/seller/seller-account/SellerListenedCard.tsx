@@ -100,7 +100,10 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     newStatus: "available" | "reserved" | "sold" | "archived"
   ) => {
     try {
-      await updateProduct({ id: product.id, data: { status: newStatus } });
+      await updateProduct({
+        id: product.id.toString(),
+        data: { status: newStatus },
+      });
       setCurrentStatus(newStatus);
       toast.success(`Status updated to ${newStatus}`);
       // TanStack Query will automatically refetch the data and update the UI
