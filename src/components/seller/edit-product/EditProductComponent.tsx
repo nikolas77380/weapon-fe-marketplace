@@ -28,7 +28,16 @@ const EditProductComponent = ({
   const product = products.find((p: Product) => p.slug === productSlug);
 
   return (
-    <EditPageWrapper currentUser={currentUser}>
+    <EditPageWrapper
+      currentUser={currentUser}
+      customLabels={
+        product
+          ? {
+              [productSlug]: product.title || product.name || productSlug,
+            }
+          : {}
+      }
+    >
       {loading && <LoadingState title="Loading product..." />}
 
       {error && (

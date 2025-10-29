@@ -31,6 +31,11 @@
       "titleSignOut": "Sign Out"
     }
   },
+  "Breadcrumb": {
+    "home": "Home",
+    "account": "Account",
+    "addProduct": "Add Product"
+  },
   "BuyerAccountHeader": {
     "titleUserDetails": "User Details",
     "titleBrowseMarketplace": "Browse marketplace",
@@ -282,7 +287,7 @@
       "labelProductName": "Product Name",
       "placeholderProductName": "Enter your product name",
       "labelSku": "Product SKU (Optional)",
-      "placeholderSku": "Enter your product SKU (optional)",
+      "placeholderSku": "Enter your product SKU",
       "labelDescription": "Description",
       "placeholderDescription": "Enter product description",
       "labelCategory": "Category",

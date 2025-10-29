@@ -175,14 +175,14 @@ const AuthPage = () => {
       <div className="container mx-auto px-layout sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-0">
           <div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-170">
-            <div className="flex items-center justify-between lg:justify-center w-full mb-4 lg:mb-0">
+            <div className="flex items-center justify-between lg:justify-center w-full mb-4 lg:mb-0 relative">
               {/* Пустой div для выравнивания на мобильных */}
               <div className="lg:hidden w-8"></div>
               <div className="flex justify-center">
                 <Logo />
               </div>
-              {/* Language Switcher на мобильных */}
-              <div className="lg:hidden">
+              {/* Language Switcher - на всех устройствах */}
+              <div className="lg:absolute lg:right-0">
                 <LanguageSwitcher
                   classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]"
                   classNameSelectValue="text-gold-main"
@@ -287,14 +287,6 @@ const AuthPage = () => {
                 )}
               </div>
             </div>
-          </div>
-
-          {/* Language Switcher - только на десктопе */}
-          <div className="hidden lg:flex lg:justify-start lg:max-w-[200px] w-full lg:mt-0">
-            <LanguageSwitcher
-              classNameSelectTrigger="shadow-none border-[#f1eded] bg-[#f1eded]"
-              classNameSelectValue="text-gold-main"
-            />
           </div>
         </div>
       </div>
