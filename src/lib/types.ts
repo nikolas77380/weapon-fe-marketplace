@@ -198,7 +198,7 @@ export interface UpdateProductData {
   priceUSD?: number;
   priceEUR?: number;
   priceUAH?: number;
-  category?: number;
+  category?: string;
   tags?: number[];
   sku?: string;
   status?: "available" | "reserved" | "sold" | "archived";

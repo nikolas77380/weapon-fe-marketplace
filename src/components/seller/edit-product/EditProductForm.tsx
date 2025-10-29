@@ -90,7 +90,7 @@ const EditProductForm = ({
       priceUAH: product.priceUAH ?? 0,
       // Legacy support
       price: product.price || 0,
-      category: product.category?.id || 0,
+      category: product.category?.id.toString() || "0",
       sku: product.sku || "",
       status: product.status || "available",
       condition: product.attributesJson?.condition || "New",
@@ -112,7 +112,7 @@ const EditProductForm = ({
         priceUAH: product.priceUAH ?? 0,
         // Legacy support
         price: product.price || 0,
-        category: product.category?.id || 0,
+        category: product.category?.id.toString() || "0",
         sku: product.sku || "",
         status: product.status || "available",
         condition: product.attributesJson?.condition || "new",
@@ -175,7 +175,7 @@ const EditProductForm = ({
       };
 
       await updateProduct({
-        id: product.id,
+        id: product.id.toString(),
         data: updateData,
         images: values.images,
       });

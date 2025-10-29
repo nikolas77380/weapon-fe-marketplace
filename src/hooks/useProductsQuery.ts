@@ -96,14 +96,14 @@ export const useUpdateProductMutation = () => {
       data,
       images,
     }: {
-      id: number;
+      id: string;
       data: UpdateProductData;
       images?: File[];
-    }) => updateProduct({ id, data, images }),
+    }) => updateProduct({ id: Number(id), data, images }),
     onSuccess: (updatedProduct, variables) => {
       // Update the specific product in cache
       queryClient.setQueryData(
-        queryKeys.products.detail(variables.id),
+        queryKeys.products.detail(Number(variables.id)),
         updatedProduct
       );
 

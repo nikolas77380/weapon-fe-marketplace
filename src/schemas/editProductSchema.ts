@@ -9,7 +9,7 @@ export const editProductSchema = z.object({
   // Legacy fields for backward compatibility
   price: z.number().optional(),
   currency: z.string().optional(),
-  category: z.number().optional(),
+  category: z.string().optional(),
   sku: z.string().optional(),
   status: z.enum(["available", "reserved", "sold", "archived"]).optional(),
   condition: z.string().optional(),
