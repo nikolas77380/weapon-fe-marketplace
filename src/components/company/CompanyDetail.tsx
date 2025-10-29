@@ -20,6 +20,7 @@ import { Search, Funnel } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
+import { useCurrency } from "@/hooks/useCurrency";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
 
@@ -29,6 +30,7 @@ interface CompanyDetailProps {
 
 const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const t = useTranslations("CompanyDetail");
+  const { selectedCurrency } = useCurrency();
 
   const { products: sellerProducts, loading } = useSellerProducts(
     sellerData.id
@@ -99,6 +101,18 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       return elasticProducts.data;
     }
 
+    // Helper function to get product price based on selected currency
+    const getProductPrice = (product: any): number => {
+      if (selectedCurrency === "USD") {
+        return product.priceUSD ?? product.price ?? 0;
+      } else if (selectedCurrency === "EUR") {
+        return product.priceEUR ?? product.price ?? 0;
+      } else if (selectedCurrency === "UAH") {
+        return product.priceUAH ?? product.price ?? 0;
+      }
+      return product.price ?? 0;
+    };
+
     // Fallback to local filtering
     const filtered = sellerProducts.filter((product) => {
       // Search filter
@@ -110,8 +124,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
           .includes(filters.search.toLowerCase());
 
       // Price filter
-      const priceMatch =
-        product.price >= filters.minPrice && product.price <= filters.maxPrice;
+      const price = getProductPrice(product);
+      const priceMatch = price >= filters.minPrice && price <= filters.maxPrice;
 
       // Category filter
       const categoryMatch =
@@ -130,7 +144,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         case "id":
           return isDesc ? b.id - a.id : a.id - b.id;
         case "price":
-          return isDesc ? b.price - a.price : a.price - b.price;
+          const priceA = getProductPrice(a);
+          const priceB = getProductPrice(b);
+          return isDesc ? priceB - priceA : priceA - priceB;
         case "title":
           const titleA = a.title.toLowerCase();
           const titleB = b.title.toLowerCase();
@@ -152,15 +168,27 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     filters.maxPrice,
     filters.categoryId,
     filters.sort,
+    selectedCurrency,
   ]);
 
   // Products filtered only by price (for category synchronization)
   const priceFilteredProducts = useMemo(() => {
-    return sellerProducts.filter(
-      (product) =>
-        product.price >= filters.minPrice && product.price <= filters.maxPrice
-    );
-  }, [sellerProducts, filters.minPrice, filters.maxPrice]);
+    const getProductPrice = (product: any): number => {
+      if (selectedCurrency === "USD") {
+        return product.priceUSD ?? product.price ?? 0;
+      } else if (selectedCurrency === "EUR") {
+        return product.priceEUR ?? product.price ?? 0;
+      } else if (selectedCurrency === "UAH") {
+        return product.priceUAH ?? product.price ?? 0;
+      }
+      return product.price ?? 0;
+    };
+
+    return sellerProducts.filter((product) => {
+      const price = getProductPrice(product);
+      return price >= filters.minPrice && price <= filters.maxPrice;
+    });
+  }, [sellerProducts, filters.minPrice, filters.maxPrice, selectedCurrency]);
 
   // Available categories based on price filter
   const availableCategories = useMemo(() => {
@@ -236,10 +264,22 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const handlePriceChange = useCallback(
     (min: number, max: number) => {
       setFilters((prev) => {
+        const getProductPrice = (product: any): number => {
+          if (selectedCurrency === "USD") {
+            return product.priceUSD ?? product.price ?? 0;
+          } else if (selectedCurrency === "EUR") {
+            return product.priceEUR ?? product.price ?? 0;
+          } else if (selectedCurrency === "UAH") {
+            return product.priceUAH ?? product.price ?? 0;
+          }
+          return product.price ?? 0;
+        };
+
         // Get products filtered by new price
-        const newPriceProducts = sellerProducts.filter(
-          (product) => product.price >= min && product.price <= max
-        );
+        const newPriceProducts = sellerProducts.filter((product) => {
+          const price = getProductPrice(product);
+          return price >= min && price <= max;
+        });
 
         // Extract available categories from filtered products
         const availableCategoryIds = new Set(
@@ -260,7 +300,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         };
       });
     },
-    [sellerProducts]
+    [sellerProducts, selectedCurrency]
   );
 
   const handleCategoryChange = useCallback((categoryId: number | null) => {
