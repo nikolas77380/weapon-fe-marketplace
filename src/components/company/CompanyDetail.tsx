@@ -22,9 +22,6 @@ import { useViewMode } from "@/hooks/useViewMode";
 import { useTranslations } from "next-intl";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
-import { useContactSeller } from "@/hooks/useContactSeller";
-import { toast } from "sonner";
-import { useAuthContext } from "@/context/AuthContext";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -86,8 +83,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const [open, setOpen] = useState(false);
-  const { contactSeller } = useContactSeller();
-  const { currentUser } = useAuthContext();
 
   const { categories } = useCategories();
 
@@ -95,16 +90,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     // Prevent event bubbling to parent Link
     e.stopPropagation();
     e.preventDefault();
-
-    if (currentUser) {
-      const success = await contactSeller(sellerData.id);
-      if (success) {
-        toast.success("Чат создан! Переходим к сообщениям...");
-        return;
-      }
-    }
-
-    // Если не авторизован или не удалось создать чат, показываем модалку
     setOpen(true);
   };
 
@@ -587,7 +572,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                             </p>
                             <a
                               href={
-                                sellerData?.metadata?.webSite?.startsWith("http")
+                                sellerData?.metadata?.webSite?.startsWith(
+                                  "http"
+                                )
                                   ? sellerData?.metadata?.webSite
                                   : `https://${sellerData?.metadata?.webSite}`
                               }

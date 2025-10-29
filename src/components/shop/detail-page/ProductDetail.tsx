@@ -11,8 +11,6 @@ import { formatPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import ContactModal from "../ContactModal";
-import { useContactSeller } from "@/hooks/useContactSeller";
-import { useAuthContext } from "@/context/AuthContext";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
@@ -21,8 +19,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
   const currentLocale = useLocale();
 
   const { sellerData } = useSellerData(product?.seller?.id);
-  const { contactSeller } = useContactSeller();
-  const { currentUser } = useAuthContext();
   const [open, setOpen] = useState(false);
 
   const getCategoryDisplayName = (category: any) => {
@@ -65,13 +61,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
   const handleContactSeller = async (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-
-    if (currentUser && product?.seller?.id) {
-      const success = await contactSeller(product.seller.id, product.title);
-      if (success) {
-        return;
-      }
-    }
     setOpen(true);
   };
 

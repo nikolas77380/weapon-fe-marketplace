@@ -655,7 +655,8 @@
         "submittingButton": "Sending...",
         "successMessage": "Your request has been sent successfully! We will contact you soon.",
         "errorMessage": "Error sending request. Please try again.",
-        "errorMessageTurnstile": "Security verification failed. Please try again."
+        "errorMessageTurnstile": "Security verification failed. Please try again.",
+        "buttonContactSeller": "Contact Seller"
       },
       "closeButton": "Close"
     }

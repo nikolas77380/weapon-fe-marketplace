@@ -7,6 +7,31 @@ export interface User {
   blocked: boolean;
   createdAt: string;
   updatedAt: string;
+  metadata?: {
+    avatar?: {
+      id: number;
+      documentId: string;
+      name: string;
+      url: string;
+      ext: string;
+      mime: string;
+      size: number;
+      width: number;
+      height: number;
+      hash: string;
+      provider: string;
+      createdAt: string;
+      updatedAt: string;
+      publishedAt: string;
+      folderPath: string;
+      alternativeText?: string;
+      caption?: string;
+      previewUrl?: string;
+      provider_metadata?: any;
+      locale?: string;
+      formats?: any;
+    };
+  };
 }
 
 export interface Chat {

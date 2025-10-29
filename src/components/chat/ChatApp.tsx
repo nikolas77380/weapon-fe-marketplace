@@ -11,10 +11,12 @@ import { AlertCircle, MessageSquare } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 
 export const ChatApp: React.FC = () => {
   const { currentUser } = useAuthContext();
   const t = useTranslations("Chat");
+  const searchParams = useSearchParams();
 
   const {
     chats,
@@ -29,14 +31,32 @@ export const ChatApp: React.FC = () => {
     clearCurrentChat,
   } = useChat();
 
-  // Загружаем чаты при монтировании компонента
+  // Load chats when component is mounted
   useEffect(() => {
     if (currentUser) {
       loadUserChats();
     }
   }, [loadUserChats, currentUser]);
 
-  // Если пользователь не авторизован, показываем сообщение
+  const handleChatSelect = async (chat: Chat) => {
+    try {
+      await loadChat(chat.id);
+    } catch (error) {
+      console.error("Failed to load chat:", error);
+    }
+  };
+
+  useEffect(() => {
+    const chatId = searchParams.get("chatId");
+    if (chatId && currentUser && chats.length > 0) {
+      const chatIdNumber = parseInt(chatId, 10);
+      const chat = chats.find((c) => c.id === chatIdNumber);
+      if (chat && (!currentChat || currentChat.id !== chatIdNumber)) {
+        handleChatSelect(chat);
+      }
+    }
+  }, [searchParams, currentUser, chats, currentChat]);
+
   if (!currentUser) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -65,14 +85,6 @@ export const ChatApp: React.FC = () => {
       </div>
     );
   }
-
-  const handleChatSelect = async (chat: Chat) => {
-    try {
-      await loadChat(chat.id);
-    } catch (error) {
-      console.error("Failed to load chat:", error);
-    }
-  };
 
   const handleSendMessage = async (text: string) => {
     if (!currentChat) return;
@@ -118,7 +130,7 @@ export const ChatApp: React.FC = () => {
 
   return (
     <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20 min-w-0">
-      {/* Боковая панель со списком чатов */}
+      {/* Side panel  */}
       <div
         className={cn(
           "w-full md:w-80 bg-white border-r border-gray-200 flex flex-col transition-all duration-300",
@@ -141,7 +153,7 @@ export const ChatApp: React.FC = () => {
         </div>
       </div>
 
-      {/* Основная область чата */}
+      {/* Main chat area */}
       <div
         className={cn(
           "flex-1 flex flex-col bg-white transition-all duration-300 min-w-0",

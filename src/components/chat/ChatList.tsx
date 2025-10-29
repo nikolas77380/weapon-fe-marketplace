@@ -4,10 +4,12 @@ import React from "react";
 import { Chat } from "@/types/chat";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageCircle, Users, Clock } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { uk } from "date-fns/locale";
 import { useTranslations } from "next-intl";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface ChatListProps {
   chats: Chat[];
@@ -31,6 +33,26 @@ const getStatusColor = (status: Chat["status"]) => {
   }
 };
 
+// Function to determine if there are unread messages in the chat
+const hasUnreadMessages = (chat: Chat, currentUserId?: number): boolean => {
+  if (!chat.messages || !currentUserId) return false;
+
+  return chat.messages.some(
+    (message) => !message.isRead && message.sender.id !== currentUserId
+  );
+};
+
+// Функция для получения инициалов
+const getInitials = (name: string | null | undefined) => {
+  if (!name) return "??";
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
+
 export const ChatList: React.FC<ChatListProps> = ({
   chats,
   currentChatId,
@@ -38,6 +60,7 @@ export const ChatList: React.FC<ChatListProps> = ({
   loading = false,
 }) => {
   const t = useTranslations("Chat");
+  const { currentUser } = useAuthContext();
   if (loading) {
     return (
       <div className="space-y-4 p-2">
@@ -67,8 +90,9 @@ export const ChatList: React.FC<ChatListProps> = ({
   return (
     <div className="">
       {chats.map((chat) => {
-        const lastMessage = chat.messages?.[0]; // Последнее сообщение
+        const lastMessage = chat.messages?.[0];
         const isActive = currentChatId === chat.id;
+        const hasUnread = hasUnreadMessages(chat, currentUser?.id);
 
         return (
           <div
@@ -76,6 +100,8 @@ export const ChatList: React.FC<ChatListProps> = ({
             className={`p-2 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
               isActive
                 ? "border-l-4 border-l-gold-main bg-gold-main/10"
+                : hasUnread
+                ? "bg-blue-50 border-l-4 border-l-blue-500"
                 : "border-gray-200"
             }`}
             onClick={() => onChatSelect(chat)}
@@ -101,6 +127,36 @@ export const ChatList: React.FC<ChatListProps> = ({
                     {chat.participants.length} {t("participants")}
                   </span>
                 </div>
+
+                {/* Аватары участников */}
+                <div className="flex items-center gap-1">
+                  <div className="flex -space-x-1">
+                    {chat.participants.slice(0, 3).map((participant) => (
+                      <Avatar
+                        key={participant.id}
+                        className="h-5 w-5 border border-white"
+                      >
+                        <AvatarImage
+                          src={participant.metadata?.avatar?.url}
+                          alt={participant.displayName || participant.username}
+                        />
+                        <AvatarFallback className="bg-gray-100 text-gray-600 text-xs">
+                          {getInitials(
+                            participant.displayName || participant.username
+                          )}
+                        </AvatarFallback>
+                      </Avatar>
+                    ))}
+                    {chat.participants.length > 3 && (
+                      <div className="h-5 w-5 rounded-full bg-gray-100 border border-white flex items-center justify-center">
+                        <span className="text-xs text-gray-600">
+                          +{chat.participants.length - 3}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4 mr-1 shrink-0 text-xs" />
                   <span className="text-xs">

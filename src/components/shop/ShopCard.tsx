@@ -27,13 +27,6 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
     e.stopPropagation();
     e.preventDefault();
 
-    if (item.seller?.id) {
-      const success = await contactSeller(item.seller.id, item.title);
-      if (success) {
-        return;
-      }
-    }
-
     setOpen(true);
   };
 

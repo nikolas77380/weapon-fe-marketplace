@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { Building2, Phone, Globe, MapPin, Flag } from "lucide-react";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
+import { useContactSeller } from "@/hooks/useContactSeller";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface MetadataRequiredDialogProps {
   open: boolean;
@@ -18,9 +20,18 @@ const ContactModal = ({
   sellerId,
 }: MetadataRequiredDialogProps) => {
   const t = useTranslations("ShopCard.contactModal");
-
+  const { currentUser } = useAuthContext();
   const { sellerMeta } = useSellerMetaBySeller(sellerId || 0);
+  const { contactSeller } = useContactSeller();
 
+  const handleContactSeller = async () => {
+    if (sellerId) {
+      const success = await contactSeller(sellerId);
+      if (success) {
+        return;
+      }
+    }
+  };
   return (
     <div className="px-2 w-full">
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -135,7 +146,15 @@ const ContactModal = ({
           </div>
 
           {/* Footer */}
-          <div className="p-3 xs:p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+          <div className="p-3 xs:p-4 sm:p-6 border-t border-gray-200 bg-gray-50 flex flex-col gap-2">
+            {currentUser && (
+              <Button
+                onClick={handleContactSeller}
+                className="w-full bg-gold-main mt-2 hover:bg-gold-main/90 text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-300"
+              >
+                {t("buttonContactSeller")}
+              </Button>
+            )}
             <Button
               onClick={() => onOpenChange(false)}
               className="w-full bg-gold-main hover:bg-gold-main/90 text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-300"

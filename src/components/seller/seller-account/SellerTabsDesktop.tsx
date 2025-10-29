@@ -13,7 +13,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
 import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import MetaForm from "./MetaForm";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
 import { useChatStats } from "@/hooks/useChatStats";
@@ -35,7 +35,7 @@ const SellerTabsDesktop = ({
   const t = useTranslations("SellerAccountTabs");
   const tBuyer = useTranslations("BuyerAccountTabs");
   const pathname = usePathname();
-
+  const router = useRouter();
   const { stats } = useChatStats();
   const { favourites, loading: favouritesLoading } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
@@ -221,6 +221,7 @@ const SellerTabsDesktop = ({
                   </h2>
                   {stats?.latestMessages?.map((message) => (
                     <div
+                      onClick={() => router.push(`/messages/${message.id}`)}
                       key={message.id}
                       className={`border rounded-xl w-full flex gap-5 py-3 px-6 cursor-pointer transition-all duration-200 ${
                         !message.isRead
