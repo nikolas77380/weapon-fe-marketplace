@@ -56,14 +56,11 @@ export const getDisplayPrice = (
   } else if (selectedCurrency === "UAH") {
     price = product.priceUAH ?? 0;
   } else {
-    // Fallback to legacy price/currency
-    price = product.price ?? 0;
+    // Unknown currency: default to 0 (no legacy fallback during development)
+    price = 0;
   }
 
-  // If price is 0, try to fallback to legacy price
-  if (price === 0 && product.price) {
-    price = product.price;
-  }
+  // No legacy fallback to product.price; enforce currency-specific values only
 
   const symbol = getCurrencySymbol(selectedCurrency);
   return formatPrice(price, symbol);
