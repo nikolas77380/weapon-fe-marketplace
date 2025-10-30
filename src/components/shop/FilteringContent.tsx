@@ -209,21 +209,25 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     : {};
 
   // Memoize priceRange objects to prevent infinite re-renders
-  // Используем статистику из elastic как лимиты для слайдера
+  // Берём лимиты из priceStatsByCurrency[selectedCurrency]; fallback на старое поле priceStats
+  const currentStats = elasticFilters?.priceStatsByCurrency
+    ? elasticFilters.priceStatsByCurrency[selectedCurrency]
+    : elasticFilters?.priceStats;
+
   const desktopPriceRange = useMemo(
     () => ({
-      min: elasticFilters?.priceStats?.min ?? 0,
-      max: elasticFilters?.priceStats?.max ?? 100000,
+      min: currentStats?.min ?? 0,
+      max: currentStats?.max ?? 100000,
     }),
-    [elasticFilters?.priceStats?.min, elasticFilters?.priceStats?.max]
+    [currentStats?.min, currentStats?.max]
   );
 
   const mobilePriceRange = useMemo(
     () => ({
-      min: elasticFilters?.priceStats?.min ?? 0,
-      max: elasticFilters?.priceStats?.max ?? 100000,
+      min: currentStats?.min ?? 0,
+      max: currentStats?.max ?? 100000,
     }),
-    [elasticFilters?.priceStats?.min, elasticFilters?.priceStats?.max]
+    [currentStats?.min, currentStats?.max]
   );
 
   // Memoize other objects that might cause re-renders
