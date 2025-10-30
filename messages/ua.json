@@ -57,7 +57,7 @@
     },
     "tabFavourites": {
       "titleMyFavouritesProduct": "Мій обраний товар",
-      "titleFavourites": "Обране",
+      "titleFavourites": "Збережені товари",
       "titleSavedItem": "Збережений",
       "titleViewDetails": "Переглянути деталі"
     },
@@ -73,6 +73,7 @@
   "SellerAccountTabs": {
     "tabMyInquiries": {
       "titleTabMyInquiries": "Мої товари",
+      "titlePreview": "Переглянути",
       "descriptionManageProducts": "Керуйте своїми списками товарів",
       "titleToogleEditProduct": "Редагувати товар",
       "titleToogleDeleteCard": "Видалити товар",
@@ -439,8 +440,10 @@
     "titleCondition": "Стан:",
     "titleManufacturer": "Виробник:",
     "titleProductDetails": "Деталі товару",
+    "titleSKU": "Код товару:",
     "titleStatus": "Статус:",
     "titleUnknown": "Невідомо",
+    "notSpecified": "Не вказано",
     "toastSuccessFavourite": "Додано до обраного",
     "toastSuccessRemoveFavourite": "Видалено з обраного",
     "toastErrorAddFavourite": "Не вдалося додати до обраного",

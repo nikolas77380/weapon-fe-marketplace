@@ -1,6 +1,6 @@
 import { ImageType, Product } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
-import { Ellipsis, Eye, SquarePen, Trash2 } from "lucide-react";
+import { Ellipsis, Eye, ScanEye, SquarePen, Trash2 } from "lucide-react";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import { useCurrency } from "@/hooks/useCurrency";
 import {
@@ -26,13 +26,14 @@ import {
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import ShopCard from "@/components/shop/ShopCard";
 
 import Link from "next/link";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { updateStatus } from "@/mockup/status";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface SellerListenedCardProps {
   product: Product;
@@ -42,9 +43,17 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
   const { selectedCurrency } = useCurrency();
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const currentLocale = useLocale();
+
+  const getCategoryDisplayName = (category: any) => {
+    return currentLocale === "ua" && category?.translate_ua
+      ? category.translate_ua
+      : category?.name;
+  };
 
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(product.status);
 
   const getStatusStyles = (status: string) => {
@@ -137,8 +146,10 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
         />
         <div className="flex flex-col">
           <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>
-          <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-roboto font-extralight text-sm text-black">
-            <p>{product.category?.name}</p>
+          <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-extralight text-sm text-black">
+            <p className="truncate max-w-[200px] sm:max-w-[260px]">
+              {getCategoryDisplayName(product.category)}
+            </p>
             <p>{getDisplayPrice(product, selectedCurrency)}</p>
             <p>Posted: {formatDate(product.createdAt)}</p>
           </div>
@@ -168,6 +179,24 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           {getTranslatedStatus(currentStatus)}
         </div>
         <div className="flex items-center gap-3">
+          {/* Preview trigger in actions */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className="text-gray-600 hover:text-gray-800 transition-colors"
+                onClick={() => setIsPreviewOpen(true)}
+                aria-label="Preview"
+              >
+                <ScanEye
+                  size={16}
+                  className="cursor-pointer min-[400px]:size-5"
+                />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("tabMyInquiries.titlePreview")}</p>
+            </TooltipContent>
+          </Tooltip>
           <Link href={`/account/edit-product/${product.slug}`}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -218,6 +247,14 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               <DialogFooter className="gap-2">
                 <Button
                   variant="outline"
+                  onClick={() => setIsPreviewOpen(true)}
+                  disabled={loading}
+                  className="py-2 border-gold-main"
+                >
+                  <ScanEye className="mr-2 h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
                   onClick={() => setIsDeleteDialogOpen(false)}
                   disabled={loading}
                   className="py-2 border-gold-main"
@@ -235,6 +272,17 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                     : t("tabMyInquiries.titleToogleDeleteCard")}
                 </Button>
               </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Preview Modal */}
+          <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+            <DialogContent className="rounded-lg border-gold-main max-w-4xl w-[98vw] min-h-[70vh] sm:min-h-[75vh] p-2 sm:p-4 overflow-auto">
+              <div className="flex items-center justify-center">
+                <div className="mx-auto pointer-events-none w-[260px] sm:w-[300px] md:w-[320px]">
+                  <ShopCard item={product as Product} viewMode="grid" />
+                </div>
+              </div>
             </DialogContent>
           </Dialog>
 
