@@ -56,8 +56,8 @@
       "titleTabMyInquiries": "Мої запити"
     },
     "tabFavourites": {
-      "titleMyFavouritesProduct": "Мій обраний товар",
-      "titleFavourites": "Обране",
+      "titleMyFavouritesProduct": "Збережені товари",
+      "titleFavourites": "Збережені товари",
       "titleSavedItem": "Збережений",
       "titleViewDetails": "Переглянути деталі"
     },
@@ -73,6 +73,7 @@
   "SellerAccountTabs": {
     "tabMyInquiries": {
       "titleTabMyInquiries": "Мої товари",
+      "titlePreview": "Переглянути",
       "descriptionManageProducts": "Керуйте своїми списками товарів",
       "titleToogleEditProduct": "Редагувати товар",
       "titleToogleDeleteCard": "Видалити товар",
@@ -198,7 +199,7 @@
     "placeholderWebSite": "Введіть веб-сторінку компанії",
     "labelPhoneNumbers": "Номери телефону",
     "placeholderPhoneNumbers": "Введіть номери телефонів компанії, розділені комами, якщо їх декілька",
-    "labelCountry": "Краіна",
+    "labelCountry": "Країна",
     "placeholderCountry": "Оберіть краіну",
     "labelAddress": "Адреса",
     "placeholderAddress": "Введіть адресу компанії",
@@ -390,7 +391,7 @@
     "buttonLogReg": "Увійти / Зареєструватися"
   },
   "NotFavourite": {
-    "titleNotFavourite": "Обраних товарів немає.",
+    "titleNotFavourite": "Збереженних товарів немає.",
     "descriptionNotFavourite": "Почніть додавати товари до обраного!"
   },
   "ShopCard": {
@@ -439,8 +440,10 @@
     "titleCondition": "Стан:",
     "titleManufacturer": "Виробник:",
     "titleProductDetails": "Деталі товару",
+    "titleSKU": "Код товару:",
     "titleStatus": "Статус:",
     "titleUnknown": "Невідомо",
+    "notSpecified": "Не вказано",
     "toastSuccessFavourite": "Додано до обраного",
     "toastSuccessRemoveFavourite": "Видалено з обраного",
     "toastErrorAddFavourite": "Не вдалося додати до обраного",

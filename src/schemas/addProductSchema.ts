@@ -3,7 +3,7 @@ import z from "zod";
 export const createAddProductSchema = (t: (key: string) => string) => {
   return z.object({
     productName: z.string().min(1, t("validation.productNameRequired")),
-    productSku: z.string().min(1, t("validation.productSkuRequired")),
+    productSku: z.string().optional(),
     productDescription: z
       .string()
       .min(1, t("validation.productDescriptionRequired")),
@@ -32,7 +32,7 @@ export const createAddProductSchema = (t: (key: string) => string) => {
 // Default schema for backward compatibility
 export const addProductSchema = z.object({
   productName: z.string().min(1, "Product name is required"),
-  productSku: z.string().min(1, "Product SKU is required"),
+  productSku: z.string().optional(),
   productDescription: z.string().min(1, "Product description is required"),
   productCategory: z.string().min(1, "Product category is required"),
   productManufacturer: z.string().min(1, "Product manufacturer is required"),
