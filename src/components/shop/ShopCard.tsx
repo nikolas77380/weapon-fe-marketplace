@@ -8,7 +8,7 @@ import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import ContactModal from "./ContactModal";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
 
 interface ShopCardProps {
@@ -20,13 +20,13 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
   const { selectedCurrency } = useCurrency();
 
-  const currentLocale = useLocale();
+  // const currentLocale = useLocale();
 
-  const getCategoryDisplayName = (category: any) => {
-    return currentLocale === "ua" && category?.translate_ua
-      ? category.translate_ua
-      : category?.name;
-  };
+  // const getCategoryDisplayName = (category: any) => {
+  //   return currentLocale === "ua" && category?.translate_ua
+  //     ? category.translate_ua
+  //     : category?.name;
+  // };
 
   const [open, setOpen] = useState(false);
   const handleContactSeller = async (e: React.MouseEvent) => {
@@ -90,7 +90,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             <p className="font-extrabold text-base sm:text-lg mb-2 truncate">
               {item.title}
             </p>
-            {item.category && item.category.slug && (
+            {/* {item.category && item.category.slug && (
               <Link
                 href={`/category/${item.category.slug}`}
                 className="text-sm truncate font-light text-gray-700 my-1 hover:text-gold-main transition-colors duration-300 cursor-pointer"
@@ -98,7 +98,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               >
                 {getCategoryDisplayName(item.category)}
               </Link>
-            )}
+            )} */}
             <p className="font-light text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 line-clamp-3">
               {item.description}
             </p>
@@ -196,7 +196,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
           >
             {item.title}
           </Link>
-          {item.category && item.category.slug && (
+          {/* {item.category && item.category.slug && (
             <Link
               href={`/category/${item.category.slug}`}
               className="text-sm truncate font-light text-gray-700 my-1 hover:text-gold-main transition-colors duration-300 cursor-pointer"
@@ -204,7 +204,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             >
               {getCategoryDisplayName(item.category)}
             </Link>
-          )}
+          )} */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
