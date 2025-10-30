@@ -98,7 +98,7 @@ const SellerTabsDesktop = ({
           </TabsTrigger>
           <TabsTrigger value="favourites" className={cn(triggerClasses)}>
             <Heart className="mr-1" />
-            {tBuyer("tabFavourites.titleFavourites")} ({favourites.length || 0})
+            {tBuyer("tabFavourites.titleFavourites")}
           </TabsTrigger>
           <TabsTrigger value="messages" className={cn(triggerClasses)}>
             <MessageSquare className="mr-1" />
@@ -152,7 +152,6 @@ const SellerTabsDesktop = ({
                   viewMode={viewMode}
                   onGridClick={toggleToGrid}
                   onListClick={toggleToList}
-                  count={favourites.length || 0}
                   title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
                 />
 

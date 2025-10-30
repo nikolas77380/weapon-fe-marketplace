@@ -114,8 +114,7 @@ const SellerTabsMobile = ({
               )}
             >
               <Heart className="mr-1 min-[400px]:block hidden" />
-              {tBuyer("tabFavourites.titleFavourites")} (
-              {favourites.length || 0})
+              {tBuyer("tabFavourites.titleFavourites")}
             </TabsTrigger>
             <TabsTrigger
               value="messages"
@@ -181,7 +180,6 @@ const SellerTabsMobile = ({
                   viewMode={viewMode}
                   onGridClick={toggleToGrid}
                   onListClick={toggleToList}
-                  count={favourites.length || 0}
                   title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
                 />
 

@@ -56,7 +56,7 @@
       "titleTabMyInquiries": "Мої запити"
     },
     "tabFavourites": {
-      "titleMyFavouritesProduct": "Мій обраний товар",
+      "titleMyFavouritesProduct": "Збережені товари",
       "titleFavourites": "Збережені товари",
       "titleSavedItem": "Збережений",
       "titleViewDetails": "Переглянути деталі"
@@ -199,7 +199,7 @@
     "placeholderWebSite": "Введіть веб-сторінку компанії",
     "labelPhoneNumbers": "Номери телефону",
     "placeholderPhoneNumbers": "Введіть номери телефонів компанії, розділені комами, якщо їх декілька",
-    "labelCountry": "Краіна",
+    "labelCountry": "Країна",
     "placeholderCountry": "Оберіть краіну",
     "labelAddress": "Адреса",
     "placeholderAddress": "Введіть адресу компанії",
@@ -391,7 +391,7 @@
     "buttonLogReg": "Увійти / Зареєструватися"
   },
   "NotFavourite": {
-    "titleNotFavourite": "Обраних товарів немає.",
+    "titleNotFavourite": "Збереженних товарів немає.",
     "descriptionNotFavourite": "Почніть додавати товари до обраного!"
   },
   "ShopCard": {

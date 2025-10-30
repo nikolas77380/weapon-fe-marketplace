@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-import { Building2, Phone, Globe, MapPin, Flag } from "lucide-react";
+import { Building2, Phone, Globe, MapPin, Flag, Loader2 } from "lucide-react";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useContactSeller } from "@/hooks/useContactSeller";
 import { useAuthContext } from "@/context/AuthContext";
@@ -21,7 +21,7 @@ const ContactModal = ({
 }: MetadataRequiredDialogProps) => {
   const t = useTranslations("ShopCard.contactModal");
   const { currentUser } = useAuthContext();
-  const { sellerMeta } = useSellerMetaBySeller(sellerId || 0);
+  const { sellerMeta, loading } = useSellerMetaBySeller(sellerId || 0);
   const { contactSeller } = useContactSeller();
 
   const handleContactSeller = async () => {
@@ -55,94 +55,103 @@ const ContactModal = ({
 
           {/* Content */}
           <div className="p-3 xs:p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
-            <div className="space-y-4">
-              {/* Company Name */}
-              {sellerMeta?.companyName && (
-                <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
-                  <Building2 className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-600 mb-1">
-                      {t("titleCompanyName")}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerMeta.companyName}
-                    </p>
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="w-6 h-6 text-gold-main animate-spin" />
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Company Name */}
+                {sellerMeta?.companyName && (
+                  <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
+                    <Building2 className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-gray-600 mb-1">
+                        {t("titleCompanyName")}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-800 break-words">
+                        {sellerMeta.companyName}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Phone Numbers */}
-              {sellerMeta?.phoneNumbers && (
-                <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
-                  <Phone className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-600 mb-1">
-                      {t("titlePhoneNumbers")}
-                    </p>
-                    <a
-                      href={`tel:${sellerMeta.phoneNumbers.replace(/\s/g, "")}`}
-                      className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
-                    >
-                      {sellerMeta.phoneNumbers}
-                    </a>
+                {/* Phone Numbers */}
+                {sellerMeta?.phoneNumbers && (
+                  <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
+                    <Phone className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-gray-600 mb-1">
+                        {t("titlePhoneNumbers")}
+                      </p>
+                      <a
+                        href={`tel:${sellerMeta.phoneNumbers.replace(
+                          /\s/g,
+                          ""
+                        )}`}
+                        className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
+                      >
+                        {sellerMeta.phoneNumbers}
+                      </a>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Website */}
-              {sellerMeta?.webSite && (
-                <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
-                  <Globe className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-600 mb-1">
-                      {t("titleWebSite")}
-                    </p>
-                    <a
-                      href={
-                        sellerMeta.webSite.startsWith("http")
-                          ? sellerMeta.webSite
-                          : `https://${sellerMeta.webSite}`
-                      }
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
-                    >
-                      {sellerMeta.webSite}
-                    </a>
+                {/* Website */}
+                {sellerMeta?.webSite && (
+                  <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
+                    <Globe className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-gray-600 mb-1">
+                        {t("titleWebSite")}
+                      </p>
+                      <a
+                        href={
+                          sellerMeta.webSite.startsWith("http")
+                            ? sellerMeta.webSite
+                            : `https://${sellerMeta.webSite}`
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm font-semibold text-gold-main hover:text-gold-main/80 break-words underline"
+                      >
+                        {sellerMeta.webSite}
+                      </a>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Country */}
-              {sellerMeta?.country && (
-                <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
-                  <Flag className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-600 mb-1">
-                      {t("titleCountry")}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerMeta.country}
-                    </p>
+                {/* Country */}
+                {sellerMeta?.country && (
+                  <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
+                    <Flag className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-gray-600 mb-1">
+                        {t("titleCountry")}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-800 break-words">
+                        {sellerMeta.country}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Address */}
-              {sellerMeta?.address && (
-                <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
-                  <MapPin className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-medium text-gray-600 mb-1">
-                      {t("titleAddress")}
-                    </p>
-                    <p className="text-sm font-semibold text-gray-800 break-words">
-                      {sellerMeta.address}
-                    </p>
+                {/* Address */}
+                {sellerMeta?.address && (
+                  <div className="flex items-start gap-3 p-2 xs:p-3 bg-gray-50 rounded-lg">
+                    <MapPin className="w-4 h-4 text-gold-main mt-0.5 flex-shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-gray-600 mb-1">
+                        {t("titleAddress")}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-800 break-words">
+                        {sellerMeta.address}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Footer */}
@@ -150,7 +159,8 @@ const ContactModal = ({
             {currentUser && (
               <Button
                 onClick={handleContactSeller}
-                className="w-full bg-gold-main mt-2 hover:bg-gold-main/90 text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-300"
+                disabled={loading}
+                className="w-full bg-gold-main mt-2 hover:bg-gold-main/90 text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {t("buttonContactSeller")}
               </Button>
