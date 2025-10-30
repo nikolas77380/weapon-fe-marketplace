@@ -32,7 +32,7 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { updateStatus } from "@/mockup/status";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface SellerListenedCardProps {
   product: Product;
@@ -42,6 +42,13 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
   const { selectedCurrency } = useCurrency();
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const currentLocale = useLocale();
+
+  const getCategoryDisplayName = (category: any) => {
+    return currentLocale === "ua" && category?.translate_ua
+      ? category.translate_ua
+      : category?.name;
+  };
 
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -137,8 +144,10 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
         />
         <div className="flex flex-col">
           <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>
-          <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-roboto font-extralight text-sm text-black">
-            <p>{product.category?.name}</p>
+          <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-extralight text-sm text-black">
+            <p className="truncate max-w-[200px] sm:max-w-[260px]">
+              {getCategoryDisplayName(product.category)}
+            </p>
             <p>{getDisplayPrice(product, selectedCurrency)}</p>
             <p>Posted: {formatDate(product.createdAt)}</p>
           </div>
@@ -168,6 +177,22 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
           {getTranslatedStatus(currentStatus)}
         </div>
         <div className="flex items-center gap-3">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                href={`/marketplace/${product.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Preview"
+                className="text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <Eye size={16} className="cursor-pointer min-[400px]:size-5" />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t("tabMyInquiries.titlePreview")}</p>
+            </TooltipContent>
+          </Tooltip>
           <Link href={`/account/edit-product/${product.slug}`}>
             <Tooltip>
               <TooltipTrigger asChild>

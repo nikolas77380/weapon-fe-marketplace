@@ -106,16 +106,16 @@ const SellerMenuContent = ({
               </div>
             </button>
 
-            <Link href="/" onClick={handleLinkClick} className={linkClass}>
+            {/* <Link href="/" onClick={handleLinkClick} className={linkClass}>
               <div className="flex items-center gap-3">
                 <PackageSearch size={18} />
                 <p className={`font-semibold ${textClass}`}>
                   {t("titleBrowseProducts")}
                 </p>
               </div>
-            </Link>
+            </Link> */}
 
-            <button
+            {/* <button
               onClick={handleAddProductClick}
               className={`${linkClass} w-full text-left`}
             >
@@ -125,7 +125,7 @@ const SellerMenuContent = ({
                   {t("titlAddNewProduct")}
                 </p>
               </div>
-            </button>
+            </button> */}
 
             <Link
               href="/messages"

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { DollarSign } from "lucide-react";
+import { DollarSign, Euro } from "lucide-react";
 
 const currencies = [
   { code: "USD", name: "US Dollar", symbol: "$" },
@@ -71,7 +71,16 @@ export default function CurrencySwitcher({
 
   return (
     <div className={cn("flex items-center", classNameMainDiv)}>
-      <DollarSign className="h-4 w-4 text-gold-main" />
+      {/* Dynamic currency icon/symbol */}
+      {getCurrentCurrencyConfig()?.code === "USD" ? (
+        <DollarSign className="h-4 w-4 text-gold-main" />
+      ) : getCurrentCurrencyConfig()?.code === "EUR" ? (
+        <Euro className="h-4 w-4 text-gold-main" />
+      ) : (
+        <span className="h-4 w-4 inline-flex items-center justify-center text-gold-main text-[13px] leading-none">
+          {getCurrentCurrencyConfig()?.symbol}
+        </span>
+      )}
       <Select value={currentCurrency} onValueChange={handleCurrencyChange}>
         <SelectTrigger
           size="sm"

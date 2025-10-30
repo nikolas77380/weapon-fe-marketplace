@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
-import { MessageSquare, Users } from "lucide-react";
+import { Heart, MessageSquare, PackagePlus, PackageSearch, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
@@ -94,7 +94,8 @@ const SellerTabsMobile = ({
           orientation="horizontal"
           className="w-full h-full"
         >
-          <TabsList className="bg-gray-100 grid grid-cols-2 min-[600px]:grid-cols-5 w-full h-full gap-1 rounded-sm">
+          <TabsList className="bg-gray-100 grid grid-cols-1 w-full h-full gap-1 
+          rounded-sm">
             <TabsTrigger
               value="myInquiries"
               className={cn(
@@ -102,6 +103,7 @@ const SellerTabsMobile = ({
                 "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
+              <PackageSearch className="mr-1 min-[400px]:block hidden" />
               {t("tabMyInquiries.titleTabMyInquiries")}
             </TabsTrigger>
             <TabsTrigger
@@ -111,8 +113,8 @@ const SellerTabsMobile = ({
                 "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
-              {tBuyer("tabFavourites.titleFavourites")} (
-              {favourites.length || 0})
+              <Heart className="mr-1 min-[400px]:block hidden" />
+              {tBuyer("tabFavourites.titleFavourites")}
             </TabsTrigger>
             <TabsTrigger
               value="messages"
@@ -121,6 +123,7 @@ const SellerTabsMobile = ({
                 "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
+              <MessageSquare className="mr-1 min-[400px]:block hidden" />
               {t("tabMessage.titleMessages")}
             </TabsTrigger>
             <TabsTrigger
@@ -130,6 +133,7 @@ const SellerTabsMobile = ({
                 "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
+              <PackagePlus className="mr-1 min-[400px]:block hidden" />
               {t("tabAddProduct.titleAddProduct")}
             </TabsTrigger>
             <TabsTrigger
@@ -139,6 +143,7 @@ const SellerTabsMobile = ({
                 "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
               )}
             >
+              <Settings className="mr-1 min-[400px]:block hidden" />
               {t("tabSettings.titleSettings")}
             </TabsTrigger>
           </TabsList>
@@ -175,7 +180,6 @@ const SellerTabsMobile = ({
                   viewMode={viewMode}
                   onGridClick={toggleToGrid}
                   onListClick={toggleToList}
-                  count={favourites.length || 0}
                   title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
                 />
 

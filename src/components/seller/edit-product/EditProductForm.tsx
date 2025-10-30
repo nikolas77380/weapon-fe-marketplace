@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Form,
   FormLabel,
@@ -17,13 +17,7 @@ import {
 } from "@/schemas/editProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { SelectItem } from "@/components/ui/select";
 import {
   getProductConditionOptions,
   getProductStatusOptions,
@@ -38,7 +32,6 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 import { X } from "lucide-react";
-import DeleteImageDialog from "./DeleteImageDialog";
 import {
   Tooltip,
   TooltipContent,
@@ -52,7 +45,7 @@ interface EditProductFormProps {
 
 const EditProductForm = ({
   product,
-  customLabels = {},
+  customLabels: _customLabels = {},
 }: EditProductFormProps) => {
   const t = useTranslations("EditProduct");
   const tCondition = useTranslations(
@@ -67,8 +60,7 @@ const EditProductForm = ({
       : category?.name;
   };
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [imageToDelete, setImageToDelete] = useState<number | null>(null);
+  // const [imageToDelete, setImageToDelete] = useState<number | null>(null);
 
   const router = useRouter();
 
@@ -79,6 +71,8 @@ const EditProductForm = ({
     loading: updateLoading,
     error: updateError,
   } = useProductActions();
+
+  void _customLabels;
 
   const form = useForm<EditProductSchemaValues>({
     resolver: zodResolver(editProductSchema),
@@ -141,19 +135,7 @@ const EditProductForm = ({
     product.attributesJson?.model,
   ]);
 
-  const handleDeleteImage = async ({ imageId }: { imageId: number }) => {
-    if (imageToDelete) {
-      try {
-        // await deleteImageMutation.mutateAsync({ imageId: imageToDelete });
-        toast.success(t("toastSuccessDeleteImage"));
-        setOpenDialog(false);
-        setImageToDelete(null);
-      } catch (error) {
-        console.error("Error deleting image:", error);
-        toast.error(t("toastErrorDeleteImage"));
-      }
-    }
-  };
+  // Deletion dialog is currently disabled
 
   const onSubmit = async (values: EditProductSchemaValues) => {
     try {
@@ -218,10 +200,6 @@ const EditProductForm = ({
                   <button
                     className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white 
                     rounded-full group p-2 cursor-pointer transition duration-300 ease-in-out"
-                    onClick={() => {
-                      setImageToDelete(image.id);
-                      setOpenDialog(true);
-                    }}
                   >
                     <X className="h-4 w-4 group-hover:text-white" />
                   </button>
@@ -339,31 +317,27 @@ const EditProductForm = ({
             />
           </div>
 
-          {/* Category, Condition, Status - 3 in a row on desktop, stacked on mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full">
-            {/* Category */}
-            <FormFieldComponent
-              control={form.control}
-              className="rounded-sm max-w-full overflow-hidden"
-              name="category"
-              label={t("labelCategory")}
-              type="select"
-              placeholder="Select category"
-              customSelectOptions={
-                <>
-                  {categories.map((category) => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                    >
-                      {getCategoryDisplayName(category)}
-                    </SelectItem>
-                  ))}
-                </>
-              }
-            />
+          {/* Category full width */}
+          <FormFieldComponent
+            control={form.control}
+            className="rounded-sm max-w-full overflow-hidden"
+            name="category"
+            label={t("labelCategory")}
+            type="select"
+            placeholder="Select category"
+            customSelectOptions={
+              <>
+                {categories.map((category) => (
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    {getCategoryDisplayName(category)}
+                  </SelectItem>
+                ))}
+              </>
+            }
+          />
 
-            {/* Condition */}
+          {/* Condition and Status on the next row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
             <FormFieldComponent
               control={form.control}
               className="rounded-sm"
@@ -374,7 +348,6 @@ const EditProductForm = ({
               options={getProductConditionOptions(tCondition)}
             />
 
-            {/* Status */}
             <FormFieldComponent
               control={form.control}
               className="rounded-sm"
