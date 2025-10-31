@@ -17,6 +17,7 @@ import type { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useRouter } from "next/navigation";
+import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 interface SellerMenuContentProps {
   user: UserProfile;
@@ -33,6 +34,7 @@ const SellerMenuContent = ({
 }: SellerMenuContentProps) => {
   const t = useTranslations("Navbar.sellerNavbar");
   const { favourites } = useFavourites();
+  const { unreadChatsCount } = useUnreadChats();
   const router = useRouter();
 
   const handleLinkClick = () => {
@@ -138,9 +140,11 @@ const SellerMenuContent = ({
                   <p className={`font-semibold ${textClass}`}>
                     {t("titleMessages")}
                   </p>
-                  <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                    3
-                  </div>
+                  {unreadChatsCount > 0 && (
+                    <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
+                      {unreadChatsCount}
+                    </div>
+                  )}
                 </div>
               </div>
             </Link>
@@ -241,7 +245,7 @@ const SellerMenuContent = ({
                       {t("titleMessages")}
                     </p>
                     <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                      3
+                      {unreadChatsCount}
                     </div>
                   </div>
                 </div>
