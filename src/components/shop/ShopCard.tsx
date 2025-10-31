@@ -6,10 +6,11 @@ import { useState } from "react";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ContactModal from "./ContactModal";
 import { useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useSellerData } from "@/hooks/useSellerData";
 
 interface ShopCardProps {
   item: Product;
@@ -19,6 +20,7 @@ interface ShopCardProps {
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
   const { selectedCurrency } = useCurrency();
+  const { sellerData } = useSellerData(item?.seller?.id);
 
   // const currentLocale = useLocale();
 
@@ -110,8 +112,19 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             <div className="flex items-center gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
                 <Avatar className="w-6 h-6 sm:w-8 sm:h-8">
+                  <AvatarImage
+                    src={
+                      sellerData?.metadata?.avatar?.url ||
+                      item?.seller?.metadata?.avatar?.url
+                    }
+                    alt={sellerData?.username || item?.seller?.username}
+                  />
                   <AvatarFallback className="bg-black text-white text-xs sm:text-sm uppercase">
-                    {item?.seller?.username.charAt(0)}
+                    {(
+                      sellerData?.displayName ||
+                      sellerData?.username ||
+                      item?.seller?.username
+                    )?.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
                 <span className="text-xs sm:text-sm truncate max-w-[100px]">
@@ -185,7 +198,23 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       </Link>
       <div className="flex flex-col p-2 xs:p-2.5 sm:p-3.5">
         <div className="flex flex-col gap-1.5 xs:gap-2">
-          <div className="flex justify-end w-full">
+          <div className="flex justify-between w-full">
+            <Avatar className="size-6 mb-1">
+              <AvatarImage
+                src={
+                  sellerData?.metadata?.avatar?.url ||
+                  item.seller?.metadata?.avatar?.url
+                }
+                alt={sellerData?.username || item.seller?.username}
+              />
+              <AvatarFallback className="bg-black text-white text-sm uppercase">
+                {(
+                  sellerData?.displayName ||
+                  sellerData?.username ||
+                  item.seller?.username
+                )?.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
             <p className="text-sm xs:text-base sm:text-lg font-medium text-gold-main">
               {getDisplayPrice(item, selectedCurrency)}
             </p>
@@ -212,7 +241,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
                   href={`/company/${item.seller?.id}`}
                   className="text-xs xs:text-sm hover:underline cursor-pointer truncate"
                 >
-                  {item.seller?.username}
+                  {sellerData?.metadata?.companyName || item.seller?.username}
                 </Link>
               </div>
             </div>

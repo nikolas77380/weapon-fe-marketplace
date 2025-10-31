@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
-import { MessageSquare, Users } from "lucide-react";
+import { Heart, MessageSquare, PackagePlus, PackageSearch, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
@@ -93,18 +93,23 @@ const SellerTabsDesktop = ({
       >
         <TabsList className="flex-col w-64 h-47.5 bg-gray-100 rounded-sm">
           <TabsTrigger value="myInquiries" className={cn(triggerClasses)}>
+            <PackageSearch className="mr-1" />
             {t("tabMyInquiries.titleTabMyInquiries")}
           </TabsTrigger>
           <TabsTrigger value="favourites" className={cn(triggerClasses)}>
-            {tBuyer("tabFavourites.titleFavourites")} ({favourites.length || 0})
+            <Heart className="mr-1" />
+            {tBuyer("tabFavourites.titleFavourites")}
           </TabsTrigger>
           <TabsTrigger value="messages" className={cn(triggerClasses)}>
+            <MessageSquare className="mr-1" />
             {t("tabMessage.titleMessages")}
           </TabsTrigger>
           <TabsTrigger value="addProduct" className={cn(triggerClasses)}>
+            <PackagePlus className="mr-1" />
             {t("tabAddProduct.titleAddProduct")}
           </TabsTrigger>
           <TabsTrigger value="settings" className={cn(triggerClasses)}>
+            <Settings className="mr-1" />
             {t("tabSettings.titleSettings")}
           </TabsTrigger>
         </TabsList>
@@ -147,7 +152,6 @@ const SellerTabsDesktop = ({
                   viewMode={viewMode}
                   onGridClick={toggleToGrid}
                   onListClick={toggleToList}
-                  count={favourites.length || 0}
                   title={tBuyer("tabFavourites.titleMyFavouritesProduct")}
                 />
 

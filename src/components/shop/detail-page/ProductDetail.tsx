@@ -241,9 +241,9 @@ const ProductDetail = ({ product }: { product: Product }) => {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="text-sm sm:text-base">
-                      <span className="font-medium text-gray-600">SKU:</span>
+                      <span className="font-medium text-gray-600">{t("titleSKU")}</span>
                       <span className="ml-2 text-gray-800">
-                        {product?.sku || "Not specified"}
+                        {product?.sku || t("notSpecified")}
                       </span>
                     </div>
                     <div className="text-sm sm:text-base">
