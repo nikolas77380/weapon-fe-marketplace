@@ -620,7 +620,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                               }
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-light text-xs sm:text-sm hover:text-gold-main/80 break-words underline"
+                              className="font-light truncate text-xs sm:text-sm hover:text-gold-main/80 break-words underline"
                             >
                               {sellerData?.metadata?.webSite}
                             </a>
