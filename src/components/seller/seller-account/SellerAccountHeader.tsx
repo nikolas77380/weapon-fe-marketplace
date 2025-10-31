@@ -33,7 +33,10 @@ const SellerAccountHeader = ({
   return (
     <div className={className}>
       {/* Right Buttons */}
-      <div className="flex items-center justify-end mt-3 lg:mt-0 mb-8 gap-3.5">
+      <div className="flex items-center justify-between mt-3 lg:mt-0 mb-8 gap-3.5">
+        <h2 className="font-medium text-xl lg:text-2xl self-center m-0">
+          {t("titleWelcome")}, {currentUser.username}
+        </h2>
         <Button
           className="bg-gold-main rounded-sm cursor-pointer duration-300 transition-all px-1 hover:bg-gold-main/90"
           onClick={handleLogout}
@@ -45,11 +48,9 @@ const SellerAccountHeader = ({
           </div>
         </Button>
       </div>
-      <h2 className="font-medium text-xl lg:text-2xl mb-8">
-        {t("titleWelcome")}, {currentUser.username}
-      </h2>
+
       {/* Action Cards */}
-      <div className="grid grid-cols-1 min-[450px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-7 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
+      <div className="grid grid-cols-2 min-[450px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-7 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
         {products.length > 0 && (
           <>
             <SellerActionCard
