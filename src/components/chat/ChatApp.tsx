@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Chat } from "@/types/chat";
 import { useChat } from "@/hooks/useChat";
 import { ChatList } from "./ChatList";
@@ -11,18 +11,24 @@ import { AlertCircle, MessageSquare } from "lucide-react";
 import { useAuthContext } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import LoadingState from "../ui/LoadingState";
 
 export const ChatApp: React.FC = () => {
-  const { currentUser } = useAuthContext();
+  const { currentUser, currentUserLoading } = useAuthContext();
   const t = useTranslations("Chat");
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const lastLoadedChatIdRef = useRef<number | null>(null);
+  const isUpdatingUrlRef = useRef(false);
 
   const {
     chats,
     currentChat,
     messages,
     loading,
+    isFetching,
     error,
     loadUserChats,
     loadChat,
@@ -31,16 +37,30 @@ export const ChatApp: React.FC = () => {
     clearCurrentChat,
   } = useChat();
 
-  // Load chats when component is mounted
   useEffect(() => {
     if (currentUser) {
       loadUserChats();
     }
   }, [loadUserChats, currentUser]);
 
-  const handleChatSelect = async (chat: Chat) => {
+  const handleChatSelect = async (chat: Chat, updateUrl = true) => {
+    if (
+      lastLoadedChatIdRef.current === chat.id &&
+      currentChat?.id === chat.id
+    ) {
+      return;
+    }
+
     try {
       await loadChat(chat.id);
+      lastLoadedChatIdRef.current = chat.id;
+
+      // Обновляем URL с новым chatId только если это не было вызвано из useEffect
+      if (updateUrl && !isUpdatingUrlRef.current) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("chatId", chat.id.toString());
+        router.push(`${pathname}?${params.toString()}`, { scroll: false });
+      }
     } catch (error) {
       console.error("Failed to load chat:", error);
     }
@@ -48,16 +68,28 @@ export const ChatApp: React.FC = () => {
 
   useEffect(() => {
     const chatId = searchParams.get("chatId");
-    if (chatId && currentUser && chats.length > 0) {
-      const chatIdNumber = parseInt(chatId, 10);
-      const chat = chats.find((c) => c.id === chatIdNumber);
-      if (chat && (!currentChat || currentChat.id !== chatIdNumber)) {
-        handleChatSelect(chat);
-      }
+    if (!chatId || !currentUser || chats.length === 0) {
+      return;
     }
-  }, [searchParams, currentUser, chats, currentChat]);
 
-  if (!currentUser) {
+    const chatIdNumber = parseInt(chatId, 10);
+
+    if (lastLoadedChatIdRef.current === chatIdNumber) {
+      return;
+    }
+
+    const chat = chats.find((c) => c.id === chatIdNumber);
+
+    if (chat) {
+      isUpdatingUrlRef.current = true;
+      handleChatSelect(chat, false).finally(() => {
+        isUpdatingUrlRef.current = false;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.toString(), currentUser?.id, chats.length]);
+
+  if (!currentUser && !currentUserLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
         <div className="text-center">
@@ -86,6 +118,10 @@ export const ChatApp: React.FC = () => {
     );
   }
 
+  if (currentUserLoading) {
+    return <LoadingState title={t("loadingChats")} />;
+  }
+
   const handleSendMessage = async (text: string) => {
     if (!currentChat) return;
 
@@ -111,6 +147,13 @@ export const ChatApp: React.FC = () => {
 
   const handleBackToChatList = () => {
     clearCurrentChat();
+    lastLoadedChatIdRef.current = null;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("chatId");
+    const newUrl = params.toString()
+      ? `${pathname}?${params.toString()}`
+      : pathname;
+    router.push(newUrl, { scroll: false });
   };
 
   if (error) {
@@ -121,7 +164,7 @@ export const ChatApp: React.FC = () => {
             <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">{t("loadingError")}</h3>
             <p className="text-gray-500 mb-4">{error}</p>
-            <Button onClick={loadUserChats}>{t("retryButton")}</Button>
+            <Button onClick={() => loadUserChats()}>{t("retryButton")}</Button>
           </div>
         </CardContent>
       </Card>
@@ -169,6 +212,7 @@ export const ChatApp: React.FC = () => {
             onFinishChat={handleFinishChat}
             onBackToChatList={handleBackToChatList}
             loading={loading}
+            isFetching={isFetching}
           />
         ) : (
           <div className="flex flex-col items-center justify-center flex-1 text-gray-400 bg-gradient-to-b from-gray-50 to-gray-100 animate-fadeIn">

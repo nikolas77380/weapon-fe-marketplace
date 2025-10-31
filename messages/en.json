@@ -405,7 +405,8 @@
       "titleWebSite": "Web Site:",
       "titleCountry": "Country:",
       "titleAddress": "Address:",
-      "buttonClose": "Close"
+      "buttonClose": "Close",
+      "loadingSellerMeta": "Loading seller meta..."
     }
   },
   "Footer": {
@@ -571,6 +572,7 @@
     "loadingError": "Error loading chats",
     "retryButton": "Try again",
     "participants": "participants",
+    "loadingChats": "Loading chats...",
     "status": {
       "active": "Active",
       "successfully_completed": "Successfully completed",

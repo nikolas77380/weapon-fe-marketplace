@@ -33,16 +33,14 @@ const getStatusColor = (status: Chat["status"]) => {
   }
 };
 
-// Function to determine if there are unread messages in the chat
 const hasUnreadMessages = (chat: Chat, currentUserId?: number): boolean => {
   if (!chat.messages || !currentUserId) return false;
 
   return chat.messages.some(
-    (message) => !message.isRead && message.sender.id !== currentUserId
+    (message) => !message.isRead && message.sender?.id !== currentUserId
   );
 };
 
-// Функция для получения инициалов
 const getInitials = (name: string | null | undefined) => {
   if (!name) return "??";
   return name
@@ -53,6 +51,26 @@ const getInitials = (name: string | null | undefined) => {
     .slice(0, 2);
 };
 
+const getChatTitle = (chat: Chat, currentUserId?: number): string => {
+  if (!currentUserId || !chat.participants || chat.participants.length === 0) {
+    return chat.topic;
+  }
+
+  const otherParticipant = chat.participants.find(
+    (p) => p.id !== currentUserId
+  );
+
+  if (!otherParticipant) {
+    return chat.topic;
+  }
+
+  if (otherParticipant.metadata?.companyName) {
+    return `${otherParticipant.username} (${otherParticipant.metadata.companyName})`;
+  }
+
+  return otherParticipant.displayName || otherParticipant.username;
+};
+
 export const ChatList: React.FC<ChatListProps> = ({
   chats,
   currentChatId,
@@ -61,7 +79,7 @@ export const ChatList: React.FC<ChatListProps> = ({
 }) => {
   const t = useTranslations("Chat");
   const { currentUser } = useAuthContext();
-  if (loading) {
+  if (loading && !chats.length) {
     return (
       <div className="space-y-4 p-2">
         {[...Array(3)].map((_, i) => (
@@ -109,7 +127,7 @@ export const ChatList: React.FC<ChatListProps> = ({
             <div className="p-4 sm:p-5">
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900">
-                  {chat.topic}
+                  {getChatTitle(chat, currentUser?.id)}
                 </h3>
                 <Badge
                   className={`${getStatusColor(
@@ -171,7 +189,9 @@ export const ChatList: React.FC<ChatListProps> = ({
               {lastMessage && (
                 <div className="text-sm text-gray-600 truncate">
                   <span className="font-medium">
-                    {lastMessage.sender.displayName}:
+                    {lastMessage.sender?.displayName ||
+                      lastMessage.sender?.username}
+                    :
                   </span>
                   <span className="ml-1">{lastMessage.text}</span>
                 </div>

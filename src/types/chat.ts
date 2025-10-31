@@ -31,6 +31,7 @@ export interface User {
       locale?: string;
       formats?: any;
     };
+    companyName?: string;
   };
 }
 
@@ -44,6 +45,15 @@ export interface Chat {
     | "unsuccessfully_completed"
     | "closed";
   messages?: Message[];
+  product?: {
+    id: number;
+    title: string;
+    slug: string;
+    images?: Array<{
+      id: number;
+      url: string;
+    }>;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -51,17 +61,28 @@ export interface Chat {
 export interface Message {
   id: number;
   text: string;
-  sender: User;
+  sender?: User; // Опционально для системных сообщений
   chat: Chat;
   isRead: boolean;
   readBy: User[];
+  isSystem?: boolean;
+  product?: {
+    id: number;
+    title: string;
+    slug: string;
+    images?: Array<{
+      id: number;
+      url: string;
+    }>;
+  };
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateChatRequest {
-  topic: string;
+  topic?: string;
   participantIds: number[];
+  productId?: number;
 }
 
 export interface SendMessageRequest {
