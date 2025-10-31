@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import SellerListenedCard from "./SellerListenedCard";
-import { Heart, MessageSquare, PackagePlus, PackageSearch, Settings, Users } from "lucide-react";
+import {
+  Heart,
+  MessageSquare,
+  PackagePlus,
+  PackageSearch,
+  Settings,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
 import SellerAccountHeader from "./SellerAccountHeader";
-import { cn, triggerClasses } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useViewMode } from "@/hooks/useViewMode";
@@ -41,7 +52,9 @@ const SellerTabsMobile = ({
 
   const { favourites, loading: favouritesLoading } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
-  const [activeTab, setActiveTab] = useState("myInquiries");
+  const [activeAccordion, setActiveAccordion] = useState<string[]>([
+    "myInquiries",
+  ]);
 
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
@@ -51,7 +64,12 @@ const SellerTabsMobile = ({
       savedTab === "settings" ||
       savedTab === "addProduct"
     ) {
-      setActiveTab(savedTab);
+      setActiveAccordion((prev) => {
+        if (!prev.includes(savedTab)) {
+          return [...prev, savedTab];
+        }
+        return prev;
+      });
       setTimeout(() => {
         sessionStorage.removeItem("accountTab");
       }, 100);
@@ -63,7 +81,12 @@ const SellerTabsMobile = ({
     const handleTabChange = (event: CustomEvent<string>) => {
       const tab = event.detail;
       if (tab === "addProduct" || tab === "favourites" || tab === "settings") {
-        setActiveTab(tab);
+        setActiveAccordion((prev) => {
+          if (!prev.includes(tab)) {
+            return [...prev, tab];
+          }
+          return prev;
+        });
         sessionStorage.removeItem("accountTab");
       }
     };
@@ -80,82 +103,27 @@ const SellerTabsMobile = ({
     };
   }, []);
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-  };
-
   return (
     <div className="block md:hidden w-full px-3 sm:px-6">
       <SellerAccountHeader products={products} currentUser={currentUser} />
       <div className="mt-6">
-        <Tabs
-          value={activeTab}
-          onValueChange={handleTabChange}
-          orientation="horizontal"
-          className="w-full h-full"
+        <Accordion
+          type="multiple"
+          value={activeAccordion}
+          onValueChange={(value) => setActiveAccordion(value)}
+          className="w-full space-y-1"
         >
-          <TabsList className="bg-gray-100 grid grid-cols-1 w-full h-full gap-1 
-          rounded-sm">
-            <TabsTrigger
-              value="myInquiries"
-              className={cn(
-                triggerClasses,
-                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
-              )}
-            >
-              <PackageSearch className="mr-1 min-[400px]:block hidden" />
-              {t("tabMyInquiries.titleTabMyInquiries")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="favourites"
-              className={cn(
-                triggerClasses,
-                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
-              )}
-            >
-              <Heart className="mr-1 min-[400px]:block hidden" />
-              {tBuyer("tabFavourites.titleFavourites")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="messages"
-              className={cn(
-                triggerClasses,
-                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
-              )}
-            >
-              <MessageSquare className="mr-1 min-[400px]:block hidden" />
-              {t("tabMessage.titleMessages")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="addProduct"
-              className={cn(
-                triggerClasses,
-                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
-              )}
-            >
-              <PackagePlus className="mr-1 min-[400px]:block hidden" />
-              {t("tabAddProduct.titleAddProduct")}
-            </TabsTrigger>
-            <TabsTrigger
-              value="settings"
-              className={cn(
-                triggerClasses,
-                "text-xs sm:text-sm w-full h-full py-2 px-1 justify-center"
-              )}
-            >
-              <Settings className="mr-1 min-[400px]:block hidden" />
-              {t("tabSettings.titleSettings")}
-            </TabsTrigger>
-          </TabsList>
-          <div className="mt-6 overflow-hidden">
-            <TabsContent
-              value="myInquiries"
-              className="bg-background border border-sidebar-accent px-3 sm:px-6 pt-2 pb-4"
-            >
-              <div className="mt-7.5">
-                <h1 className="text-lg sm:text-xl font-roboto">
+          <AccordionItem value="myInquiries" className="rounded-md border-b-0">
+            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+              <div className="flex items-center justify-center gap-2">
+                <PackageSearch className="min-[400px]:block hidden" size={18} />
+                <span className="text-xs sm:text-sm">
                   {t("tabMyInquiries.titleTabMyInquiries")}
-                </h1>
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="px-3 sm:px-6 pt-4 pb-4">
+              <div className="mt-7.5">
                 <p className="text-xs sm:text-sm font-medium text-[#C4C2C2] mt-2">
                   {t("tabMyInquiries.descriptionManageProducts")}
                 </p>
@@ -173,8 +141,19 @@ const SellerTabsMobile = ({
                   )}
                 </div>
               </div>
-            </TabsContent>
-            <TabsContent value="favourites">
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="favourites" className="rounded-md border-b-0">
+            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+              <div className="flex items-center justify-center gap-2">
+                <Heart className="min-[400px]:block hidden" size={18} />
+                <span className="text-xs sm:text-sm">
+                  {tBuyer("tabFavourites.titleFavourites")}
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <div className="space-y-4">
                 <ViewModeToggle
                   viewMode={viewMode}
@@ -210,13 +189,21 @@ const SellerTabsMobile = ({
                   )}
                 </div>
               </div>
-            </TabsContent>
-            <TabsContent value="messages">
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="messages" className="rounded-md border-b-0">
+            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+              <div className="flex items-center justify-center gap-2">
+                <MessageSquare className="min-[400px]:block hidden" size={18} />
+                <span className="text-xs sm:text-sm">
+                  {t("tabMessage.titleMessages")}
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <div className="mt-7.5">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-lg sm:text-xl font-roboto">
-                    {t("tabMessage.titleCustomerMessages")}
-                  </h1>
                   <Link
                     href="/messages"
                     className="bg-gold-main py-2 px-3 sm:py-1.5 sm:px-4 rounded-md flex items-center gap-2 sm:gap-3 text-white hover:bg-gold-main/80 duration-300 transition-all"
@@ -278,9 +265,6 @@ const SellerTabsMobile = ({
                   </div>
                 </div>
                 <div className="mt-9 border border-gray-primary rounded-xl p-4 sm:p-5 flex flex-col gap-5">
-                  <h2 className="font-roboto text-base sm:text-lg">
-                    {t("tabMessage.titleLatestMessages")}
-                  </h2>
                   {stats?.latestMessages?.slice(0, 3).map((message) => (
                     <div
                       key={message.id}
@@ -314,22 +298,60 @@ const SellerTabsMobile = ({
                   ))}
                 </div>
               </div>
-            </TabsContent>
-            <TabsContent value="addProduct">
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="addProduct" className="rounded-md border-b-0">
+            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+              <div className="flex items-center justify-center gap-2">
+                <PackagePlus className="min-[400px]:block hidden" size={18} />
+                <span className="text-xs sm:text-sm">
+                  {t("tabAddProduct.titleAddProduct")}
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <AddProductPageComponent
                 currentUser={currentUser}
-                onProductCreated={() => setActiveTab("myInquiries")}
+                onProductCreated={() =>
+                  setActiveAccordion((prev) => {
+                    const newValue = prev.filter((v) => v !== "addProduct");
+                    if (!newValue.includes("myInquiries")) {
+                      newValue.push("myInquiries");
+                    }
+                    return newValue;
+                  })
+                }
               />
-            </TabsContent>
-            <TabsContent value="settings">
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value="settings" className="rounded-md border-b-0">
+            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+              <div className="flex items-center justify-center gap-2">
+                <Settings className="min-[400px]:block hidden" size={18} />
+                <span className="text-xs sm:text-sm">
+                  {t("tabSettings.titleSettings")}
+                </span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4">
               <MetaForm
                 currentUser={currentUser}
-                onSuccess={() => setActiveTab("myInquiries")}
+                onSuccess={() =>
+                  setActiveAccordion((prev) => {
+                    const newValue = prev.filter((v) => v !== "settings");
+                    if (!newValue.includes("myInquiries")) {
+                      newValue.push("myInquiries");
+                    }
+                    return newValue;
+                  })
+                }
                 onUserUpdate={onUserUpdate}
               />
-            </TabsContent>
-          </div>
-        </Tabs>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </div>
   );
