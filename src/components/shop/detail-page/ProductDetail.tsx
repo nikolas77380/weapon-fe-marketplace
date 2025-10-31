@@ -275,6 +275,8 @@ const ProductDetail = ({ product }: { product: Product }) => {
             open={open}
             onOpenChange={setOpen}
             sellerId={product?.seller?.id}
+            productId={product?.id}
+            productTitle={product?.title}
           />
         )}
       </div>

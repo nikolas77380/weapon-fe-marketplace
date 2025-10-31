@@ -407,7 +407,8 @@
       "titleCountry": "Країна:",
       "titleAddress": "Адреса:",
       "buttonClose": "Закрити",
-      "buttonContactSeller": "Зв'язатися з продавцем"
+      "buttonContactSeller": "Зв'язатися з продавцем",
+      "loadingSellerMeta": "Завантаження інформації про продавця..."
     }
   },
   "Footer": {
@@ -565,6 +566,7 @@
     "footerNote": "Це посилання підтвердження можна використати лише один раз."
   },
   "Chat": {
+    "loadingChats": "Завантаження чатів...",
     "title": "Чати",
     "selectChat": "Виберіть чат",
     "selectChatDescription": "Виберіть чат зі списку зліва",

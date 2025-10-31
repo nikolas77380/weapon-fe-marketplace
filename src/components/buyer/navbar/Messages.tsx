@@ -4,7 +4,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link, NavigationMenuLink } from "@radix-ui/react-navigation-menu";
-import { Badge, Circle, MessageCircle } from "lucide-react";
+import { Circle, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
 

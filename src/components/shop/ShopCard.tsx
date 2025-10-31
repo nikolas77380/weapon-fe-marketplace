@@ -272,6 +272,8 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             open={open}
             onOpenChange={setOpen}
             sellerId={item.seller?.id}
+            productId={item.id}
+            productTitle={item.title}
           />
         )}
       </div>

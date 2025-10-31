@@ -11,12 +11,14 @@ interface MessageAreaProps {
   messages: Message[];
   currentUserId?: number;
   loading?: boolean;
+  isFetching?: boolean; // Для отслеживания обновлений без показа скелетона
 }
 
 export const MessageArea: React.FC<MessageAreaProps> = ({
   messages,
   currentUserId,
   loading = false,
+  isFetching = false,
 }) => {
   const t = useTranslations("Chat");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -33,7 +35,9 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
     }
   }, [messages]);
 
-  if (loading) {
+  // Показываем скелетон только при первой загрузке, когда нет данных
+  // Не показываем если это просто обновление (isFetching) - данные остаются видимыми
+  if (loading && messages.length === 0 && !isFetching) {
     return (
       <div className="flex-1 p-4">
         <div className="space-y-4">

@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { Chat, Message } from "@/types/chat";
 import { ChatHeader } from "./ChatHeader";
 import { MessageArea } from "./MessageArea";
 import { MessageInput } from "./MessageInput";
-import { useChatPolling } from "@/hooks/useChatPolling";
 import { useTranslations } from "next-intl";
 
 interface ChatInterfaceProps {
@@ -18,6 +17,7 @@ interface ChatInterfaceProps {
   ) => void;
   onBackToChatList: () => void;
   loading?: boolean;
+  isFetching?: boolean;
   sendingMessage?: boolean;
 }
 
@@ -29,30 +29,15 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onFinishChat,
   onBackToChatList,
   loading = false,
+  isFetching = false,
   sendingMessage = false,
 }) => {
   const t = useTranslations("Chat");
-  const [localMessages, setLocalMessages] = React.useState<Message[]>(messages);
-  const [currentChat, setCurrentChat] = React.useState<Chat>(chat);
 
-  // Обновляем локальное состояние при изменении пропсов
-  useEffect(() => {
-    setLocalMessages(messages);
-    setCurrentChat(chat);
-  }, [messages, chat]);
-
-  // Настройка polling для обновления сообщений
-  useChatPolling({
-    chatId: chat.id,
-    onMessagesUpdate: (newMessages) => {
-      setLocalMessages(newMessages);
-    },
-    onChatUpdate: (updatedChat) => {
-      setCurrentChat(updatedChat);
-    },
-    enabled: chat.status === "active", // Polling только для активных чатов
-    pollingInterval: 10000, // 10 секунд
-  });
+  // Используем данные напрямую из пропсов - React Query уже обрабатывает обновления
+  // Не используем локальное состояние, чтобы избежать конфликтов
+  const localMessages = messages;
+  const currentChat = chat;
 
   const isChatActive = currentChat.status === "active";
 
@@ -74,6 +59,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           messages={localMessages}
           currentUserId={currentUserId}
           loading={loading}
+          isFetching={isFetching}
         />
       </div>
 

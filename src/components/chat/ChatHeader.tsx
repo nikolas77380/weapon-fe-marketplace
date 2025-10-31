@@ -20,6 +20,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface ChatHeaderProps {
   chat: Chat;
@@ -56,6 +57,30 @@ const getInitials = (name: string | null | undefined) => {
     .slice(0, 2);
 };
 
+// Функция для получения заголовка чата (имя противоположного участника)
+const getChatTitle = (chat: Chat, currentUserId?: number): string => {
+  if (!currentUserId || !chat.participants || chat.participants.length === 0) {
+    return chat.topic;
+  }
+
+  // Находим противоположного участника
+  const otherParticipant = chat.participants.find(
+    (p) => p.id !== currentUserId
+  );
+
+  if (!otherParticipant) {
+    return chat.topic;
+  }
+
+  // Если у собеседника есть companyName (продавец), показываем username и название компании
+  if (otherParticipant.metadata?.companyName) {
+    return `${otherParticipant.username} (${otherParticipant.metadata.companyName})`;
+  }
+
+  // Если собеседник покупатель, показываем displayName или username
+  return otherParticipant.displayName || otherParticipant.username;
+};
+
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
   chat,
   onFinishChat,
@@ -63,6 +88,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBack,
 }) => {
   const t = useTranslations("Chat");
+  const { currentUser } = useAuthContext();
   const isActive = chat.status === "active";
   const canFinish = isActive;
 
@@ -86,7 +112,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         </Button>
         <div className="flex-1">
           <div className="flex items-start min-[380px]:items-center flex-col min-[380px]:flex-row space-x-3 mb-2">
-            <h2 className="text-lg font-semibold truncate">{chat.topic}</h2>
+            <h2 className="text-lg font-semibold truncate">
+              {getChatTitle(chat, currentUser?.id)}
+            </h2>
             <Badge className={getStatusColor(chat.status)}>
               {t(`status.${chat.status}`)}
             </Badge>

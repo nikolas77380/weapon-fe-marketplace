@@ -9,45 +9,20 @@ export const useContactSeller = () => {
   const router = useRouter();
 
   const contactSeller = useCallback(
-    async (sellerId: number, productTitle?: string) => {
+    async (
+      sellerId: number,
+      options?: { productId?: number; productTitle?: string }
+    ) => {
       if (!currentUser) {
         return false;
       }
 
       try {
-        let topic = productTitle;
-
-        if (!topic) {
-          try {
-            const metaResponse = await getSellerMetaBySellerId(sellerId);
-            if (
-              metaResponse &&
-              metaResponse.data &&
-              metaResponse.data.length > 0
-            ) {
-              const meta = metaResponse.data[0];
-              const username = meta.sellerEntity?.username;
-              if (username) {
-                topic = username;
-              }
-            }
-          } catch (error) {
-            console.error("Failed to fetch seller username:", error);
-          }
-
-          if (!topic) {
-            topic = "";
-          }
-        }
-
-        if (!topic) {
-          return false;
-        }
-
         // API will automatically find an existing chat or create a new one
         const chat = await createChat({
-          topic,
           participantIds: [sellerId], // currentUser.id добавляется автоматически на бэкенде
+          productId: options?.productId,
+          topic: options?.productTitle, // topic теперь опциональный, бэкенд сгенерирует автоматически
         });
 
         router.push(`/messages?chatId=${chat.id}`);

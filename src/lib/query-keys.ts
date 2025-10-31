@@ -45,4 +45,13 @@ export const queryKeys = {
     details: () => [...queryKeys.promos.all, "detail"] as const,
     detail: (id: number) => [...queryKeys.promos.details(), id] as const,
   },
+  chats: {
+    all: ["chats"] as const,
+    lists: () => [...queryKeys.chats.all, "list"] as const,
+    list: () => [...queryKeys.chats.lists()] as const,
+    details: () => [...queryKeys.chats.all, "detail"] as const,
+    detail: (id: number) => [...queryKeys.chats.details(), id] as const,
+    messages: (id: number) =>
+      [...queryKeys.chats.detail(id), "messages"] as const,
+  },
 } as const;
