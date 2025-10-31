@@ -33,9 +33,6 @@ const ContactCompanyModal: React.FC<ContactModalProps> = ({
   const turnstileFrontendConfig = turnstileConfig.getFrontendConfig();
   const turnstile = useTurnstile({
     siteKey: turnstileFrontendConfig?.siteKey || "",
-    onError: (error) => {
-      // Не устанавливаем ошибку сразу, только логируем
-    },
   });
 
   const handleInputChange = (

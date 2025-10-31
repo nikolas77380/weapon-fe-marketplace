@@ -1,31 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import { getChatStats } from "@/lib/chat-api";
 import { useAuthContext } from "@/context/AuthContext";
+import { Message } from "@/types/chat";
 
 interface ChatStats {
   activeChatsCount: number;
   closedChatsCount: number;
-  latestMessages: {
-    id: number;
-    text: string;
-    isRead: boolean;
-    createdAt: string;
-    sender: {
-      id: number;
-      username: string;
-      displayName?: string;
-    };
-    chat: {
-      id: number;
-      topic: string;
-      status: string;
-      participants: Array<{
-        id: number;
-        username: string;
-        displayName?: string;
-      }>;
-    };
-  }[];
+  latestMessages: Message[];
 }
 
 export const useChatStats = () => {

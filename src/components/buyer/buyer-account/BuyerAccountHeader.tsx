@@ -22,8 +22,7 @@ const BuyerAccountHeader = ({
   className,
 }: BuyerAccountHeaderProps) => {
   const t = useTranslations("BuyerAccountHeader");
-  const { changeUserRole, isLoading, isSuccess, error } =
-    useUserRoleManagement();
+  const { changeUserRole, isLoading } = useUserRoleManagement();
   const handleBecomeSeller = async () => {
     try {
       await changeUserRole(currentUser?.id, "seller");

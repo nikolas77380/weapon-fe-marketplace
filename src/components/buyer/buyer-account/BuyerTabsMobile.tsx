@@ -4,7 +4,6 @@ import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useViewMode } from "@/hooks/useViewMode";
-import { MessageSquare } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import NotFavouriteState from "./NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
