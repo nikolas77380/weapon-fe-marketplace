@@ -6,20 +6,43 @@ import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
+import { useFavourites } from "@/hooks/useFavourites";
+import { useState } from "react";
 
 interface FavouriteCardProps {
   favourite: FavouriteProduct;
   viewMode?: "grid" | "list";
+  onRemove?: () => void;
 }
 
 const FavouriteCard = ({
   favourite,
   viewMode = "grid",
+  onRemove,
 }: FavouriteCardProps) => {
   const t = useTranslations("BuyerAccountTabs.tabFavourites");
+  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const { selectedCurrency } = useCurrency();
+  const { removeFromFavourites } = useFavourites();
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const product = favourite.product;
+
+  const handleRemove = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isRemoving) return;
+
+    setIsRemoving(true);
+    const success = await removeFromFavourites(favourite.id, product.id);
+
+    if (success && onRemove) {
+      onRemove();
+    }
+
+    setIsRemoving(false);
+  };
 
   if (viewMode === "list") {
     // List view
@@ -40,9 +63,14 @@ const FavouriteCard = ({
           />
           {/* Favourite indicator */}
           <div className="absolute top-2 right-2">
-            <div className="bg-red-500 p-1.5 rounded-full">
+            <button
+              onClick={handleRemove}
+              disabled={isRemoving}
+              className="bg-red-500 p-1.5 rounded-full hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Remove from favourites"
+            >
               <Heart size={12} className="text-white fill-white" />
-            </div>
+            </button>
           </div>
         </div>
         <div className="flex flex-col justify-between p-4 flex-1">
@@ -100,9 +128,14 @@ const FavouriteCard = ({
         />
         {/* Favourite indicator */}
         <div className="absolute top-2 right-2">
-          <div className="bg-red-500 p-1.5 rounded-full shadow-lg">
+          <button
+            onClick={handleRemove}
+            disabled={isRemoving}
+            className="bg-red-500 p-1.5 rounded-full shadow-lg hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Remove from favourites"
+          >
             <Heart size={12} className="text-white fill-white" />
-          </div>
+          </button>
         </div>
       </div>
 
@@ -132,7 +165,11 @@ const FavouriteCard = ({
         {/* Status and date */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="rounded-sm bg-green-500 py-0.5 px-2 flex-shrink-0">
-            <p className="text-xs text-white font-semibold">{product.status}</p>
+            <p className="text-xs text-white font-semibold">
+              {product.status == "available"
+                ? tStatus("available")
+                : tStatus("unavailable")}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-xs font-bold text-muted-foreground">
