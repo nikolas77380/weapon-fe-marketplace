@@ -78,13 +78,14 @@ const AddProductForms = ({
       productCategory: "",
       productManufacturer: "",
       productModel: "",
-      productCondition: "",
+      productCondition: "new" as "new" | "used",
       productPriceUSD: 0,
       productPriceEUR: 0,
       productPriceUAH: 0,
       productCount: 0,
       productImages: [],
       productStatus: "available",
+      productVideoUrl: "",
     },
   });
 
@@ -184,10 +185,14 @@ const AddProductForms = ({
         category: selectedCategory.id,
         sku: values.productSku || undefined,
         status: values.productStatus,
+        condition: values.productCondition,
+        videoUrl:
+          values.productVideoUrl && values.productVideoUrl.trim() !== ""
+            ? values.productVideoUrl.trim()
+            : undefined,
         attributesJson: {
           manufacturer: values.productManufacturer,
           model: values.productModel,
-          condition: values.productCondition,
           count: values.productCount,
         },
       };
@@ -207,13 +212,14 @@ const AddProductForms = ({
         productCategory: "",
         productManufacturer: "",
         productModel: "",
-        productCondition: "",
+        productCondition: "new" as "new" | "used",
         productPriceUSD: 0,
         productPriceEUR: 0,
         productPriceUAH: 0,
         productCount: 0,
         productImages: [],
         productStatus: "available",
+        productVideoUrl: "",
       });
 
       toast.success(t("toastSuccessAdd"));
@@ -241,7 +247,7 @@ const AddProductForms = ({
       productCategory: "",
       productManufacturer: "",
       productModel: "",
-      productCondition: "",
+      productCondition: "new" as "new" | "used",
       productPriceUSD: 0,
       productPriceEUR: 0,
       productPriceUAH: 0,
@@ -474,6 +480,19 @@ const AddProductForms = ({
               options={getProductStatusOptions(tStatus)}
             />
           </div>
+
+          {/* Product Video URL */}
+          <FormFieldComponent
+            control={form.control}
+            name="productVideoUrl"
+            label={t("labelVideoUrl")}
+            type="input"
+            placeholder={
+              t("placeholderVideoUrl") || "https://example.com/video"
+            }
+            className="w-full rounded-sm"
+            classNameLabel="bg-background"
+          />
 
           {/* Images Dropzone */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">

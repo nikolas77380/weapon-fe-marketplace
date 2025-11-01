@@ -292,8 +292,8 @@
       "titleBasicInfo": "Базова інформація",
       "labelProductName": "Назва товару",
       "placeholderProductName": "Введіть назву товару",
-      "labelSku": "SKU товару (Необов'язково)",
-      "placeholderSku": "Введіть SKU товару",
+      "labelSku": "Код товару (Необов'язково)",
+      "placeholderSku": "Введіть код товару",
       "labelDescription": "Опис",
       "placeholderDescription": "Введіть опис товару",
       "labelCategory": "Категорія",
@@ -312,15 +312,12 @@
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
       "productStatus": {
-        "available": "Активний",
-        "reserved": "Зарезервований",
-        "sold": "Проданий",
-        "archived": "Не активний"
+        "available": "В наявності",
+        "unavailable": "Немає в наявності"
       },
       "productCondition": {
-        "New": "Новий",
-        "In-Stock": "В наявності",
-        "Pre-Order": "Передзамовлення"
+        "new": "Новий",
+        "used": "Б/У"
       },
       "titleImages": "Зображення",
       "buttonClear": "Очистити форму",
@@ -328,7 +325,6 @@
       "buttonSubmit": "Підтвердити",
       "validation": {
         "productNameRequired": "Назва товару є обов'язковою",
-        "productSkuRequired": "SKU товару є обов'язковим",
         "productDescriptionRequired": "Опис товару є обов'язковим",
         "productCategoryRequired": "Категорія товару є обов'язковою",
         "productManufacturerRequired": "Виробник товару є обов'язковим",
@@ -358,6 +354,10 @@
     "labelCategory": "Категорія",
     "labelStatus": "Статус",
     "labelCondition": "Стан товару",
+    "labelVideoUrl": "Посилання на відео",
+    "placeholderVideoUrl": "Введіть посилання на відео",
+    "labelSku": "Код товару (Необов'язково)",
+    "placeholderSku": "Введіть код товару",
     "labelCount": "Кількість",
     "labelManufacturer": "Виробник",
     "labelModel": "Модель",
@@ -434,6 +434,7 @@
     "buttonRemoveFavourite": "Видалити з обраного",
     "buttonAddFavourite": "Додати до обраного",
     "titleModel": "Модель",
+    "titleVideo": "Відео",
     "titleNotModel": "Не має назви моделі",
     "titleCategory": "Категорія",
     "titleNotCategory": "Не має назви категорії",

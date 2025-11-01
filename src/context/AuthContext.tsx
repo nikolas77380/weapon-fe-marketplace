@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     await logout();
     setCurrentUser(null);
-    redirect("/auth");
+    redirect("/");
   };
 
   const handleEmailConfirmation = async (

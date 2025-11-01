@@ -548,6 +548,20 @@ export const getProducts = async (params?: {
   const queryString = queryParams.toString();
   const path = `/api/products/public${queryString ? `?${queryString}` : ""}`;
 
+  // If seller filter is present, try to use authenticated request
+  // so the API can determine if the user is viewing their own products
+  const token = getSessionTokenFromCookie();
+  if (token && params?.seller) {
+    console.log(
+      "Using authenticated request for seller products, sellerId:",
+      params.seller
+    );
+    return strapiFetchAuth({
+      path,
+      method: "GET",
+      token,
+    });
+  }
   return strapiFetch({
     path,
     method: "GET",

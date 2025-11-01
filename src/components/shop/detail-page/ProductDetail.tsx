@@ -1,5 +1,5 @@
 import { Product } from "@/lib/types";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import ProductImageGallery from "./ProductImageGallery";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,16 +12,26 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import ContactModal from "../ContactModal";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getVideoEmbedUrl } from "@/lib/videoUtils";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
   const tContact = useTranslations("ShopCard");
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const tCondition = useTranslations(
+    "AddProduct.addProductForm.productCondition"
+  );
   const currentLocale = useLocale();
   const { selectedCurrency } = useCurrency();
 
   const { sellerData } = useSellerData(product?.seller?.id);
   const [open, setOpen] = useState(false);
+
+  // Получаем embed URL для видео
+  const videoEmbedUrl = useMemo(() => {
+    if (!product?.videoUrl) return null;
+    return getVideoEmbedUrl(product.videoUrl);
+  }, [product?.videoUrl]);
 
   const getCategoryDisplayName = (category: any) => {
     return currentLocale === "ua" && category?.translate_ua
@@ -31,12 +41,10 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
   const getTranslatedCondition = (condition: string) => {
     switch (condition) {
-      case "New":
-        return currentLocale === "ua" ? "Новий" : "New";
-      case "In-Stock":
-        return currentLocale === "ua" ? "В наявності" : "In Stock";
-      case "Pre-Order":
-        return currentLocale === "ua" ? "Передзамовлення" : "Pre-Order";
+      case "new":
+        return tCondition("new");
+      case "used":
+        return tCondition("used");
       default:
         return condition;
     }
@@ -46,12 +54,8 @@ const ProductDetail = ({ product }: { product: Product }) => {
     switch (status) {
       case "available":
         return tStatus("available");
-      case "reserved":
-        return tStatus("reserved");
-      case "sold":
-        return tStatus("sold");
-      case "archived":
-        return tStatus("archived");
+      case "unavailable":
+        return tStatus("unavailable");
       default:
         return (
           status?.charAt(0).toUpperCase() + status?.slice(1) ||
@@ -68,12 +72,28 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
   return (
     <div className="w-full flex flex-col gap-6 lg:flex-row lg:gap-9 mb-20 lg:mb-0 px-2 sm:px-4 lg:px-6">
-      {/* Images */}
+      {/* Images and Video */}
       <div className="w-full lg:w-1/3">
         <ProductImageGallery
           images={product.images}
           productTitle={product.title}
         />
+        {videoEmbedUrl && (
+          <div className="mt-4 mb-4">
+            <h3 className="text-lg font-semibold mb-2">
+              {t("titleVideo") || "Video"}
+            </h3>
+            <div className="aspect-video w-full rounded-sm overflow-hidden">
+              <iframe
+                src={videoEmbedUrl}
+                title={product.title}
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        )}
       </div>
       {/* Details */}
       <div className="w-full lg:w-2/3 flex flex-col">
@@ -208,13 +228,13 @@ const ProductDetail = ({ product }: { product: Product }) => {
                           {t("titleAddSpec")}
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          {attrs.condition && (
+                          {product?.condition && (
                             <div>
                               <span className="font-medium text-gray-600">
                                 {t("titleCondition")}
                               </span>
                               <span className="ml-2 px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                {getTranslatedCondition(attrs.condition)}
+                                {getTranslatedCondition(product.condition)}
                               </span>
                             </div>
                           )}
@@ -241,7 +261,9 @@ const ProductDetail = ({ product }: { product: Product }) => {
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="text-sm sm:text-base">
-                      <span className="font-medium text-gray-600">{t("titleSKU")}</span>
+                      <span className="font-medium text-gray-600">
+                        {t("titleSKU")}
+                      </span>
                       <span className="ml-2 text-gray-800">
                         {product?.sku || t("notSpecified")}
                       </span>
@@ -254,10 +276,8 @@ const ProductDetail = ({ product }: { product: Product }) => {
                         className={`ml-2 px-2 py-1 text-xs rounded-full ${
                           product?.status === "available"
                             ? "bg-green-100 text-green-800"
-                            : product?.status === "reserved"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : product?.status === "sold"
-                            ? "bg-red-100 text-red-800"
+                            : product?.status === "unavailable"
+                            ? "bg-gray-100 text-gray-800"
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >

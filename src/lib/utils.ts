@@ -222,225 +222,59 @@ export const COUNTRIES = [
 
 export const SELLER_TYPES = [
   {
-    key: "oem-manufacturer",
-    label: "OEM Manufacturer",
-    ua: "Виробник OEM",
-    category: "Primary Producers",
-    categoryUa: "Основні виробники",
-    description:
-      "Designs and produces complete weapons/systems under its own brand.",
-    descriptionUa:
-      "Проектує та виробляє повні збройні системи під власною торговою маркою.",
+    key: "manufacturer",
+    label: "Manufacturer",
+    ua: "Виробник",
+    category: "Primary",
+    categoryUa: "Основні",
+    description: "Designs and produces products.",
+    descriptionUa: "Проектує та виробляє продукцію.",
   },
   {
-    key: "component-subsystem-manufacturer",
-    label: "Component/Sub-system Manufacturer",
-    ua: "Виробник компонентів/підсистем",
-    category: "Primary Producers",
-    categoryUa: "Основні виробники",
-    description:
-      "Produces parts and modules (barrels, optics, triggers, UAV parts, armor plates).",
-    descriptionUa:
-      "Виробляє деталі та модулі (стволи, оптику, спускові механізми, деталі БПЛА, бронеплити).",
-  },
-  {
-    key: "ammunition-manufacturer",
-    label: "Ammunition Manufacturer",
-    ua: "Виробник боєприпасів",
-    category: "Primary Producers",
-    categoryUa: "Основні виробники",
-    description:
-      "Manufactures small-arms ammo and/or mortar/artillery rounds (where legal).",
-    descriptionUa:
-      "Виробляє боєприпаси для стрілецької зброї та/або мінометні/артилерійські снаряди (де це законно).",
-  },
-
-  // Import/Export & Distribution
-  {
-    key: "licensed-importer",
-    label: "Licensed Importer",
-    ua: "Ліцензований імпортер",
-    category: "Import/Export & Distribution",
-    categoryUa: "Імпорт/Експорт та дистрибуція",
-    description:
-      "Imports regulated products into a country under export/import controls.",
-    descriptionUa:
-      "Імпортує регульовані товари в країну під контролем експорту/імпорту.",
-  },
-  {
-    key: "authorized-distributor",
-    label: "Authorized Distributor",
-    ua: "Авторизований дистриб'ютор",
-    category: "Import/Export & Distribution",
-    categoryUa: "Імпорт/Експорт та дистрибуція",
-    description:
-      "Holds territory/segment rights from OEMs to distribute products.",
-    descriptionUa:
-      "Має територіальні/сегментні права від OEM для розповсюдження продукції.",
+    key: "dealer",
+    label: "Dealer",
+    ua: "Дилер",
+    category: "Distribution",
+    categoryUa: "Дистрибуція",
+    description: "Authorized seller of products.",
+    descriptionUa: "Авторизований продавець продукції.",
   },
   {
     key: "wholesaler",
     label: "Wholesaler",
     ua: "Оптовий продавець",
-    category: "Import/Export & Distribution",
-    categoryUa: "Імпорт/Експорт та дистрибуція",
+    category: "Distribution",
+    categoryUa: "Дистрибуція",
     description: "Buys in bulk and resells to dealers/retailers.",
     descriptionUa: "Купує оптом та перепродає дилерам/роздрібним продавцям.",
   },
-
-  // Retail & Dealers
   {
-    key: "licensed-retailer",
-    label: "Licensed Retailer (Brick-and-Mortar)",
-    ua: "Ліцензований роздрібний продавець (фізичний магазин)",
-    category: "Retail & Dealers",
-    categoryUa: "Роздрібна торгівля та дилери",
-    description:
-      "Physical storefront selling to end users under local licensing.",
-    descriptionUa:
-      "Фізичний магазин, що продає кінцевим споживачам під місцевим ліцензуванням.",
+    key: "retailer",
+    label: "Retailer",
+    ua: "Роздрібний продавець",
+    category: "Retail",
+    categoryUa: "Роздрібна торгівля",
+    description: "Sells products directly to end users.",
+    descriptionUa: "Продає продукцію безпосередньо кінцевим споживачам.",
   },
   {
-    key: "online-retailer",
-    label: "Online Retailer (Licensed)",
-    ua: "Онлайн-продавець (ліцензований)",
-    category: "Retail & Dealers",
-    categoryUa: "Роздрібна торгівля та дилери",
-    description:
-      "E-commerce dealer operating with required licenses and compliance.",
-    descriptionUa:
-      "Інтернет-дилер, що працює з необхідними ліцензіями та відповідністю.",
+    key: "importer",
+    label: "Importer",
+    ua: "Імпортер",
+    category: "Import/Export",
+    categoryUa: "Імпорт/Експорт",
+    description: "Imports products into a country.",
+    descriptionUa: "Імпортує продукцію в країну.",
   },
-  {
-    key: "specialty-dealer",
-    label: "Specialty Dealer",
-    ua: "Спеціалізований дилер",
-    category: "Retail & Dealers",
-    categoryUa: "Роздрібна торгівля та дилери",
-    description:
-      "Focuses on a niche (tactical, hunting, precision shooting, UAVs, etc.).",
-    descriptionUa:
-      "Спеціалізується на ніші (тактичне, полювання, точна стрільба, БПЛА тощо).",
-  },
-  {
-    key: "consignment-dealer",
-    label: "Consignment Dealer",
-    ua: "Дилер на комісії",
-    category: "Retail & Dealers",
-    categoryUa: "Роздрібна торгівля та дилери",
-    description: "Sells items on behalf of owners and takes a commission.",
-    descriptionUa: "Продає товари від імені власників та отримує комісію.",
-  },
-
-  // Intermediaries
   {
     key: "broker-agent",
     label: "Broker/Agent",
-    ua: "Брокер/Агент",
+    ua: "Агент/Брокер",
     category: "Intermediaries",
     categoryUa: "Посередники",
-    description:
-      "Facilitates B2B/B2G deals without owning stock; commission-based.",
+    description: "Facilitates deals without owning stock; commission-based.",
     descriptionUa:
-      "Сприяє B2B/B2G угодам без володіння запасами; на комісійній основі.",
-  },
-  {
-    key: "system-integrator",
-    label: "System Integrator",
-    ua: "Системний інтегратор",
-    category: "Intermediaries",
-    categoryUa: "Посередники",
-    description:
-      "Builds multi-vendor solutions (e.g., drone + optics + comms).",
-    descriptionUa:
-      "Створює багатопостачальницькі рішення (наприклад, дрон + оптика + зв'язок).",
-  },
-
-  // Secondary Market
-  {
-    key: "certified-pre-owned-dealer",
-    label: "Certified Pre-Owned Dealer",
-    ua: "Сертифікований дилер вживаних товарів",
-    category: "Secondary Market",
-    categoryUa: "Вторинний ринок",
-    description:
-      "Sells inspected/verified used items with documented provenance.",
-    descriptionUa:
-      "Продає перевірені/верифіковані вживані товари з документованим походженням.",
-  },
-  {
-    key: "licensed-auction-house",
-    label: "Auction House (Licensed)",
-    ua: "Аукціонний дім (ліцензований)",
-    category: "Secondary Market",
-    categoryUa: "Вторинний ринок",
-    description: "Runs live/online auctions under regulatory compliance.",
-    descriptionUa:
-      "Проводить живі/онлайн аукціони з дотриманням регуляторних вимог.",
-  },
-  {
-    key: "gov-military-surplus",
-    label: "Government/Military Surplus Seller",
-    ua: "Продавець надлишків уряду/військових",
-    category: "Secondary Market",
-    categoryUa: "Вторинний ринок",
-    description: "Disposes of decommissioned stock per demilitarization rules.",
-    descriptionUa:
-      "Утилізує списані запаси відповідно до правил демілітаризації.",
-  },
-
-  // Services & Support
-  {
-    key: "gunsmith-armorer",
-    label: "Gunsmith/Armorer",
-    ua: "Зброяр/Броняр",
-    category: "Services & Support",
-    categoryUa: "Послуги та підтримка",
-    description:
-      "Builds, repairs, and modifies firearms; may sell parts/accessories.",
-    descriptionUa:
-      "Виготовляє, ремонтує та модифікує вогнепальну зброю; може продавати деталі/аксесуари.",
-  },
-  {
-    key: "mro-refurbishment",
-    label: "MRO/Refurbishment Provider",
-    ua: "Постачальник ТО/Відновлення",
-    category: "Services & Support",
-    categoryUa: "Послуги та підтримка",
-    description: "Maintenance, repair, overhaul, and upgrades for systems.",
-    descriptionUa:
-      "Технічне обслуговування, ремонт, капітальний ремонт та модернізація систем.",
-  },
-  {
-    key: "training-range-provider",
-    label: "Training/Ranges Provider",
-    ua: "Постачальник навчання/стрільбищ",
-    category: "Services & Support",
-    categoryUa: "Послуги та підтримка",
-    description: "Operates ranges/training and may sell limited gear.",
-    descriptionUa:
-      "Експлуатує стрільбища/навчання та може продавати обмежене спорядження.",
-  },
-
-  // Special Categories (jurisdiction-dependent)
-  {
-    key: "licensed-collector-private-seller",
-    label: "Collector/Private Seller (Licensed)",
-    ua: "Колекціонер/Приватний продавець (ліцензований)",
-    category: "Special Categories",
-    categoryUa: "Спеціальні категорії",
-    description: "Peer-to-peer sales where permitted and licensed.",
-    descriptionUa:
-      "Продажі від особи до особи там, де це дозволено та ліцензовано.",
-  },
-  {
-    key: "demil-disposal-vendor",
-    label: "Demilitarization/Disposal Vendor",
-    ua: "Постачальник демілітаризації/утилізації",
-    category: "Special Categories",
-    categoryUa: "Спеціальні категорії",
-    description: "Performs compliant demilitarization and disposal services.",
-    descriptionUa: "Надає послуги з відповідної демілітаризації та утилізації.",
+      "Сприяє угодам без володіння запасами; на комісійній основі.",
   },
 ] as const;
 
@@ -480,20 +314,12 @@ export const PRODUCT_STATUS_FORM = [
     label: "Available",
   },
   {
-    key: "reserved",
-    label: "Reserved",
-  },
-  {
-    key: "sold",
-    label: "Sold",
-  },
-  {
-    key: "archived",
-    label: "Archived",
+    key: "unavailable",
+    label: "Unavailable",
   },
 ] as const;
 
-// Function to get translated product status options
+// Function to get translated product status options (available/unavailable)
 export const getProductStatusOptions = (t: (key: string) => string) =>
   [
     {
@@ -501,24 +327,21 @@ export const getProductStatusOptions = (t: (key: string) => string) =>
       label: t("available"),
     },
     {
-      key: "archived",
-      label: t("archived"),
+      key: "unavailable",
+      label: t("unavailable"),
     },
   ] as const;
 
+// Function to get translated product condition options (new/used)
 export const getProductConditionOptions = (t: (key: string) => string) =>
   [
     {
-      key: "New",
-      label: t("New"),
+      key: "new",
+      label: t("new"),
     },
     {
-      key: "In-Stock",
-      label: t("In-Stock"),
-    },
-    {
-      key: "Pre-Order",
-      label: t("Pre-Order"),
+      key: "used",
+      label: t("used"),
     },
   ] as const;
 
