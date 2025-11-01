@@ -45,7 +45,7 @@ const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
         <NavigationMenuLink asChild className="hidden 2xl:block">
           <button
             onClick={handleAddProductClick}
-            className="border-none cursor-pointer hover:bg-transparent bg-transparent group"
+            className="border-none cursor-pointer hover:bg-transparent bg-transparent group w-fit"
           >
             <div className="flex items-center gap-2 py-2.5 px-4">
               <Plus
@@ -69,7 +69,7 @@ const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
           <LanguageSwitcher classNameSelectValue="text-gold-main" />
         </NavigationMenuLink>
 
-        <Link href="/account" className="flex items-center">
+        <Link href="/account" className="flex items-center border border-gold-main rounded-lg py-1 lg:py-1.5 px-3 lg:px-4">
           <Avatar className="h-8 w-8 cursor-pointer">
             <AvatarImage src={user.metadata?.avatar?.url} alt={user.username} />
             <AvatarFallback className="bg-black text-white text-sm uppercase">

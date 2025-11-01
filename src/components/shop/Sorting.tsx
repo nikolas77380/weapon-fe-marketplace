@@ -38,9 +38,9 @@ const Sorting = ({
   ];
 
   return (
-    <div className="flex items-center gap-3 min-[500px]:gap-4 sm:gap-7.5 w-full sm:w-auto justify-between sm:justify-start">
+    <div className="flex flex-col min-[340px]:flex-row items-start min-[340px]:items-center gap-3 min-[500px]:gap-4 sm:gap-7.5 w-full sm:w-auto justify-between sm:justify-start">
       <Select value={selectedSort} onValueChange={onSortChange}>
-        <SelectTrigger className="w-[160px] min-[500px]:w-[160px] sm:w-[200px] rounded-sm shadow-none 
+        <SelectTrigger className="w-[210px] min-[500px]:w-[210px] sm:w-[240px] rounded-sm shadow-none 
         focus:ring-0 focus:ring-offset-0 text-xs min-[500px]:text-sm">
           <SelectValue placeholder="Newest First" />
         </SelectTrigger>
