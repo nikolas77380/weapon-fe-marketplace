@@ -22,7 +22,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
   const t = useTranslations("BuyerAccountTabs");
   const pathname = usePathname();
 
-  const { favourites, loading } = useFavourites();
+  const { favourites, loading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
 
@@ -208,6 +208,7 @@ const BuyerTabsMobile = ({ currentUser }: BuyerTabsMobileProps) => {
                         key={favourite.id}
                         favourite={favourite}
                         viewMode={viewMode}
+                        onRemove={refresh}
                       />
                     ))
                   ) : (

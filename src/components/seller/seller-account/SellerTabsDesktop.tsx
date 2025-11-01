@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SellerListenedCard from "./SellerListenedCard";
-import { Heart, MessageSquare, PackagePlus, PackageSearch, Settings, Users } from "lucide-react";
+import {
+  Heart,
+  MessageSquare,
+  PackagePlus,
+  PackageSearch,
+  Settings,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
 import SkeletonComponent from "@/components/ui/SkeletonComponent";
@@ -38,7 +45,7 @@ const SellerTabsDesktop = ({
   const pathname = usePathname();
   const router = useRouter();
   const { stats } = useChatStats();
-  const { favourites, loading: favouritesLoading } = useFavourites();
+  const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
   const { unreadChatsCount } = useUnreadChats();
@@ -175,6 +182,7 @@ const SellerTabsDesktop = ({
                         key={favourite.id}
                         favourite={favourite}
                         viewMode={viewMode}
+                        onRemove={refresh}
                       />
                     ))
                   ) : (

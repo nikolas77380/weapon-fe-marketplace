@@ -50,7 +50,7 @@ const SellerTabsMobile = ({
   const { unreadChatsCount } = useUnreadChats();
   const { stats } = useChatStats();
 
-  const { favourites, loading: favouritesLoading } = useFavourites();
+  const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeAccordion, setActiveAccordion] = useState<string[]>([
     "myInquiries",
@@ -182,6 +182,7 @@ const SellerTabsMobile = ({
                         key={favourite.id}
                         favourite={favourite}
                         viewMode={viewMode}
+                        onRemove={refresh}
                       />
                     ))
                   ) : (
