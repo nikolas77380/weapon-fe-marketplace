@@ -41,6 +41,9 @@ interface SellerListenedCardProps {
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
   const { selectedCurrency } = useCurrency();
+  const tCondition = useTranslations(
+    "AddProduct.addProductForm.productCondition"
+  );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const currentLocale = useLocale();
 
@@ -57,15 +60,11 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const getStatusStyles = (status: string) => {
     switch (status) {
       case "available":
-        return "bg-green-600 text-white";
-      case "reserved":
-        return "bg-yellow-500 text-black";
-      case "sold":
-        return "bg-red-600 text-white";
-      case "archived":
-        return "bg-gray-500 text-white";
+        return "bg-green-100 text-green-800";
+      case "unavailable":
+        return "bg-gray-100 text-gray-800";
       default:
-        return "bg-black text-white";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -73,12 +72,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     switch (status) {
       case "available":
         return tStatus("available");
-      case "reserved":
-        return tStatus("reserved");
-      case "sold":
-        return tStatus("sold");
-      case "archived":
-        return tStatus("archived");
+      case "unavailable":
+        return tStatus("unavailable");
       default:
         return status;
     }
@@ -103,9 +98,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     }
   };
 
-  const handleStatusUpdate = async (
-    newStatus: "available" | "reserved" | "sold" | "archived"
-  ) => {
+  const handleStatusUpdate = async (newStatus: "available" | "unavailable") => {
     try {
       await updateProduct({
         id: product.id.toString(),
@@ -280,11 +273,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                     key={status.value}
                     onClick={() =>
                       handleStatusUpdate(
-                        status.value as
-                          | "available"
-                          | "reserved"
-                          | "sold"
-                          | "archived"
+                        status.value as "available" | "unavailable"
                       )
                     }
                     className="hover:bg-gray-100 cursor-pointer"

@@ -313,14 +313,11 @@
       "placeholderStatus": "Select Status",
       "productStatus": {
         "available": "Available",
-        "reserved": "Reserved",
-        "sold": "Sold",
-        "archived": "Unavailable"
+        "unavailable": "Unavailable"
       },
       "productCondition": {
         "New": "New",
-        "In-Stock": "In Stock",
-        "Pre-Order": "Pre-Order"
+        "used": "Used"
       },
       "titleImages": "Images",
       "buttonClear": "Clear Draft",
@@ -328,7 +325,6 @@
       "buttonSubmit": "Submit",
       "validation": {
         "productNameRequired": "Product name is required",
-        "productSkuRequired": "Product SKU is required",
         "productDescriptionRequired": "Product description is required",
         "productCategoryRequired": "Product category is required",
         "productManufacturerRequired": "Product manufacturer is required",
@@ -357,6 +353,10 @@
     "labelPrice": "Price (USD)",
     "labelCategory": "Category",
     "labelStatus": "Status",
+    "labelVideoUrl": "Video URL",
+    "placeholderVideoUrl": "Enter your video URL",
+    "labelSku": "Product SKU (Optional)",
+    "placeholderSku": "Enter your product SKU",
     "labelCondition": "Condition",
     "labelCount": "Count",
     "labelManufacturer": "Manufacturer",

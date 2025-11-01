@@ -153,7 +153,8 @@ export interface Product {
   price?: number;
   currency?: string;
   sku?: string;
-  status: "available" | "reserved" | "sold" | "archived";
+  status: "available" | "unavailable";
+  condition: "new" | "used";
   category?: Category;
   tags?: Tag[];
   seller?: {
@@ -165,6 +166,7 @@ export interface Product {
   images?: MediaFile[];
   certificates?: Certificate[];
   attributesJson?: AttributesJson;
+  videoUrl?: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -188,7 +190,9 @@ export interface CreateProductData {
   category: number;
   tags?: number[];
   sku?: string;
-  status?: "available" | "reserved" | "sold" | "archived";
+  status?: "available" | "unavailable";
+  condition?: "new" | "used";
+  videoUrl?: string;
   attributesJson?: AttributesJson;
 }
 
@@ -201,7 +205,9 @@ export interface UpdateProductData {
   category?: string;
   tags?: number[];
   sku?: string;
-  status?: "available" | "reserved" | "sold" | "archived";
+  status?: "available" | "unavailable";
+  condition?: "new" | "used";
+  videoUrl?: string;
   attributesJson?: AttributesJson;
 }
 

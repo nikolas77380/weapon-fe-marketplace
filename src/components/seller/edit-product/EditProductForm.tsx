@@ -87,10 +87,11 @@ const EditProductForm = ({
       category: product.category?.id.toString() || "0",
       sku: product.sku || "",
       status: product.status || "available",
-      condition: product.attributesJson?.condition || "New",
+      condition: product.condition || "new",
       quantity: product.attributesJson?.count || 1,
       manufacturer: product.attributesJson?.manufacturer || "",
       model: product.attributesJson?.model || "",
+      videoUrl: product.videoUrl || "",
       images: undefined,
     },
   });
@@ -109,10 +110,11 @@ const EditProductForm = ({
         category: product.category?.id.toString() || "0",
         sku: product.sku || "",
         status: product.status || "available",
-        condition: product.attributesJson?.condition || "new",
+        condition: product.condition || "new",
         quantity: product.attributesJson?.count || 1,
         manufacturer: product.attributesJson?.manufacturer || "",
         model: product.attributesJson?.model || "",
+        videoUrl: product.videoUrl || "",
         images: undefined,
       });
     }
@@ -129,7 +131,8 @@ const EditProductForm = ({
     product.category?.id,
     product.sku,
     product.status,
-    product.attributesJson?.condition,
+    product.condition,
+    product.videoUrl,
     product.attributesJson?.count,
     product.attributesJson?.manufacturer,
     product.attributesJson?.model,
@@ -148,8 +151,12 @@ const EditProductForm = ({
         category: values.category,
         sku: values.sku,
         status: values.status,
+        condition: values.condition,
+        videoUrl:
+          values.videoUrl && values.videoUrl.trim() !== ""
+            ? values.videoUrl.trim()
+            : undefined,
         attributesJson: {
-          condition: values.condition,
           count: values.quantity,
           manufacturer: values.manufacturer,
           model: values.model,
@@ -364,9 +371,9 @@ const EditProductForm = ({
             <FormFieldComponent
               control={form.control}
               name="sku"
-              label="SKU"
+              label={t("labelSku")}
               type="input"
-              placeholder="Product SKU"
+              placeholder={t("placeholderSku")}
               classNameLabel="bg-background"
             />
 
@@ -405,6 +412,19 @@ const EditProductForm = ({
               classNameLabel="bg-background"
             />
           </div>
+
+          {/* Video URL */}
+          <FormFieldComponent
+            control={form.control}
+            name="videoUrl"
+            label={t("labelVideoUrl")}
+            type="input"
+            placeholder={
+              t("placeholderVideoUrl") || "https://example.com/video"
+            }
+            className="w-full"
+            classNameLabel="bg-background"
+          />
 
           {/* Submit Buttons - 2 buttons side by side */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
