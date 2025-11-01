@@ -246,7 +246,7 @@
       "placeholderIssuedBy": "Enter issuing organization",
       "labelIssuedDate": "Issued Date",
       "placeholderIssuedDate": "Select issued date",
-      "labelExpiryDate": "Expiry Date",
+      "labelExpiryDate": "Expiry Date (optional)",
       "placeholderExpiryDate": "Select expiry date (optional)",
       "labelCertificateNumber": "Certificate Number",
       "placeholderCertificateNumber": "Enter certificate number (optional)",
@@ -298,6 +298,8 @@
       "placeholderDescription": "Enter product description",
       "labelCategory": "Category",
       "placeholderCategory": "Select Category",
+      "placeholderCategorySearch": "Search categories...",
+      "noCategoriesFound": "No categories found",
       "errorCategories": "Failed to load categories. Please try again later.",
       "labelManufacturer": "Manufacturer",
       "placeholderManufacturer": "Enter manufacturer name",
@@ -311,6 +313,8 @@
       "labelCount": "Count",
       "labelStatus": "Status",
       "placeholderStatus": "Select Status",
+      "labelVideoUrl": "Video URL",
+      "placeholderVideoUrl": "Enter your video URL",
       "productStatus": {
         "available": "Available",
         "unavailable": "Unavailable"
