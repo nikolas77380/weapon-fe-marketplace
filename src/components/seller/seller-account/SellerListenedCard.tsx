@@ -142,7 +142,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               {getCategoryDisplayName(product.category)}
             </p>
             <p>{getDisplayPrice(product, selectedCurrency)}</p>
-            <p>Posted: {formatDate(product.createdAt)}</p>
+            <p>{formatDate(product.createdAt)}</p>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-3 sm:gap-6 font-roboto font-medium text-xs sm:text-sm text-gray-400">
             <div className="flex items-center gap-1.5">
