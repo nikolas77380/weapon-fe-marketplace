@@ -147,8 +147,6 @@ const EditProductForm = ({
       title: product.title || "",
       description: product.description || "",
       priceUSD: product.priceUSD ?? product.price ?? 0,
-      priceEUR: product.priceEUR ?? 0,
-      priceUAH: product.priceUAH ?? 0,
       // Legacy support
       price: product.price || 0,
       category: product.category?.id.toString() || "0",
@@ -170,8 +168,6 @@ const EditProductForm = ({
         title: product.title || "",
         description: product.description || "",
         priceUSD: product.priceUSD ?? product.price ?? 0,
-        priceEUR: product.priceEUR ?? 0,
-        priceUAH: product.priceUAH ?? 0,
         // Legacy support
         price: product.price || 0,
         category: product.category?.id.toString() || "0",
@@ -192,8 +188,6 @@ const EditProductForm = ({
     product.title,
     product.description,
     product.priceUSD,
-    product.priceEUR,
-    product.priceUAH,
     product.price,
     product.category?.id,
     product.sku,
@@ -213,8 +207,6 @@ const EditProductForm = ({
         title: values.title,
         description: values.description,
         priceUSD: values.priceUSD,
-        priceEUR: values.priceEUR,
-        priceUAH: values.priceUAH,
         category: values.category,
         sku: values.sku,
         status: values.status,
@@ -333,63 +325,24 @@ const EditProductForm = ({
             rows={4}
           />
 
-          {/* Prices */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-            <FormFieldComponent
-              control={form.control}
-              name="priceUSD"
-              label="Price (USD)"
-              type="input"
-              inputType="number"
-              placeholder="0.00"
-              className="w-full"
-              classNameLabel="bg-background"
-              min="0.01"
-              step="0.01"
-              customOnChange={(e, fieldOnChange) => {
-                const value = e.target.value;
-                const numValue =
-                  value === "" ? 0 : Math.max(0.01, Number(value));
-                fieldOnChange(numValue);
-              }}
-            />
-            <FormFieldComponent
-              control={form.control}
-              name="priceEUR"
-              label="Price (EUR)"
-              type="input"
-              inputType="number"
-              placeholder="0.00"
-              className="w-full"
-              classNameLabel="bg-background"
-              min="0.01"
-              step="0.01"
-              customOnChange={(e, fieldOnChange) => {
-                const value = e.target.value;
-                const numValue =
-                  value === "" ? 0 : Math.max(0.01, Number(value));
-                fieldOnChange(numValue);
-              }}
-            />
-            <FormFieldComponent
-              control={form.control}
-              name="priceUAH"
-              label="Price (UAH)"
-              type="input"
-              inputType="number"
-              placeholder="0.00"
-              className="w-full"
-              classNameLabel="bg-background"
-              min="0.01"
-              step="0.01"
-              customOnChange={(e, fieldOnChange) => {
-                const value = e.target.value;
-                const numValue =
-                  value === "" ? 0 : Math.max(0.01, Number(value));
-                fieldOnChange(numValue);
-              }}
-            />
-          </div>
+          {/* Price */}
+          <FormFieldComponent
+            control={form.control}
+            name="priceUSD"
+            label="Price (USD)"
+            type="input"
+            inputType="number"
+            placeholder="0.00"
+            className="w-full"
+            classNameLabel="bg-background"
+            min="0.01"
+            step="0.01"
+            customOnChange={(e, fieldOnChange) => {
+              const value = e.target.value;
+              const numValue = value === "" ? 0 : Math.max(0.01, Number(value));
+              fieldOnChange(numValue);
+            }}
+          />
 
           {/* Category full width with search */}
           <FormField

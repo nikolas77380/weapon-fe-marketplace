@@ -16,8 +16,6 @@ export const createAddProductSchema = (t: (key: string) => string) => {
       message: t("validation.productConditionRequired"),
     }),
     productPriceUSD: z.number().min(0.01, t("validation.priceGreaterThanZero")),
-    productPriceEUR: z.number().min(0.01, t("validation.priceGreaterThanZero")),
-    productPriceUAH: z.number().min(0.01, t("validation.priceGreaterThanZero")),
     productCount: z.number().min(1, t("validation.countGreaterThanZero")),
     productStatus: z.enum(["available", "unavailable"], {
       message: t("validation.productStatusRequired"),
@@ -44,8 +42,6 @@ export const addProductSchema = z.object({
     message: "Product condition is required",
   }),
   productPriceUSD: z.number().min(0.01, "Price must be greater than 0"),
-  productPriceEUR: z.number().min(0.01, "Price must be greater than 0"),
-  productPriceUAH: z.number().min(0.01, "Price must be greater than 0"),
   productCount: z.number().min(1, "Count must be greater than 0"),
   productStatus: z.enum(["available", "unavailable"], {
     message: "Product status is required",

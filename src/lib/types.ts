@@ -200,8 +200,6 @@ export interface UpdateProductData {
   title?: string;
   description?: string;
   priceUSD?: number;
-  priceEUR?: number;
-  priceUAH?: number;
   category?: string;
   tags?: number[];
   sku?: string;

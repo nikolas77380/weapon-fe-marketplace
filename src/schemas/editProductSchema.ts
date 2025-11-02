@@ -4,8 +4,6 @@ export const editProductSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   priceUSD: z.number().optional(),
-  priceEUR: z.number().optional(),
-  priceUAH: z.number().optional(),
   // Legacy fields for backward compatibility
   price: z.number().optional(),
   currency: z.string().optional(),
