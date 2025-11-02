@@ -430,17 +430,19 @@ const AddProductForms = ({
           </div>
 
           {/* Product Video URL */}
-          <FormFieldComponent
-            control={form.control}
-            name="productVideoUrl"
-            label={t("labelVideoUrl")}
-            type="input"
-            placeholder={
-              t("placeholderVideoUrl") || "https://example.com/video"
-            }
-            className="w-full rounded-sm"
-            classNameLabel="bg-background"
-          />
+          <div className="max-w-5xl mx-auto">
+            <FormFieldComponent
+              control={form.control}
+              name="productVideoUrl"
+              label={t("labelVideoUrl")}
+              type="input"
+              placeholder={
+                t("placeholderVideoUrl") || "https://example.com/video"
+              }
+              className="w-full rounded-sm"
+              classNameLabel="bg-background"
+            />
+          </div>
 
           {/* Images Dropzone */}
           <div className="relative border border-gray-primary rounded-2xl p-10 space-y-6 flex flex-col max-w-5xl mx-auto">

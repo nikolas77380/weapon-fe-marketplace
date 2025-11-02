@@ -72,28 +72,12 @@ const ProductDetail = ({ product }: { product: Product }) => {
 
   return (
     <div className="w-full flex flex-col gap-6 lg:flex-row lg:gap-9 mb-20 lg:mb-0 px-2 sm:px-4 lg:px-6">
-      {/* Images and Video */}
+      {/* Images */}
       <div className="w-full lg:w-1/3">
         <ProductImageGallery
           images={product.images}
           productTitle={product.title}
         />
-        {videoEmbedUrl && (
-          <div className="mt-4 mb-4">
-            <h3 className="text-lg font-semibold mb-2">
-              {t("titleVideo") || "Video"}
-            </h3>
-            <div className="aspect-video w-full rounded-sm overflow-hidden">
-              <iframe
-                src={videoEmbedUrl}
-                title={product.title}
-                className="w-full h-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        )}
       </div>
       {/* Details */}
       <div className="w-full lg:w-2/3 flex flex-col">
@@ -290,6 +274,22 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </TabsContent>
           </Tabs>
         </div>
+        {videoEmbedUrl && (
+          <div className="mt-6 lg:mt-7.5 mb-10">
+            <h3 className="text-lg font-semibold mb-2">
+              {t("titleVideo") || "Video"}
+            </h3>
+            <div className="aspect-video w-full rounded-sm overflow-hidden">
+              <iframe
+                src={videoEmbedUrl}
+                title={product.title}
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        )}
         {open && (
           <ContactModal
             open={open}

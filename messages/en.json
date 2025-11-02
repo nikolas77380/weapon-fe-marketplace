@@ -320,7 +320,7 @@
         "unavailable": "Unavailable"
       },
       "productCondition": {
-        "New": "New",
+        "new": "New",
         "used": "Used"
       },
       "titleImages": "Images",
@@ -437,6 +437,7 @@
     "buttonRemoveFavourite": "Remove from Favourites",
     "buttonAddFavourite": "Add to Favourite",
     "titleModel": "Model",
+    "titleVideo": "Video",
     "titleNotModel": "Not have model name",
     "titleCategory": "Category",
     "titleNotCategory": "Not have category name",
