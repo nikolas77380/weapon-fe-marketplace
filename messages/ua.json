@@ -195,6 +195,8 @@
     "placeholderDescription": "Введіть опис компанії",
     "labelCompanyName": "Назва компанії",
     "placeholderCompanyName": "Введіть назву компанії",
+    "labelBusinessId": "ЄДРПОУ",
+    "placeholderBusinessId": "Введіть ЄДРПОУ",
     "labelWebSite": "Веб-сторінка",
     "placeholderWebSite": "Введіть веб-сторінку компанії",
     "labelPhoneNumbers": "Номери телефону",
