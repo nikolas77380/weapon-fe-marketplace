@@ -313,7 +313,7 @@ const AddProductForms = ({
                       loading={categoriesLoading}
                       error={categoriesError}
                       placeholder={t("placeholderCategory")}
-                      className="w-full min-[600px]:w-1/2 rounded-sm"
+                      className="w-full rounded-sm"
                       getMainCategories={getMainCategories}
                       getSubCategories={getSubCategories}
                     />

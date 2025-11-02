@@ -246,7 +246,7 @@
       "placeholderIssuedBy": "Введіть організацію, яка видала сертифікат",
       "labelIssuedDate": "Дата видачі",
       "placeholderIssuedDate": "Оберіть дату видачі",
-      "labelExpiryDate": "Термін дії",
+      "labelExpiryDate": "Термін дії (необов'язково)",
       "placeholderExpiryDate": "Оберіть термін дії (необов'язково)",
       "labelCertificateNumber": "Номер сертифіката",
       "placeholderCertificateNumber": "Введіть номер сертифіката (необов'язково)",
@@ -298,6 +298,8 @@
       "placeholderDescription": "Введіть опис товару",
       "labelCategory": "Категорія",
       "placeholderCategory": "Оберіть категорію",
+      "placeholderCategorySearch": "Пошук категорій...",
+      "noCategoriesFound": "Категорії не знайдено",
       "errorCategories": "Не вдалося завантажити категорії. Будь ласка, спробуєте пізніше.",
       "labelManufacturer": "Виробник",
       "placeholderManufacturer": "Введіть назву виробника",
@@ -311,6 +313,8 @@
       "labelCount": "Кількість",
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
+      "labelVideoUrl": "Посилання на відео",
+      "placeholderVideoUrl": "Введіть посилання на відео",
       "productStatus": {
         "available": "В наявності",
         "unavailable": "Немає в наявності"
