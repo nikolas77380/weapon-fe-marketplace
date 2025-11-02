@@ -73,7 +73,10 @@ const MobileDrawer = ({
       from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4"
         >
           <div className="flex items-center justify-between w-full">
-            <Logo />
+            <Link href="/" onClick={onClose}>
+              <Logo />
+            </Link>
+
             <DrawerClose asChild>
               <div
                 className="rounded-full size-8 flex items-center justify-center bg-transparent cursor-pointer
@@ -121,21 +124,23 @@ const MobileDrawer = ({
             <>
               {/* Avatar without click */}
               <div className="flex items-center gap-3 p-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src={currentUser.metadata?.avatar?.url}
-                    alt={currentUser.username}
-                  />
-                  <AvatarFallback className="bg-black text-white text-sm uppercase">
-                    {currentUser.displayName?.charAt(0) ||
-                      currentUser.username.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <span className="text-sm xs:text-base font-medium">
-                    {currentUser.displayName || currentUser.username}
-                  </span>
-                </div>
+                <Link href="/account" onClick={onClose}>
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={currentUser.metadata?.avatar?.url}
+                      alt={currentUser.username}
+                    />
+                    <AvatarFallback className="bg-black text-white text-sm uppercase">
+                      {currentUser.displayName?.charAt(0) ||
+                        currentUser.username.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <span className="text-sm xs:text-base font-medium">
+                      {currentUser.displayName || currentUser.username}
+                    </span>
+                  </div>
+                </Link>
               </div>
 
               {/* Buyer menu content */}
@@ -152,24 +157,25 @@ const MobileDrawer = ({
           {currentUser?.role.name === "seller" && (
             <>
               {/* Avatar without click */}
-              <div className="flex items-center gap-3 p-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src={currentUser.metadata?.avatar?.url}
-                    alt={currentUser.username}
-                  />
-                  <AvatarFallback className="bg-black text-white text-sm uppercase">
-                    {currentUser.displayName?.charAt(0) ||
-                      currentUser.username.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex">
-                  <span className="text-sm xs:text-base font-medium">
-                    {currentUser.displayName || currentUser.username}
-                  </span>
+              <Link href="/account" onClick={onClose}>
+                <div className="flex items-center gap-3 p-3">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={currentUser.metadata?.avatar?.url}
+                      alt={currentUser.username}
+                    />
+                    <AvatarFallback className="bg-black text-white text-sm uppercase">
+                      {currentUser.displayName?.charAt(0) ||
+                        currentUser.username.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex">
+                    <span className="text-sm xs:text-base font-medium">
+                      {currentUser.displayName || currentUser.username}
+                    </span>
+                  </div>
                 </div>
-              </div>
-
+              </Link>
               {/* Add Product Button for Seller on <2xl */}
               <button
                 onClick={handleAddProductClick}

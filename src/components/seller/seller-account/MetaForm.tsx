@@ -49,6 +49,7 @@ const MetaForm = ({
       specialisation: metadata?.specialisation || "",
       sellerDescription: metadata?.sellerDescription || "",
       companyName: metadata?.companyName || "",
+      businessId: metadata?.businessId || "",
       webSite: metadata?.webSite || "",
       phoneNumbers: metadata?.phoneNumbers || "",
       country: metadata?.country || "UA",
@@ -217,6 +218,17 @@ const MetaForm = ({
                     label={t("labelCompanyName")}
                     type="input"
                     placeholder={t("placeholderCompanyName")}
+                    classNameLabel="bg-background"
+                    className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+
+                  {/* Business ID */}
+                  <FormFieldComponent
+                    control={form.control}
+                    name="businessId"
+                    label={t("labelBusinessId")}
+                    type="input"
+                    placeholder={t("placeholderBusinessId")}
                     classNameLabel="bg-background"
                     className="outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   />

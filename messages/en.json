@@ -195,6 +195,8 @@
     "placeholderDescription": "Enter company description",
     "labelCompanyName": "Company Name",
     "placeholderCompanyName": "Enter your company name",
+    "labelBusinessId": "BusinessId",
+    "placeholderBusinessId": "Enter BusinessId",
     "labelWebSite": "Web Site",
     "placeholderWebSite": "Enter company Web Site",
     "labelPhoneNumbers": "Phone Numbers",

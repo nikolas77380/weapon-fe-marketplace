@@ -5,6 +5,7 @@ export interface SellerMeta {
   specialisation?: string;
   sellerDescription?: string;
   companyName?: string;
+  businessId?: string;
   webSite?: string;
   phoneNumbers?: string;
   country?: string;

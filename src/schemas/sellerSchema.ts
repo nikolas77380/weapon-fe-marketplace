@@ -4,6 +4,7 @@ export const sellerSchema = z.object({
   specialisation: z.string().min(1, "Required"),
   sellerDescription: z.string().min(1, "Required"),
   companyName: z.string().min(1, "Required"),
+  businessId: z.string().optional(),
   webSite: z.string().optional(),
   phoneNumbers: z.string().min(1, "Required"),
   country: z.string().min(1, "Required"),
