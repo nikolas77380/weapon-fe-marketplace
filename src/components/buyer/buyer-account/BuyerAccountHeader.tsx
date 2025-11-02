@@ -99,7 +99,7 @@ const BuyerAccountHeader = ({
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
+            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
               <BuyerActionCard
                 title={t("titleActiveInquiries")}
                 count={0}
@@ -119,7 +119,7 @@ const BuyerAccountHeader = ({
                   <HandHelping className="size-5 lg:size-7" strokeWidth={0.5} />
                 }
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
