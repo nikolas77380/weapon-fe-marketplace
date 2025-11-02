@@ -50,7 +50,7 @@ const SellerAccountHeader = ({
       </div>
 
       {/* Action Cards */}
-      <div className="grid grid-cols-2 min-[450px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-7 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
+      <div className="grid grid-cols-2 min-[450px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-4 lg:gap-9 xl:gap-10 mb-10 lg:mb-15">
         {products.length > 0 && (
           <>
             <SellerActionCard

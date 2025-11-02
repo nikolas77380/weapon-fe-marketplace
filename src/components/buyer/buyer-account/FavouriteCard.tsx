@@ -88,7 +88,9 @@ const FavouriteCard = ({
             <div className="flex items-center justify-between gap-4 w-full lg:w-auto">
               <div className="hidden min-[400px]:block bg-green-500 py-1 px-2 rounded-sm">
                 <p className="text-xs lg:text-sm text-white font-semibold">
-                  {product.status}
+                  {product.status == "available"
+                    ? tStatus("available")
+                    : tStatus("unavailable")}
                 </p>
               </div>
               <div>
