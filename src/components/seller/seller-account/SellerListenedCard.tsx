@@ -41,9 +41,9 @@ interface SellerListenedCardProps {
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   const t = useTranslations("SellerAccountTabs");
   const { selectedCurrency } = useCurrency();
-  const tCondition = useTranslations(
-    "AddProduct.addProductForm.productCondition"
-  );
+  // const tCondition = useTranslations(
+  //   "AddProduct.addProductForm.productCondition"
+  // );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const currentLocale = useLocale();
 
@@ -161,14 +161,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
         </div>
       </div>
       {/* Action Buttons */}
-      <div className="flex items-center min-[600px]:items-start justify-between min-[600px]:justify-end gap-4 min-[600px]:gap-8">
-        <div
-          className={`px-2 py-0.5 text-xs font-medium self-start rounded ${getStatusStyles(
-            currentStatus
-          )}`}
-        >
-          {getTranslatedStatus(currentStatus)}
-        </div>
+      <div className="flex min-[600px]:flex-col items-center min-[600px]:items-start justify-between min-[600px]:justify-end gap-4 min-[600px]:gap-8">
         <div className="flex items-center gap-3">
           <Tooltip>
             <TooltipTrigger asChild>
@@ -283,6 +276,13 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
+        </div>
+        <div
+          className={`px-2 py-0.5 text-xs font-medium self-start rounded ${getStatusStyles(
+            currentStatus
+          )}`}
+        >
+          {getTranslatedStatus(currentStatus)}
         </div>
       </div>
     </div>
