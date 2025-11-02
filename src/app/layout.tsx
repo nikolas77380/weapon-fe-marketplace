@@ -8,6 +8,8 @@ import { QueryProvider } from "@/lib/query-client";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
+import { NavigationProvider } from "@/context/NavigationContext";
+import { NavigationLoader } from "@/components/ui/NavigationLoader";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -46,12 +48,15 @@ export default async function RootLayout({
       >
         <QueryProvider>
           <NextIntlClientProvider messages={messages}>
-            <AuthContextProvider>
-              <UnreadChatsProvider>
-                <ConditionalLayout>{children}</ConditionalLayout>
-                <Toaster />
-              </UnreadChatsProvider>
-            </AuthContextProvider>
+            <NavigationProvider>
+              <AuthContextProvider>
+                <UnreadChatsProvider>
+                  <ConditionalLayout>{children}</ConditionalLayout>
+                  <NavigationLoader />
+                  <Toaster />
+                </UnreadChatsProvider>
+              </AuthContextProvider>
+            </NavigationProvider>
           </NextIntlClientProvider>
         </QueryProvider>
       </body>
