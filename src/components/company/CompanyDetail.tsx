@@ -553,104 +553,134 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       </h1>
                       <div className="mt-3 sm:mt-5 flex flex-col gap-2.5 sm:gap-3.5">
                         {/* Working time */}
-                        <h2 className="text-lg sm:text-xl font-light">
-                          {t("tabOverview.titleWorkingTime")}
-                        </h2>
-                        <div className="flex flex-col gap-2 sm:gap-2.5">
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t(`tabOverview.workTime.monFri`)}
-                            </p>
-                            <p className="font-light text-xs sm:text-sm">
-                              {sellerData?.metadata?.workTimeMonFri === "closed"
-                                ? t("tabOverview.workTime.closed")
-                                : sellerData?.metadata?.workTimeMonFri}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t(`tabOverview.workTime.sat`)}
-                            </p>
-                            <p className="font-light text-xs sm:text-sm">
-                              {sellerData?.metadata?.workTimeSaturday ===
-                              "closed"
-                                ? t("tabOverview.workTime.closed")
-                                : sellerData?.metadata?.workTimeSaturday}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t(`tabOverview.workTime.sun`)}
-                            </p>
-                            <p className="font-light text-xs sm:text-sm">
-                              {sellerData?.metadata?.workTimeSunday === "closed"
-                                ? t("tabOverview.workTime.closed")
-                                : sellerData?.metadata?.workTimeSunday}
-                            </p>
-                          </div>
-                        </div>
-                        <h2 className="text-lg sm:text-xl font-light">
-                          {t("tabOverview.titleContact")}
-                        </h2>
-                        <div className="flex flex-col gap-2 sm:gap-2.5">
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t("tabOverview.titlePhone")}
-                            </p>
-                            <a
-                              href="tel:+380507697777"
-                              className="hover:text-gold-main transition-colors duration-300"
-                            >
-                              <p className="font-light text-xs sm:text-sm break-all">
-                                {sellerData?.metadata?.phoneNumbers}
-                              </p>
-                            </a>
-                          </div>
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t("tabOverview.titleWebsite")}
-                            </p>
-                            <a
-                              href={
-                                sellerData?.metadata?.webSite?.startsWith(
-                                  "http"
-                                )
-                                  ? sellerData?.metadata?.webSite
-                                  : `https://${sellerData?.metadata?.webSite}`
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="font-light truncate text-xs sm:text-sm hover:text-gold-main/80 break-words underline"
-                            >
-                              {sellerData?.metadata?.webSite}
-                            </a>
-                          </div>
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t("tabOverview.titleEmail")}
-                            </p>
-                            <p className="font-light text-xs sm:text-sm break-all">
-                              {sellerData?.email}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-2 sm:gap-2.5">
-                            <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
-                              {t("tabOverview.titleAddress")}
-                            </p>
-                            <p className="font-light text-xs sm:text-sm">
-                              {sellerData?.metadata?.address}
-                            </p>
-                          </div>
-                          <div>
-                            {open && (
-                              <ContactModal
-                                open={open}
-                                onOpenChange={setOpen}
-                                sellerId={sellerData?.id}
-                              />
-                            )}
-                          </div>
-                        </div>
+                        {(sellerData?.metadata?.workTimeMonFri ||
+                          sellerData?.metadata?.workTimeSaturday ||
+                          sellerData?.metadata?.workTimeSunday) && (
+                          <>
+                            <h2 className="text-lg sm:text-xl font-light">
+                              {t("tabOverview.titleWorkingTime")}
+                            </h2>
+                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                              {sellerData?.metadata?.workTimeMonFri && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t(`tabOverview.workTime.monFri`)}
+                                  </p>
+                                  <p className="font-light text-xs sm:text-sm">
+                                    {sellerData?.metadata?.workTimeMonFri ===
+                                    "closed"
+                                      ? t("tabOverview.workTime.closed")
+                                      : sellerData?.metadata?.workTimeMonFri}
+                                  </p>
+                                </div>
+                              )}
+                              {sellerData?.metadata?.workTimeSaturday && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t(`tabOverview.workTime.sat`)}
+                                  </p>
+                                  <p className="font-light text-xs sm:text-sm">
+                                    {sellerData?.metadata?.workTimeSaturday ===
+                                    "closed"
+                                      ? t("tabOverview.workTime.closed")
+                                      : sellerData?.metadata?.workTimeSaturday}
+                                  </p>
+                                </div>
+                              )}
+                              {sellerData?.metadata?.workTimeSunday && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t(`tabOverview.workTime.sun`)}
+                                  </p>
+                                  <p className="font-light text-xs sm:text-sm">
+                                    {sellerData?.metadata?.workTimeSunday ===
+                                    "closed"
+                                      ? t("tabOverview.workTime.closed")
+                                      : sellerData?.metadata?.workTimeSunday}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          </>
+                        )}
+                        {/* Contacts */}
+                        {(sellerData?.metadata?.phoneNumbers ||
+                          sellerData?.metadata?.webSite ||
+                          sellerData?.email ||
+                          sellerData?.metadata?.address) && (
+                          <>
+                            <h2 className="text-lg sm:text-xl font-light">
+                              {t("tabOverview.titleContact")}
+                            </h2>
+                            <div className="flex flex-col gap-2 sm:gap-2.5">
+                              {sellerData?.metadata?.phoneNumbers && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t("tabOverview.titlePhone")}
+                                  </p>
+                                  <a
+                                    href={`tel:${sellerData.metadata.phoneNumbers}`}
+                                    className="hover:text-gold-main transition-colors duration-300"
+                                  >
+                                    <p className="font-light text-xs sm:text-sm break-all">
+                                      {sellerData.metadata.phoneNumbers}
+                                    </p>
+                                  </a>
+                                </div>
+                              )}
+                              {sellerData?.metadata?.webSite && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t("tabOverview.titleWebsite")}
+                                  </p>
+                                  <a
+                                    href={
+                                      sellerData.metadata.webSite.startsWith(
+                                        "http"
+                                      )
+                                        ? sellerData.metadata.webSite
+                                        : `https://${sellerData.metadata.webSite}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-light truncate text-xs sm:text-sm hover:text-gold-main/80 break-words underline"
+                                  >
+                                    {sellerData.metadata.webSite}
+                                  </a>
+                                </div>
+                              )}
+                              {sellerData?.email && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t("tabOverview.titleEmail")}
+                                  </p>
+                                  <p className="font-light text-xs sm:text-sm break-all">
+                                    {sellerData.email}
+                                  </p>
+                                </div>
+                              )}
+                              {sellerData?.metadata?.address && (
+                                <div className="flex items-center gap-2 sm:gap-2.5">
+                                  <p className="font-light text-muted-foreground min-w-[50px] sm:min-w-[62px] text-xs sm:text-sm">
+                                    {t("tabOverview.titleAddress")}
+                                  </p>
+                                  <p className="font-light text-xs sm:text-sm">
+                                    {sellerData.metadata.address}
+                                  </p>
+                                </div>
+                              )}
+                              <div>
+                                {open && (
+                                  <ContactModal
+                                    open={open}
+                                    onOpenChange={setOpen}
+                                    sellerId={sellerData?.id}
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
