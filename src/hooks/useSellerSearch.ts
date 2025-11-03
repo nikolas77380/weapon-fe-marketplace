@@ -187,6 +187,9 @@ export const useSellerSearchManual = () => {
             setSellers(response.data);
           } else if (Array.isArray(response)) {
             setSellers(response);
+          } else {
+            console.warn("Unexpected response format:", response);
+            setSellers([]);
           }
 
           if (response.meta?.pagination) {
@@ -203,6 +206,8 @@ export const useSellerSearchManual = () => {
           if (response.meta?.searchTerm) {
             setSearchTerm(response.meta.searchTerm);
           }
+        } else {
+          setSellers([]);
         }
       } catch (err) {
         setError(

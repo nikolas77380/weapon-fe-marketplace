@@ -12,7 +12,7 @@ import LoadingState from "../ui/LoadingState";
 interface MetadataRequiredDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  sellerId?: number;
+  sellerId: number;
   productId?: number;
   productTitle?: string;
 }
@@ -28,7 +28,8 @@ const ContactModal = ({
   const { currentUser } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const { sellerMeta, loading: isSellerMetaLoading } = useSellerMetaBySeller(
-    sellerId || 0
+    sellerId,
+    open
   );
   const { contactSeller } = useContactSeller();
 

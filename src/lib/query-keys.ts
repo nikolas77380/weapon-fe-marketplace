@@ -54,4 +54,12 @@ export const queryKeys = {
     messages: (id: number) =>
       [...queryKeys.chats.detail(id), "messages"] as const,
   },
+  sellerMeta: {
+    all: ["sellerMeta"] as const,
+    lists: () => [...queryKeys.sellerMeta.all, "list"] as const,
+    details: () => [...queryKeys.sellerMeta.all, "detail"] as const,
+    detail: (id: number) => [...queryKeys.sellerMeta.details(), id] as const,
+    bySeller: (sellerId: number) =>
+      [...queryKeys.sellerMeta.all, "seller", sellerId] as const,
+  },
 } as const;

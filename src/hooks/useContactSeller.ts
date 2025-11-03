@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext";
 import { createChat } from "@/lib/chat-api";
-import { getSellerMetaBySellerId } from "@/lib/strapi";
 
 export const useContactSeller = () => {
   const { currentUser } = useAuthContext();

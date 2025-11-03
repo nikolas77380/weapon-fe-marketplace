@@ -577,6 +577,14 @@ export const getProductById = async (id: number) => {
   });
 };
 
+export const getTopProductsByCategories = async () => {
+  // Используем публичный endpoint для получения топ продуктов по всем категориям
+  return strapiFetch({
+    path: `/api/products/public/top-by-categories`,
+    method: "GET",
+  });
+};
+
 // Search products by title or seller name (public)
 export const searchProductsPublic = async (params?: {
   search: string;
@@ -740,7 +748,7 @@ export const searchSellersPublic = async (params?: {
   }
 
   const queryString = queryParams.toString();
-  const path = `/api/users/search/sellers/public${
+  const path = `/api/user-search/sellers/public${
     queryString ? `?${queryString}` : ""
   }`;
 
@@ -786,7 +794,7 @@ export const searchSellers = async (params?: {
   }
 
   const queryString = queryParams.toString();
-  const path = `/api/users/search/sellers${
+  const path = `/api/user-search/sellers${
     queryString ? `?${queryString}` : ""
   }`;
 

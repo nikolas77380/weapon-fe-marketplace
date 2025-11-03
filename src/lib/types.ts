@@ -161,7 +161,8 @@ export interface Product {
   seller?: {
     id: number;
     username: string;
-    email: string;
+    email?: string;
+    companyName?: string;
     metadata?: SellerMeta;
   };
   images?: MediaFile[];
