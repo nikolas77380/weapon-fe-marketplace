@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   getSellerMetas,
   getSellerMetaById,
   getSellerMetaBySellerId,
 } from "@/lib/strapi";
+import { queryKeys } from "@/lib/query-keys";
 
 export const useSellerMetas = (params?: {
   pagination?: {
@@ -105,41 +107,35 @@ export const useSellerMeta = (id: number) => {
   };
 };
 
-export const useSellerMetaBySeller = (sellerId: number) => {
-  const [sellerMeta, setSellerMeta] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchSellerMeta = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
+export const useSellerMetaBySeller = (
+  sellerId: number,
+  enabled: boolean = true
+) => {
+  const {
+    data: response,
+    isLoading: loading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: queryKeys.sellerMeta.bySeller(sellerId),
+    queryFn: async () => {
       const response = await getSellerMetaBySellerId(sellerId);
-      if (response && response.data && response.data.length > 0) {
-        setSellerMeta(response.data[0]);
-      } else {
-        setSellerMeta(null);
-      }
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to fetch seller metadata"
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, [sellerId]);
+      return response;
+    },
+    enabled: enabled && !!sellerId && sellerId > 0,
+    staleTime: 5 * 60 * 1000, // 5 минут
+    gcTime: 10 * 60 * 1000, // 10 минут
+  });
 
-  useEffect(() => {
-    if (sellerId) {
-      fetchSellerMeta();
-    }
-  }, [sellerId, fetchSellerMeta]);
+  const sellerMeta =
+    response && response.data && response.data.length > 0
+      ? response.data[0]
+      : null;
 
   return {
     sellerMeta,
     loading,
-    error,
-    refetch: fetchSellerMeta,
+    error: error?.message || null,
+    refetch,
   };
 };

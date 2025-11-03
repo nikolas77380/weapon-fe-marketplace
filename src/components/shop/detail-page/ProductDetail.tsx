@@ -290,7 +290,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </div>
           </div>
         )}
-        {open && (
+        {open && product?.seller?.id && (
           <ContactModal
             open={open}
             onOpenChange={setOpen}
