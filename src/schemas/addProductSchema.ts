@@ -19,18 +19,10 @@ export const createAddProductSchema = (t: (key: string) => string) => {
     productCurrency: z.enum(["USD", "EUR", "UAH"], {
       message: t("validation.currencyRequired"),
     }),
-    productCount: z.preprocess(
-      (val) => {
-        if (val === undefined || val === null || val === "" || val === 0) {
-          return undefined;
-        }
-        return val;
-      },
-      z.union([
-        z.undefined(),
-        z.number().min(1, t("validation.countGreaterThanZero")),
-      ]).optional()
-    ),
+    productCount: z
+      .number()
+      .min(1, t("validation.countGreaterThanZero"))
+      .optional(),
     productStatus: z.enum(["available", "unavailable"], {
       message: t("validation.productStatusRequired"),
     }),
@@ -59,18 +51,10 @@ export const addProductSchema = z.object({
   productCurrency: z.enum(["USD", "EUR", "UAH"], {
     message: "Currency is required",
   }),
-  productCount: z.preprocess(
-    (val) => {
-      if (val === undefined || val === null || val === "" || val === 0) {
-        return undefined;
-      }
-      return val;
-    },
-    z.union([
-      z.undefined(),
-      z.number().min(1, "Count must be greater than 0"),
-    ]).optional()
-  ),
+  productCount: z
+    .number()
+    .min(1, "Count must be greater than 0")
+    .optional(),
   productStatus: z.enum(["available", "unavailable"], {
     message: "Product status is required",
   }),

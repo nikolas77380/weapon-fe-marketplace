@@ -360,6 +360,7 @@
         "productModelRequired": "Модель товару є обов'язковою",
         "productConditionRequired": "Стан товару є обов'язковим",
         "priceGreaterThanZero": "Ціна повинна бути більше 0",
+        "currencyRequired": "Валюта є обов'язковою",
         "countGreaterThanZero": "Кількість повинна бути більше 0",
         "productStatusRequired": "Статус товару є обов'язковим",
         "maxImages": "Максимум 5 зображень дозволено",

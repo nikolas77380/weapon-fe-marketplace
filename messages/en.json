@@ -360,6 +360,7 @@
         "productModelRequired": "Product model is required",
         "productConditionRequired": "Product condition is required",
         "priceGreaterThanZero": "Price must be greater than 0",
+        "currencyRequired": "Currency is required",
         "countGreaterThanZero": "Count must be greater than 0",
         "productStatusRequired": "Product status is required",
         "maxImages": "Maximum 5 images allowed",

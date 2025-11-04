@@ -135,6 +135,14 @@ const AddProductForms = ({
   }, [createError]);
 
   const onSubmit = async (values: AddProductSchemaValues) => {
+    // Convert 0 to undefined before validation (optional field)
+    if (values.productCount === 0) {
+      form.setValue("productCount", undefined, {
+        shouldValidate: false,
+      });
+      values.productCount = undefined;
+    }
+
     // Ensure productImages is always an array before validation
     const currentImages = Array.isArray(values.productImages)
       ? values.productImages
