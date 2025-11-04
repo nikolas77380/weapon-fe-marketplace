@@ -358,7 +358,8 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
-    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
+    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.", 
+    "labelCurrency": "Валюта",
     "toastSuccessDeleteImage": "Зображення успішно видалено!",
     "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
     "titleEditProduct": "Редагування товару",
@@ -368,7 +369,7 @@
     "placeholderProductName": "Введіть назву товару",
     "labelDescription": "Опис",
     "placeholderDescription": "Введіть опис товару",
-    "labelPrice": "Ціна (USD)",
+    "labelPrice": "Ціна",
     "labelCategory": "Категорія",
     "labelStatus": "Статус",
     "labelCondition": "Стан товару",
