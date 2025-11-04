@@ -121,7 +121,7 @@
     }
   },
   "SellerAccountHeader": {
-    "titleWelcome": "З поверненням",
+    "titleWelcome": "Вітаємо",
     "titleAddProduct": "Додати товар",
     "titleSettings": "Налаштування",
     "titleActiveListings": "Активні списки",
@@ -330,8 +330,9 @@
       "placeholderCondition": "Оберіть стан товару",
       "titlePrice": "Ціна",
       "labelPrice": "Ціна (USD)",
+      "labelCurrency": "Валюта",
       "titleDetails": "Деталі",
-      "labelCount": "Кількість",
+      "labelCount": "Кількість (необов'язково)",
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
       "labelVideoUrl": "Посилання на відео",
@@ -360,6 +361,7 @@
         "productModelRequired": "Модель товару є обов'язковою",
         "productConditionRequired": "Стан товару є обов'язковим",
         "priceGreaterThanZero": "Ціна повинна бути більше 0",
+        "currencyRequired": "Валюта є обов'язковою",
         "countGreaterThanZero": "Кількість повинна бути більше 0",
         "productStatusRequired": "Статус товару є обов'язковим",
         "maxImages": "Максимум 5 зображень дозволено",
@@ -369,7 +371,7 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
-    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.", 
+    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
     "labelCurrency": "Валюта",
     "toastSuccessDeleteImage": "Зображення успішно видалено!",
     "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
@@ -528,7 +530,8 @@
       "placeholderSearch": "Пошук товарів..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Додаткова інформація"
+      "titleBusinessInfo": "Додаткова інформація",
+      "titleBusinessId": "ЕДРПОУ:"
     }
   },
   "PriceRange": {

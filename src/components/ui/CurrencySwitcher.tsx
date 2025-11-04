@@ -77,7 +77,7 @@ export default function CurrencySwitcher({
       ) : getCurrentCurrencyConfig()?.code === "EUR" ? (
         <Euro className="h-4 w-4 text-gold-main" />
       ) : (
-        <span className="h-4 w-4 inline-flex items-center justify-center text-gold-main text-[13px] leading-none">
+        <span className="h-4 w-4 inline-flex items-center justify-center text-gold-main text-base leading-none">
           {getCurrentCurrencyConfig()?.symbol}
         </span>
       )}

@@ -68,6 +68,26 @@ const MobileDrawer = ({
 
   const handleAddProductClick = () => {
     sessionStorage.setItem("accountTab", "addProduct");
+    // Also save to localStorage for persistence across reloads
+    if (typeof window !== "undefined") {
+      try {
+        const currentTabs = localStorage.getItem("accountTabMobile");
+        let tabsArray: string[] = ["myInquiries"];
+        if (currentTabs) {
+          const parsed = JSON.parse(currentTabs);
+          if (Array.isArray(parsed)) {
+            tabsArray = parsed;
+          }
+        }
+        if (!tabsArray.includes("addProduct")) {
+          tabsArray.push("addProduct");
+        }
+        localStorage.setItem("accountTabMobile", JSON.stringify(tabsArray));
+      } catch (error) {
+        // If localStorage fails, just use default
+        console.error("Error saving to localStorage:", error);
+      }
+    }
     onClose();
     router.push("/account");
   };
@@ -99,11 +119,7 @@ const MobileDrawer = ({
       from-slate-800 via-gray-600 to-slate-900 shadow-2xl h-16 mb-5 px-4"
         >
           <div className="flex items-center justify-between w-full">
-            <Link
-              href="/"
-              onClick={onClose}
-              className="block w-24 h-11"
-            >
+            <Link href="/" onClick={onClose} className="block w-24 h-11">
               <Image
                 src="/logo/esviem_defence_logo_2_1.png"
                 alt="logo"

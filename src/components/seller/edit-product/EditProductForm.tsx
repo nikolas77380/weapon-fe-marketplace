@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import {
   Form,
   FormLabel,
@@ -17,7 +17,6 @@ import {
 } from "@/schemas/editProductSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { SelectItem } from "@/components/ui/select";
 import {
   getProductConditionOptions,
   getProductStatusOptions,
@@ -29,16 +28,9 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { Product, UpdateProductData } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useLocale } from "next-intl";
 import Image from "next/image";
-import { X, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { X } from "lucide-react";
+import CategoryCombobox from "@/components/ui/CategoryCombobox";
 import {
   Tooltip,
   TooltipContent,
@@ -60,78 +52,14 @@ const EditProductForm = ({
     "AddProduct.addProductForm.productCondition"
   );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
-  const currentLocale = useLocale();
-
-  const getCategoryDisplayName = (category: any) => {
-    return currentLocale === "ua" && category?.translate_ua
-      ? category.translate_ua
-      : category?.name;
-  };
-
-  const [categorySearchQuery, setCategorySearchQuery] = useState("");
-  const [isCategorySelectOpen, setIsCategorySelectOpen] = useState(false);
-  const categoryInputRef = useRef<HTMLInputElement>(null);
-
-  // const [imageToDelete, setImageToDelete] = useState<number | null>(null);
 
   const router = useRouter();
 
-  const { categories } = useCategories();
-
-  // Filter categories based on search - optimized for performance
-  const filteredCategories = useMemo(() => {
-    if (!categorySearchQuery.trim()) {
-      return categories;
-    }
-
-    const query = categorySearchQuery.toLowerCase().trim();
-    const matchingCategoryIds = new Set<number>();
-
-    // Create a map for faster parent lookup
-    const categoryMap = new Map(categories.map((c) => [c.id, c]));
-
-    // Simple direct search first
-    for (const category of categories) {
-      const name = category.name?.toLowerCase() || "";
-      const translate = category.translate_ua?.toLowerCase() || "";
-
-      if (name.includes(query) || translate.includes(query)) {
-        matchingCategoryIds.add(category.id);
-
-        // Add all parent categories
-        let current = category;
-        while (current.parent) {
-          const parent = categoryMap.get(current.parent.id);
-          if (parent && !matchingCategoryIds.has(parent.id)) {
-            matchingCategoryIds.add(parent.id);
-            current = parent;
-          } else {
-            break;
-          }
-        }
-      }
-    }
-
-    // Return filtered categories maintaining order
-    return categories.filter((cat) => matchingCategoryIds.has(cat.id));
-  }, [categories, categorySearchQuery]);
-
-  // Focus input when select opens
-  useEffect(() => {
-    if (isCategorySelectOpen && categoryInputRef.current) {
-      const timeoutId = setTimeout(() => {
-        categoryInputRef.current?.focus();
-      }, 0);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isCategorySelectOpen]);
-
-  // Reset search when select closes
-  useEffect(() => {
-    if (!isCategorySelectOpen) {
-      setCategorySearchQuery("");
-    }
-  }, [isCategorySelectOpen]);
+  const {
+    categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+  } = useCategories();
 
   const {
     updateProduct,
@@ -142,21 +70,24 @@ const EditProductForm = ({
   void _customLabels;
 
   // Get price for selected currency from product
-  const getPriceForCurrency = (currency: "USD" | "EUR" | "UAH"): number => {
-    switch (currency) {
-      case "USD":
-        return product.priceUSD || 0;
-      case "EUR":
-        return product.priceEUR || 0;
-      case "UAH":
-        return product.priceUAH || 0;
-      default:
-        return 0;
-    }
-  };
+  const getPriceForCurrency = useCallback(
+    (currency: "USD" | "EUR" | "UAH"): number => {
+      switch (currency) {
+        case "USD":
+          return product.priceUSD || 0;
+        case "EUR":
+          return product.priceEUR || 0;
+        case "UAH":
+          return product.priceUAH || 0;
+        default:
+          return 0;
+      }
+    },
+    [product.priceUSD, product.priceEUR, product.priceUAH]
+  );
 
   // Determine initial price and currency from product (default to USD)
-  const getInitialPriceAndCurrency = () => {
+  const getInitialPriceAndCurrency = useCallback(() => {
     // Default to USD if available
     if (product.priceUSD && product.priceUSD > 0) {
       return { price: product.priceUSD, currency: "USD" as const };
@@ -170,7 +101,7 @@ const EditProductForm = ({
       return { price: product.priceUAH, currency: "UAH" as const };
     }
     return { price: 0, currency: "USD" as const };
-  };
+  }, [product.priceUSD, product.priceEUR, product.priceUAH]);
 
   const initialPriceData = getInitialPriceAndCurrency();
 
@@ -230,6 +161,7 @@ const EditProductForm = ({
     product.attributesJson?.count,
     product.attributesJson?.manufacturer,
     product.attributesJson?.model,
+    getInitialPriceAndCurrency,
   ]);
 
   // Watch currency changes and update price from product
@@ -253,7 +185,7 @@ const EditProductForm = ({
       form.setValue("price", priceForCurrency);
       prevCurrencyRef.current = watchedCurrency;
     }
-  }, [watchedCurrency, form, product]);
+  }, [watchedCurrency, form, product, getPriceForCurrency]);
 
   // Deletion dialog is currently disabled
 
@@ -417,7 +349,7 @@ const EditProductForm = ({
             />
           </div>
 
-          {/* Category full width with search */}
+          {/* Category */}
           <FormField
             control={form.control}
             name="category"
@@ -425,167 +357,21 @@ const EditProductForm = ({
               <FormItem>
                 <FormLabel>{t("labelCategory")}</FormLabel>
                 <FormControl>
-                  <Select
+                  <CategoryCombobox
+                    value={field.value || ""}
                     onValueChange={field.onChange}
-                    value={String(field.value || "")}
-                    onOpenChange={setIsCategorySelectOpen}
-                  >
-                    <SelectTrigger className="rounded-sm max-w-full overflow-hidden">
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent
-                      onCloseAutoFocus={(e) => {
-                        // Prevent auto-focus on trigger when closing
-                        e.preventDefault();
-                      }}
-                      className="max-w-[calc(100vw-1rem)] sm:max-w-none min-w-[var(--radix-select-trigger-width)]"
-                      sideOffset={4}
-                      align="start"
-                      position="popper"
-                      collisionPadding={8}
-                    >
-                      {/* Search input inside SelectContent */}
-                      {categories.length > 0 && (
-                        <div className="sticky top-0 z-10 bg-popover border-b border-border p-2">
-                          <div className="relative">
-                            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-                            <Input
-                              ref={categoryInputRef}
-                              type="text"
-                              placeholder={tAddProduct(
-                                "placeholderCategorySearch"
-                              )}
-                              value={categorySearchQuery}
-                              onChange={(e) => {
-                                const newValue = e.target.value;
-                                setCategorySearchQuery(newValue);
-                                // Immediately restore focus after state update
-                                setTimeout(() => {
-                                  if (
-                                    categoryInputRef.current &&
-                                    isCategorySelectOpen &&
-                                    document.activeElement !==
-                                      categoryInputRef.current
-                                  ) {
-                                    const activeElement =
-                                      document.activeElement;
-                                    const isSelectItem =
-                                      activeElement?.getAttribute("role") ===
-                                        "option" ||
-                                      activeElement?.closest('[role="option"]');
-
-                                    if (!isSelectItem) {
-                                      categoryInputRef.current.focus();
-                                      // Restore cursor to end
-                                      const len =
-                                        categoryInputRef.current.value.length;
-                                      categoryInputRef.current.setSelectionRange(
-                                        len,
-                                        len
-                                      );
-                                    }
-                                  }
-                                }, 0);
-                              }}
-                              onKeyDown={(e) => {
-                                // For normal input characters (letters, numbers, symbols)
-                                // Prevent Select from handling these events
-                                if (
-                                  e.key.length === 1 ||
-                                  e.key === "Backspace" ||
-                                  e.key === "Delete"
-                                ) {
-                                  e.stopPropagation();
-                                  // Allow default browser input handling
-                                  return;
-                                }
-
-                                // Handle Escape - clear search and let Select close
-                                if (e.key === "Escape") {
-                                  setCategorySearchQuery("");
-                                  // Let event bubble - Select will handle closing
-                                  return;
-                                }
-
-                                // For Arrow keys, Tab, Enter - don't stop propagation
-                                // Let Select handle navigation and selection
-                                // This allows arrow keys to navigate the list even when input is focused
-                              }}
-                              onFocus={(e) => {
-                                // Prevent any focus stealing
-                                e.stopPropagation();
-                              }}
-                              onBlur={(e) => {
-                                // Check if blur is due to SelectItem interaction
-                                const relatedTarget =
-                                  e.relatedTarget as HTMLElement;
-                                const isSelectItem =
-                                  relatedTarget?.getAttribute("role") ===
-                                    "option" ||
-                                  relatedTarget?.closest('[role="option"]');
-
-                                // If not selecting from list, restore focus
-                                if (!isSelectItem && isCategorySelectOpen) {
-                                  setTimeout(() => {
-                                    if (
-                                      categoryInputRef.current &&
-                                      document.activeElement !==
-                                        categoryInputRef.current
-                                    ) {
-                                      const currentActive =
-                                        document.activeElement;
-                                      const currentIsSelectItem =
-                                        currentActive?.getAttribute("role") ===
-                                          "option" ||
-                                        currentActive?.closest(
-                                          '[role="option"]'
-                                        );
-
-                                      if (!currentIsSelectItem) {
-                                        categoryInputRef.current.focus();
-                                      }
-                                    }
-                                  }, 0);
-                                }
-                              }}
-                              onMouseDown={(e) => {
-                                // Prevent Select from closing when clicking input
-                                e.stopPropagation();
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                              className="pl-8 h-9 bg-background"
-                              autoComplete="off"
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Categories list */}
-                      {filteredCategories.length === 0 ? (
-                        <SelectItem
-                          value="no-results"
-                          disabled
-                          className="text-muted-foreground"
-                        >
-                          {categorySearchQuery.trim()
-                            ? tAddProduct("noCategoriesFound")
-                            : "No categories available"}
-                        </SelectItem>
-                      ) : (
-                        filteredCategories.map((category) => (
-                          <SelectItem
-                            key={category.id}
-                            value={category.id.toString()}
-                          >
-                            {getCategoryDisplayName(category)}
-                          </SelectItem>
-                        ))
-                      )}
-                    </SelectContent>
-                  </Select>
+                    categories={categories}
+                    loading={categoriesLoading}
+                    error={categoriesError}
+                    placeholder={tAddProduct("placeholderCategory")}
+                    className="w-full rounded-sm"
+                  />
                 </FormControl>
+                {categoriesError && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {tAddProduct("errorCategories")}
+                  </p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
