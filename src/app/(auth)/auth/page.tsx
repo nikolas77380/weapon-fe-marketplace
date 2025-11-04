@@ -18,8 +18,8 @@ import {
 } from "@/lib/auth";
 import { useAuthContext } from "@/context/AuthContext";
 // import { isSeller } from "@/lib/utils";
-import Logo from "@/components/ui/Logo";
 // import { Tag, User } from "lucide-react";
+import Link from "next/link";
 // import { UserProfile } from "@/lib/types";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -179,7 +179,18 @@ const AuthPage = () => {
               {/* Пустой div для выравнивания на мобильных */}
               <div className="lg:hidden w-8"></div>
               <div className="flex justify-center">
-                <Logo />
+                <Link
+                  href="/"
+                  className="block w-24 h-11 sm:w-28 sm:h-12 md:w-32 md:h-14"
+                >
+                  <Image
+                    src="/logo/esviem_defence_logo_2_1.png"
+                    alt="logo"
+                    width={320}
+                    height={220}
+                    className="w-full h-full object-contain"
+                  />
+                </Link>
               </div>
               {/* Language Switcher - на всех устройствах */}
               <div className="lg:absolute lg:right-0">

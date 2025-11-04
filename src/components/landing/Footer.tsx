@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import Logo from "../ui/Logo";
 import { useTranslations } from "next-intl";
 import PrivacyPolicyModal from "../ui/PrivacyPolicyModal";
 import ContactCompanyModal from "./footer-pages/ContactCompanyModal";
@@ -34,7 +33,18 @@ const Footer = () => {
         <div className="flex flex-col sm:flex-row sm:justify-between w-full gap-6 sm:gap-8 lg:gap-0">
           <ul className="text-center sm:text-left">
             <li className="font-bold text-xl sm:text-2xl mb-3 sm:mb-5 flex justify-center sm:justify-start">
-              <Logo />
+              <Link
+                href="/"
+                className="block w-24 h-11 sm:w-28 sm:h-12 md:w-32 md:h-14"
+              >
+                <Image
+                  src="/logo/esviem_defence_logo_2_1.png"
+                  alt="logo"
+                  width={320}
+                  height={220}
+                  className="w-full h-full object-contain"
+                />
+              </Link>
             </li>
             <li className="font-light text-sm sm:text-base w-full max-w-full sm:max-w-52">
               {t("description")}

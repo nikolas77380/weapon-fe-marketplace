@@ -64,15 +64,19 @@ const Navbar = () => {
             <Menu size={16} className="text-white sm:w-5 sm:h-5" />
           </button>
 
-          <div className="mr-1 lg:mr-0">
+          <div className="mr-1 lg:mr-0 flex-shrink-0">
             {/* <Logo /> */}
-            <Link href="/" className="w-24 h-11">
+            <Link
+              href="/"
+              className="block w-16 h-8 sm:w-20 sm:h-9 md:w-24 md:h-11 lg:w-28 lg:h-12 xl:w-32 xl:h-12"
+            >
               <Image
                 src="/logo/esviem_defence_logo_2_1.png"
                 alt="logo"
                 width={320}
                 height={220}
-                className="w-24 h-11 object-contain"
+                className="w-full h-full object-contain"
+                priority
               />
             </Link>
           </div>
