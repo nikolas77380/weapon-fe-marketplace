@@ -53,20 +53,26 @@ const MobileSubCategories: React.FC<MobileSubCategoriesProps> = ({
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
       {/* Header */}
       <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
           <button
             onClick={onBack}
-            className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+            className="p-2 hover:bg-gray-100 rounded-md transition-colors flex-shrink-0"
           >
             <ArrowLeft size={20} className="text-gray-600" />
           </button>
-          <h2 className="font-semibold text-lg text-gray-800">
-            {getCategoryName(category)}
-          </h2>
+          <Link
+            href={`/category/${category.slug}`}
+            onClick={onClose}
+            className="flex-1 min-w-0"
+          >
+            <h2 className="font-semibold text-lg text-gray-800 hover:text-gold-main transition-colors cursor-pointer">
+              {getCategoryName(category)}
+            </h2>
+          </Link>
         </div>
         <button
           onClick={onClose}
-          className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-md transition-colors flex-shrink-0"
         >
           <X size={20} className="text-gray-600" />
         </button>

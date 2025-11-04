@@ -17,6 +17,7 @@ import { useState, useCallback } from "react";
 import { useCategories } from "@/hooks/useCategories";
 import { NavbarSearch } from "../search/NavbarSearch";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
@@ -64,7 +65,16 @@ const Navbar = () => {
           </button>
 
           <div className="mr-1 lg:mr-0">
-            <Logo />
+            {/* <Logo /> */}
+            <Link href="/" className="w-24 h-11">
+              <Image
+                src="/logo/esviem_defence_logo_2_1.png"
+                alt="logo"
+                width={320}
+                height={220}
+                className="w-24 h-11 object-contain"
+              />
+            </Link>
           </div>
 
           {/* Catalog Button - shows everyone on Desktop, hides on mobile */}
@@ -167,7 +177,7 @@ const Navbar = () => {
     <>
       <nav
         className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-2.5 relative bg-gradient-to-br 
-      from-slate-800 via-gray-500 to-slate-900 shadow-2xl"
+      from-slate-800 via-gray-600 to-slate-900 shadow-2xl"
       >
         <NavbarContent />
       </nav>
