@@ -22,10 +22,13 @@ const ViewedProductsSlider = () => {
 
   const allProducts = response?.data || [];
 
-  // Filter only viewed products in the correct order
+  // Filter only viewed products in the correct order, excluding archived
   const viewedProducts: Product[] = viewedProductIds
     .map((id) => allProducts.find((product: Product) => product.id === id))
-    .filter((product): product is Product => product !== undefined);
+    .filter(
+      (product): product is Product =>
+        product !== undefined && product.activityStatus !== "archived"
+    );
 
   if (!currentUser || !hasViewedProducts || viewedProducts.length === 0) {
     return null;

@@ -65,7 +65,9 @@
   "BuyerAccountTabs": {
     "noActiveInquiries": "No active inquiries yet",
     "tabMyInquiries": {
-      "titleTabMyInquiries": "My inquiries"
+      "titleTabMyInquiries": "My inquiries",
+      "activeProducts": "Active products",
+      "archivedProducts": "Archived products"
     },
     "tabFavourites": {
       "titleMyFavouritesProduct": "My Favourites Product",
@@ -93,7 +95,11 @@
       "descriptionModalDeleteProduct2": "This item cannot be returned.",
       "descriptionModalDeleting": "Deleting...",
       "descriptionModalCancel": "Cancel",
-      "titleViews": "{count, plural, one {# view} other {# views}}"
+      "titleViews": "{count, plural, one {# view} other {# views}}",
+      "activeProducts": "Active",
+      "archivedProducts": "Archived",
+      "noActiveProducts": "No active products",
+      "noArchivedProducts": "No archived products"
     },
     "tabMessage": {
       "titleMessages": "Messages",
@@ -333,6 +339,10 @@
       "productStatus": {
         "available": "Available",
         "unavailable": "Unavailable"
+      },
+      "productActivityStatus": {
+        "active": "Active",
+        "archived": "Archived"
       },
       "productCondition": {
         "new": "New",

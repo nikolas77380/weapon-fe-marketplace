@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TopProgressBar } from "@/components/ui/TopProgressBar";
 import SellerListenedCard from "./SellerListenedCard";
 import {
   Heart,
@@ -48,6 +49,20 @@ const SellerTabsDesktop = ({
   const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
+  const [activeProductTab, setActiveProductTab] = useState<
+    "active" | "archived"
+  >("active");
+
+  // Разделяем продукты на активные и архивные
+  const { activeProducts, archivedProducts } = useMemo(() => {
+    const active = products.filter(
+      (product) => product.activityStatus !== "archived"
+    );
+    const archived = products.filter(
+      (product) => product.activityStatus === "archived"
+    );
+    return { activeProducts: active, archivedProducts: archived };
+  }, [products]);
   const { unreadChatsCount } = useUnreadChats();
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
@@ -128,6 +143,7 @@ const SellerTabsDesktop = ({
             currentUser={currentUser}
             className="hidden md:block"
           />
+          <TopProgressBar isLoading={loading} />
           <div className="mt-9 overflow-hidden">
             <TabsContent
               value="myInquiries"
@@ -140,18 +156,57 @@ const SellerTabsDesktop = ({
                 <p className="text-sm font-medium text-[#C4C2C2] mt-2">
                   {t("tabMyInquiries.descriptionManageProducts")}
                 </p>
-                <div className="mt-3.5 flex flex-col gap-4 items-center w-full">
-                  {loading ? (
-                    <SkeletonComponent
-                      type="sellerCard"
-                      count={3}
-                      className="w-full"
-                    />
-                  ) : (
-                    products.map((product) => (
-                      <SellerListenedCard key={product.id} product={product} />
-                    ))
-                  )}
+                <div className="mt-4">
+                  <Tabs
+                    value={activeProductTab}
+                    onValueChange={(value) =>
+                      setActiveProductTab(value as "active" | "archived")
+                    }
+                    className="w-full"
+                  >
+                    <TabsList className="grid w-full grid-cols-2">
+                      <TabsTrigger value="active">
+                        {t("tabMyInquiries.activeProducts")} (
+                        {activeProducts.length})
+                      </TabsTrigger>
+                      <TabsTrigger value="archived">
+                        {t("tabMyInquiries.archivedProducts")} (
+                        {archivedProducts.length})
+                      </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="active" className="mt-4">
+                      <div className="flex flex-col gap-4 items-center w-full">
+                        {activeProducts.length > 0 ? (
+                          activeProducts.map((product) => (
+                            <SellerListenedCard
+                              key={product.id}
+                              product={product}
+                            />
+                          ))
+                        ) : (
+                          <p className="text-sm text-muted-foreground py-8">
+                            {t("tabMyInquiries.noActiveProducts")}
+                          </p>
+                        )}
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="archived" className="mt-4">
+                      <div className="flex flex-col gap-4 items-center w-full">
+                        {archivedProducts.length > 0 ? (
+                          archivedProducts.map((product) => (
+                            <SellerListenedCard
+                              key={product.id}
+                              product={product}
+                            />
+                          ))
+                        ) : (
+                          <p className="text-sm text-muted-foreground py-8">
+                            {t("tabMyInquiries.noArchivedProducts")}
+                          </p>
+                        )}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
                 </div>
               </div>
             </TabsContent>

@@ -1,4 +1,4 @@
-import { UserProfile } from "@/lib/types";
+import { UserProfile, Product } from "@/lib/types";
 import React, { useState, useMemo, useCallback } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
@@ -100,7 +100,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   // Use Elasticsearch data if available, otherwise fallback to local filtering
   const filteredProducts = useMemo(() => {
     if (elasticProducts?.data) {
-      return elasticProducts.data;
+      return elasticProducts.data.filter(
+        (product: Product) => product.activityStatus !== "archived"
+      );
     }
 
     // Helper function to get product price based on selected currency
@@ -117,6 +119,11 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
     // Fallback to local filtering
     const filtered = sellerProducts.filter((product) => {
+      // Exclude archived products
+      if (product.activityStatus === "archived") {
+        return false;
+      }
+
       // Search filter
       const searchMatch =
         filters.search === "" ||
