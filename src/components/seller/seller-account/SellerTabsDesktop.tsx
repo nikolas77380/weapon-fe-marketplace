@@ -131,8 +131,10 @@ const SellerTabsDesktop = ({
             {t("tabAddProduct.titleAddProduct")}
           </TabsTrigger>
           <TabsTrigger value="settings" className={cn(triggerClasses)}>
-            <Settings className="mr-1" />
-            {t("tabSettings.titleSettings")}
+            <Settings className="mr-1 flex-shrink-0" />
+            <span className="truncate min-w-0">
+              {t("tabSettings.titleSettings")}
+            </span>
           </TabsTrigger>
         </TabsList>
         <div className="grow w-full">

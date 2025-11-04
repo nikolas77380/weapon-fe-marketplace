@@ -23,6 +23,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
+import BusinessInfo from "./BusinessInfo";
 import { COUNTRIES } from "@/lib/utils";
 
 interface CompanyDetailProps {
@@ -865,6 +866,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   hideCategoryFilter={false}
                 />
               </div>
+            </TabsContent>
+            <TabsContent value="businessInfo">
+              <BusinessInfo sellerData={sellerData} />
             </TabsContent>
           </Tabs>
         </div>
