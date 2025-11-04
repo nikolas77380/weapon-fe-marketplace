@@ -28,7 +28,7 @@ import {
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
-import CategorySelect from "@/components/ui/CategorySelect";
+import CategoryCombobox from "@/components/ui/CategoryCombobox";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -51,8 +51,6 @@ const AddProductForms = ({
     categories,
     loading: categoriesLoading,
     error: categoriesError,
-    getMainCategories,
-    getSubCategories,
   } = useCategories();
 
   const {
@@ -301,8 +299,7 @@ const AddProductForms = ({
                 <FormItem>
                   <FormLabel>{t("labelCategory")}</FormLabel>
                   <FormControl>
-                    <CategorySelect
-                      key={`category-select-${field.value}`}
+                    <CategoryCombobox
                       value={field.value}
                       onValueChange={field.onChange}
                       categories={categories}
@@ -310,8 +307,6 @@ const AddProductForms = ({
                       error={categoriesError}
                       placeholder={t("placeholderCategory")}
                       className="w-full rounded-sm"
-                      getMainCategories={getMainCategories}
-                      getSubCategories={getSubCategories}
                     />
                   </FormControl>
                   {categoriesError && (
