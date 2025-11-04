@@ -31,7 +31,6 @@ import Link from "next/link";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
-import { updateStatus } from "@/mockup/status";
 import { useLocale, useTranslations } from "next-intl";
 
 interface SellerListenedCardProps {
@@ -44,7 +43,6 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   // const tCondition = useTranslations(
   //   "AddProduct.addProductForm.productCondition"
   // );
-  const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const currentLocale = useLocale();
 
   const getCategoryDisplayName = (category: any) => {
@@ -53,37 +51,42 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
       : category?.name;
   };
 
+  const tActivityStatus = useTranslations(
+    "AddProduct.addProductForm.productActivityStatus"
+  );
   const { deleteProduct, updateProduct, loading } = useProductActions();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(product.status);
+  const [currentActivityStatus, setCurrentActivityStatus] = useState(
+    product.activityStatus || "active"
+  );
 
-  const getStatusStyles = (status: string) => {
-    switch (status) {
-      case "available":
+  const getActivityStatusStyles = (activityStatus: string) => {
+    switch (activityStatus) {
+      case "active":
         return "bg-green-100 text-green-800";
-      case "unavailable":
+      case "archived":
         return "bg-gray-100 text-gray-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
 
-  const getTranslatedStatus = (status: string) => {
-    switch (status) {
-      case "available":
-        return tStatus("available");
-      case "unavailable":
-        return tStatus("unavailable");
+  const getTranslatedActivityStatus = (activityStatus: string) => {
+    switch (activityStatus) {
+      case "active":
+        return tActivityStatus("active");
+      case "archived":
+        return tActivityStatus("archived");
       default:
-        return status;
+        return activityStatus;
     }
   };
 
-  const getTranslatedStatusOptions = () => {
-    return updateStatus.map((status) => ({
-      ...status,
-      label: getTranslatedStatus(status.value),
-    }));
+  const getTranslatedActivityStatusOptions = () => {
+    return [
+      { value: "active", label: getTranslatedActivityStatus("active") },
+      { value: "archived", label: getTranslatedActivityStatus("archived") },
+    ];
   };
 
   const handleDeleteProduct = async () => {
@@ -98,25 +101,23 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
     }
   };
 
-  const handleStatusUpdate = async (newStatus: "available" | "unavailable") => {
+  const handleActivityStatusUpdate = async (
+    newActivityStatus: "active" | "archived"
+  ) => {
     try {
       await updateProduct({
         id: product.id.toString(),
-        data: { status: newStatus },
+        data: { activityStatus: newActivityStatus },
       });
-      setCurrentStatus(newStatus);
-      toast.success(`Status updated to ${newStatus}`);
+      setCurrentActivityStatus(newActivityStatus);
       // TanStack Query will automatically refetch the data and update the UI
-    } catch (error) {
-      console.error("Error updating status:", error);
-      toast.error("Failed to update status");
-    }
+    } catch (error) {}
   };
 
-  // Update the local status when changing status
+  // Update the local activity status when changing activity status
   useEffect(() => {
-    setCurrentStatus(product.status);
-  }, [product.status]);
+    setCurrentActivityStatus(product.activityStatus || "active");
+  }, [product.activityStatus]);
   return (
     <div
       className="border border-gray-primary px-4 sm:px-8 py-4 sm:py-6 flex flex-col min-[600px]:flex-row 
@@ -259,30 +260,33 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              {getTranslatedStatusOptions()
-                .filter((status) => status.value !== currentStatus)
-                .map((status) => (
+              {getTranslatedActivityStatusOptions()
+                .filter(
+                  (activityStatus) =>
+                    activityStatus.value !== currentActivityStatus
+                )
+                .map((activityStatus) => (
                   <DropdownMenuItem
-                    key={status.value}
+                    key={activityStatus.value}
                     onClick={() =>
-                      handleStatusUpdate(
-                        status.value as "available" | "unavailable"
+                      handleActivityStatusUpdate(
+                        activityStatus.value as "active" | "archived"
                       )
                     }
                     className="hover:bg-gray-100 cursor-pointer"
                   >
-                    {status.label}
+                    {activityStatus.label}
                   </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
         <div
-          className={`px-2 py-0.5 text-xs font-medium self-start rounded ${getStatusStyles(
-            currentStatus
+          className={`px-2 py-0.5 text-xs font-medium self-start rounded ${getActivityStatusStyles(
+            currentActivityStatus
           )}`}
         >
-          {getTranslatedStatus(currentStatus)}
+          {getTranslatedActivityStatus(currentActivityStatus)}
         </div>
       </div>
     </div>

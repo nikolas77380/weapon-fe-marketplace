@@ -17,7 +17,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { usePromosQuery } from "@/hooks/usePromosQuery";
 import BannerSlider from "../CategoryContent/BannerSlider";
 import SkeletonComponent from "../ui/SkeletonComponent";
-import { Category } from "@/lib/types";
+import { Category, Product } from "@/lib/types";
 import { useCurrency } from "@/hooks/useCurrency";
 
 interface FilterState {
@@ -82,7 +82,11 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     currency: selectedCurrency,
   });
 
-  const allProducts = response?.data || [];
+  const allProducts = useMemo(() => {
+    return (response?.data || []).filter(
+      (product: Product) => product.activityStatus !== "archived"
+    );
+  }, [response?.data]);
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
 

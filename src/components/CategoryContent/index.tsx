@@ -38,6 +38,7 @@ const FilteringContent = () => {
   const paginatedProducts = useMemo(() => {
     const allProducts = response?.data || [];
     return allProducts
+      .filter((product: Product) => product.activityStatus !== "archived")
       .slice()
       .sort(
         (a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount)

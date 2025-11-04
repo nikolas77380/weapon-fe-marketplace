@@ -155,6 +155,7 @@ export interface Product {
   currency?: string;
   sku?: string;
   status: "available" | "unavailable";
+  activityStatus?: "active" | "archived";
   condition: "new" | "used";
   category?: Category;
   tags?: Tag[];
@@ -197,6 +198,7 @@ export interface CreateProductData {
   tags?: number[];
   sku?: string;
   status?: "available" | "unavailable";
+  activityStatus?: "active" | "archived";
   condition?: "new" | "used";
   videoUrl?: string;
   attributesJson?: AttributesJson;
@@ -214,6 +216,7 @@ export interface UpdateProductData {
   tags?: number[];
   sku?: string;
   status?: "available" | "unavailable";
+  activityStatus?: "active" | "archived";
   condition?: "new" | "used";
   videoUrl?: string;
   attributesJson?: AttributesJson;
