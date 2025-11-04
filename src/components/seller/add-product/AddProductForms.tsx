@@ -28,7 +28,7 @@ import {
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
-import CategorySelect from "@/components/ui/CategorySelect";
+import CategoryCombobox from "@/components/ui/CategoryCombobox";
 import { useProductActions } from "@/hooks/useProductsQuery";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -51,8 +51,6 @@ const AddProductForms = ({
     categories,
     loading: categoriesLoading,
     error: categoriesError,
-    getMainCategories,
-    getSubCategories,
   } = useCategories();
 
   const {
@@ -81,7 +79,7 @@ const AddProductForms = ({
       productCondition: "new" as "new" | "used",
       productPrice: 0,
       productCurrency: "USD" as "USD" | "EUR" | "UAH",
-      productCount: 0,
+      productCount: undefined,
       productImages: [],
       productStatus: "available",
       productVideoUrl: "",
@@ -137,6 +135,14 @@ const AddProductForms = ({
   }, [createError]);
 
   const onSubmit = async (values: AddProductSchemaValues) => {
+    // Convert 0 to undefined before validation (optional field)
+    if (values.productCount === 0) {
+      form.setValue("productCount", undefined, {
+        shouldValidate: false,
+      });
+      values.productCount = undefined;
+    }
+
     // Ensure productImages is always an array before validation
     const currentImages = Array.isArray(values.productImages)
       ? values.productImages
@@ -191,7 +197,7 @@ const AddProductForms = ({
         attributesJson: {
           manufacturer: values.productManufacturer,
           model: values.productModel,
-          count: values.productCount,
+          ...(values.productCount && values.productCount > 0 ? { count: values.productCount } : {}),
         },
       };
 
@@ -213,7 +219,7 @@ const AddProductForms = ({
         productCondition: "new" as "new" | "used",
         productPrice: 0,
         productCurrency: "USD" as "USD" | "EUR" | "UAH",
-        productCount: 0,
+        productCount: undefined,
         productImages: [],
         productStatus: "available",
         productVideoUrl: "",
@@ -247,7 +253,7 @@ const AddProductForms = ({
       productCondition: "new" as "new" | "used",
       productPrice: 0,
       productCurrency: "USD" as "USD" | "EUR" | "UAH",
-      productCount: 0,
+      productCount: undefined,
       productImages: [],
       productStatus: "available",
     });
@@ -301,8 +307,7 @@ const AddProductForms = ({
                 <FormItem>
                   <FormLabel>{t("labelCategory")}</FormLabel>
                   <FormControl>
-                    <CategorySelect
-                      key={`category-select-${field.value}`}
+                    <CategoryCombobox
                       value={field.value}
                       onValueChange={field.onChange}
                       categories={categories}
@@ -310,8 +315,6 @@ const AddProductForms = ({
                       error={categoriesError}
                       placeholder={t("placeholderCategory")}
                       className="w-full rounded-sm"
-                      getMainCategories={getMainCategories}
-                      getSubCategories={getSubCategories}
                     />
                   </FormControl>
                   {categoriesError && (
@@ -423,15 +426,24 @@ const AddProductForms = ({
               inputType="number"
               className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
-              min="1"
+              min="0"
               step="1"
               customOnChange={(e, fieldOnChange) => {
                 const value = e.target.value;
-                const numValue = value === "" ? 0 : Math.max(1, Number(value));
-                fieldOnChange(numValue);
+                // Allow empty value or value >= 1
+                if (value === "") {
+                  fieldOnChange(undefined);
+                } else {
+                  const numValue = Number(value);
+                  if (numValue >= 1) {
+                    fieldOnChange(numValue);
+                  } else {
+                    fieldOnChange(undefined);
+                  }
+                }
               }}
               customOnFocus={(e) => {
-                if (e.target.value === "0") {
+                if (e.target.value === "0" || e.target.value === "") {
                   e.target.value = "";
                 }
               }}

@@ -56,7 +56,7 @@
     "titleActiveInquiries": "Active inquiries",
     "titleSavedProducts": "Saved product",
     "titleCompletedDeals": "Completed deals",
-    "titleWelcome": "Welcome",
+    "titleWelcome": "Hello",
     "becomeSellerText": "Want to place products in our marketplace?",
     "becomeSellerButton": "Become a Seller",
     "becomeSellerSuccess": "Role successfully changed to seller!",
@@ -121,7 +121,7 @@
     }
   },
   "SellerAccountHeader": {
-    "titleWelcome": "Weclome back",
+    "titleWelcome": "Hello",
     "titleAddProduct": "Add product",
     "titleSettings": "Settings",
     "titleActiveListings": "Active listings",
@@ -331,7 +331,7 @@
       "titlePrice": "Pricing",
       "labelPrice": "Price (USD)",
       "titleDetails": "Details",
-      "labelCount": "Count",
+      "labelCount": "Count (optional)",
       "labelStatus": "Status",
       "placeholderStatus": "Select Status",
       "labelVideoUrl": "Video URL",
@@ -360,6 +360,7 @@
         "productModelRequired": "Product model is required",
         "productConditionRequired": "Product condition is required",
         "priceGreaterThanZero": "Price must be greater than 0",
+        "currencyRequired": "Currency is required",
         "countGreaterThanZero": "Count must be greater than 0",
         "productStatusRequired": "Product status is required",
         "maxImages": "Maximum 5 images allowed",
@@ -369,7 +370,7 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Product updated successfully!",
-    "toastErrorUpdate": "Failed to update product. Please try again.", 
+    "toastErrorUpdate": "Failed to update product. Please try again.",
     "labelCurrency": "Currency",
     "toastSuccessDeleteImage": "Image deleted successfully!",
     "toastErrorDeleteImage": "Failed to delete image. Please try again.",
@@ -527,7 +528,8 @@
       "placeholderSearch": "Search products..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Additional information"
+      "titleBusinessInfo": "Additional information",
+      "titleBusinessId": "Business ID:"
     }
   },
   "PriceRange": {
