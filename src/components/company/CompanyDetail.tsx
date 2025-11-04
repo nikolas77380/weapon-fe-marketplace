@@ -19,11 +19,12 @@ import { Input } from "../ui/input";
 import { Search, Funnel } from "lucide-react";
 import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
 import BusinessInfo from "./BusinessInfo";
+import { COUNTRIES } from "@/lib/utils";
 
 interface CompanyDetailProps {
   sellerData: UserProfile;
@@ -32,7 +33,7 @@ interface CompanyDetailProps {
 const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const t = useTranslations("CompanyDetail");
   const { selectedCurrency } = useCurrency();
-
+  const locale = useLocale();
   const { products: sellerProducts, loading } = useSellerProducts(
     sellerData.id
   );
@@ -407,7 +408,31 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
               {/* Country */}
               <p className="text-xs sm:text-sm">
                 {sellerData?.metadata?.country ? (
-                  sellerData.metadata.country
+                  COUNTRIES.find(
+                    (country) => country.iso2 === sellerData?.metadata?.country
+                  )?.name ? (
+                    locale === "ua" ? (
+                      COUNTRIES.find(
+                        (country) =>
+                          country.iso2 === sellerData?.metadata?.country
+                      )?.ua
+                    ) : (
+                      COUNTRIES.find(
+                        (country) =>
+                          country.iso2 === sellerData?.metadata?.country
+                      )?.name
+                    )
+                  ) : locale === "ua" ? (
+                    COUNTRIES.find(
+                      (country) =>
+                        country.name === sellerData?.metadata?.country
+                    )?.ua
+                  ) : (
+                    COUNTRIES.find(
+                      (country) =>
+                        country.name === sellerData?.metadata?.country
+                    )?.name
+                  )
                 ) : (
                   <span className="text-gray-400">{t("titleNotCountry")}</span>
                 )}

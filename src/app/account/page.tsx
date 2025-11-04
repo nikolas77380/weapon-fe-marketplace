@@ -10,7 +10,7 @@ const BuyerAccountPage = async () => {
 
   return (
     <main className=" w-full h-full min-h-screen mb-20">
-      <div className="container mx-auto px-2 sm:px-4 lg:px-6 mt-5 md:mt-0">
+      <div className="container mx-auto mt-5 md:mt-0">
         {isBuyer(currentUser) && (
           <>
             <BreadcrumbComponent

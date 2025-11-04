@@ -292,6 +292,7 @@
   "AddProduct": {
     "titleAddProduct": "Додати новий продукт",
     "descriptionAddProduct": "Розмістіть своє тактичне спорядження на ринку",
+    "labelCurrency": "Валюта",
     "errorAddProduct": "Будь ласка, заповніть деталі вашої компанії, щоб додати товар",
     "metadataRequiredDialog": {
       "dialogTitle": "Потрібні деталі компанії",
@@ -358,7 +359,8 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
-    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
+    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.", 
+    "labelCurrency": "Валюта",
     "toastSuccessDeleteImage": "Зображення успішно видалено!",
     "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
     "titleEditProduct": "Редагування товару",
@@ -368,7 +370,7 @@
     "placeholderProductName": "Введіть назву товару",
     "labelDescription": "Опис",
     "placeholderDescription": "Введіть опис товару",
-    "labelPrice": "Ціна (USD)",
+    "labelPrice": "Ціна",
     "labelCategory": "Категорія",
     "labelStatus": "Статус",
     "labelCondition": "Стан товару",

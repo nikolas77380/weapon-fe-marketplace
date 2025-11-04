@@ -141,14 +141,46 @@ const EditProductForm = ({
 
   void _customLabels;
 
+  // Get price for selected currency from product
+  const getPriceForCurrency = (currency: "USD" | "EUR" | "UAH"): number => {
+    switch (currency) {
+      case "USD":
+        return product.priceUSD || 0;
+      case "EUR":
+        return product.priceEUR || 0;
+      case "UAH":
+        return product.priceUAH || 0;
+      default:
+        return 0;
+    }
+  };
+
+  // Determine initial price and currency from product (default to USD)
+  const getInitialPriceAndCurrency = () => {
+    // Default to USD if available
+    if (product.priceUSD && product.priceUSD > 0) {
+      return { price: product.priceUSD, currency: "USD" as const };
+    }
+    // Fallback to EUR
+    if (product.priceEUR && product.priceEUR > 0) {
+      return { price: product.priceEUR, currency: "EUR" as const };
+    }
+    // Fallback to UAH
+    if (product.priceUAH && product.priceUAH > 0) {
+      return { price: product.priceUAH, currency: "UAH" as const };
+    }
+    return { price: 0, currency: "USD" as const };
+  };
+
+  const initialPriceData = getInitialPriceAndCurrency();
+
   const form = useForm<EditProductSchemaValues>({
     resolver: zodResolver(editProductSchema),
     defaultValues: {
       title: product.title || "",
       description: product.description || "",
-      priceUSD: product.priceUSD ?? product.price ?? 0,
-      // Legacy support
-      price: product.price || 0,
+      price: initialPriceData.price,
+      currency: initialPriceData.currency,
       category: product.category?.id.toString() || "0",
       sku: product.sku || "",
       status: product.status || "available",
@@ -164,12 +196,12 @@ const EditProductForm = ({
   // Update form when product changes
   useEffect(() => {
     if (product) {
+      const priceData = getInitialPriceAndCurrency();
       form.reset({
         title: product.title || "",
         description: product.description || "",
-        priceUSD: product.priceUSD ?? product.price ?? 0,
-        // Legacy support
-        price: product.price || 0,
+        price: priceData.price,
+        currency: priceData.currency,
         category: product.category?.id.toString() || "0",
         sku: product.sku || "",
         status: product.status || "available",
@@ -188,7 +220,8 @@ const EditProductForm = ({
     product.title,
     product.description,
     product.priceUSD,
-    product.price,
+    product.priceEUR,
+    product.priceUAH,
     product.category?.id,
     product.sku,
     product.status,
@@ -199,6 +232,29 @@ const EditProductForm = ({
     product.attributesJson?.model,
   ]);
 
+  // Watch currency changes and update price from product
+  const watchedCurrency = form.watch("currency");
+  const prevCurrencyRef = useRef<string | undefined>(initialPriceData.currency);
+
+  // Update ref when product changes
+  useEffect(() => {
+    prevCurrencyRef.current = initialPriceData.currency;
+  }, [product.id, initialPriceData.currency]);
+
+  useEffect(() => {
+    if (
+      watchedCurrency &&
+      product &&
+      prevCurrencyRef.current !== watchedCurrency
+    ) {
+      const priceForCurrency = getPriceForCurrency(
+        watchedCurrency as "USD" | "EUR" | "UAH"
+      );
+      form.setValue("price", priceForCurrency);
+      prevCurrencyRef.current = watchedCurrency;
+    }
+  }, [watchedCurrency, form, product]);
+
   // Deletion dialog is currently disabled
 
   const onSubmit = async (values: EditProductSchemaValues) => {
@@ -206,7 +262,8 @@ const EditProductForm = ({
       const updateData: UpdateProductData = {
         title: values.title,
         description: values.description,
-        priceUSD: values.priceUSD,
+        price: values.price,
+        currency: values.currency,
         category: values.category,
         sku: values.sku,
         status: values.status,
@@ -326,23 +383,39 @@ const EditProductForm = ({
           />
 
           {/* Price */}
-          <FormFieldComponent
-            control={form.control}
-            name="priceUSD"
-            label="Price (USD)"
-            type="input"
-            inputType="number"
-            placeholder="0.00"
-            className="w-full"
-            classNameLabel="bg-background"
-            min="0.01"
-            step="0.01"
-            customOnChange={(e, fieldOnChange) => {
-              const value = e.target.value;
-              const numValue = value === "" ? 0 : Math.max(0.01, Number(value));
-              fieldOnChange(numValue);
-            }}
-          />
+          <div className="flex flex-col gap-4">
+            <FormFieldComponent
+              control={form.control}
+              name="currency"
+              label={t("labelCurrency")}
+              type="select"
+              className="w-full sm:w-32 rounded-sm"
+              classNameLabel="bg-background"
+              options={[
+                { key: "USD", label: "USD", value: "USD" },
+                { key: "EUR", label: "EUR", value: "EUR" },
+                { key: "UAH", label: "UAH", value: "UAH" },
+              ]}
+            />
+            <FormFieldComponent
+              control={form.control}
+              name="price"
+              label={t("labelPrice")}
+              type="input"
+              inputType="number"
+              placeholder="0.00"
+              className="w-2xs"
+              classNameLabel="bg-background"
+              min="0.01"
+              step="0.01"
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                const numValue =
+                  value === "" ? 0 : Math.max(0.01, Number(value));
+                fieldOnChange(numValue);
+              }}
+            />
+          </div>
 
           {/* Category full width with search */}
           <FormField

@@ -44,15 +44,22 @@ export default function ConditionalLayout({
   // List of paths where Navbar and Footer should NOT be shown
   const hideNavbarFooterPaths = ["/auth"];
 
+  // List of paths where only Footer should NOT be shown
+  const hideFooterOnlyPaths = ["/messages"];
+
   const shouldHideNavbarFooter = hideNavbarFooterPaths.some((path) =>
     pathname.startsWith(path)
   );
+
+  const shouldHideFooter =
+    shouldHideNavbarFooter ||
+    hideFooterOnlyPaths.some((path) => pathname.startsWith(path));
 
   return (
     <>
       <div className="relative">{!shouldHideNavbarFooter && <Navbar />}</div>
       {children}
-      {!shouldHideNavbarFooter && <Footer />}
+      {!shouldHideFooter && <Footer />}
     </>
   );
 }

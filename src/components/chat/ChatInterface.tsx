@@ -54,7 +54,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         />
       </div>
 
-      <div className="flex-1 bg-gray-50">
+      <div className="flex-1 bg-gray-50 h-[100vh]">
         <MessageArea
           messages={localMessages}
           currentUserId={currentUserId}

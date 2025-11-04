@@ -2,12 +2,13 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Building2, Phone, Globe, MapPin, Flag, Loader2 } from "lucide-react";
 import { useSellerMetaBySeller } from "@/hooks/useSellerMeta";
 import { useContactSeller } from "@/hooks/useContactSeller";
 import { useAuthContext } from "@/context/AuthContext";
 import LoadingState from "../ui/LoadingState";
+import { COUNTRIES } from "@/lib/utils";
 
 interface MetadataRequiredDialogProps {
   open: boolean;
@@ -31,6 +32,7 @@ const ContactModal = ({
     sellerId,
     open
   );
+  const locale = useLocale();
   const { contactSeller } = useContactSeller();
 
   const handleContactSeller = async () => {
@@ -48,6 +50,7 @@ const ContactModal = ({
       }
     }
   };
+  console.log(sellerMeta);
   return (
     <div className="px-2 w-full">
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -147,7 +150,25 @@ const ContactModal = ({
                           {t("titleCountry")}
                         </p>
                         <p className="text-sm font-semibold text-gray-800 break-words">
-                          {sellerMeta.country}
+                          {COUNTRIES.find(
+                            (country) => country.iso2 === sellerMeta.country
+                          )?.name
+                            ? locale === "ua"
+                              ? COUNTRIES.find(
+                                  (country) =>
+                                    country.iso2 === sellerMeta.country
+                                )?.ua
+                              : COUNTRIES.find(
+                                  (country) =>
+                                    country.iso2 === sellerMeta.country
+                                )?.name
+                            : locale === "ua"
+                            ? COUNTRIES.find(
+                                (country) => country.name === sellerMeta.country
+                              )?.ua
+                            : COUNTRIES.find(
+                                (country) => country.name === sellerMeta.country
+                              )?.name}
                         </p>
                       </div>
                     </div>

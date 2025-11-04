@@ -186,6 +186,10 @@ export interface Tag {
 export interface CreateProductData {
   title: string;
   description?: string;
+  // New format: price + currency
+  price?: number;
+  currency?: "USD" | "EUR" | "UAH";
+  // Legacy format for backward compatibility
   priceUSD?: number;
   priceEUR?: number;
   priceUAH?: number;
@@ -201,6 +205,10 @@ export interface CreateProductData {
 export interface UpdateProductData {
   title?: string;
   description?: string;
+  // New format: price + currency
+  price?: number;
+  currency?: "USD" | "EUR" | "UAH";
+  // Legacy format for backward compatibility
   priceUSD?: number;
   category?: string;
   tags?: number[];
