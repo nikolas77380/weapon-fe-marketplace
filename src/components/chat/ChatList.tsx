@@ -129,13 +129,13 @@ export const ChatList: React.FC<ChatListProps> = ({
                 <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900">
                   {getChatTitle(chat, currentUser?.id)}
                 </h3>
-                <Badge
+                {/* <Badge
                   className={`${getStatusColor(
                     chat.status
                   )} text-xs sm:text-sm whitespace-nowrap`}
                 >
                   {t(`status.${chat.status}`)}
-                </Badge>
+                </Badge> */}
               </div>
 
               <div className="flex flex-wrap gap-2 md:gap-3 lg:gap-4 items-center text-sm text-gray-500 mb-2">

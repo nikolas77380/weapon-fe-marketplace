@@ -124,7 +124,6 @@ const BuyerMenuContent = ({
             <Button
               onClick={() => {
                 onLogout();
-                handleLinkClick();
               }}
               className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer p-3 justify-start"
             >
@@ -202,7 +201,6 @@ const BuyerMenuContent = ({
               <Button
                 onClick={() => {
                   onLogout();
-                  handleLinkClick();
                 }}
                 className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer"
               >

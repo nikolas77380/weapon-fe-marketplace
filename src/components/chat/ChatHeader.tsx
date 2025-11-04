@@ -115,9 +115,9 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             <h2 className="text-lg font-semibold truncate">
               {getChatTitle(chat, currentUser?.id)}
             </h2>
-            <Badge className={getStatusColor(chat.status)}>
+            {/* <Badge className={getStatusColor(chat.status)}>
               {t(`status.${chat.status}`)}
-            </Badge>
+            </Badge> */}
           </div>
 
           <div className="flex items-start min-[380px]:items-center text-sm text-gray-500 flex-col min-[380px]:flex-row">
@@ -178,7 +178,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="border-gray-200">
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
                 onClick={() => handleFinishChat("successfully_completed")}
                 className="text-green-700"
               >
@@ -191,7 +191,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               >
                 <XCircle className="h-4 w-4 mr-2" />
                 {t("actions.finishUnsuccessfully")}
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem
                 onClick={() => handleFinishChat("closed")}
                 className="text-gray-700"

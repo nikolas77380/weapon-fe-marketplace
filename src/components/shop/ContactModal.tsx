@@ -85,7 +85,9 @@ const ContactModal = ({
                           {t("titleCompanyName")}
                         </p>
                         <p className="text-sm font-semibold text-gray-800 break-words">
-                          {sellerMeta.companyName} ({sellerMeta?.businessId})
+                          {sellerMeta.companyName}{" "}
+                          {sellerMeta?.businessId &&
+                            `(${sellerMeta?.businessId})`}
                         </p>
                       </div>
                     </div>
