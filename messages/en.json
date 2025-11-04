@@ -330,6 +330,7 @@
       "placeholderCondition": "Select condition",
       "titlePrice": "Pricing",
       "labelPrice": "Price (USD)",
+      "labelCurrency": "Currency",
       "titleDetails": "Details",
       "labelCount": "Count (optional)",
       "labelStatus": "Status",

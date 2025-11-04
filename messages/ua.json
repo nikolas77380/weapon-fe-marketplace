@@ -330,6 +330,7 @@
       "placeholderCondition": "Оберіть стан товару",
       "titlePrice": "Ціна",
       "labelPrice": "Ціна (USD)",
+      "labelCurrency": "Валюта",
       "titleDetails": "Деталі",
       "labelCount": "Кількість (необов'язково)",
       "labelStatus": "Статус",
