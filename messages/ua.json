@@ -15,20 +15,32 @@
       "titleAddProduct": "Додати товар",
       "titleUserName": "Ім'я користувача",
       "titleMyAccount": "Мій обліковий запис",
-      "titleFavourites": "Обране",
+      "titleFavourites": "Збережені товари",
       "titleBrowseProducts": "Переглянути товари",
       "titlAddNewProduct": "Додати новий продукт",
       "titleMessages": "Повідомлення",
       "titleSettings": "Налаштування",
-      "titleSignOut": "Вийти"
+      "titleSignOut": "Вийти",
+      "logoutDialog": {
+        "title": "Підтвердити вихід",
+        "description": "Ви впевнені, що хочете вийти?",
+        "buttonCancel": "Скасувати",
+        "buttonConfirm": "Так, вийти"
+      }
     },
     "buyerNavbar": {
       "titleUserName": "Ім'я користувача",
       "titleMyAccount": "Мій обліковий запис",
-      "titleFavourites": "Обране",
+      "titleFavourites": "Збережені товари",
       "titleMessages": "Повідомлення",
       "titleSettings": "Налаштування",
-      "titleSignOut": "Вийти"
+      "titleSignOut": "Вийти",
+      "logoutDialog": {
+        "title": "Підтвердити вихід",
+        "description": "Ви впевнені, що хочете вийти?",
+        "buttonCancel": "Скасувати",
+        "buttonConfirm": "Так, вийти"
+      }
     }
   },
   "Breadcrumb": {
@@ -66,7 +78,7 @@
       "titleNoMessagesYet": "Поки що немає повідомлень"
     },
     "tabSettings": {
-      "titleSettings": "Налаштування",
+      "titleSettings": "Налаштування інформації про компанію",
       "titleContentSettings": "Тут буде вміст налаштувань"
     }
   },
@@ -99,7 +111,7 @@
       "descriptionAddNewProduct": "Додати новий товар до ваших оголошень"
     },
     "tabSettings": {
-      "titleSettings": "Налаштування"
+      "titleSettings": "Налаштування інформації про компанію"
     }
   },
   "SellerAccountHeader": {

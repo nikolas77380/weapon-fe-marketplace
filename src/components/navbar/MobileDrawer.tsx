@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Drawer,
@@ -10,7 +10,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "../ui/drawer";
-import { X, LayoutGrid, User, Plus } from "lucide-react";
+import { X, LayoutGrid, User, Plus, LogOut } from "lucide-react";
 import { UserProfile } from "@/lib/types";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -21,6 +21,9 @@ import { Separator } from "../ui/separator";
 import Logo from "../ui/Logo";
 import BuyerMenuContent from "../buyer/navbar/BuyerMenuContent";
 import SellerMenuContent from "../buyer/navbar/SellerMenuContent";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { DialogHeader } from "../ui/dialog";
+import { Button } from "../ui/button";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -38,7 +41,31 @@ const MobileDrawer = ({
   onLogout,
 }: MobileDrawerProps) => {
   const t = useTranslations("Navbar");
+  const tDialog = useTranslations(
+    currentUser?.role.name === "seller"
+      ? "Navbar.sellerNavbar.logoutDialog"
+      : "Navbar.buyerNavbar.logoutDialog"
+  );
   const router = useRouter();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+
+  const handleLogoutClick = () => {
+    setShowLogoutDialog(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    setShowLogoutDialog(false);
+    onLogout();
+    onClose();
+  };
+
+  const handleDrawerClose = (open: boolean) => {
+    // Prevent closing drawer when logout dialog is open
+    if (!open && showLogoutDialog) {
+      return;
+    }
+    onClose();
+  };
 
   const handleAddProductClick = () => {
     sessionStorage.setItem("accountTab", "addProduct");
@@ -60,7 +87,7 @@ const MobileDrawer = ({
   }, [isOpen]);
 
   return (
-    <Drawer direction="left" open={isOpen} onOpenChange={onClose}>
+    <Drawer direction="left" open={isOpen} onOpenChange={handleDrawerClose}>
       <DrawerContent className="h-[100vh] border-none">
         {/* Hidden accessibility elements */}
         <DrawerTitle className="sr-only">{t("burgerMenu.srTitle")}</DrawerTitle>
@@ -146,7 +173,7 @@ const MobileDrawer = ({
               {/* Buyer menu content */}
               <BuyerMenuContent
                 user={currentUser}
-                onLogout={onLogout}
+                onLogout={handleLogoutClick}
                 isMobile={true}
                 onClose={onClose}
               />
@@ -193,7 +220,7 @@ const MobileDrawer = ({
               {/* Seller menu content */}
               <SellerMenuContent
                 user={currentUser}
-                onLogout={onLogout}
+                onLogout={handleLogoutClick}
                 isMobile={true}
                 onClose={onClose}
               />
@@ -213,6 +240,42 @@ const MobileDrawer = ({
             />
           </div>
         </div>
+        <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+          <DialogContent className="rounded-lg border-none !max-w-sm md:!max-w-lg overflow-hidden p-0">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-red-500/10 to-red-500/5 p-3 xs:p-4 sm:p-6 border-b border-red-500/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-500/20 rounded-lg">
+                  <LogOut className="w-5 h-5 text-red-500" />
+                </div>
+                <div>
+                  <DialogTitle className="text-lg sm:text-xl font-bold text-gray-800">
+                    {tDialog("title")}
+                  </DialogTitle>
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                    {tDialog("description")}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="p-3 xs:p-4 sm:p-6 border-t border-gray-200 bg-gray-50 flex flex-col gap-2">
+              <Button
+                onClick={handleLogoutConfirm}
+                className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-6 rounded-lg transition-colors duration-300"
+              >
+                {tDialog("buttonConfirm")}
+              </Button>
+              <Button
+                onClick={() => setShowLogoutDialog(false)}
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2.5 px-6 rounded-lg transition-colors duration-300"
+              >
+                {tDialog("buttonCancel")}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </DrawerContent>
     </Drawer>
   );

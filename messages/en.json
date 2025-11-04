@@ -20,7 +20,13 @@
       "titlAddNewProduct": "Add new product",
       "titleMessages": "Messages",
       "titleSettings": "Settings",
-      "titleSignOut": "Sign Out"
+      "titleSignOut": "Sign Out",
+      "logoutDialog": {
+        "title": "Confirm Logout",
+        "description": "Are you sure you want to log out?",
+        "buttonCancel": "Cancel",
+        "buttonConfirm": "Yes, Log Out"
+      }
     },
     "buyerNavbar": {
       "titleUserName": "User name",
@@ -28,7 +34,13 @@
       "titleFavourites": "Favourites",
       "titleMessages": "Messages",
       "titleSettings": "Settings",
-      "titleSignOut": "Sign Out"
+      "titleSignOut": "Sign Out",
+      "logoutDialog": {
+        "title": "Confirm Logout",
+        "description": "Are you sure you want to log out?",
+        "buttonCancel": "Cancel",
+        "buttonConfirm": "Yes, Log Out"
+      }
     }
   },
   "Breadcrumb": {
@@ -66,7 +78,7 @@
       "titleNoMessagesYet": "No messages yet"
     },
     "tabSettings": {
-      "titleSettings": "Settings",
+      "titleSettings": "Settings Company Information",
       "titleContentSettings": "Settings content will be here"
     }
   },

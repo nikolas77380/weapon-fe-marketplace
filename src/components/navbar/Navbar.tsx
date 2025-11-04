@@ -71,13 +71,13 @@ const Navbar = () => {
           <div className="relative hidden lg:block">
             <div
               className={`
-                rounded-sm cursor-pointer duration-300 transition-all
+                rounded-sm cursor-pointer duration-300 md:ml-[35px] transition-all
                 border border-gold-main hover:bg-white/10
                   ${isCatalogOpen ? "bg-white/10" : ""}
                 `}
               onClick={handleToggleCatalog}
             >
-              <div className="flex items-center gap-2 py-1.5 lg:py-2 px-3 lg:px-4">
+              <div className="flex items-center gap-2 py-1.5 lg:py-2 px-3 lg:px-4 ">
                 {isCatalogOpen ? (
                   <X size={14} className="text-white lg:w-4 lg:h-4" />
                 ) : (
@@ -98,7 +98,7 @@ const Navbar = () => {
           </div>
         </div>
         {/* Search bar - adaptive width */}
-        <div className="relative w-full xl:max-w-sm mx-2 sm:mx-4 lg:mx-10">
+        <div className="relative w-full xl:max-w-md mx-2 sm:mx-4 lg:mx-10">
           <NavbarSearch
             onProductSelect={(product) =>
               router.push(`/marketplace/${product.id}`)
