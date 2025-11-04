@@ -369,7 +369,7 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Product updated successfully!",
-    "toastErrorUpdate": "Failed to update product. Please try again.", 
+    "toastErrorUpdate": "Failed to update product. Please try again.",
     "labelCurrency": "Currency",
     "toastSuccessDeleteImage": "Image deleted successfully!",
     "toastErrorDeleteImage": "Failed to delete image. Please try again.",
@@ -527,7 +527,8 @@
       "placeholderSearch": "Search products..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Additional information"
+      "titleBusinessInfo": "Additional information",
+      "titleBusinessId": "Business ID:"
     }
   },
   "PriceRange": {

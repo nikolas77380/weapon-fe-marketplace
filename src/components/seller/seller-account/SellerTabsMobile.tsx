@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import {
   Accordion,
   AccordionContent,
@@ -54,9 +60,29 @@ const SellerTabsMobile = ({
 
   const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
-  const [activeAccordion, setActiveAccordion] = useState<string[]>([
-    "myInquiries",
-  ]);
+
+  // Track if we were on /account page
+  const wasOnAccountPage = useRef(pathname === "/account");
+
+  // Initialize from localStorage for persistence across reloads
+  // Only restore if we're on /account page, otherwise use default
+  const [activeAccordion, setActiveAccordion] = useState<string[]>(() => {
+    if (pathname === "/account" && typeof window !== "undefined") {
+      const saved = localStorage.getItem("accountTabMobile");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        } catch {
+          // ignore parse error
+        }
+      }
+    }
+    return ["myInquiries"];
+  });
+
   const [activeProductTab, setActiveProductTab] = useState<
     "active" | "archived"
   >("active");
@@ -72,6 +98,50 @@ const SellerTabsMobile = ({
     return { activeProducts: active, archivedProducts: archived };
   }, [products]);
 
+  // Save to localStorage when activeAccordion changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("accountTabMobile", JSON.stringify(activeAccordion));
+    }
+  }, [activeAccordion]);
+
+  // Clear localStorage and reset state when leaving /account page
+  useEffect(() => {
+    if (pathname === "/account") {
+      wasOnAccountPage.current = true;
+    } else if (wasOnAccountPage.current && pathname !== "/account") {
+      // We were on /account and now we're leaving - clear localStorage and reset state
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("accountTabMobile");
+        localStorage.removeItem("accountScrollPosition");
+      }
+      // Reset accordion state to default (only myInquiries open)
+      setActiveAccordion(["myInquiries"]);
+      wasOnAccountPage.current = false;
+    }
+  }, [pathname]);
+
+  // Scroll to tab function
+  const scrollToTab = useCallback((tabValue: string) => {
+    // Try to find by id first
+    let element = document.getElementById(`accordion-${tabValue}`);
+    // If not found, try to find by data attribute
+    if (!element) {
+      element = document.querySelector(`[data-accordion-item="${tabValue}"]`);
+    }
+    if (element) {
+      setTimeout(() => {
+        const elementTop =
+          element.getBoundingClientRect().top + window.pageYOffset;
+        const offset = 80; // Offset from top for mobile header
+        window.scrollTo({
+          top: elementTop - offset,
+          behavior: "smooth",
+        });
+      }, 300); // Wait for accordion animation
+    }
+  }, []);
+
   // Check sessionStorage on mount and whenever pathname changes
   useEffect(() => {
     const savedTab = sessionStorage.getItem("accountTab");
@@ -82,15 +152,28 @@ const SellerTabsMobile = ({
     ) {
       setActiveAccordion((prev) => {
         if (!prev.includes(savedTab)) {
-          return [...prev, savedTab];
+          const newValue = [...prev, savedTab];
+          // Save to localStorage
+          if (typeof window !== "undefined") {
+            localStorage.setItem("accountTabMobile", JSON.stringify(newValue));
+          }
+          // Scroll to the newly opened tab (not the first one)
+          setTimeout(() => {
+            scrollToTab(savedTab);
+          }, 100);
+          return newValue;
         }
+        // If already open, just scroll to this specific tab
+        setTimeout(() => {
+          scrollToTab(savedTab);
+        }, 100);
         return prev;
       });
       setTimeout(() => {
         sessionStorage.removeItem("accountTab");
       }, 100);
     }
-  }, [pathname]);
+  }, [pathname, scrollToTab]);
 
   // Listen for custom event when already on /account page
   useEffect(() => {
@@ -99,8 +182,24 @@ const SellerTabsMobile = ({
       if (tab === "addProduct" || tab === "favourites" || tab === "settings") {
         setActiveAccordion((prev) => {
           if (!prev.includes(tab)) {
-            return [...prev, tab];
+            const newValue = [...prev, tab];
+            // Save to localStorage
+            if (typeof window !== "undefined") {
+              localStorage.setItem(
+                "accountTabMobile",
+                JSON.stringify(newValue)
+              );
+            }
+            // Scroll to tab after state update
+            setTimeout(() => {
+              scrollToTab(tab);
+            }, 100);
+            return newValue;
           }
+          // If already open, just scroll
+          setTimeout(() => {
+            scrollToTab(tab);
+          }, 100);
           return prev;
         });
         sessionStorage.removeItem("accountTab");
@@ -117,7 +216,79 @@ const SellerTabsMobile = ({
         handleTabChange as EventListener
       );
     };
+  }, [scrollToTab]);
+
+  // Save scroll position when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window !== "undefined") {
+        localStorage.setItem(
+          "accountScrollPosition",
+          window.scrollY.toString()
+        );
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Restore scroll position and tab on mount if we have saved data from localStorage
+  useEffect(() => {
+    const savedTabs = (() => {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("accountTabMobile");
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              return parsed;
+            }
+          } catch {
+            // ignore parse error
+          }
+        }
+      }
+      return null;
+    })();
+
+    // Restore scroll position
+    const savedScrollPosition = (() => {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("accountScrollPosition");
+        if (saved) {
+          const position = parseInt(saved, 10);
+          if (!isNaN(position) && position > 0) {
+            return position;
+          }
+        }
+      }
+      return null;
+    })();
+
+    if (savedScrollPosition) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: savedScrollPosition,
+          behavior: "auto", // Instant scroll on page load
+        });
+      }, 100);
+    }
+
+    if (savedTabs && savedTabs.length > 0) {
+      // Find the last non-default tab (most recently opened) and scroll to it
+      const nonDefaultTabs = savedTabs.filter((tab) => tab !== "myInquiries");
+      const tabToScroll =
+        nonDefaultTabs.length > 0
+          ? nonDefaultTabs[nonDefaultTabs.length - 1] // Last opened tab
+          : savedTabs[0];
+      if (tabToScroll && tabToScroll !== "myInquiries") {
+        setTimeout(() => {
+          scrollToTab(tabToScroll);
+        }, 800); // Wait for page and accordion to render
+      }
+    }
+  }, []); // Only on mount
 
   return (
     <div className="block md:hidden w-full px-3 sm:px-6">
@@ -127,11 +298,21 @@ const SellerTabsMobile = ({
         <Accordion
           type="multiple"
           value={activeAccordion}
-          onValueChange={(value) => setActiveAccordion(value)}
+          onValueChange={(value) => {
+            setActiveAccordion(value);
+            // Save to localStorage
+            if (typeof window !== "undefined") {
+              localStorage.setItem("accountTabMobile", JSON.stringify(value));
+            }
+          }}
           className="w-full space-y-1"
         >
           <AccordionItem value="myInquiries" className="rounded-md border-b-0">
-            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+            <AccordionTrigger
+              id="accordion-myInquiries"
+              data-accordion-item="myInquiries"
+              className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
+            >
               <div className="flex items-center justify-center gap-2">
                 <PackageSearch className="min-[400px]:block hidden" size={18} />
                 <span className="text-xs sm:text-sm">
@@ -201,7 +382,11 @@ const SellerTabsMobile = ({
           </AccordionItem>
 
           <AccordionItem value="favourites" className="rounded-md border-b-0">
-            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+            <AccordionTrigger
+              id="accordion-favourites"
+              data-accordion-item="favourites"
+              className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
+            >
               <div className="flex items-center justify-center gap-2">
                 <Heart className="min-[400px]:block hidden" size={18} />
                 <span className="text-xs sm:text-sm">
@@ -250,7 +435,11 @@ const SellerTabsMobile = ({
           </AccordionItem>
 
           <AccordionItem value="messages" className="rounded-md border-b-0">
-            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+            <AccordionTrigger
+              id="accordion-messages"
+              data-accordion-item="messages"
+              className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
+            >
               <div className="flex items-center justify-center gap-2">
                 <MessageSquare className="min-[400px]:block hidden" size={18} />
                 <span className="text-xs sm:text-sm">
@@ -359,7 +548,11 @@ const SellerTabsMobile = ({
           </AccordionItem>
 
           <AccordionItem value="addProduct" className="rounded-md border-b-0">
-            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+            <AccordionTrigger
+              id="accordion-addProduct"
+              data-accordion-item="addProduct"
+              className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
+            >
               <div className="flex items-center justify-center gap-2">
                 <PackagePlus className="min-[400px]:block hidden" size={18} />
                 <span className="text-xs sm:text-sm">
@@ -384,7 +577,11 @@ const SellerTabsMobile = ({
           </AccordionItem>
 
           <AccordionItem value="settings" className="rounded-md border-b-0">
-            <AccordionTrigger className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white">
+            <AccordionTrigger
+              id="accordion-settings"
+              data-accordion-item="settings"
+              className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
+            >
               <div className="flex items-center justify-center gap-2">
                 <Settings className="min-[400px]:block hidden" size={18} />
                 <span className="text-xs sm:text-sm">

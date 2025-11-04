@@ -1,22 +1,27 @@
-import { UserProfile } from "@/lib/types"
+import { UserProfile } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface BusinessInfoProps {
-  sellerData: UserProfile
+  sellerData: UserProfile;
 }
 
 const BusinessInfo = ({ sellerData }: BusinessInfoProps) => {
+  const t = useTranslations("CompanyDetail.tabBusinessInfo");
+
   return (
-    <div className='mt-4'>
+    <div className="mt-4">
       <div>
-        {sellerData?.metadata?.businessId &&(
+        {sellerData?.metadata?.businessId && (
           <p className="flex items-center gap-2">
-            <span className="font-bold">Business ID:</span>
-            <span className="text-gray-700 font-light">{sellerData?.metadata?.businessId}</span>
+            <span className="font-bold">{t("titleBusinessId")}</span>
+            <span className="text-gray-700 font-light">
+              {sellerData?.metadata?.businessId}
+            </span>
           </p>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BusinessInfo
+export default BusinessInfo;

@@ -369,7 +369,7 @@
   },
   "EditProduct": {
     "toastSuccessUpdate": "Товар оновлено успішно!",
-    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.", 
+    "toastErrorUpdate": "Помилка оновлення товару. Будь ласка, спробуєте пізніше.",
     "labelCurrency": "Валюта",
     "toastSuccessDeleteImage": "Зображення успішно видалено!",
     "toastErrorDeleteImage": "Помилка видалення зображення. Будь ласка, спробуєте пізніше.",
@@ -528,7 +528,8 @@
       "placeholderSearch": "Пошук товарів..."
     },
     "tabBusinessInfo": {
-      "titleBusinessInfo": "Додаткова інформація"
+      "titleBusinessInfo": "Додаткова інформація",
+      "titleBusinessId": "ЕДРПОУ:"
     }
   },
   "PriceRange": {
