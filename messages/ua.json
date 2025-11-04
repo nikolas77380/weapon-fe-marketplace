@@ -292,6 +292,7 @@
   "AddProduct": {
     "titleAddProduct": "Додати новий продукт",
     "descriptionAddProduct": "Розмістіть своє тактичне спорядження на ринку",
+    "labelCurrency": "Валюта",
     "errorAddProduct": "Будь ласка, заповніть деталі вашої компанії, щоб додати товар",
     "metadataRequiredDialog": {
       "dialogTitle": "Потрібні деталі компанії",

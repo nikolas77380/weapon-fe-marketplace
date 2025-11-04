@@ -293,6 +293,7 @@
     "titleAddProduct": "Add new Product",
     "descriptionAddProduct": "List your tactical equipment on the marketplace",
     "errorAddProduct": "Please complete your company details to add product.",
+    "labelCurrency": "Currency",
     "metadataRequiredDialog": {
       "dialogTitle": "Company Details Required",
       "dialogDescription": "You cannot add a product until you complete your company information. Please fill out your company details first.",
