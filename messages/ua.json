@@ -121,7 +121,7 @@
     }
   },
   "SellerAccountHeader": {
-    "titleWelcome": "З поверненням",
+    "titleWelcome": "Вітаємо",
     "titleAddProduct": "Додати товар",
     "titleSettings": "Налаштування",
     "titleActiveListings": "Активні списки",
@@ -331,7 +331,7 @@
       "titlePrice": "Ціна",
       "labelPrice": "Ціна (USD)",
       "titleDetails": "Деталі",
-      "labelCount": "Кількість",
+      "labelCount": "Кількість (необов'язково)",
       "labelStatus": "Статус",
       "placeholderStatus": "Оберіть статус",
       "labelVideoUrl": "Посилання на відео",

@@ -56,7 +56,7 @@
     "titleActiveInquiries": "Active inquiries",
     "titleSavedProducts": "Saved product",
     "titleCompletedDeals": "Completed deals",
-    "titleWelcome": "Welcome",
+    "titleWelcome": "Hello",
     "becomeSellerText": "Want to place products in our marketplace?",
     "becomeSellerButton": "Become a Seller",
     "becomeSellerSuccess": "Role successfully changed to seller!",
@@ -121,7 +121,7 @@
     }
   },
   "SellerAccountHeader": {
-    "titleWelcome": "Weclome back",
+    "titleWelcome": "Hello",
     "titleAddProduct": "Add product",
     "titleSettings": "Settings",
     "titleActiveListings": "Active listings",
@@ -331,7 +331,7 @@
       "titlePrice": "Pricing",
       "labelPrice": "Price (USD)",
       "titleDetails": "Details",
-      "labelCount": "Count",
+      "labelCount": "Count (optional)",
       "labelStatus": "Status",
       "placeholderStatus": "Select Status",
       "labelVideoUrl": "Video URL",

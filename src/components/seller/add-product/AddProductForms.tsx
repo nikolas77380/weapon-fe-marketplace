@@ -79,7 +79,7 @@ const AddProductForms = ({
       productCondition: "new" as "new" | "used",
       productPrice: 0,
       productCurrency: "USD" as "USD" | "EUR" | "UAH",
-      productCount: 0,
+      productCount: undefined,
       productImages: [],
       productStatus: "available",
       productVideoUrl: "",
@@ -189,7 +189,7 @@ const AddProductForms = ({
         attributesJson: {
           manufacturer: values.productManufacturer,
           model: values.productModel,
-          count: values.productCount,
+          ...(values.productCount && values.productCount > 0 ? { count: values.productCount } : {}),
         },
       };
 
@@ -211,7 +211,7 @@ const AddProductForms = ({
         productCondition: "new" as "new" | "used",
         productPrice: 0,
         productCurrency: "USD" as "USD" | "EUR" | "UAH",
-        productCount: 0,
+        productCount: undefined,
         productImages: [],
         productStatus: "available",
         productVideoUrl: "",
@@ -245,7 +245,7 @@ const AddProductForms = ({
       productCondition: "new" as "new" | "used",
       productPrice: 0,
       productCurrency: "USD" as "USD" | "EUR" | "UAH",
-      productCount: 0,
+      productCount: undefined,
       productImages: [],
       productStatus: "available",
     });
@@ -418,15 +418,24 @@ const AddProductForms = ({
               inputType="number"
               className="w-full min-[600px]:w-1/2"
               classNameLabel="bg-background"
-              min="1"
+              min="0"
               step="1"
               customOnChange={(e, fieldOnChange) => {
                 const value = e.target.value;
-                const numValue = value === "" ? 0 : Math.max(1, Number(value));
-                fieldOnChange(numValue);
+                // Allow empty value or value >= 1
+                if (value === "") {
+                  fieldOnChange(undefined);
+                } else {
+                  const numValue = Number(value);
+                  if (numValue >= 1) {
+                    fieldOnChange(numValue);
+                  } else {
+                    fieldOnChange(undefined);
+                  }
+                }
               }}
               customOnFocus={(e) => {
-                if (e.target.value === "0") {
+                if (e.target.value === "0" || e.target.value === "") {
                   e.target.value = "";
                 }
               }}
