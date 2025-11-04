@@ -79,7 +79,8 @@ const AddProductForms = ({
       productManufacturer: "",
       productModel: "",
       productCondition: "new" as "new" | "used",
-      productPriceUSD: 0,
+      productPrice: 0,
+      productCurrency: "USD" as "USD" | "EUR" | "UAH",
       productCount: 0,
       productImages: [],
       productStatus: "available",
@@ -177,7 +178,8 @@ const AddProductForms = ({
       const productData = {
         title: values.productName,
         description: values.productDescription,
-        priceUSD: values.productPriceUSD,
+        price: values.productPrice,
+        currency: values.productCurrency,
         category: selectedCategory.id,
         sku: values.productSku || undefined,
         status: values.productStatus,
@@ -209,7 +211,8 @@ const AddProductForms = ({
         productManufacturer: "",
         productModel: "",
         productCondition: "new" as "new" | "used",
-        productPriceUSD: 0,
+        productPrice: 0,
+        productCurrency: "USD" as "USD" | "EUR" | "UAH",
         productCount: 0,
         productImages: [],
         productStatus: "available",
@@ -242,7 +245,8 @@ const AddProductForms = ({
       productManufacturer: "",
       productModel: "",
       productCondition: "new" as "new" | "used",
-      productPriceUSD: 0,
+      productPrice: 0,
+      productCurrency: "USD" as "USD" | "EUR" | "UAH",
       productCount: 0,
       productImages: [],
       productStatus: "available",
@@ -365,28 +369,43 @@ const AddProductForms = ({
             </h2>
             {/* Product Prices */}
             <div className="space-y-4">
-              <FormFieldComponent
-                control={form.control}
-                name="productPriceUSD"
-                label="Price (USD)"
-                type="input"
-                inputType="number"
-                className="w-full"
-                classNameLabel="bg-background"
-                min="0.01"
-                step="0.01"
-                customOnChange={(e, fieldOnChange) => {
-                  const value = e.target.value;
-                  const numValue =
-                    value === "" ? 0 : Math.max(0.01, Number(value));
-                  fieldOnChange(numValue);
-                }}
-                customOnFocus={(e) => {
-                  if (e.target.value === "0") {
-                    e.target.value = "";
-                  }
-                }}
-              />
+              <div className="flex flex-col sm:flex-row gap-4">
+                <FormFieldComponent
+                  control={form.control}
+                  name="productPrice"
+                  label={t("labelPrice") || "Price"}
+                  type="input"
+                  inputType="number"
+                  className="flex-1"
+                  classNameLabel="bg-background"
+                  min="0.01"
+                  step="0.01"
+                  customOnChange={(e, fieldOnChange) => {
+                    const value = e.target.value;
+                    const numValue =
+                      value === "" ? 0 : Math.max(0.01, Number(value));
+                    fieldOnChange(numValue);
+                  }}
+                  customOnFocus={(e) => {
+                    if (e.target.value === "0") {
+                      e.target.value = "";
+                    }
+                  }}
+                />
+                <FormFieldComponent
+                  control={form.control}
+                  name="productCurrency"
+                  label={t("labelCurrency") || "Currency"}
+                  type="select"
+                  className="w-full sm:w-32"
+                  classNameLabel="bg-background"
+                  options={[
+                    { key: "USD", label: "USD", value: "USD" },
+                    { key: "EUR", label: "EUR", value: "EUR" },
+                    { key: "UAH", label: "UAH", value: "UAH" },
+                  ]}
+                />
+              </div>
             </div>
           </div>
 

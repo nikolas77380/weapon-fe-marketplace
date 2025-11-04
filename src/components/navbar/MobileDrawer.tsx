@@ -22,7 +22,6 @@ import Logo from "../ui/Logo";
 import BuyerMenuContent from "../buyer/navbar/BuyerMenuContent";
 import SellerMenuContent from "../buyer/navbar/SellerMenuContent";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { DialogHeader } from "../ui/dialog";
 import { Button } from "../ui/button";
 
 interface MobileDrawerProps {

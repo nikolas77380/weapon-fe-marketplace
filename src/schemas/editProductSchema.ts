@@ -3,10 +3,11 @@ import z from "zod";
 export const editProductSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  priceUSD: z.number().optional(),
-  // Legacy fields for backward compatibility
+  // New format: price + currency
   price: z.number().optional(),
-  currency: z.string().optional(),
+  currency: z.enum(["USD", "EUR", "UAH"]).optional(),
+  // Legacy fields for backward compatibility
+  priceUSD: z.number().optional(),
   category: z.string().optional(),
   sku: z.string().optional(),
   status: z.enum(["available", "unavailable"]).optional(),
