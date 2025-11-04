@@ -18,7 +18,7 @@ import LanguageSwitcher from "../ui/LanguageSwitcher";
 import CurrencySwitcher from "../ui/CurrencySwitcher";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
-import Logo from "../ui/Logo";
+import Image from "next/image";
 import BuyerMenuContent from "../buyer/navbar/BuyerMenuContent";
 import SellerMenuContent from "../buyer/navbar/SellerMenuContent";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -96,11 +96,22 @@ const MobileDrawer = ({
 
         <DrawerHeader
           className="flex items-center justify-between bg-gradient-to-br 
-      from-slate-800 via-gray-500 to-slate-900 shadow-2xl h-16 mb-5 px-4"
+      from-slate-800 via-gray-600 to-slate-900 shadow-2xl h-16 mb-5 px-4"
         >
           <div className="flex items-center justify-between w-full">
-            <Link href="/" onClick={onClose}>
-              <Logo />
+            <Link
+              href="/"
+              onClick={onClose}
+              className="block w-24 h-11"
+            >
+              <Image
+                src="/logo/esviem_defence_logo_2_1.png"
+                alt="logo"
+                width={320}
+                height={220}
+                className="w-full h-full object-contain"
+                priority
+              />
             </Link>
 
             <DrawerClose asChild>

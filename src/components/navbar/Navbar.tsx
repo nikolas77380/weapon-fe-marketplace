@@ -17,6 +17,7 @@ import { useState, useCallback } from "react";
 import { useCategories } from "@/hooks/useCategories";
 import { NavbarSearch } from "../search/NavbarSearch";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
   const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
@@ -63,8 +64,21 @@ const Navbar = () => {
             <Menu size={16} className="text-white sm:w-5 sm:h-5" />
           </button>
 
-          <div className="mr-1 lg:mr-0">
-            <Logo />
+          <div className="mr-1 lg:mr-0 flex-shrink-0">
+            {/* <Logo /> */}
+            <Link
+              href="/"
+              className="block w-16 h-8 sm:w-20 sm:h-9 md:w-24 md:h-11 lg:w-28 lg:h-12 xl:w-32 xl:h-12"
+            >
+              <Image
+                src="/logo/esviem_defence_logo_2_1.png"
+                alt="logo"
+                width={320}
+                height={220}
+                className="w-full h-full object-contain"
+                priority
+              />
+            </Link>
           </div>
 
           {/* Catalog Button - shows everyone on Desktop, hides on mobile */}
@@ -167,7 +181,7 @@ const Navbar = () => {
     <>
       <nav
         className="w-full px-2 sm:px-4 lg:px-6 py-3 sm:py-2.5 relative bg-gradient-to-br 
-      from-slate-800 via-gray-500 to-slate-900 shadow-2xl"
+      from-slate-800 via-gray-600 to-slate-900 shadow-2xl"
       >
         <NavbarContent />
       </nav>

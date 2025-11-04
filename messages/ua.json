@@ -65,7 +65,9 @@
   "BuyerAccountTabs": {
     "noActiveInquiries": "Поки немає активних запитів",
     "tabMyInquiries": {
-      "titleTabMyInquiries": "Мої запити"
+      "titleTabMyInquiries": "Мої запити",
+      "activeProducts": "Активні товари",
+      "archivedProducts": "Архівовані товари"
     },
     "tabFavourites": {
       "titleMyFavouritesProduct": "Збережені товари",
@@ -93,7 +95,11 @@
       "descriptionModalDeleteProduct2": "Цей товар не можна буде повернути.",
       "descriptionModalDeleting": "Видалення...",
       "descriptionModalCancel": "Скасувати",
-      "titleViews": "{count, plural, one {# перегляд} few {# перегляди} many {# переглядів} other {# переглядів}}"
+      "titleViews": "{count, plural, one {# перегляд} few {# перегляди} many {# переглядів} other {# переглядів}}",
+      "activeProducts": "Активні",
+      "archivedProducts": "Архівні",
+      "noActiveProducts": "Немає активних товарів",
+      "noArchivedProducts": "Немає архівних товарів"
     },
     "tabMessage": {
       "titleMessages": "Повідомлення",
@@ -292,6 +298,7 @@
   "AddProduct": {
     "titleAddProduct": "Додати новий продукт",
     "descriptionAddProduct": "Розмістіть своє тактичне спорядження на ринку",
+    "labelCurrency": "Валюта",
     "errorAddProduct": "Будь ласка, заповніть деталі вашої компанії, щоб додати товар",
     "metadataRequiredDialog": {
       "dialogTitle": "Потрібні деталі компанії",
@@ -332,6 +339,10 @@
       "productStatus": {
         "available": "В наявності",
         "unavailable": "Немає в наявності"
+      },
+      "productActivityStatus": {
+        "active": "Активний",
+        "archived": "Архівований"
       },
       "productCondition": {
         "new": "Новий",

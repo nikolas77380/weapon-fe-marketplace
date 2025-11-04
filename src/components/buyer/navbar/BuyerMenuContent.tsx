@@ -85,9 +85,6 @@ const BuyerMenuContent = ({
                   <p className={`font-semibold ${textClass}`}>
                     {t("titleFavourites")}
                   </p>
-                  <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                    {favourites.length || 0}
-                  </div>
                 </div>
               </div>
             </button>
@@ -103,9 +100,6 @@ const BuyerMenuContent = ({
                   <p className={`font-semibold ${textClass}`}>
                     {t("titleMessages")}
                   </p>
-                  <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                    {unreadChatsCount}
-                  </div>
                 </div>
               </div>
             </Link>
