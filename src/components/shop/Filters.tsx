@@ -68,6 +68,44 @@ const Filters = ({
       : category.translate_ua || category.name;
   };
 
+  const prepareConditionName = (condition: string) => {
+    if (currentLocale === "en") {
+      return condition === "new"
+        ? "New"
+        : condition === "used"
+        ? "Used"
+        : condition;
+    } else if (currentLocale === "ua") {
+      return condition === "new"
+        ? "Новый"
+        : condition === "used"
+        ? "Б/У"
+        : condition;
+    }
+  };
+
+  const prepareAvailabilityName = (availability: string) => {
+    if (currentLocale === "en") {
+      return availability === "available"
+        ? "Available"
+        : availability === "preorder"
+        ? "Preorder"
+        : availability === "unavailable"
+        ? "Unavailable"
+        : availability;
+    } else if (currentLocale === "ua") {
+      return availability === "available"
+        ? "Доступний"
+        : availability === "preorder"
+        ? "Презамовлення"
+        : availability === "unavailable"
+        ? "Недоступний"
+        : availability;
+    }
+  };
+
+  console.log(elasticFilters);
+
   return (
     <div
       className={`${
@@ -274,7 +312,7 @@ const Filters = ({
                           htmlFor={`elastic-availability-${item.key}`}
                           className="text-sm font-light cursor-pointer"
                         >
-                          {item.key} ({item.doc_count})
+                          {prepareAvailabilityName(item.key)} ({item.doc_count})
                         </Label>
                       </div>
                     ))}
@@ -334,7 +372,7 @@ const Filters = ({
                         htmlFor={`elastic-condition-${item.key}`}
                         className="text-sm font-light cursor-pointer"
                       >
-                        {item.key} ({item.doc_count})
+                        {prepareConditionName(item.key)} ({item.doc_count})
                       </Label>
                     </div>
                   ))}
