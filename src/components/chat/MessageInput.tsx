@@ -68,10 +68,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-2 xs:p-4 border-t border-gray-200 bg-white"
+      className="p-2 xs:p-4 border-t border-gray-200 bg-white w-full max-w-full overflow-x-hidden"
     >
-      <div className="flex items-center">
-        <div className="flex-1 relative">
+      <div className="flex items-center w-full min-w-0">
+        <div className="flex-1 relative min-w-0 w-full">
           <Textarea
             ref={textareaRef}
             value={message}
@@ -79,7 +79,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onKeyDown={handleKeyDown}
             placeholder={placeholder || t("messageInput.placeholder")}
             disabled={disabled || loading || isSending}
-            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main"
+            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main w-full max-w-full"
             rows={1}
           />
 

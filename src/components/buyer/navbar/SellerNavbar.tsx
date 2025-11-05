@@ -69,8 +69,8 @@ const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
           <LanguageSwitcher classNameSelectValue="text-gold-main" />
         </NavigationMenuLink>
 
-        <Link href="/account" className="flex items-center border border-gold-main rounded-lg py-1 lg:py-1.5 px-3 lg:px-4">
-          <Avatar className="h-8 w-8 cursor-pointer">
+        <Link href="/account" className="flex items-center border border-gold-main rounded-lg py-1 lg:py-1.5 px-3 lg:px-4 h-10">
+          <Avatar className="h-6 w-6 cursor-pointer">
             <AvatarImage src={user.metadata?.avatar?.url} alt={user.username} />
             <AvatarFallback className="bg-black text-white text-sm uppercase">
               {user.displayName?.charAt(0) || user.username.charAt(0)}

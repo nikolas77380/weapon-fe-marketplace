@@ -44,8 +44,8 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const handleBack = () => onBackToChatList();
 
   return (
-    <div className="min-w-0">
-      <div className="sticky top-0 z-20 bg-white border-b border-gray-200">
+    <div className="min-w-0 w-full max-w-full overflow-x-hidden flex flex-col h-full">
+      <div className="sticky top-0 z-20 bg-white border-b border-gray-200 w-full">
         <ChatHeader
           chat={currentChat}
           onFinishChat={onFinishChat}
@@ -54,7 +54,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         />
       </div>
 
-      <div className="flex-1 bg-gray-50 h-[100vh]">
+      <div className="flex-1 bg-gray-50 h-[100vh] overflow-x-hidden w-full">
         <MessageArea
           messages={localMessages}
           currentUserId={currentUserId}
@@ -63,7 +63,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         />
       </div>
 
-      <div className="sticky bottom-0 z-20 pb-[env(safe-area-inset-bottom)]">
+      <div className="sticky bottom-0 z-20 w-full max-w-full overflow-x-hidden pb-[env(safe-area-inset-bottom,0)]">
         <MessageInput
           onSendMessage={onSendMessage}
           disabled={!isChatActive}
