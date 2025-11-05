@@ -38,7 +38,7 @@ interface SellerListenedCardProps {
 }
 
 const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
-  const t = useTranslations("SellerAccountTabs");
+  const t = useTranslations("SellerAccountTabs.tabMyInquiries");
   const { selectedCurrency } = useCurrency();
   // const tCondition = useTranslations(
   //   "AddProduct.addProductForm.productCondition"
@@ -143,13 +143,21 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               {getCategoryDisplayName(product.category)}
             </p>
             <p>{getDisplayPrice(product, selectedCurrency)}</p>
-            <p>{formatDate(product.createdAt)}</p>
+            <p>
+              {formatDate(product.createdAt, currentLocale, {
+                justNow: t("dateFormat.justNow"),
+                minutesAgo: (count) => t("dateFormat.minutesAgo", { count }),
+                hoursAgo: (count) => t("dateFormat.hoursAgo", { count }),
+                daysAgo: (count) => t("dateFormat.daysAgo", { count }),
+                invalidDate: t("dateFormat.invalidDate"),
+              })}
+            </p>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-3 sm:gap-6 font-roboto font-medium text-xs sm:text-sm text-gray-400">
             <div className="flex items-center gap-1.5">
               <Eye size={16} className="min-[400px]:size-[18px]" />
               <p>
-                {t("tabMyInquiries.titleViews", {
+                {t("titleViews", {
                   count: product.viewsCount || 0,
                 })}
               </p>
@@ -177,7 +185,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
               </Link>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{t("tabMyInquiries.titlePreview")}</p>
+              <p>{t("titlePreview")}</p>
             </TooltipContent>
           </Tooltip>
           <Link href={`/account/edit-product/${product.slug}`}>
@@ -189,7 +197,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <p>{t("tabMyInquiries.titleToogleEditProduct")}</p>
+                <p>{t("titleToogleEditProduct")}</p>
               </TooltipContent>
             </Tooltip>
           </Link>
@@ -211,20 +219,17 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                     />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{t("tabMyInquiries.titleToogleDeleteCard")}</p>
+                    <p>{t("titleToogleDeleteCard")}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
             </DialogTrigger>
             <DialogContent className="rounded-lg border-gold-main">
               <DialogHeader>
-                <DialogTitle>
-                  {t("tabMyInquiries.titleToogleDeleteCard")}
-                </DialogTitle>
+                <DialogTitle>{t("titleToogleDeleteCard")}</DialogTitle>
                 <DialogDescription>
-                  {t("tabMyInquiries.descriptionModalDeleteProduct1")} &ldquo;
-                  {product.title}&rdquo;?{" "}
-                  {t("tabMyInquiries.descriptionModalDeleteProduct2")}
+                  {t("descriptionModalDeleteProduct1")} &ldquo;
+                  {product.title}&rdquo;? {t("descriptionModalDeleteProduct2")}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="gap-2">
@@ -234,7 +239,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                   disabled={loading}
                   className="py-2 border-gold-main"
                 >
-                  {t("tabMyInquiries.descriptionModalCancel")}
+                  {t("descriptionModalCancel")}
                 </Button>
                 <Button
                   variant="default"
@@ -243,8 +248,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                   className="py-2 bg-gold-main hover:bg-gold-main/80 text-white"
                 >
                   {loading
-                    ? t("tabMyInquiries.descriptionModalDeleting")
-                    : t("tabMyInquiries.titleToogleDeleteCard")}
+                    ? t("descriptionModalDeleting")
+                    : t("titleToogleDeleteCard")}
                 </Button>
               </DialogFooter>
             </DialogContent>
