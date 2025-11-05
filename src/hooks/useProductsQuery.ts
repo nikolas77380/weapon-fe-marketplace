@@ -54,7 +54,7 @@ export const useSellerProductsQuery = (sellerId?: number) => {
         seller: sellerId,
         pagination: {
           page: 1,
-          pageSize: 6,
+          pageSize: 30,
         },
       }),
     enabled: !!sellerId,

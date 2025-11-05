@@ -93,18 +93,18 @@ const FavouriteCard = ({
                     : tStatus("unavailable")}
                 </p>
               </div>
-              <div>
+              {/* <div>
                 <p className="hidden min-[400px]:block text-xs lg:text-sm font-bold text-muted-foreground">
                   Added: {new Date(favourite.createdAt).toLocaleDateString()}
                 </p>
-              </div>
+              </div> */}
             </div>
             <Link
               href={`/marketplace/${product.id}`}
               className="py-2 px-4 bg-gold-main text-white hover:bg-gold-main/90 duration-300 
               transition-all text-xs lg:text-sm rounded-sm"
             >
-              View Details →
+              {t("titleViewDetails")}
             </Link>
           </div>
         </div>
@@ -173,11 +173,11 @@ const FavouriteCard = ({
                 : tStatus("unavailable")}
             </p>
           </div>
-          <div className="text-right">
+          {/* <div className="text-right">
             <p className="text-xs font-bold text-muted-foreground">
               {new Date(favourite.createdAt).toLocaleDateString()}
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Action button */}

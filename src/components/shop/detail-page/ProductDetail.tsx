@@ -6,13 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FavouriteButton from "@/components/ui/FavouriteButton";
-import { useSellerData } from "@/hooks/useSellerData";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import ContactModal from "../ContactModal";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getVideoEmbedUrl } from "@/lib/videoUtils";
+import { COUNTRIES } from "@/lib/utils";
 
 const ProductDetail = ({ product }: { product: Product }) => {
   const t = useTranslations("ProductDetail");
@@ -24,7 +24,6 @@ const ProductDetail = ({ product }: { product: Product }) => {
   const currentLocale = useLocale();
   const { selectedCurrency } = useCurrency();
 
-  const { sellerData } = useSellerData(product?.seller?.id);
   const [open, setOpen] = useState(false);
 
   // Получаем embed URL для видео
@@ -119,31 +118,39 @@ const ProductDetail = ({ product }: { product: Product }) => {
           <div className="flex items-center gap-3">
             <Avatar className="size-15">
               <AvatarImage
-                src={sellerData?.metadata?.avatar?.url}
-                alt={sellerData?.username || product?.seller?.username}
+                src={product?.seller?.avatarUrl || ""}
+                alt={product?.seller?.username || ""}
               />
               <AvatarFallback className="bg-black text-white text-sm uppercase">
-                {sellerData?.username?.charAt(0) ||
-                  product?.seller?.username?.charAt(0) ||
-                  "?"}
+                {product?.seller?.username?.charAt(0) || "U"}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
               {/* Company name */}
-              {sellerData?.metadata?.companyName && (
+              {product?.seller?.companyName && (
                 <p className="text-sm text-gray-600">
-                  {sellerData.metadata.companyName}
+                  {product?.seller?.companyName}
                 </p>
               )}
               {/* Country */}
               <p className="text-sm">
-                {sellerData?.metadata?.country ? (
-                  sellerData.metadata.country
-                ) : (
-                  <span className="text-gray-400">
-                    {t("descriptionNotCountry")}
-                  </span>
-                )}
+                {COUNTRIES.find(
+                  (country) => country.iso2 === product?.seller?.country
+                )?.name
+                  ? currentLocale === "ua"
+                    ? COUNTRIES.find(
+                        (country) => country.iso2 === product?.seller?.country
+                      )?.ua
+                    : COUNTRIES.find(
+                        (country) => country.iso2 === product?.seller?.country
+                      )?.name
+                  : currentLocale === "ua"
+                  ? COUNTRIES.find(
+                      (country) => country.name === product?.seller?.country
+                    )?.ua
+                  : COUNTRIES.find(
+                      (country) => country.name === product?.seller?.country
+                    )?.name}
               </p>
             </div>
           </div>
@@ -176,7 +183,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </TabsList>
             <TabsContent value="description">
               <p className="text-base sm:text-lg font-light">
-                {product?.description || "Not have description"}
+                {product?.description || ""}
               </p>
             </TabsContent>
             <TabsContent value="specifications">
@@ -188,7 +195,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
                       {t("titleModel")}
                     </h4>
                     <p className="text-sm sm:text-base lg:text-lg">
-                      {product?.attributesJson?.model || "Not have model name"}
+                      {product?.attributesJson?.model || ""}
                     </p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-lg">

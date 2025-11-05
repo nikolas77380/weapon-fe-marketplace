@@ -116,7 +116,7 @@ const EditProductForm = ({
       sku: product.sku || "",
       status: product.status || "available",
       condition: product.condition || "new",
-      quantity: product.attributesJson?.count || 1,
+      quantity: product.attributesJson?.count || undefined,
       manufacturer: product.attributesJson?.manufacturer || "",
       model: product.attributesJson?.model || "",
       videoUrl: product.videoUrl || "",
@@ -137,7 +137,7 @@ const EditProductForm = ({
         sku: product.sku || "",
         status: product.status || "available",
         condition: product.condition || "new",
-        quantity: product.attributesJson?.count || 1,
+        quantity: product.attributesJson?.count || undefined,
         manufacturer: product.attributesJson?.manufacturer || "",
         model: product.attributesJson?.model || "",
         videoUrl: product.videoUrl || "",
@@ -205,7 +205,9 @@ const EditProductForm = ({
             ? values.videoUrl.trim()
             : undefined,
         attributesJson: {
-          count: values.quantity,
+          ...(values.quantity !== undefined && values.quantity !== null
+            ? { count: values.quantity }
+            : {}),
           manufacturer: values.manufacturer,
           model: values.model,
         },
@@ -417,12 +419,22 @@ const EditProductForm = ({
               label={t("labelCount")}
               type="input"
               inputType="number"
-              min="1"
-              placeholder="1"
+              min="0"
+              placeholder=""
               classNameLabel="bg-background"
-              customOnChange={(e, fieldOnChange) =>
-                fieldOnChange(Number(e.target.value))
-              }
+              customOnChange={(e, fieldOnChange) => {
+                const value = e.target.value;
+                if (value === "") {
+                  fieldOnChange(undefined);
+                } else {
+                  const numValue = Number(value);
+                  if (numValue >= 0) {
+                    fieldOnChange(numValue);
+                  } else {
+                    fieldOnChange(undefined);
+                  }
+                }
+              }}
             />
           </div>
 

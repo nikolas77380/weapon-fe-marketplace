@@ -99,7 +99,14 @@
       "activeProducts": "Active",
       "archivedProducts": "Archived",
       "noActiveProducts": "No active products",
-      "noArchivedProducts": "No archived products"
+      "noArchivedProducts": "No archived products",
+      "dateFormat": {
+        "justNow": "Just now",
+        "minutesAgo": "{count, plural, one {# minute ago} other {# minutes ago}}",
+        "hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
+        "daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
+        "invalidDate": "Invalid date"
+      }
     },
     "tabMessage": {
       "titleMessages": "Messages",
@@ -390,7 +397,7 @@
     "labelSku": "Product SKU (Optional)",
     "placeholderSku": "Enter your product SKU",
     "labelCondition": "Condition",
-    "labelCount": "Count",
+    "labelCount": "Count (optional)",
     "labelManufacturer": "Manufacturer",
     "labelModel": "Model",
     "buttonUpdating": "Updating...",

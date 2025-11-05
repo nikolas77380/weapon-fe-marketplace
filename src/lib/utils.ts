@@ -380,12 +380,22 @@ export const hasRole = (user: UserProfile, role: string): boolean => {
 export const STORAGE_KEY = "add-product-form-draft";
 
 // Date formatting utilities
-export const formatDate = (dateString: string): string => {
+export const formatDate = (
+  dateString: string,
+  locale: string = "en",
+  translations?: {
+    justNow?: string;
+    minutesAgo?: (count: number) => string;
+    hoursAgo?: (count: number) => string;
+    daysAgo?: (count: number) => string;
+    invalidDate?: string;
+  }
+): string => {
   const date = new Date(dateString);
 
   // Check if date is valid
   if (isNaN(date.getTime())) {
-    return "Invalid date";
+    return translations?.invalidDate || "Invalid date";
   }
 
   const now = new Date();
@@ -398,20 +408,31 @@ export const formatDate = (dateString: string): string => {
     if (diffInHours === 0) {
       const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
       if (diffInMinutes === 0) {
-        return "Just now";
+        return translations?.justNow || "Just now";
       }
-      return `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
+      return translations?.minutesAgo
+        ? translations.minutesAgo(diffInMinutes)
+        : `${diffInMinutes} minute${diffInMinutes === 1 ? "" : "s"} ago`;
     }
-    return `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
+    return translations?.hoursAgo
+      ? translations.hoursAgo(diffInHours)
+      : `${diffInHours} hour${diffInHours === 1 ? "" : "s"} ago`;
   }
 
   // If less than 7 days, show "X days ago"
   if (diffInDays < 7) {
-    return `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
+    return translations?.daysAgo
+      ? translations.daysAgo(diffInDays)
+      : `${diffInDays} day${diffInDays === 1 ? "" : "s"} ago`;
   }
 
-  // Otherwise show formatted date
-  return date.toLocaleDateString("en-US", {
+  // Otherwise show formatted date with locale
+  const localeMap: Record<string, string> = {
+    ua: "uk-UA",
+    en: "en-US",
+  };
+
+  return date.toLocaleDateString(localeMap[locale] || locale, {
     year: "numeric",
     month: "short",
     day: "numeric",

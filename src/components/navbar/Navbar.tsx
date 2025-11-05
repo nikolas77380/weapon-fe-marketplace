@@ -86,12 +86,12 @@ const Navbar = () => {
             <div
               className={`
                 rounded-sm cursor-pointer duration-300 md:ml-[35px] transition-all
-                border border-gold-main hover:bg-white/10
+                border border-gold-main hover:bg-white/10 h-10
                   ${isCatalogOpen ? "bg-white/10" : ""}
                 `}
               onClick={handleToggleCatalog}
             >
-              <div className="flex items-center gap-2 py-1.5 lg:py-2 px-3 lg:px-4 ">
+              <div className="flex items-center gap-2 py-1.5 lg:py-2 px-3 lg:px-4 h-10">
                 {isCatalogOpen ? (
                   <X size={14} className="text-white lg:w-4 lg:h-4" />
                 ) : (

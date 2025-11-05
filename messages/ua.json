@@ -99,7 +99,14 @@
       "activeProducts": "Активні",
       "archivedProducts": "Архівні",
       "noActiveProducts": "Немає активних товарів",
-      "noArchivedProducts": "Немає архівних товарів"
+      "noArchivedProducts": "Немає архівних товарів",
+      "dateFormat": {
+        "justNow": "Щойно",
+        "minutesAgo": "{count, plural, one {# хвилину тому} few {# хвилини тому} many {# хвилин тому} other {# хвилин тому}}",
+        "hoursAgo": "{count, plural, one {# годину тому} few {# години тому} many {# годин тому} other {# годин тому}}",
+        "daysAgo": "{count, plural, one {# день тому} few {# дні тому} many {# днів тому} other {# днів тому}}",
+        "invalidDate": "Невірна дата"
+      }
     },
     "tabMessage": {
       "titleMessages": "Повідомлення",
@@ -390,7 +397,7 @@
     "placeholderVideoUrl": "Введіть посилання на відео",
     "labelSku": "Код товару (Необов'язково)",
     "placeholderSku": "Введіть код товару",
-    "labelCount": "Кількість",
+    "labelCount": "Кількість (необов'язково)",
     "labelManufacturer": "Виробник",
     "labelModel": "Модель",
     "buttonUpdating": "Оновлюється...",
