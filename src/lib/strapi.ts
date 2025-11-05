@@ -489,6 +489,7 @@ export const getProducts = async (params?: {
   status?: string;
   search?: string;
   sort?: string;
+  ids?: number[];
   priceRange?: {
     min?: number;
     max?: number;
@@ -518,6 +519,14 @@ export const getProducts = async (params?: {
 
   if (params?.search) {
     queryParams.append("filters[title][$containsi]", params.search);
+  }
+
+  if (params?.ids && params.ids.length > 0) {
+    // Add each ID to the query params for $in filter
+    // Format: filters[id][$in][0]=1&filters[id][$in][1]=2
+    params.ids.forEach((id, index) => {
+      queryParams.append(`filters[id][$in][${index}]`, id.toString());
+    });
   }
 
   if (params?.priceRange?.min !== undefined) {
