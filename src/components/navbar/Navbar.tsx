@@ -71,7 +71,7 @@ const Navbar = () => {
               className="block w-19 h-10 sm:w-20 sm:h-9 md:w-24 md:h-11 lg:w-28 lg:h-12 xl:w-32 xl:h-12"
             >
               <Image
-                src="/logo/esviem_defence_logo_2_1.png"
+                src="/logo/esviem_defence_logo_2_2.png"
                 alt="logo"
                 width={320}
                 height={220}

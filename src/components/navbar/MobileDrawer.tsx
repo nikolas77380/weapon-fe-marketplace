@@ -121,7 +121,7 @@ const MobileDrawer = ({
           <div className="flex items-center justify-between w-full">
             <Link href="/" onClick={onClose} className="block w-24 h-11">
               <Image
-                src="/logo/esviem_defence_logo_2_1.png"
+                src="/logo/esviem_defence_logo_2_2.png"
                 alt="logo"
                 width={320}
                 height={220}
