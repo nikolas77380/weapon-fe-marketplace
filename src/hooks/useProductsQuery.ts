@@ -20,6 +20,7 @@ export interface ProductsQueryParams {
   status?: string;
   search?: string;
   sort?: string;
+  ids?: number[];
   priceRange?: {
     min?: number;
     max?: number;
@@ -35,6 +36,7 @@ export const useProductsQuery = (params?: ProductsQueryParams) => {
   return useQuery({
     queryKey: queryKeys.products.list(params),
     queryFn: () => getProducts(params),
+    enabled: params !== undefined, // Don't fetch if params are undefined
   });
 };
 

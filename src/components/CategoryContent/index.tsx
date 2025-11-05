@@ -19,14 +19,14 @@ const FilteringContent = () => {
   const { data: response, isLoading } = useProductsQuery({
     pagination: {
       page: 1,
-      pageSize: 6,
+      pageSize: 12,
     },
+    sort: "viewsCount:desc",
   });
 
   const loading = isLoading;
   const { getMainCategories, categories } = useCategories();
   const { data: promosResponse } = usePromosQuery();
-  console.log("promosResponse", promosResponse);
 
   // Отключаем isInitialLoad после первой успешной загрузки
   useEffect(() => {
@@ -34,16 +34,6 @@ const FilteringContent = () => {
       setIsInitialLoad(false);
     }
   }, [isLoading, response?.data]);
-
-  const paginatedProducts = useMemo(() => {
-    const allProducts = response?.data || [];
-    return allProducts
-      .filter((product: Product) => product.activityStatus !== "archived")
-      .slice()
-      .sort(
-        (a: Product, b: Product) => Number(b.viewsCount) - Number(a.viewsCount)
-      );
-  }, [response?.data]);
 
   const availableCategories = getMainCategories();
 
@@ -78,7 +68,7 @@ const FilteringContent = () => {
         <TopProductsSlider />
 
         {/* Products Grid */}
-        {!loading && paginatedProducts.length > 0 && (
+        {!loading && response?.data.length > 0 && (
           <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
             {t("title")}
           </h3>
@@ -94,7 +84,7 @@ const FilteringContent = () => {
               className="w-full"
             />
           ) : (
-            paginatedProducts.map((item: Product) => (
+            response?.data.map((item: Product) => (
               <ShopCard item={item} key={item.id} />
             ))
           )}
