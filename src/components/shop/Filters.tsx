@@ -14,6 +14,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { useTranslations, useLocale } from "next-intl";
+import { useCategories } from "@/hooks/useCategories";
 
 interface FiltersProps {
   onPriceChange: (min: number, max: number) => void;
@@ -64,22 +65,23 @@ const Filters = ({
   const [openCategories, setOpenCategories] = useState<string>("");
   const [openAvailability, setOpenAvailability] = useState<string>("");
   const [openCondition, setOpenCondition] = useState<string>("");
+  const { categories: allCategories } = useCategories();
   console.log(availableCategories);
   const getCategoryName = (category: {
     key: string;
     name?: string;
     translate_ua?: string;
   }) => {
+    console.log("category", category);
     if (!category.name && !category.translate_ua) {
-      const categoryItem = availableCategories.find(
-        (c) => c.slug === category.key
-      );
+      const categoryItem = allCategories.find((c) => c.slug === category.key);
       console.log("availableCategories", availableCategories);
       return currentLocale === "en"
         ? categoryItem?.name
         : categoryItem?.translate_ua;
+    } else {
+      return currentLocale === "en" ? category.name : category.translate_ua;
     }
-    return currentLocale === "en" ? category.name : category.translate_ua;
   };
 
   const prepareConditionName = (condition: string) => {
@@ -118,7 +120,7 @@ const Filters = ({
     }
   };
 
-  console.log(elasticFilters);
+  console.log(elasticFilters.categories);
 
   return (
     <div
@@ -241,10 +243,13 @@ const Filters = ({
                       />
                       <Label
                         htmlFor={`elastic-category-${category.key}`}
-                        className="text-sm font-light cursor-pointer truncate max-w-[200px] block"
-                        title={getCategoryName(category) || category.key}
+                        className="text-sm font-light cursor-pointer flex"
+                        title={getCategoryName(category)}
                       >
-                        {getCategoryName(category)} ({category.doc_count})
+                        <span className="truncate max-w-[200px]">
+                          {getCategoryName(category)}
+                        </span>
+                        <span className="text-sm">({category.doc_count})</span>
                       </Label>
                     </div>
                   ))}

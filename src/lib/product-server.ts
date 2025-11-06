@@ -45,6 +45,18 @@ export const getProductPageData = async (
     throw new Error("Product not found");
   }
 
+  // Check if product is archived - if yes, only creator can view it
+  if (product.activityStatus === "archived") {
+    const isCreator =
+      currentUser &&
+      product.seller &&
+      Number(currentUser.id) === Number(product.seller.id);
+
+    if (!isCreator) {
+      throw new Error("Product not found");
+    }
+  }
+
   return {
     product,
     currentUser,
