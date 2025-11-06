@@ -45,83 +45,20 @@ const SellerMenuContent = ({
 
   const handleFavouritesClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    sessionStorage.setItem("accountTab", "favourites");
-    // Also save to localStorage for persistence across reloads
-    if (typeof window !== "undefined") {
-      try {
-        const currentTabs = localStorage.getItem("accountTabMobile");
-        let tabsArray: string[] = ["myInquiries"];
-        if (currentTabs) {
-          const parsed = JSON.parse(currentTabs);
-          if (Array.isArray(parsed)) {
-            tabsArray = parsed;
-          }
-        }
-        if (!tabsArray.includes("favourites")) {
-          tabsArray.push("favourites");
-        }
-        localStorage.setItem("accountTabMobile", JSON.stringify(tabsArray));
-      } catch (error) {
-        // If localStorage fails, just use default
-        console.error("Error saving to localStorage:", error);
-      }
-    }
     handleLinkClick();
-    router.push("/account");
+    router.push("/account?tab=favourites");
   };
 
   const handleSettingsClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    sessionStorage.setItem("accountTab", "settings");
-    // Also save to localStorage for persistence across reloads
-    if (typeof window !== "undefined") {
-      try {
-        const currentTabs = localStorage.getItem("accountTabMobile");
-        let tabsArray: string[] = ["myInquiries"];
-        if (currentTabs) {
-          const parsed = JSON.parse(currentTabs);
-          if (Array.isArray(parsed)) {
-            tabsArray = parsed;
-          }
-        }
-        if (!tabsArray.includes("settings")) {
-          tabsArray.push("settings");
-        }
-        localStorage.setItem("accountTabMobile", JSON.stringify(tabsArray));
-      } catch (error) {
-        // If localStorage fails, just use default
-        console.error("Error saving to localStorage:", error);
-      }
-    }
     handleLinkClick();
-    router.push("/account");
+    router.push("/account?tab=settings");
   };
 
   const handleAddProductClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    sessionStorage.setItem("accountTab", "addProduct");
-    // Also save to localStorage for persistence across reloads
-    if (typeof window !== "undefined") {
-      try {
-        const currentTabs = localStorage.getItem("accountTabMobile");
-        let tabsArray: string[] = ["myInquiries"];
-        if (currentTabs) {
-          const parsed = JSON.parse(currentTabs);
-          if (Array.isArray(parsed)) {
-            tabsArray = parsed;
-          }
-        }
-        if (!tabsArray.includes("addProduct")) {
-          tabsArray.push("addProduct");
-        }
-        localStorage.setItem("accountTabMobile", JSON.stringify(tabsArray));
-      } catch (error) {
-        // If localStorage fails, just use default
-        console.error("Error saving to localStorage:", error);
-      }
-    }
     handleLinkClick();
-    router.push("/account");
+    router.push("/account?tab=addProduct");
   };
 
   const containerClass = isMobile ? "space-y-2" : "grid w-[200px] gap-1";
