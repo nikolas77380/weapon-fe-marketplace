@@ -49,8 +49,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               "/no-image.png"
             }
             alt={item.title}
-            width={150}
-            height={150}
+            width={200}
+            height={200}
+            sizes="(max-width: 400px) 150px, (max-width: 640px) 160px, 200px"
+            loading="lazy"
             onError={(e) => handleImageError(e, "/no-image.png")}
             className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-contain"
           />
@@ -147,8 +149,10 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               "/no-image.png"
             }
             alt={item.title}
-            width={266}
-            height={200}
+            width={400}
+            height={300}
+            sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, 200px"
+            loading="lazy"
             onError={(e) => handleImageError(e, "/no-image.png")}
             className="w-full h-full object-contain"
           />

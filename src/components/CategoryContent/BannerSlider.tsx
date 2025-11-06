@@ -45,10 +45,12 @@ const BannerSlider = ({ promos }: { promos?: Promo[] }) => {
                   <Image
                     src={imageUrl}
                     alt={alt}
-                    width={1000}
-                    height={200}
+                    width={1920}
+                    height={400}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
                     className="object-cover w-full h-full"
                     priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               </SwiperSlide>

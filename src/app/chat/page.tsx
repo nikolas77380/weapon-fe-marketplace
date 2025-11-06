@@ -1,5 +1,4 @@
 import React from "react";
-import { redirect } from "next/navigation";
 import { requireAuth } from "@/lib/server-auth";
 import { getUserChatsServer } from "@/lib/chat-api-server";
 import { ChatAppClient } from "@/components/chat/ChatAppClient";

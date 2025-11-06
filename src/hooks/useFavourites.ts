@@ -1,156 +1,63 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import {
-  addToFavourites,
-  removeFromFavourites,
-  getFavourites,
-  checkIfFavourited,
-  FavouriteProduct,
-} from "@/lib/favourites";
-import { toast } from "sonner";
-import { useTranslations } from "next-intl";
+  useFavouritesQuery,
+  useFavouriteStatusQuery,
+  useAddToFavouritesMutation,
+  useRemoveFromFavouritesMutation,
+} from "./useFavouritesQuery";
 
-export const useFavourites = () => {
-  const t = useTranslations("ProductDetail");
-  const [favourites, setFavourites] = useState<FavouriteProduct[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [favouriteStatuses, setFavouriteStatuses] = useState<
-    Record<number, boolean>
-  >({});
+export const useFavourites = (productId?: number) => {
+  // Загружаем все избранные продукты
+  const {
+    data: favourites = [],
+    isLoading: favouritesLoading,
+    refetch: loadFavourites,
+  } = useFavouritesQuery();
 
-  // Загрузить все избранные продукты
-  const loadFavourites = useCallback(async () => {
-    try {
-      setLoading(true);
-      const result = await getFavourites();
+  // Загружаем статус для конкретного продукта, если передан productId
+  const { data: favouriteStatus, isLoading: statusLoading } =
+    useFavouriteStatusQuery(productId || 0);
 
-      if (result.success && result.data) {
-        setFavourites(result.data);
-        // Обновляем статусы для всех продуктов
-        const statuses: Record<number, boolean> = {};
-        result.data.forEach((fav) => {
-          statuses[fav.product.id] = true;
-        });
-        setFavouriteStatuses(statuses);
+  // Мутации для добавления и удаления
+  const addToFavouritesMutation = useAddToFavouritesMutation();
+  const removeFromFavouritesMutation = useRemoveFromFavouritesMutation();
+
+  // Проверить, добавлен ли продукт в избранное
+  const isFavourited = useCallback(
+    (id: number) => {
+      if (id === productId && favouriteStatus) {
+        return favouriteStatus.isFavourited;
       }
-    } catch (error) {
-      console.error("Error loading favourites:", error);
-      toast.error("Failed to load favourites");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Проверить статус избранного для конкретного продукта
-  const checkFavouriteStatus = useCallback(async (productId: number) => {
-    try {
-      const result = await checkIfFavourited(productId);
-      if (result.success) {
-        setFavouriteStatuses((prev) => ({
-          ...prev,
-          [productId]: result.isFavourited,
-        }));
-        return result;
-      }
-    } catch (error) {
-      console.error("Error checking favourite status:", error);
-    }
-    return { success: false, isFavourited: false };
-  }, []);
-
-  // Добавить продукт в избранное
-  const addToFavouritesHandler = useCallback(
-    async (productId: number) => {
-      try {
-        const result = await addToFavourites(productId);
-
-        if (result.success) {
-          // Обновляем статус
-          setFavouriteStatuses((prev) => ({
-            ...prev,
-            [productId]: true,
-          }));
-
-          // Перезагружаем список избранного
-          await loadFavourites();
-
-          return true;
-        } else {
-          toast.error(result.error || t("toastErrorAddFavourite"));
-          return false;
-        }
-      } catch (error) {
-        console.error("Error adding to favourites:", error);
-        toast.error(t("toastErrorAddFavourite"));
-        return false;
-      }
+      // Проверяем в общем списке избранного
+      return favourites.some((fav) => fav.product.id === id);
     },
-    [loadFavourites]
-  );
-
-  // Удалить продукт из избранного
-  const removeFromFavouritesHandler = useCallback(
-    async (favouriteId: number, productId: number) => {
-      try {
-        const result = await removeFromFavourites(favouriteId);
-
-        if (result.success) {
-          // Обновляем статус
-          setFavouriteStatuses((prev) => ({
-            ...prev,
-            [productId]: false,
-          }));
-
-          // Удаляем из локального состояния
-          setFavourites((prev) => prev.filter((fav) => fav.id !== favouriteId));
-
-          toast.success(t("toastSuccessRemoveFavourite"));
-          return true;
-        } else {
-          toast.error(result.error || t("toastErrorRemoveFavourite"));
-          return false;
-        }
-      } catch (error) {
-        console.error("Error removing from favourites:", error);
-        toast.error(t("toastErrorRemoveFavourite"));
-        return false;
-      }
-    },
-    []
+    [favourites, productId, favouriteStatus]
   );
 
   // Переключить статус избранного
   const toggleFavourite = useCallback(
-    async (productId: number) => {
-      const isCurrentlyFavourited = favouriteStatuses[productId];
+    async (id: number) => {
+      const isCurrentlyFavourited = isFavourited(id);
 
       if (isCurrentlyFavourited) {
         // Находим favouriteId для удаления
-        const favourite = favourites.find(
-          (fav) => fav.product.id === productId
-        );
+        const favourite = favourites.find((fav) => fav.product.id === id);
         if (favourite) {
-          return await removeFromFavouritesHandler(favourite.id, productId);
+          await removeFromFavouritesMutation.mutateAsync({
+            favouriteId: favourite.id,
+            productId: id,
+          });
         }
       } else {
-        return await addToFavouritesHandler(productId);
+        await addToFavouritesMutation.mutateAsync(id);
       }
-
-      return false;
     },
     [
-      favouriteStatuses,
+      isFavourited,
       favourites,
-      addToFavouritesHandler,
-      removeFromFavouritesHandler,
+      addToFavouritesMutation,
+      removeFromFavouritesMutation,
     ]
-  );
-
-  // Проверить, добавлен ли продукт в избранное
-  const isFavourited = useCallback(
-    (productId: number) => {
-      return favouriteStatuses[productId] || false;
-    },
-    [favouriteStatuses]
   );
 
   // Получить количество избранных продуктов
@@ -158,18 +65,27 @@ export const useFavourites = () => {
     return favourites.length;
   }, [favourites]);
 
-  // Инициализация при монтировании
-  useEffect(() => {
-    loadFavourites();
-  }, [loadFavourites]);
+  // Проверить статус избранного для конкретного продукта
+  const checkFavouriteStatus = useCallback(
+    async (id: number) => {
+      // Используем данные из кеша или делаем новый запрос
+      const status = favourites.find((fav) => fav.product.id === id);
+      return {
+        success: true,
+        isFavourited: !!status,
+        favouriteId: status?.id,
+      };
+    },
+    [favourites]
+  );
 
   return {
     favourites,
-    loading,
+    loading: favouritesLoading || statusLoading,
     isFavourited,
     getFavouritesCount,
-    addToFavourites: addToFavouritesHandler,
-    removeFromFavourites: removeFromFavouritesHandler,
+    addToFavourites: addToFavouritesMutation.mutateAsync,
+    removeFromFavourites: removeFromFavouritesMutation.mutateAsync,
     toggleFavourite,
     checkFavouriteStatus,
     loadFavourites,

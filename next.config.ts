@@ -15,9 +15,20 @@ const nextConfig: NextConfig = {
         hostname: "weapon-be-marketplace.onrender.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "strapi-aws-s3-images-storage.s3.eu-north-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
-    // Отключаем оптимизацию для внешних изображений
-    unoptimized: true,
+    // Включаем оптимизацию изображений
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
+    // Оптимизация качества
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Разрешаем iframe для видео платформ
   async headers() {

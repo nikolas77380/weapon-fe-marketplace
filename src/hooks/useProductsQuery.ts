@@ -10,7 +10,7 @@ import {
   getSellerProductsElastic,
   getSellerProductFiltersElastic,
 } from "@/lib/strapi";
-import { CreateProductData, UpdateProductData } from "@/lib/types";
+import { CreateProductData, UpdateProductData, Product } from "@/lib/types";
 import { queryKeys } from "@/lib/query-keys";
 
 export interface ProductsQueryParams {
@@ -32,19 +32,34 @@ export interface ProductsQueryParams {
 }
 
 // Query hooks
-export const useProductsQuery = (params?: ProductsQueryParams) => {
+export const useProductsQuery = (
+  params?: ProductsQueryParams,
+  initialData?: {
+    data: Product[];
+    meta: {
+      pagination: {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      };
+    };
+  }
+) => {
   return useQuery({
     queryKey: queryKeys.products.list(params),
     queryFn: () => getProducts(params),
     enabled: params !== undefined, // Don't fetch if params are undefined
+    initialData: initialData,
   });
 };
 
-export const useProductQuery = (id: number) => {
+export const useProductQuery = (id: number, initialData?: Product) => {
   return useQuery({
     queryKey: queryKeys.products.detail(id),
     queryFn: () => getProductById(id),
     enabled: !!id,
+    initialData: initialData,
   });
 };
 

@@ -35,13 +35,20 @@ const FavouriteCard = ({
     if (isRemoving) return;
 
     setIsRemoving(true);
-    const success = await removeFromFavourites(favourite.id, product.id);
+    try {
+      await removeFromFavourites({
+        favouriteId: favourite.id,
+        productId: product.id,
+      });
 
-    if (success && onRemove) {
-      onRemove();
+      if (onRemove) {
+        onRemove();
+      }
+    } catch (error) {
+      console.error("Failed to remove from favourites:", error);
+    } finally {
+      setIsRemoving(false);
     }
-
-    setIsRemoving(false);
   };
 
   if (viewMode === "list") {

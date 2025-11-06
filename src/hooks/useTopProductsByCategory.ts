@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { getTopProductsByCategories } from "@/lib/strapi";
+import { Product } from "@/lib/types";
 
-export const useTopProductsByCategory = () => {
+export const useTopProductsByCategory = (initialData?: Product[]) => {
   return useQuery({
     queryKey: ["top-products-by-category"],
     queryFn: async () => {
@@ -16,5 +17,6 @@ export const useTopProductsByCategory = () => {
     staleTime: 5 * 60 * 1000, // 5 минут - данные считаются свежими
     gcTime: 10 * 60 * 1000, // 10 минут - время хранения в кэше
     refetchOnWindowFocus: false, // Не перезапрашивать при фокусе окна
+    initialData: initialData,
   });
 };

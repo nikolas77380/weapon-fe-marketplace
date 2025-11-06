@@ -149,6 +149,7 @@ export const getFavourites = async (): Promise<{
 };
 
 // Проверить, добавлен ли продукт в избранное
+// Используем существующий эндпоинт /api/favourites с фильтрацией
 export const checkIfFavourited = async (
   productId: number
 ): Promise<{
@@ -168,8 +169,9 @@ export const checkIfFavourited = async (
       };
     }
 
+    // Используем существующий эндпоинт с фильтрацией по productId
     const response = await fetch(
-      `${API_BASE_URL}/api/favourites/check?productId=${productId}`,
+      `${API_BASE_URL}/api/favourites?filters[product][id][$eq]=${productId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,8 +189,9 @@ export const checkIfFavourited = async (
     }
 
     const data = await response.json();
-    const isFavourited = data.data?.isFavourited || false;
-    const favouriteId = data.data?.favouriteId || null;
+    const favourites = data.data || [];
+    const isFavourited = favourites.length > 0;
+    const favouriteId = isFavourited ? favourites[0].id : undefined;
 
     return { success: true, isFavourited, favouriteId };
   } catch (error) {

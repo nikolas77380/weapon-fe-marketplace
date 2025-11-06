@@ -16,30 +16,28 @@ export const strapiFetch = async ({
     process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
   }${path}`;
 
-  console.log(`Making ${method} request to:`, url);
-  console.log("Request body:", body);
-
   const response = await fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
     },
     body: body ? JSON.stringify(body) : undefined,
+    // Добавляем кеширование для серверных запросов
+    cache: "no-store", // Всегда получаем свежие данные на сервере
   });
 
   if (!response.ok) {
-    // const errorText = await response.text();
-    // console.error("Response error:", errorText);
-    // throw new Error(`HTTP ${response.status}: ${errorText}`);
-    const errorData = await response.json();
-    throw {
+    const errorData = await response.json().catch(() => ({
+      error: { message: `HTTP ${response.status}` },
+    }));
+    const error = {
       status: response.status,
       message: errorData?.error?.message || "Unknown error",
     };
+    throw error;
   }
 
   const data = await response.json();
-  console.log("Response data:", data);
   return data;
 };
 

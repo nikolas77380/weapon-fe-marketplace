@@ -14,8 +14,9 @@ export const getServerCurrentUser = async (): Promise<UserProfile | null> => {
 
   try {
     const response = await getCurrentUser(token);
-    if (response && "id" in response) {
-      return response;
+    // getCurrentUser возвращает ApiResponse<UserProfile>, который может быть UserProfile или ErrorResponse
+    if (response && "id" in response && !("error" in response)) {
+      return response as UserProfile;
     }
     return null;
   } catch (error) {
