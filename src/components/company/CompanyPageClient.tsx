@@ -31,7 +31,7 @@ const CompanyPageClient = ({
   // Используем данные из query или initialData
   // initialData используется сразу, а хук обновит данные в фоне
   const sellerDataToUse = sellerData || initialSellerData;
-  const sellerMetaToUse = sellerMeta || initialSellerMeta;
+
   // Показываем loading только если нет initialData и идет загрузка
   const isLoading = loading && !initialSellerData;
 

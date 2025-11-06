@@ -508,7 +508,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                 value="products"
                 className="text-sm sm:text-base w-full min-[550px]:w-auto h-full py-2"
               >
-                {t("tabProducts.titleProducts")} ({sellerProducts.length})
+                {t("tabProducts.titleProducts")}
               </TabsTrigger>
               <TabsTrigger
                 value="businessInfo"
