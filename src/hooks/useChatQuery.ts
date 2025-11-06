@@ -93,6 +93,12 @@ export const useSendMessageMutation = () => {
         }
       );
 
+      // Делаем refetch сообщений, чтобы получить обновленные данные с сервера
+      // Это важно для получения актуальных данных, включая обновления от других участников
+      await queryClient.refetchQueries({
+        queryKey: queryKeys.chats.messages(variables.chatId),
+      });
+
       await refreshUnreadCount();
     },
   });

@@ -79,6 +79,23 @@ export const ChatList: React.FC<ChatListProps> = ({
 }) => {
   const t = useTranslations("Chat");
   const { currentUser } = useAuthContext();
+
+  // Сортируем чаты по дате последнего сообщения (или updatedAt, если сообщений нет)
+  const sortedChats = [...chats].sort((a, b) => {
+    const getLastMessageDate = (chat: Chat) => {
+      if (chat.messages && chat.messages.length > 0) {
+        return new Date(chat.messages[0].createdAt).getTime();
+      }
+      return new Date(chat.updatedAt).getTime();
+    };
+
+    const dateA = getLastMessageDate(a);
+    const dateB = getLastMessageDate(b);
+
+    // Сортируем по убыванию (самые новые сверху)
+    return dateB - dateA;
+  });
+
   if (loading && !chats.length) {
     return (
       <div className="space-y-4 p-2">
@@ -107,7 +124,7 @@ export const ChatList: React.FC<ChatListProps> = ({
 
   return (
     <div className="">
-      {chats.map((chat) => {
+      {sortedChats.map((chat) => {
         const lastMessage = chat.messages?.[0];
         const isActive = currentChatId === chat.id;
         const hasUnread = hasUnreadMessages(chat, currentUser?.id);
@@ -126,9 +143,15 @@ export const ChatList: React.FC<ChatListProps> = ({
           >
             <div className="p-4 sm:p-5">
               <div className="flex items-start justify-between mb-2">
-                <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900">
-                  {getChatTitle(chat, currentUser?.id)}
-                </h3>
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  {/* Точка главного цвета - показываем только если есть непрочитанные сообщения */}
+                  {hasUnread && (
+                    <div className="h-2 w-2 rounded-full bg-gold-main shrink-0 mt-1.5"></div>
+                  )}
+                  <h3 className="font-semibold text-base sm:text-lg truncate text-gray-900">
+                    {getChatTitle(chat, currentUser?.id)}
+                  </h3>
+                </div>
                 {/* <Badge
                   className={`${getStatusColor(
                     chat.status

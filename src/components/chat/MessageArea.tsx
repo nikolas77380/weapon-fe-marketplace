@@ -22,8 +22,6 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
 }) => {
   const t = useTranslations("Chat");
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-  // Автоскролл к последнему сообщению
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current.querySelector(
@@ -35,9 +33,7 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
     }
   }, [messages]);
 
-  // Показываем скелетон только при первой загрузке, когда нет данных
-  // Не показываем если это просто обновление (isFetching) - данные остаются видимыми
-  if (loading && messages.length === 0 && !isFetching) {
+  if (loading && messages.length === 0) {
     return (
       <div className="flex-1 p-4">
         <div className="space-y-4">
@@ -58,7 +54,7 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
     );
   }
 
-  if (messages.length === 0) {
+  if (messages.length === 0 && !loading && !isFetching) {
     return (
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="text-center">
