@@ -1,5 +1,12 @@
 import { UserProfile, Product } from "@/lib/types";
-import React, { useState, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
+import { debounce } from "lodash";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -87,6 +94,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
 
   const [open, setOpen] = useState(false);
+
+  // Local search state for immediate UI update
+  const [searchInput, setSearchInput] = useState("");
 
   const { categories } = useCategories();
 
@@ -316,16 +326,32 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     setFilters((prev) => ({ ...prev, categoryId, page: 1 }));
   }, []);
 
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Debounced function to update filters
+  const debouncedUpdateFilters = useRef(
+    debounce((searchValue: string) => {
       setFilters((prev) => ({
         ...prev,
-        search: e.target.value,
+        search: searchValue,
         categoryId: null,
         page: 1,
       }));
+    }, 300)
+  ).current;
+
+  // Cleanup debounced function on unmount
+  useEffect(() => {
+    return () => {
+      debouncedUpdateFilters.cancel();
+    };
+  }, [debouncedUpdateFilters]);
+
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setSearchInput(value); // Update input immediately
+      debouncedUpdateFilters(value); // Update filters with debounce
     },
-    []
+    [debouncedUpdateFilters]
   );
 
   const handlePageChange = useCallback((page: number) => {
@@ -360,8 +386,10 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       condition: [],
       categories: [],
     });
+    setSearchInput(""); // Reset search input
+    debouncedUpdateFilters.cancel(); // Cancel any pending debounced calls
     setViewMode("grid");
-  }, [setViewMode]);
+  }, [setViewMode, debouncedUpdateFilters]);
 
   const handleOpenFilterDrawer = useCallback(() => {
     setIsFilterDrawerOpen(true);
@@ -753,7 +781,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                         <div className="relative flex-1 sm:w-auto sm:flex-none lg:flex-1 lg:max-w-xs">
                           <Input
                             placeholder={t("tabProducts.placeholderSearch")}
-                            value={filters.search}
+                            value={searchInput}
                             onChange={handleSearchChange}
                             className="pl-8 sm:pl-9 focus-visible:outline-none focus-visible:ring-0 
                             focus-visible:ring-offset-0 placeholder:text-[#B3B3B3] h-8 sm:h-10 w-full 
