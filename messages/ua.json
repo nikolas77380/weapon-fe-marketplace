@@ -353,6 +353,12 @@
         "active": "Активний",
         "archived": "Архівований"
       },
+      "productAccessibility": {
+        "label": "Доступність",
+        "placeholder": "Оберіть доступність",
+        "active": "Активний",
+        "archived": "Архівований"
+      },
       "productCondition": {
         "new": "Новий",
         "used": "Б/У"
@@ -372,6 +378,7 @@
         "currencyRequired": "Валюта є обов'язковою",
         "countGreaterThanZero": "Кількість повинна бути більше 0",
         "productStatusRequired": "Статус товару є обов'язковим",
+        "productAccessibilityRequired": "Доступність товару є обов'язковою",
         "maxImages": "Максимум 5 зображень дозволено",
         "minImages": "Потрібно хоча б одне зображення"
       }

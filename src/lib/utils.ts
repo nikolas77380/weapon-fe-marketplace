@@ -349,6 +349,19 @@ export const getProductConditionOptions = (t: (key: string) => string) =>
     },
   ] as const;
 
+// Function to get translated product accessibility options (active/archived)
+export const getProductAccessibilityOptions = (t: (key: string) => string) =>
+  [
+    {
+      key: "active",
+      label: t("active"),
+    },
+    {
+      key: "archived",
+      label: t("archived"),
+    },
+  ] as const;
+
 export const PRODUCT_CURRENCY_FORM = [
   {
     key: "USD",
