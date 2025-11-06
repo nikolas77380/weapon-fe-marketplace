@@ -12,6 +12,7 @@ export const editProductSchema = z.object({
   sku: z.string().optional(),
   status: z.enum(["available", "unavailable"]).optional(),
   condition: z.enum(["new", "used"]).optional(),
+  activityStatus: z.enum(["active", "archived"]).optional(),
   quantity: z.number().optional(),
   manufacturer: z.string().optional(),
   model: z.string().optional(),

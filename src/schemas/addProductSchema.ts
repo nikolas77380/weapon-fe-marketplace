@@ -23,6 +23,11 @@ export const createAddProductSchema = (t: (key: string) => string) => {
     productStatus: z.enum(["available", "unavailable"], {
       message: t("validation.productStatusRequired"),
     }),
+    productAccessibility: z
+      .enum(["active", "archived"], {
+        message: t("validation.productAccessibilityRequired"),
+      })
+      .optional(),
     productVideoUrl: z
       .union([z.string().url(), z.literal(""), z.undefined()])
       .optional(),
@@ -52,6 +57,7 @@ export const addProductSchema = z.object({
   productStatus: z.enum(["available", "unavailable"], {
     message: "Product status is required",
   }),
+  productAccessibility: z.enum(["active", "archived"]).optional(),
   productVideoUrl: z.string().url().optional().or(z.literal("")),
   productImages: z
     .array(z.instanceof(File))
