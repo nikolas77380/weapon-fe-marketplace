@@ -66,16 +66,13 @@ const Filters = ({
   const [openAvailability, setOpenAvailability] = useState<string>("");
   const [openCondition, setOpenCondition] = useState<string>("");
   const { categories: allCategories } = useCategories();
-  console.log(availableCategories);
   const getCategoryName = (category: {
     key: string;
     name?: string;
     translate_ua?: string;
   }) => {
-    console.log("category", category);
     if (!category.name && !category.translate_ua) {
       const categoryItem = allCategories.find((c) => c.slug === category.key);
-      console.log("availableCategories", availableCategories);
       return currentLocale === "en"
         ? categoryItem?.name
         : categoryItem?.translate_ua;
@@ -119,8 +116,6 @@ const Filters = ({
         : availability;
     }
   };
-
-  console.log(elasticFilters.categories);
 
   return (
     <div
