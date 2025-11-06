@@ -2,43 +2,77 @@ import { SellerFormValues } from "@/schemas/sellerSchema";
 import { Category, CreateProductData, UpdateProductData } from "./types";
 import { getSessionTokenFromCookie } from "./auth";
 
+// Таймаут для запросов (20 секунд для медленных API)
+const FETCH_TIMEOUT = 20000;
+
 // Base Strapi API client for public requests (without JWT)
 export const strapiFetch = async ({
   path,
   method,
   body,
+  timeout = FETCH_TIMEOUT,
 }: {
   path: string;
   method: string;
   body?: unknown;
+  timeout?: number;
 }) => {
-  const url = `${
-    process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337"
-  }${path}`;
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: body ? JSON.stringify(body) : undefined,
-    // Добавляем кеширование для серверных запросов
-    cache: "no-store", // Всегда получаем свежие данные на сервере
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({
-      error: { message: `HTTP ${response.status}` },
-    }));
-    const error = {
-      status: response.status,
-      message: errorData?.error?.message || "Unknown error",
-    };
-    throw error;
+  if (!baseUrl) {
+    console.error("[strapiFetch] NEXT_PUBLIC_STRAPI_URL is not set");
+    throw new Error("API URL is not configured");
   }
 
-  const data = await response.json();
-  return data;
+  const url = `${baseUrl}${path}`;
+
+  // Создаем AbortController для таймаута
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      // Добавляем кеширование для серверных запросов
+      cache: "no-store", // Всегда получаем свежие данные на сервере
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({
+        error: { message: `HTTP ${response.status}` },
+      }));
+      const error = {
+        status: response.status,
+        message: errorData?.error?.message || "Unknown error",
+      };
+      console.error(
+        `[strapiFetch] Error ${response.status} for ${path}:`,
+        error
+      );
+      throw error;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+
+    // Проверяем, это таймаут или другая ошибка
+    if (error instanceof Error && error.name === "AbortError") {
+      console.error(`[strapiFetch] Timeout after ${timeout}ms for ${path}`);
+      throw new Error(`Request timeout: ${path} took longer than ${timeout}ms`);
+    }
+
+    console.error(`[strapiFetch] Network error for ${path}:`, error);
+    throw error;
+  }
 };
 
 // Protected Strapi API client for authenticated requests (with JWT)
@@ -174,43 +208,12 @@ export const uploadSellerAvatar = async ({
 
 export const getCategories = async (): Promise<Category[]> => {
   try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
-    const url = `${baseUrl}/api/categories/public`;
-
-    console.log("Fetching categories from:", url);
-
-    const response = await fetch(url, {
+    // Используем strapiFetch для единообразия и таймаутов
+    const data = await strapiFetch({
+      path: "/api/categories/public",
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      signal: AbortSignal.timeout(10000),
+      timeout: 20000, // 20 секунд для категорий
     });
-
-    console.log("Response status:", response.status);
-    console.log("Response ok:", response.ok);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Error response:", errorText);
-
-      if (response.status === 404) {
-        throw new Error(
-          "Categories API endpoint not found. Please check if Strapi server is running and categories are configured."
-        );
-      } else if (response.status === 500) {
-        throw new Error(
-          "Internal server error. Please check Strapi server logs."
-        );
-      } else {
-        throw new Error(
-          `HTTP error! status: ${response.status} - ${errorText}`
-        );
-      }
-    }
-
-    const data = await response.json();
 
     if (!data.data || !Array.isArray(data.data)) {
       console.error("Invalid data structure:", data);
@@ -227,7 +230,10 @@ export const getCategories = async (): Promise<Category[]> => {
       );
     }
 
-    if (error instanceof Error && error.name === "AbortError") {
+    if (
+      error instanceof Error &&
+      (error.name === "AbortError" || error.message.includes("timeout"))
+    ) {
       throw new Error(
         "Request timeout. Strapi server might be slow or unavailable."
       );

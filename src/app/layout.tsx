@@ -44,10 +44,16 @@ export default async function RootLayout({
   const messages = await getMessages();
   // Загружаем данные пользователя на сервере для навбара
   // Явно сериализуем данные для передачи в клиентский компонент
-  const userData = await getServerCurrentUser();
-  const initialUser = userData
-    ? (JSON.parse(JSON.stringify(userData)) as typeof userData)
-    : null;
+  let initialUser = null;
+  try {
+    const userData = await getServerCurrentUser();
+    initialUser = userData
+      ? (JSON.parse(JSON.stringify(userData)) as typeof userData)
+      : null;
+  } catch (error) {
+    console.error("[RootLayout] Error loading user data:", error);
+    // Продолжаем работу без данных пользователя
+  }
 
   return (
     <html lang={locale}>

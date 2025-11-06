@@ -63,9 +63,26 @@ const CategoryContentClient: React.FC<CategoryContentClientProps> = ({
 }) => {
   const t = useTranslations("TopPropositions");
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Проверяем валидность initialData
+  useEffect(() => {
+    if (!initialProducts || !initialPromos || !initialCategories) {
+      console.error("[CategoryContentClient] Invalid initial data:", {
+        hasProducts: !!initialProducts,
+        hasPromos: !!initialPromos,
+        hasCategories: !!initialCategories,
+      });
+      setError("Invalid initial data");
+    }
+  }, [initialProducts, initialPromos, initialCategories]);
 
   // Используем React Query с initialData
-  const { data: response, isLoading } = useProductsQuery(
+  const {
+    data: response,
+    isLoading,
+    error: queryError,
+  } = useProductsQuery(
     {
       pagination: {
         page: 1,
@@ -78,13 +95,23 @@ const CategoryContentClient: React.FC<CategoryContentClientProps> = ({
 
   // Используем данные из query или initialData
   const productsResponse = response || initialProducts;
-  const loading = isLoading && !initialProducts;
+  const loading = isLoading && !initialProducts?.data?.length;
 
   const { categories } = useCategories(initialCategories);
   const { data: promosResponse } = usePromosQuery(undefined, initialPromos);
 
   // Используем данные из query или initialData
   const promos = promosResponse || initialPromos;
+
+  // Логируем ошибки
+  useEffect(() => {
+    if (queryError) {
+      console.error("[CategoryContentClient] Query error:", queryError);
+      setError(
+        queryError instanceof Error ? queryError.message : "Unknown error"
+      );
+    }
+  }, [queryError]);
 
   // Отключаем isInitialLoad после первой успешной загрузки
   useEffect(() => {
@@ -111,6 +138,20 @@ const CategoryContentClient: React.FC<CategoryContentClientProps> = ({
     }
     return [];
   }, [categories, initialCategories]);
+
+  // Если есть критическая ошибка, показываем сообщение
+  if (error && !initialProducts?.data?.length) {
+    return (
+      <div className="flex h-full w-full items-center justify-center p-8">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">Error loading content: {error}</p>
+          <p className="text-gray-600 text-sm">
+            Please refresh the page or try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full w-full gap-0 lg:gap-10 overflow-hidden">
@@ -145,7 +186,7 @@ const CategoryContentClient: React.FC<CategoryContentClientProps> = ({
         <TopProductsSliderLazy initialTopProducts={initialTopProducts} />
 
         {/* Products Grid */}
-        {!loading && productsResponse?.data.length > 0 && (
+        {!loading && productsResponse?.data?.length > 0 && (
           <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-800 px-2 sm:px-0">
             {t("title")}
           </h3>
@@ -160,10 +201,14 @@ const CategoryContentClient: React.FC<CategoryContentClientProps> = ({
               count={6}
               className="w-full"
             />
-          ) : (
-            productsResponse?.data.map((item: Product) => (
+          ) : productsResponse?.data?.length > 0 ? (
+            productsResponse.data.map((item: Product) => (
               <ShopCard item={item} key={item.id} />
             ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              No products found
+            </div>
           )}
         </div>
       </div>
