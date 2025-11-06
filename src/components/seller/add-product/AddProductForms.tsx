@@ -24,6 +24,7 @@ import {
   STORAGE_KEY,
   getProductConditionOptions,
   getProductStatusOptions,
+  getProductAccessibilityOptions,
 } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
@@ -43,6 +44,9 @@ const AddProductForms = ({
     "AddProduct.addProductForm.productCondition"
   );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const tAccessibility = useTranslations(
+    "AddProduct.addProductForm.productAccessibility"
+  );
 
   const [savedFormData, setSavedFormData, removeSavedFormData] =
     useLocalStorage<AddProductSchemaValues | null>(STORAGE_KEY, null);
@@ -82,6 +86,7 @@ const AddProductForms = ({
       productCount: undefined,
       productImages: [],
       productStatus: "available",
+      productAccessibility: undefined,
       productVideoUrl: "",
     },
   });
@@ -190,6 +195,7 @@ const AddProductForms = ({
         sku: values.productSku || undefined,
         status: values.productStatus,
         condition: values.productCondition,
+        activityStatus: values.productAccessibility,
         videoUrl:
           values.productVideoUrl && values.productVideoUrl.trim() !== ""
             ? values.productVideoUrl.trim()
@@ -197,7 +203,9 @@ const AddProductForms = ({
         attributesJson: {
           manufacturer: values.productManufacturer,
           model: values.productModel,
-          ...(values.productCount && values.productCount > 0 ? { count: values.productCount } : {}),
+          ...(values.productCount && values.productCount > 0
+            ? { count: values.productCount }
+            : {}),
         },
       };
 
@@ -222,6 +230,7 @@ const AddProductForms = ({
         productCount: undefined,
         productImages: [],
         productStatus: "available",
+        productAccessibility: undefined,
         productVideoUrl: "",
       });
 
@@ -256,6 +265,7 @@ const AddProductForms = ({
       productCount: undefined,
       productImages: [],
       productStatus: "available",
+      productAccessibility: undefined,
     });
 
     toast.success(t("toastSuccessClear"));
@@ -457,6 +467,18 @@ const AddProductForms = ({
               placeholder={t("placeholderStatus")}
               className="w-full min-[600px]:w-1/2 rounded-sm"
               options={getProductStatusOptions(tStatus)}
+            />
+            {/* Product Accessibility */}
+            <FormFieldComponent
+              control={form.control}
+              name="productAccessibility"
+              label={tAccessibility("label")}
+              type="select"
+              placeholder={tAccessibility("placeholder")}
+              className="w-full min-[600px]:w-1/2 rounded-sm"
+              options={getProductAccessibilityOptions((key: string) =>
+                tAccessibility(key)
+              )}
             />
           </div>
 

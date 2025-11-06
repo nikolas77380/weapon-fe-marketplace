@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import {
   getProductConditionOptions,
   getProductStatusOptions,
+  getProductAccessibilityOptions,
 } from "@/lib/utils";
 import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
@@ -52,6 +53,9 @@ const EditProductForm = ({
     "AddProduct.addProductForm.productCondition"
   );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const tAccessibility = useTranslations(
+    "AddProduct.addProductForm.productAccessibility"
+  );
 
   const router = useRouter();
 
@@ -116,6 +120,7 @@ const EditProductForm = ({
       sku: product.sku || "",
       status: product.status || "available",
       condition: product.condition || "new",
+      activityStatus: product.activityStatus || undefined,
       quantity: product.attributesJson?.count || undefined,
       manufacturer: product.attributesJson?.manufacturer || "",
       model: product.attributesJson?.model || "",
@@ -137,6 +142,7 @@ const EditProductForm = ({
         sku: product.sku || "",
         status: product.status || "available",
         condition: product.condition || "new",
+        activityStatus: product.activityStatus || undefined,
         quantity: product.attributesJson?.count || undefined,
         manufacturer: product.attributesJson?.manufacturer || "",
         model: product.attributesJson?.model || "",
@@ -157,6 +163,7 @@ const EditProductForm = ({
     product.sku,
     product.status,
     product.condition,
+    product.activityStatus,
     product.videoUrl,
     product.attributesJson?.count,
     product.attributesJson?.manufacturer,
@@ -200,6 +207,7 @@ const EditProductForm = ({
         sku: values.sku,
         status: values.status,
         condition: values.condition,
+        activityStatus: values.activityStatus,
         videoUrl:
           values.videoUrl && values.videoUrl.trim() !== ""
             ? values.videoUrl.trim()
@@ -376,6 +384,19 @@ const EditProductForm = ({
                 )}
                 <FormMessage />
               </FormItem>
+            )}
+          />
+
+          {/* Product Accessibility */}
+          <FormFieldComponent
+            control={form.control}
+            name="activityStatus"
+            label={tAccessibility("label")}
+            type="select"
+            placeholder={tAccessibility("placeholder")}
+            className="w-full rounded-sm"
+            options={getProductAccessibilityOptions((key: string) =>
+              tAccessibility(key)
             )}
           />
 
