@@ -8,8 +8,31 @@ const HomePage = async () => {
   try {
     initialData = await getHomePageData();
   } catch (error) {
-    console.error("Failed to load homepage data on server:", error);
+    console.error("[HomePage] Failed to load homepage data on server:", error);
     // Продолжаем работу, данные загрузятся на клиенте
+    initialData = {
+      products: {
+        data: [],
+        meta: {
+          pagination: {
+            page: 1,
+            pageSize: 12,
+            pageCount: 0,
+            total: 0,
+          },
+        },
+      },
+      promos: {
+        data: [],
+      },
+      categories: [],
+      topProducts: [],
+    };
+  }
+
+  // Проверяем, что данные валидны
+  if (!initialData) {
+    console.error("[HomePage] initialData is null or undefined");
     initialData = {
       products: {
         data: [],
