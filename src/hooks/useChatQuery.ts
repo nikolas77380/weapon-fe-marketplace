@@ -10,9 +10,10 @@ import {
 import { Chat, Message, CreateChatRequest } from "@/types/chat";
 import { queryKeys } from "@/lib/query-keys";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
+import { User } from "@/types/chat";
 
 // Хук для получения списка чатов пользователя
-export const useUserChatsQuery = () => {
+export const useUserChatsQuery = (initialChats?: Chat[]) => {
   const { refreshUnreadCount } = useUnreadChats();
 
   return useQuery({
@@ -23,6 +24,7 @@ export const useUserChatsQuery = () => {
       refreshUnreadCount();
       return chats;
     },
+    initialData: initialChats,
     staleTime: 30 * 1000, // 30 секунд
     refetchOnWindowFocus: false,
   });
@@ -61,7 +63,7 @@ export const useChatMessagesQuery = (
 };
 
 // Хук для отправки сообщения
-export const useSendMessageMutation = () => {
+export const useSendMessageMutation = (currentUser?: User) => {
   const queryClient = useQueryClient();
   const { refreshUnreadCount } = useUnreadChats();
 
@@ -69,27 +71,93 @@ export const useSendMessageMutation = () => {
     mutationFn: async (data: { text: string; chatId: number }) => {
       return await sendMessage(data);
     },
-    onSuccess: async (newMessage, variables) => {
-      // Обновляем список сообщений в кеше
+    // Оптимистичное обновление
+    onMutate: async ({ text, chatId }) => {
+      // Отменяем исходящие запросы для этого чата
+      await queryClient.cancelQueries({
+        queryKey: queryKeys.chats.messages(chatId),
+      });
+
+      // Сохраняем предыдущие сообщения для отката
+      const previousMessages = queryClient.getQueryData<Message[]>(
+        queryKeys.chats.messages(chatId)
+      );
+
+      // Получаем текущий чат из кеша
+      const chats = queryClient.getQueryData<Chat[]>(queryKeys.chats.list());
+      const currentChat = chats?.find((c) => c.id === chatId);
+
+      // Используем переданного пользователя или берем из чата
+      const sender = currentUser || currentChat?.participants?.[0];
+
+      // Создаем временное оптимистичное сообщение
+      // Используем отрицательный ID для временных сообщений
+      const tempId = -Date.now();
+      const optimisticMessage = {
+        id: tempId,
+        text,
+        chat: currentChat || ({} as Chat),
+        sender: sender,
+        isRead: false,
+        readBy: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isOptimistic: true,
+      } as Message & { isOptimistic?: boolean };
+
+      // Оптимистично добавляем сообщение
       queryClient.setQueryData<Message[]>(
-        queryKeys.chats.messages(variables.chatId),
+        queryKeys.chats.messages(chatId),
         (oldMessages = []) => {
-          // Проверяем, нет ли уже такого сообщения (на случай дубликатов)
-          const exists = oldMessages.some((msg) => msg.id === newMessage.id);
+          // Проверяем, нет ли уже такого временного сообщения
+          const exists = oldMessages.some(
+            (msg) =>
+              (msg as any).isOptimistic && msg.id === optimisticMessage.id
+          );
           if (exists) return oldMessages;
-          return [...oldMessages, newMessage];
+          return [...oldMessages, optimisticMessage];
         }
       );
 
-      // Обновляем список чатов
+      // Обновляем список чатов (обновляем updatedAt)
       queryClient.setQueryData<Chat[]>(
         queryKeys.chats.list(),
         (oldChats = []) => {
           return oldChats.map((chat) =>
-            chat.id === variables.chatId
+            chat.id === chatId
               ? { ...chat, updatedAt: new Date().toISOString() }
               : chat
           );
+        }
+      );
+
+      return { previousMessages };
+    },
+    onError: (err, variables, context) => {
+      // Откатываем при ошибке
+      if (context?.previousMessages !== undefined) {
+        queryClient.setQueryData(
+          queryKeys.chats.messages(variables.chatId),
+          context.previousMessages
+        );
+      }
+    },
+    onSuccess: async (newMessage, variables) => {
+      // Заменяем временное сообщение на реальное
+      queryClient.setQueryData<Message[]>(
+        queryKeys.chats.messages(variables.chatId),
+        (oldMessages = []) => {
+          // Удаляем все временные сообщения с таким же текстом
+          const filtered = oldMessages.filter(
+            (msg) => !(msg as any).isOptimistic || msg.text !== newMessage.text
+          );
+
+          // Проверяем, нет ли уже такого сообщения (на случай дубликатов)
+          const exists = filtered.some((msg) => msg.id === newMessage.id);
+          if (exists) return filtered;
+
+          // Добавляем реальное сообщение
+          return [...filtered, newMessage];
         }
       );
 

@@ -5,7 +5,7 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
-import { Chat, Message } from "@/types/chat";
+import { Chat, Message, User } from "@/types/chat";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/query-keys";
 import {
@@ -15,8 +15,9 @@ import {
   useMarkChatAsReadMutation,
   useFinishChatMutation,
 } from "./useChatQuery";
+import { UserProfile } from "@/lib/types";
 
-export const useChat = () => {
+export const useChat = (initialChats?: Chat[], currentUser?: UserProfile) => {
   const [currentChatId, setCurrentChatId] = useState<number | null>(null);
   const [isSwitchingChat, setIsSwitchingChat] = useState(false);
   const lastMarkedReadRef = useRef<number | null>(null);
@@ -34,7 +35,7 @@ export const useChat = () => {
     isLoading: chatsLoading,
     error: chatsError,
     refetch: loadUserChats,
-  } = useUserChatsQuery();
+  } = useUserChatsQuery(initialChats);
 
   // Получаем статус текущего чата для polling
   const currentChatStatus = currentChatId
@@ -198,7 +199,26 @@ export const useChat = () => {
   const messagesError = messagesQuery.error;
 
   // Мутации
-  const sendMessageMutation = useSendMessageMutation();
+  // Преобразуем UserProfile в формат User для мутации
+  const currentUserForMutation: User | undefined = currentUser
+    ? {
+        id: currentUser.id,
+        username: currentUser.username,
+        email: currentUser.email,
+        displayName: currentUser.displayName || currentUser.username,
+        confirmed: currentUser.confirmed,
+        blocked: currentUser.blocked,
+        createdAt: currentUser.createdAt,
+        updatedAt: currentUser.updatedAt,
+        metadata: currentUser.metadata
+          ? {
+              avatar: currentUser.metadata.avatar,
+              companyName: currentUser.metadata.companyName,
+            }
+          : undefined,
+      }
+    : undefined;
+  const sendMessageMutation = useSendMessageMutation(currentUserForMutation);
   const markAsReadMutation = useMarkChatAsReadMutation();
   const finishChatMutation = useFinishChatMutation();
 
