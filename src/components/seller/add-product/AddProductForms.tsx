@@ -372,7 +372,7 @@ const AddProductForms = ({
             </h2>
             {/* Product Prices */}
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col items-start sm:items-end sm:flex-row gap-4">
                 <FormFieldComponent
                   control={form.control}
                   name="productPrice"
@@ -400,7 +400,7 @@ const AddProductForms = ({
                   name="productCurrency"
                   label={t("labelCurrency") || "Currency"}
                   type="select"
-                  className="w-full sm:w-32"
+                  className="w-full sm:w-32 !h-10 rounded-lg"
                   classNameLabel="bg-background"
                   options={[
                     { key: "USD", label: "USD", value: "USD" },
