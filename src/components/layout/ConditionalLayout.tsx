@@ -2,17 +2,20 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import Navbar from "@/components/navbar/Navbar";
 import Footer from "@/components/landing/Footer";
 import { useNavigation } from "@/context/NavigationContext";
 import { useGlobalLinkHandler } from "@/hooks/useGlobalLinkHandler";
+import NavbarClient from "@/components/navbar/NavbarClient";
+import { UserProfile } from "@/lib/types";
 
 interface ConditionalLayoutProps {
   children: React.ReactNode;
+  initialUser?: UserProfile | null;
 }
 
 export default function ConditionalLayout({
   children,
+  initialUser,
 }: ConditionalLayoutProps) {
   const pathname = usePathname();
   const { setIsNavigating } = useNavigation();
@@ -57,7 +60,11 @@ export default function ConditionalLayout({
 
   return (
     <>
-      <div className="relative">{!shouldHideNavbarFooter && <Navbar />}</div>
+      <div className="relative">
+        {!shouldHideNavbarFooter && (
+          <NavbarClient initialUser={initialUser ?? null} />
+        )}
+      </div>
       {children}
       {!shouldHideFooter && <Footer />}
     </>

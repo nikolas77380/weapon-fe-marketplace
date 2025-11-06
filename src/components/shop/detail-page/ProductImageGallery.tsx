@@ -61,6 +61,8 @@ const ProductImageGallery = ({
             }
             alt={selectedImage.name || productTitle}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+            priority={selectedImageIndex === 0}
             className="object-contain aspect-square"
             onLoad={handleImageLoad}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
@@ -70,6 +72,8 @@ const ProductImageGallery = ({
             src="/shop/1.jpg"
             alt="No image available"
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
+            priority
             className="object-cover"
             onLoad={handleImageLoad}
           />
@@ -96,6 +100,8 @@ const ProductImageGallery = ({
                 }
                 alt={image.name || productTitle}
                 fill
+                sizes="80px"
+                loading="lazy"
                 className="object-contain aspect-square p-1"
                 onError={(e) => handleImageError(e, "/shop/1.jpg")}
               />

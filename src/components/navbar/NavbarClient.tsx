@@ -3,7 +3,6 @@
 import BuyerNavbar from "../buyer/navbar/BuyerNavbar";
 import { useAuthContext } from "@/context/AuthContext";
 import SellerNavbar from "../buyer/navbar/SellerNavbar";
-import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
 import CurrencySwitcher from "../ui/CurrencySwitcher";
@@ -13,20 +12,60 @@ import { useTranslations } from "next-intl";
 import CatalogDropdown from "./CatalogDropdown";
 import MobileDrawer from "./MobileDrawer";
 import MobileCatalog from "./MobileCatalog";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useCategories } from "@/hooks/useCategories";
 import { NavbarSearch } from "../search/NavbarSearch";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { UserProfile } from "@/lib/types";
 
-const Navbar = () => {
-  const { currentUser, currentUserLoading, handleLogout } = useAuthContext();
+interface NavbarClientProps {
+  initialUser?: UserProfile | null;
+}
+
+const NavbarClient: React.FC<NavbarClientProps> = ({ initialUser }) => {
+  const {
+    currentUser,
+    currentUserLoading,
+    handleLogout,
+    setCurrentUser,
+    setCurrentUserLoading,
+  } = useAuthContext();
   const router = useRouter();
   const t = useTranslations("Navbar");
   const { getMainCategories, categories } = useCategories();
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isMobileCatalogOpen, setIsMobileCatalogOpen] = useState(false);
+  const hasInitializedUser = useRef(false);
+
+  // Синхронизируем initialUser с контекстом при монтировании
+  useEffect(() => {
+    // Устанавливаем initialUser только один раз при монтировании
+    if (initialUser && !hasInitializedUser.current) {
+      hasInitializedUser.current = true;
+
+      // Если контекст еще загружается, пропускаем загрузку и используем initialUser
+      if (currentUserLoading) {
+        setCurrentUserLoading(false);
+      }
+
+      // Устанавливаем initialUser только если его еще нет в контексте
+      if (!currentUser) {
+        setCurrentUser(initialUser);
+      }
+    }
+  }, [
+    initialUser,
+    currentUser,
+    currentUserLoading,
+    setCurrentUser,
+    setCurrentUserLoading,
+  ]);
+
+  // Используем currentUser из контекста или initialUser
+  const user: UserProfile | null = currentUser || initialUser || null;
+  const isLoading = currentUserLoading && !initialUser;
 
   const handleToggleCatalog = useCallback(() => {
     setIsCatalogOpen(!isCatalogOpen);
@@ -65,7 +104,6 @@ const Navbar = () => {
           </button>
 
           <div className="mr-1 lg:mr-0 flex-shrink-0">
-            {/* <Logo /> */}
             <Link
               href="/"
               className="block w-19 h-10 sm:w-20 sm:h-9 md:w-24 md:h-11 lg:w-28 lg:h-12 xl:w-32 xl:h-12"
@@ -75,6 +113,7 @@ const Navbar = () => {
                 alt="logo"
                 width={320}
                 height={220}
+                sizes="(max-width: 640px) 76px, (max-width: 1024px) 112px, 128px"
                 className="w-full h-full object-contain"
                 priority
               />
@@ -122,14 +161,14 @@ const Navbar = () => {
             className="text-white"
           />
         </div>
-        {!currentUserLoading && currentUser ? (
+        {!isLoading && user ? (
           <>
             {/* Desktop Navigation for authorized users */}
             <div className="hidden lg:block">
-              {currentUser.role.name === "buyer" ? (
-                <BuyerNavbar user={currentUser} onLogout={handleLogout} />
+              {user.role.name === "buyer" ? (
+                <BuyerNavbar user={user} onLogout={handleLogout} />
               ) : (
-                <SellerNavbar user={currentUser} onLogout={handleLogout} />
+                <SellerNavbar user={user} onLogout={handleLogout} />
               )}
             </div>
           </>
@@ -190,7 +229,7 @@ const Navbar = () => {
       <MobileDrawer
         isOpen={isMobileDrawerOpen}
         onClose={handleCloseMobileDrawer}
-        currentUser={currentUser}
+        currentUser={user}
         onOpenCatalog={handleOpenMobileCatalog}
         onLogout={handleLogout}
       />
@@ -206,4 +245,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarClient;

@@ -1,13 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPromos, getPromoById } from "@/lib/strapi";
 import { queryKeys } from "@/lib/query-keys";
+import { Promo } from "@/lib/types";
 
 export interface PromosQueryParams {
   category?: number;
   categorySlug?: string;
 }
 
-export const usePromosQuery = (params?: PromosQueryParams) => {
+export const usePromosQuery = (
+  params?: PromosQueryParams,
+  initialData?: { data: Promo[] }
+) => {
   const categoryId = params?.category ?? null;
   const categorySlug = params?.categorySlug ?? null;
 
@@ -26,6 +30,7 @@ export const usePromosQuery = (params?: PromosQueryParams) => {
       params === undefined,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
+    initialData: initialData,
   });
 };
 

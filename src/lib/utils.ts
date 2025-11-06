@@ -330,6 +330,10 @@ export const getProductStatusOptions = (t: (key: string) => string) =>
       key: "unavailable",
       label: t("unavailable"),
     },
+    {
+      key: "preorder",
+      label: t("preorder"),
+    },
   ] as const;
 
 // Function to get translated product condition options (new/used)

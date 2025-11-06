@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto, Outfit, Manrope } from "next/font/google";
+import { Inter, Roboto, Manrope } from "next/font/google";
 import "./globals.css";
 import ConditionalLayout from "@/components/layout/ConditionalLayout";
 import { AuthContextProvider } from "@/context/AuthContext";
@@ -10,6 +10,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
 import { NavigationProvider } from "@/context/NavigationContext";
 import { NavigationLoader } from "@/components/ui/NavigationLoader";
+import { getServerCurrentUser } from "@/lib/server-auth";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -41,6 +42,13 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  // Загружаем данные пользователя на сервере для навбара
+  // Явно сериализуем данные для передачи в клиентский компонент
+  const userData = await getServerCurrentUser();
+  const initialUser = userData
+    ? (JSON.parse(JSON.stringify(userData)) as typeof userData)
+    : null;
+
   return (
     <html lang={locale}>
       <body
@@ -51,7 +59,9 @@ export default async function RootLayout({
             <NavigationProvider>
               <AuthContextProvider>
                 <UnreadChatsProvider>
-                  <ConditionalLayout>{children}</ConditionalLayout>
+                  <ConditionalLayout initialUser={initialUser}>
+                    {children}
+                  </ConditionalLayout>
                   <NavigationLoader />
                   <Toaster />
                 </UnreadChatsProvider>

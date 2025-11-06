@@ -29,6 +29,7 @@ const MainBanner = () => {
           alt="hero banner"
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
       </motion.div>

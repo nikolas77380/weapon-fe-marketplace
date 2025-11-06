@@ -346,7 +346,8 @@
       "placeholderVideoUrl": "Введіть посилання на відео",
       "productStatus": {
         "available": "В наявності",
-        "unavailable": "Немає в наявності"
+        "unavailable": "Немає в наявності",
+        "preorder": "Презамовлення"
       },
       "productActivityStatus": {
         "active": "Активний",

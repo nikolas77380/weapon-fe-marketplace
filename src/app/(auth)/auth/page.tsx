@@ -184,7 +184,7 @@ const AuthPage = () => {
                   className="block w-24 h-11 sm:w-28 sm:h-12 md:w-32 md:h-14"
                 >
                   <Image
-                    src="/logo/esviem_defence_logo_2_1.png"
+                    src="/logo/esviem_defence_logo_2_2.png"
                     alt="logo"
                     width={320}
                     height={220}

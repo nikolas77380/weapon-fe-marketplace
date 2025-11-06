@@ -346,7 +346,8 @@
       "placeholderVideoUrl": "Enter your video URL",
       "productStatus": {
         "available": "Available",
-        "unavailable": "Unavailable"
+        "unavailable": "Unavailable",
+        "preorder": "Preorder"
       },
       "productActivityStatus": {
         "active": "Active",

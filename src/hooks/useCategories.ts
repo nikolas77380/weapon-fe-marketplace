@@ -38,7 +38,7 @@ const fallbackCategories: Category[] = [
   },
 ];
 
-export const useCategories = () => {
+export const useCategories = (initialCategories?: Category[]) => {
   const locale = useLocale();
   const {
     data: categories = [],
@@ -58,6 +58,7 @@ export const useCategories = () => {
     },
     staleTime: 5 * 60 * 1000, // 5 минут
     gcTime: 10 * 60 * 1000, // 10 минут
+    initialData: initialCategories,
   });
 
   const getMainCategories = () => {

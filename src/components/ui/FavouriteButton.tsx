@@ -26,9 +26,9 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   size = "md",
   variant = "ghost",
 }) => {
-  const t = useTranslations('ProductDetail');
+  const t = useTranslations("ProductDetail");
 
-  const { isFavourited, toggleFavourite, loading } = useFavourites();
+  const { isFavourited, toggleFavourite, loading } = useFavourites(productId);
 
   const handleToggleFavourite = async () => {
     if (loading) return;
@@ -42,8 +42,8 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   };
 
   const tooltipText = isFavourited(productId)
-    ? t('buttonRemoveFavourite')
-    : t('buttonAddFavourite')
+    ? t("buttonRemoveFavourite")
+    : t("buttonAddFavourite");
 
   return (
     <TooltipProvider>

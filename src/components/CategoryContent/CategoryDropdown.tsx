@@ -85,6 +85,8 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                 alt={category.name}
                 width={16}
                 height={16}
+                sizes="16px"
+                loading="lazy"
                 className="w-4 h-4 mr-2 object-contain flex-shrink-0"
               />
             ) : (

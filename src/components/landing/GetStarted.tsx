@@ -27,6 +27,7 @@ const GetStarted = () => {
           alt="bg started"
           fill
           priority
+          sizes="100vw"
           className="object-cover w-full h-full"
         />
       </motion.div>

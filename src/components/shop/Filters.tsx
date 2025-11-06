@@ -59,14 +59,55 @@ const Filters = ({
   const t = useTranslations("CompanyDetail.tabProducts");
   const currentLocale = useLocale();
 
-  // Состояние для отслеживания открытых аккордеонов
-  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
+  // Состояние для каждого аккордеона отдельно (для type="single" нужна строка или пустая строка)
+  const [openTags, setOpenTags] = useState<string>("");
+  const [openCategories, setOpenCategories] = useState<string>("");
+  const [openAvailability, setOpenAvailability] = useState<string>("");
+  const [openCondition, setOpenCondition] = useState<string>("");
 
   const getCategoryName = (category: Category) => {
     return currentLocale === "en"
       ? category.name
       : category.translate_ua || category.name;
   };
+
+  const prepareConditionName = (condition: string) => {
+    if (currentLocale === "en") {
+      return condition === "new"
+        ? "New"
+        : condition === "used"
+        ? "Used"
+        : condition;
+    } else if (currentLocale === "ua") {
+      return condition === "new"
+        ? "Новый"
+        : condition === "used"
+        ? "Б/У"
+        : condition;
+    }
+  };
+
+  const prepareAvailabilityName = (availability: string) => {
+    if (currentLocale === "en") {
+      return availability === "available"
+        ? "Available"
+        : availability === "preorder"
+        ? "Preorder"
+        : availability === "unavailable"
+        ? "Unavailable"
+        : availability;
+    } else if (currentLocale === "ua") {
+      return availability === "available"
+        ? "Доступний"
+        : availability === "preorder"
+        ? "Презамовлення"
+        : availability === "unavailable"
+        ? "Недоступний"
+        : availability;
+    }
+  };
+
+  console.log(elasticFilters);
 
   return (
     <div
@@ -114,13 +155,9 @@ const Filters = ({
             type="single"
             collapsible
             className="w-full"
-            value={openAccordions.includes("tags") ? "tags" : ""}
+            value={openTags}
             onValueChange={(value) => {
-              setOpenAccordions((prev) =>
-                prev.includes(value)
-                  ? prev.filter((item) => item !== value)
-                  : [...prev, value]
-              );
+              setOpenTags(value);
             }}
           >
             <AccordionItem value="tags" className="border-none">
@@ -156,17 +193,9 @@ const Filters = ({
             type="single"
             collapsible
             className="w-full"
-            value={
-              openAccordions.includes("elastic-categories")
-                ? "elastic-categories"
-                : ""
-            }
+            value={openCategories}
             onValueChange={(value) => {
-              setOpenAccordions((prev) =>
-                prev.includes(value)
-                  ? prev.filter((item) => item !== value)
-                  : [...prev, value]
-              );
+              setOpenCategories(value);
             }}
           >
             <AccordionItem value="elastic-categories" className="border-none">
@@ -224,17 +253,9 @@ const Filters = ({
               type="single"
               collapsible
               className="w-full"
-              value={
-                openAccordions.includes("elastic-availability")
-                  ? "elastic-availability"
-                  : ""
-              }
+              value={openAvailability}
               onValueChange={(value) => {
-                setOpenAccordions((prev) =>
-                  prev.includes(value)
-                    ? prev.filter((item) => item !== value)
-                    : [...prev, value]
-                );
+                setOpenAvailability(value);
               }}
             >
               <AccordionItem
@@ -274,7 +295,7 @@ const Filters = ({
                           htmlFor={`elastic-availability-${item.key}`}
                           className="text-sm font-light cursor-pointer"
                         >
-                          {item.key} ({item.doc_count})
+                          {prepareAvailabilityName(item.key)} ({item.doc_count})
                         </Label>
                       </div>
                     ))}
@@ -292,17 +313,9 @@ const Filters = ({
             type="single"
             collapsible
             className="w-full"
-            value={
-              openAccordions.includes("elastic-condition")
-                ? "elastic-condition"
-                : ""
-            }
+            value={openCondition}
             onValueChange={(value) => {
-              setOpenAccordions((prev) =>
-                prev.includes(value)
-                  ? prev.filter((item) => item !== value)
-                  : [...prev, value]
-              );
+              setOpenCondition(value);
             }}
           >
             <AccordionItem value="elastic-condition" className="border-none">
@@ -334,7 +347,7 @@ const Filters = ({
                         htmlFor={`elastic-condition-${item.key}`}
                         className="text-sm font-light cursor-pointer"
                       >
-                        {item.key} ({item.doc_count})
+                        {prepareConditionName(item.key)} ({item.doc_count})
                       </Label>
                     </div>
                   ))}
