@@ -347,7 +347,7 @@
       "productStatus": {
         "available": "В наявності",
         "unavailable": "Немає в наявності",
-        "preorder": "Презамовлення"
+        "preorder": "Попереднє замовлення"
       },
       "productActivityStatus": {
         "active": "Активний",

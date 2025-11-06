@@ -21,7 +21,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
 import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import MetaForm from "./MetaForm";
 import AddProductPageComponent from "../add-product/AddProductPageComponent";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
@@ -45,6 +45,7 @@ const SellerTabsDesktop = ({
   const tBuyer = useTranslations("BuyerAccountTabs");
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { stats } = useChatStats();
   const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
@@ -64,45 +65,29 @@ const SellerTabsDesktop = ({
     return { activeProducts: active, archivedProducts: archived };
   }, [products]);
   const { unreadChatsCount } = useUnreadChats();
-  // Check sessionStorage on mount and whenever pathname changes
+  // Check URL search params for tab parameter
   useEffect(() => {
-    const savedTab = sessionStorage.getItem("accountTab");
-    if (
-      savedTab === "favourites" ||
-      savedTab === "settings" ||
-      savedTab === "addProduct"
-    ) {
-      setActiveTab(savedTab);
-      setTimeout(() => {
-        sessionStorage.removeItem("accountTab");
-      }, 100);
-    }
-  }, [pathname]);
-
-  // Listen for custom event when already on /account page
-  useEffect(() => {
-    const handleTabChange = (event: CustomEvent<string>) => {
-      const tab = event.detail;
-      if (tab === "addProduct" || tab === "favourites" || tab === "settings") {
+    if (pathname === "/account") {
+      const tab = searchParams.get("tab");
+      if (tab === "favourites" || tab === "settings" || tab === "addProduct") {
         setActiveTab(tab);
-        sessionStorage.removeItem("accountTab");
       }
-    };
-
-    window.addEventListener(
-      "accountTabChange",
-      handleTabChange as EventListener
-    );
-    return () => {
-      window.removeEventListener(
-        "accountTabChange",
-        handleTabChange as EventListener
-      );
-    };
-  }, []);
+    }
+  }, [pathname, searchParams]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    // Update URL when tab is changed manually
+    if (
+      value === "favourites" ||
+      value === "settings" ||
+      value === "addProduct"
+    ) {
+      router.replace(`/account?tab=${value}`, { scroll: false });
+    } else {
+      // Remove tab parameter for default tabs
+      router.replace("/account", { scroll: false });
+    }
   };
 
   return (
