@@ -45,6 +45,7 @@ export interface Chat {
     | "unsuccessfully_completed"
     | "closed";
   messages?: Message[];
+  hasUnreadMessages?: boolean; // Флаг наличия непрочитанных сообщений
   product?: {
     id: number;
     title: string;

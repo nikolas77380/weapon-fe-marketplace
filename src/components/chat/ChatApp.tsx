@@ -89,6 +89,20 @@ export const ChatApp: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.toString(), currentUser?.id, chats.length]);
 
+  // Блокируем скролл body на мобильных, когда открыт чат
+  useEffect(() => {
+    const isMobile = window.innerWidth < 768; // md breakpoint
+    if (isMobile && currentChat) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [currentChat]);
+
   if (!currentUser && !currentUserLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -172,13 +186,17 @@ export const ChatApp: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex border-b border-gray-200 bg-transparent mb-20 min-w-0 overflow-x-hidden w-full max-w-full">
+    <div
+      className="h-screen flex border-b border-gray-200 bg-transparent mb-20 min-w-0 overflow-x-hidden w-full max-w-full"
+      style={{ maxWidth: "100vw", width: "100%" }}
+    >
       {/* Side panel  */}
       <div
         className={cn(
           "w-full md:w-80 bg-white border-r border-gray-200 flex flex-col transition-all duration-300 min-w-0",
           currentChat ? "hidden md:flex" : "flex"
         )}
+        style={{ maxWidth: "100%" }}
       >
         <div className="px-4 py-6 border-b border-gray-200 bg-white sticky top-0 z-10">
           <h1 className="text-xl font-semibold text-gray-900 mb-3">
@@ -200,8 +218,10 @@ export const ChatApp: React.FC = () => {
       <div
         className={cn(
           "flex-1 flex flex-col bg-white transition-all duration-300 min-w-0 overflow-x-hidden w-full max-w-full",
-          !currentChat && "hidden md:flex"
+          !currentChat && "hidden md:flex",
+          currentChat && "fixed md:relative inset-0 md:inset-auto"
         )}
+        style={{ maxWidth: "100vw", width: "100%" }}
       >
         {currentChat ? (
           <ChatInterface
