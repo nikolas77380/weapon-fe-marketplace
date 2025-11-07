@@ -67,29 +67,8 @@ const MobileDrawer = ({
   };
 
   const handleAddProductClick = () => {
-    sessionStorage.setItem("accountTab", "addProduct");
-    // Also save to localStorage for persistence across reloads
-    if (typeof window !== "undefined") {
-      try {
-        const currentTabs = localStorage.getItem("accountTabMobile");
-        let tabsArray: string[] = ["myInquiries"];
-        if (currentTabs) {
-          const parsed = JSON.parse(currentTabs);
-          if (Array.isArray(parsed)) {
-            tabsArray = parsed;
-          }
-        }
-        if (!tabsArray.includes("addProduct")) {
-          tabsArray.push("addProduct");
-        }
-        localStorage.setItem("accountTabMobile", JSON.stringify(tabsArray));
-      } catch (error) {
-        // If localStorage fails, just use default
-        console.error("Error saving to localStorage:", error);
-      }
-    }
     onClose();
-    router.push("/account");
+    router.push("/account?tab=addProduct");
   };
 
   // Block body scrolling when the drawer is open

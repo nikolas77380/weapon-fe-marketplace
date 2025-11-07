@@ -32,7 +32,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import FavouriteCard from "@/components/buyer/buyer-account/FavouriteCard";
 import NotFavouriteState from "@/components/buyer/buyer-account/NotFavouriteState";
 import ViewModeToggle from "@/components/ui/ViewModeToggle";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import MetaForm from "./MetaForm";
 import AddProductPageComponent from "../add-product/AddProductPageComponent";
 import { useUnreadChats } from "@/context/UnreadChatsContext";
@@ -55,33 +55,18 @@ const SellerTabsMobile = ({
   const t = useTranslations("SellerAccountTabs");
   const tBuyer = useTranslations("BuyerAccountTabs");
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { unreadChatsCount } = useUnreadChats();
   const { stats } = useChatStats();
 
   const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
 
-  // Track if we were on /account page
-  const wasOnAccountPage = useRef(pathname === "/account");
-
-  // Initialize from localStorage for persistence across reloads
-  // Only restore if we're on /account page, otherwise use default
-  const [activeAccordion, setActiveAccordion] = useState<string[]>(() => {
-    if (pathname === "/account" && typeof window !== "undefined") {
-      const saved = localStorage.getItem("accountTabMobile");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            return parsed;
-          }
-        } catch {
-          // ignore parse error
-        }
-      }
-    }
-    return ["myInquiries"];
-  });
+  // Initialize accordion state - default to myInquiries
+  const [activeAccordion, setActiveAccordion] = useState<string[]>([
+    "myInquiries",
+  ]);
 
   const [activeProductTab, setActiveProductTab] = useState<
     "active" | "archived"
@@ -120,29 +105,6 @@ const SellerTabsMobile = ({
     return { activeProducts: active, archivedProducts: archived };
   }, [products]);
 
-  // Save to localStorage when activeAccordion changes
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("accountTabMobile", JSON.stringify(activeAccordion));
-    }
-  }, [activeAccordion]);
-
-  // Clear localStorage and reset state when leaving /account page
-  useEffect(() => {
-    if (pathname === "/account") {
-      wasOnAccountPage.current = true;
-    } else if (wasOnAccountPage.current && pathname !== "/account") {
-      // We were on /account and now we're leaving - clear localStorage and reset state
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("accountTabMobile");
-        localStorage.removeItem("accountScrollPosition");
-      }
-      // Reset accordion state to default (only myInquiries open)
-      setActiveAccordion(["myInquiries"]);
-      wasOnAccountPage.current = false;
-    }
-  }, [pathname]);
-
   // Scroll to tab function
   const scrollToTab = useCallback((tabValue: string) => {
     // Try to find by id first
@@ -164,153 +126,62 @@ const SellerTabsMobile = ({
     }
   }, []);
 
-  // Check sessionStorage on mount and whenever pathname changes
-  useEffect(() => {
-    const savedTab = sessionStorage.getItem("accountTab");
-    if (
-      savedTab === "favourites" ||
-      savedTab === "settings" ||
-      savedTab === "addProduct"
-    ) {
-      setActiveAccordion((prev) => {
-        if (!prev.includes(savedTab)) {
-          const newValue = [...prev, savedTab];
-          // Save to localStorage
-          if (typeof window !== "undefined") {
-            localStorage.setItem("accountTabMobile", JSON.stringify(newValue));
-          }
-          // Scroll to the newly opened tab (not the first one)
-          setTimeout(() => {
-            scrollToTab(savedTab);
-          }, 100);
-          return newValue;
-        }
-        // If already open, just scroll to this specific tab
-        setTimeout(() => {
-          scrollToTab(savedTab);
-        }, 100);
-        return prev;
-      });
-      setTimeout(() => {
-        sessionStorage.removeItem("accountTab");
-      }, 100);
-    }
-  }, [pathname, scrollToTab]);
+  // Track previous search params to detect navigation vs page reload
+  const previousSearchParamsRef = useRef<string | null>(null);
+  const isProgrammaticUrlUpdateRef = useRef(false);
+  const isFirstMountRef = useRef(true);
 
-  // Listen for custom event when already on /account page
+  // Check URL search params for tab parameter
   useEffect(() => {
-    const handleTabChange = (event: CustomEvent<string>) => {
-      const tab = event.detail;
-      if (tab === "addProduct" || tab === "favourites" || tab === "settings") {
+    if (pathname === "/account") {
+      const tab = searchParams.get("tab");
+      const currentSearchParams = searchParams.toString();
+      const isUrlChange =
+        previousSearchParamsRef.current !== currentSearchParams;
+
+      if (
+        tab === "favourites" ||
+        tab === "settings" ||
+        tab === "messages" ||
+        tab === "addProduct"
+      ) {
         setActiveAccordion((prev) => {
           if (!prev.includes(tab)) {
             const newValue = [...prev, tab];
-            // Save to localStorage
-            if (typeof window !== "undefined") {
-              localStorage.setItem(
-                "accountTabMobile",
-                JSON.stringify(newValue)
-              );
+            // Scroll only if:
+            // 1. URL changed (navigation happened)
+            // 2. Not a programmatic update (manual accordion change)
+            // 3. Not first mount (page reload)
+            if (
+              isUrlChange &&
+              !isProgrammaticUrlUpdateRef.current &&
+              !isFirstMountRef.current
+            ) {
+              setTimeout(() => {
+                scrollToTab(tab);
+              }, 100);
             }
-            // Scroll to tab after state update
+            return newValue;
+          }
+          // If already open, scroll only if navigation (not reload or programmatic)
+          if (
+            isUrlChange &&
+            !isProgrammaticUrlUpdateRef.current &&
+            !isFirstMountRef.current
+          ) {
             setTimeout(() => {
               scrollToTab(tab);
             }, 100);
-            return newValue;
           }
-          // If already open, just scroll
-          setTimeout(() => {
-            scrollToTab(tab);
-          }, 100);
           return prev;
         });
-        sessionStorage.removeItem("accountTab");
       }
-    };
 
-    window.addEventListener(
-      "accountTabChange",
-      handleTabChange as EventListener
-    );
-    return () => {
-      window.removeEventListener(
-        "accountTabChange",
-        handleTabChange as EventListener
-      );
-    };
-  }, [scrollToTab]);
-
-  // Save scroll position when scrolling
-  useEffect(() => {
-    const handleScroll = () => {
-      if (typeof window !== "undefined") {
-        localStorage.setItem(
-          "accountScrollPosition",
-          window.scrollY.toString()
-        );
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Restore scroll position and tab on mount if we have saved data from localStorage
-  useEffect(() => {
-    const savedTabs = (() => {
-      if (typeof window !== "undefined") {
-        const saved = localStorage.getItem("accountTabMobile");
-        if (saved) {
-          try {
-            const parsed = JSON.parse(saved);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              return parsed;
-            }
-          } catch {
-            // ignore parse error
-          }
-        }
-      }
-      return null;
-    })();
-
-    // Restore scroll position
-    const savedScrollPosition = (() => {
-      if (typeof window !== "undefined") {
-        const saved = localStorage.getItem("accountScrollPosition");
-        if (saved) {
-          const position = parseInt(saved, 10);
-          if (!isNaN(position) && position > 0) {
-            return position;
-          }
-        }
-      }
-      return null;
-    })();
-
-    if (savedScrollPosition) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: savedScrollPosition,
-          behavior: "auto", // Instant scroll on page load
-        });
-      }, 100);
+      previousSearchParamsRef.current = currentSearchParams;
+      isProgrammaticUrlUpdateRef.current = false;
+      isFirstMountRef.current = false;
     }
-
-    if (savedTabs && savedTabs.length > 0) {
-      // Find the last non-default tab (most recently opened) and scroll to it
-      const nonDefaultTabs = savedTabs.filter((tab) => tab !== "myInquiries");
-      const tabToScroll =
-        nonDefaultTabs.length > 0
-          ? nonDefaultTabs[nonDefaultTabs.length - 1] // Last opened tab
-          : savedTabs[0];
-      if (tabToScroll && tabToScroll !== "myInquiries") {
-        setTimeout(() => {
-          scrollToTab(tabToScroll);
-        }, 800); // Wait for page and accordion to render
-      }
-    }
-  }, []); // Only on mount
+  }, [pathname, searchParams, scrollToTab]);
 
   return (
     <div className="block md:hidden w-full px-3 sm:px-6">
@@ -322,9 +193,27 @@ const SellerTabsMobile = ({
           value={activeAccordion}
           onValueChange={(value) => {
             setActiveAccordion(value);
-            // Save to localStorage
-            if (typeof window !== "undefined") {
-              localStorage.setItem("accountTabMobile", JSON.stringify(value));
+            // Update URL when accordion is changed manually
+            // Find the last non-default tab (most recently opened)
+            const nonDefaultTabs = value.filter((tab) => tab !== "myInquiries");
+            const lastTab =
+              nonDefaultTabs.length > 0
+                ? nonDefaultTabs[nonDefaultTabs.length - 1]
+                : null;
+
+            // Mark as programmatic update to prevent scroll
+            isProgrammaticUrlUpdateRef.current = true;
+
+            if (
+              lastTab === "favourites" ||
+              lastTab === "settings" ||
+              lastTab === "addProduct" ||
+              lastTab === "messages"
+            ) {
+              router.replace(`/account?tab=${lastTab}`, { scroll: false });
+            } else {
+              // Remove tab parameter if only default tab is open
+              router.replace("/account", { scroll: false });
             }
           }}
           className="w-full space-y-1"

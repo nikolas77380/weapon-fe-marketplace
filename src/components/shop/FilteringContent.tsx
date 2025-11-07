@@ -19,6 +19,7 @@ import BannerSlider from "../CategoryContent/BannerSlider";
 import SkeletonComponent from "../ui/SkeletonComponent";
 import { Category, Product } from "@/lib/types";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getCategoryPath } from "@/lib/categoryUtils";
 
 interface FilterState {
   minPrice: number;
@@ -212,6 +213,36 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       }
     : {};
 
+  // Build full category hierarchy path for breadcrumbs
+  const intermediateCrumbs = useMemo(() => {
+    if (!currentCategory || categories.length === 0) return undefined;
+
+    const getLocalizedCategoryName = (cat: Category) => {
+      return currentLocale === "en" ? cat.name : cat.translate_ua || cat.name;
+    };
+
+    // Get full category path using categoryUtils
+    const categoryPath = getCategoryPath(categories, currentCategory.id);
+
+    // If path is empty, return undefined (current category will be shown by generateBreadcrumbs)
+    if (categoryPath.length === 0) {
+      return undefined;
+    }
+
+    // Exclude the last category (current category) as it will be shown by generateBreadcrumbs
+    // Map all parent categories in path to breadcrumb items
+    const parentCategories = categoryPath.slice(0, -1);
+
+    if (parentCategories.length === 0) {
+      return undefined;
+    }
+
+    return parentCategories.map((category) => ({
+      href: `/category/${category.slug}`,
+      label: getLocalizedCategoryName(category),
+    }));
+  }, [currentCategory, categories, currentLocale]);
+
   // Memoize priceRange objects to prevent infinite re-renders
   // Берём лимиты из priceStatsByCurrency[selectedCurrency]; fallback на старое поле priceStats
   const currentStats = elasticFilters?.priceStatsByCurrency
@@ -246,7 +277,10 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
 
   return (
     <div className="min-h-screen h-full w-full mt-3 px-2 sm:px-4 lg:px-6">
-      <BreadcrumbComponent customLabels={customLabels} />
+      <BreadcrumbComponent
+        customLabels={customLabels}
+        intermediateCrumbs={intermediateCrumbs}
+      />
       {currentCategory && (
         <div className="mt-5 mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">

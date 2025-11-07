@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Plus } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   NavigationMenu,
   NavigationMenuLink,
@@ -24,20 +24,10 @@ interface BuyerNavbarAuthProps {
 const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
   const t = useTranslations("Navbar.sellerNavbar");
   const router = useRouter();
-  const pathname = usePathname();
 
   const handleAddProductClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    sessionStorage.setItem("accountTab", "addProduct");
-
-    // If we're already on /account, dispatch custom event to switch tab
-    if (pathname === "/account") {
-      window.dispatchEvent(
-        new CustomEvent("accountTabChange", { detail: "addProduct" })
-      );
-    } else {
-      router.push("/account");
-    }
+    router.push("/account?tab=addProduct");
   };
   return (
     <NavigationMenu viewport={false} className="z-50">
@@ -45,14 +35,14 @@ const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
         <NavigationMenuLink asChild className="hidden 2xl:block">
           <button
             onClick={handleAddProductClick}
-            className="border-none cursor-pointer hover:bg-transparent bg-transparent group w-fit"
+            className="border-none cursor-pointer hover:bg-transparent bg-transparent [&:hover_svg]:text-white/40 [&:hover_p]:text-white/40"
           >
-            <div className="flex items-center gap-2 py-2.5 px-4">
+            <div className="flex items-center py-2.5 gap-2">
               <Plus
                 size={16}
-                className="text-gold-main group-hover:text-white/40 duration-300 transition-all"
+                className="text-gold-main duration-300 transition-all pointer-events-none"
               />
-              <p className="text-sm font-medium text-gold-main group-hover:text-white/40 duration-300 transition-all">
+              <p className="text-sm font-medium text-gold-main duration-300 transition-all pointer-events-none">
                 {t("titleAddProduct")}
               </p>
             </div>
@@ -69,7 +59,10 @@ const SellerNavbar = ({ user }: BuyerNavbarAuthProps) => {
           <LanguageSwitcher classNameSelectValue="text-gold-main" />
         </NavigationMenuLink>
 
-        <Link href="/account" className="flex items-center border border-gold-main rounded-lg py-1 lg:py-1.5 px-3 lg:px-4 h-10">
+        <Link
+          href="/account"
+          className="flex items-center border border-gold-main rounded-lg py-1 lg:py-1.5 px-3 lg:px-4 h-10"
+        >
           <Avatar className="h-6 w-6 cursor-pointer">
             <AvatarImage src={user.metadata?.avatar?.url} alt={user.username} />
             <AvatarFallback className="bg-black text-white text-sm uppercase">

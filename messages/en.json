@@ -353,6 +353,12 @@
         "active": "Active",
         "archived": "Archived"
       },
+      "productAccessibility": {
+        "label": "Accessibility",
+        "placeholder": "Select accessibility",
+        "active": "Active",
+        "archived": "Archived"
+      },
       "productCondition": {
         "new": "New",
         "used": "Used"
@@ -372,6 +378,7 @@
         "currencyRequired": "Currency is required",
         "countGreaterThanZero": "Count must be greater than 0",
         "productStatusRequired": "Product status is required",
+        "productAccessibilityRequired": "Product accessibility is required",
         "maxImages": "Maximum 5 images allowed",
         "minImages": "At least one image is required"
       }
