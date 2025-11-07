@@ -63,7 +63,20 @@ export const useProductQuery = (id: number, initialData?: Product) => {
   });
 };
 
-export const useSellerProductsQuery = (sellerId?: number) => {
+export const useSellerProductsQuery = (
+  sellerId?: number,
+  initialData?: {
+    data: Product[];
+    meta?: {
+      pagination: {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      };
+    };
+  }
+) => {
   return useQuery({
     queryKey: queryKeys.products.seller(sellerId || 0),
     queryFn: () =>
@@ -75,6 +88,7 @@ export const useSellerProductsQuery = (sellerId?: number) => {
         },
       }),
     enabled: !!sellerId,
+    initialData: initialData,
   });
 };
 

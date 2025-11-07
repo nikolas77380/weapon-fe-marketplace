@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TopProgressBar } from "@/components/ui/TopProgressBar";
 import SellerListenedCard from "./SellerListenedCard";
@@ -52,6 +52,28 @@ const SellerTabsDesktop = ({
   const [activeProductTab, setActiveProductTab] = useState<
     "active" | "archived"
   >("active");
+
+  // Track initial mount to show skeleton on first render
+  const isInitialMount = useRef(true);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  // Update skeleton visibility based on loading state
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    }
+
+    // Show skeleton if loading, hide when loading is complete
+    if (loading) {
+      setShowSkeleton(true);
+    } else {
+      // Delay hiding skeleton slightly for smoother transition
+      const timer = setTimeout(() => {
+        setShowSkeleton(false);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   // Разделяем продукты на активные и архивные
   const { activeProducts, archivedProducts } = useMemo(() => {
@@ -176,7 +198,13 @@ const SellerTabsDesktop = ({
                     </TabsList>
                     <TabsContent value="active" className="mt-4">
                       <div className="flex flex-col gap-4 items-center w-full">
-                        {activeProducts.length > 0 ? (
+                        {showSkeleton ? (
+                          <SkeletonComponent
+                            type="productCard"
+                            count={6}
+                            className="w-full"
+                          />
+                        ) : activeProducts.length > 0 ? (
                           activeProducts.map((product) => (
                             <SellerListenedCard
                               key={product.id}
@@ -192,7 +220,13 @@ const SellerTabsDesktop = ({
                     </TabsContent>
                     <TabsContent value="archived" className="mt-4">
                       <div className="flex flex-col gap-4 items-center w-full">
-                        {archivedProducts.length > 0 ? (
+                        {showSkeleton ? (
+                          <SkeletonComponent
+                            type="productCard"
+                            count={6}
+                            className="w-full"
+                          />
+                        ) : archivedProducts.length > 0 ? (
                           archivedProducts.map((product) => (
                             <SellerListenedCard
                               key={product.id}
