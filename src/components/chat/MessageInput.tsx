@@ -86,9 +86,14 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onKeyDown={handleKeyDown}
             placeholder={placeholder || t("messageInput.placeholder")}
             disabled={disabled || loading || isSending}
-            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main w-full max-w-full text-base"
+            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main w-full max-w-full text-base overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             rows={1}
-            style={{ fontSize: "16px", maxWidth: "100%" }}
+            style={{
+              fontSize: "16px",
+              maxWidth: "100%",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
           />
 
           <Button
