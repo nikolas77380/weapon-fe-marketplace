@@ -14,6 +14,7 @@ import {
 import { generateBreadcrumbs } from "@/lib/breadcrumbs";
 import { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface IntermediateCrumb {
   href: string;
@@ -60,7 +61,7 @@ const BreadcrumbComponent = ({
   ];
 
   return (
-    <Breadcrumb className={className}>
+    <Breadcrumb className={cn(className, "ml-3")}>
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
