@@ -41,9 +41,6 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const t = useTranslations("CompanyDetail");
   const { selectedCurrency } = useCurrency();
   const locale = useLocale();
-  const { products: sellerProducts, loading } = useSellerProducts(
-    sellerData.id
-  );
 
   // View mode hook
   const { viewMode, setViewMode } = useViewMode("grid");
@@ -87,6 +84,12 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       max: filters.maxPrice,
     },
   });
+  const sellerProducts: Product[] = useMemo(
+    () => elasticProducts?.data || [],
+    [elasticProducts]
+  );
+  console.log(elasticProducts);
+  console.log(elasticLoading);
 
   // Local loading state for products tab
   const [productsTabLoading, setProductsTabLoading] = useState(false);
@@ -588,7 +591,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       {t("tabOverview.titleFeaturedProducts")}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-7.5">
-                      {loading ? (
+                      {elasticLoading ? (
                         <SkeletonComponent
                           type="productCard"
                           count={4}
@@ -811,7 +814,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
                 {/* Shop Filtering Content */}
                 <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
-                  {productsTabLoading ? (
+                  {productsTabLoading || elasticLoading ? (
                     <>
                       {/* Skeleton for filters - Hidden on mobile */}
                       <div className="hidden lg:block w-64">
@@ -861,7 +864,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           pagination={paginationData}
                           onPageChange={handlePageChange}
                           viewMode={viewMode}
-                          loading={elasticLoading || loading}
+                          loading={elasticLoading}
                         />
                       </div>
                     </>

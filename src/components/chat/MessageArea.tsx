@@ -82,7 +82,7 @@ export const MessageArea: React.FC<MessageAreaProps> = ({
   }
 
   return (
-    <ScrollArea ref={scrollAreaRef} className="h-[75vh] md:h-[83vh]">
+    <ScrollArea ref={scrollAreaRef} className="h-full">
       <div className="p-2 xs:p-4 sm:p-6 space-y-1">
         {messages.map((message) => (
           <MessageItem

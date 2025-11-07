@@ -4,7 +4,7 @@ import { Product } from "@/lib/types";
 
 export const useSellerProducts = (sellerId?: number) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start with true to show skeleton on initial load
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

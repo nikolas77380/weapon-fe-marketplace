@@ -69,9 +69,16 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     <form
       onSubmit={handleSubmit}
       className="p-2 xs:p-4 border-t border-gray-200 bg-white w-full max-w-full overflow-x-hidden"
+      style={{ maxWidth: "100vw" }}
     >
-      <div className="flex items-center w-full min-w-0">
-        <div className="flex-1 relative min-w-0 w-full">
+      <div
+        className="flex items-center w-full min-w-0"
+        style={{ maxWidth: "100%" }}
+      >
+        <div
+          className="flex-1 relative min-w-0 w-full"
+          style={{ maxWidth: "100%" }}
+        >
           <Textarea
             ref={textareaRef}
             value={message}
@@ -79,8 +86,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             onKeyDown={handleKeyDown}
             placeholder={placeholder || t("messageInput.placeholder")}
             disabled={disabled || loading || isSending}
-            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main w-full max-w-full"
+            className="min-h-[40px] max-h-[120px] resize-none pr-12 border-gray-200 focus:border-gold-main focus:ring-gold-main w-full max-w-full text-base"
             rows={1}
+            style={{ fontSize: "16px", maxWidth: "100%" }}
           />
 
           <Button

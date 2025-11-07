@@ -33,7 +33,15 @@ const getStatusColor = (status: Chat["status"]) => {
   }
 };
 
+// Используем поле hasUnreadMessages из API, если оно доступно
+// Иначе проверяем сообщения (fallback для обратной совместимости)
 const hasUnreadMessages = (chat: Chat, currentUserId?: number): boolean => {
+  // Приоритет: используем поле из API
+  if (chat.hasUnreadMessages !== undefined) {
+    return chat.hasUnreadMessages;
+  }
+
+  // Fallback: проверяем сообщения (для обратной совместимости)
   if (!chat.messages || !currentUserId) return false;
 
   return chat.messages.some(

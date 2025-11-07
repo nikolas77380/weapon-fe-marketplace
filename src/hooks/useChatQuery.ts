@@ -188,6 +188,16 @@ export const useMarkChatAsReadMutation = () => {
         messages
       );
 
+      // Обновляем hasUnreadMessages для этого чата в списке чатов
+      queryClient.setQueryData<Chat[]>(
+        queryKeys.chats.list(),
+        (oldChats = []) => {
+          return oldChats.map((chat) =>
+            chat.id === chatId ? { ...chat, hasUnreadMessages: false } : chat
+          );
+        }
+      );
+
       await refreshUnreadCount();
     },
   });
