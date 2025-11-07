@@ -107,6 +107,9 @@ export const useSendMessageMutation = (currentUser?: User) => {
       // Создаем временное оптимистичное сообщение
       // Используем отрицательный ID для временных сообщений
       const tempId = -Date.now();
+      // Время для оптимистичного сообщения - используем текущее время клиента
+      // Реальное сообщение с сервера будет иметь серверное время
+      // При замене на реальное сообщение время обновится автоматически
       const optimisticMessage = {
         id: tempId,
         text,
@@ -114,13 +117,14 @@ export const useSendMessageMutation = (currentUser?: User) => {
         sender: sender,
         isRead: false,
         readBy: [],
-        createdAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(), // Время клиента для оптимистичного обновления
         updatedAt: new Date().toISOString(),
         isOptimistic: true,
         isSending: true, // Флаг для отображения индикатора отправки
       } as Message & { isOptimistic?: boolean; isSending?: boolean };
 
       // Оптимистично добавляем сообщение
+      // Сообщения уже отсортированы с бэка (старые -> новые), просто добавляем в конец
       queryClient.setQueryData<Message[]>(
         queryKeys.chats.messages(chatId),
         (oldMessages = []) => {
@@ -130,6 +134,9 @@ export const useSendMessageMutation = (currentUser?: User) => {
               (msg as any).isOptimistic && msg.id === optimisticMessage.id
           );
           if (exists) return oldMessages;
+
+          // Добавляем оптимистичное сообщение в конец (оно самое новое)
+          // Сортировка не нужна - сообщения уже отсортированы с бэка
           return [...oldMessages, optimisticMessage];
         }
       );
@@ -205,8 +212,8 @@ export const useSendMessageMutation = (currentUser?: User) => {
             return messagesWithoutOptimistic;
           }
 
-          // Добавляем реальное сообщение в конец списка
-          // Это гарантирует, что все старые сообщения сохраняются
+          // Добавляем реальное сообщение в конец (оно самое новое)
+          // Сортировка не нужна - сообщения уже отсортированы с бэка (старые -> новые)
           return [...messagesWithoutOptimistic, newMessage];
         }
       );
