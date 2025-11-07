@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { uk } from "date-fns/locale";
-import { Check, CheckCheck, Package } from "lucide-react";
+import { Check, CheckCheck, Package, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,9 +22,15 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 }) => {
   const t = useTranslations("Chat");
   const isSystemMessage = message.isSystem || false;
-  const isOwnMessage = message.sender?.id === currentUserId;
+  const isOptimistic = (message as any).isOptimistic || false;
+  // Для оптимистичных сообщений всегда считаем их своими (от текущего пользователя)
+  // Это предотвращает неправильное позиционирование при отправке
+  const isOwnMessage = isOptimistic
+    ? true
+    : message.sender?.id === currentUserId;
   const isRead = message.isRead;
   const readByCount = message.readBy?.length || 0;
+  const isSending = (message as any).isSending || false;
 
   const getInitials = (name: string | null | undefined) => {
     if (!name) return "??";
@@ -122,7 +128,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
               isOwnMessage
                 ? "bg-gold-main text-white"
                 : "bg-white border border-gray-200 text-gray-900"
-            }`}
+            } ${isSending ? "opacity-70" : ""}`}
           >
             <p className="text-sm whitespace-pre-wrap">{message.text}</p>
             <div
@@ -144,7 +150,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
               >
                 {isOwnMessage && (
                   <div className="ml-1">
-                    {isRead ? (
+                    {isSending ? (
+                      <Loader2 className="h-3 w-3 text-white animate-spin" />
+                    ) : isRead ? (
                       <CheckCheck className="h-3 w-3 text-white" />
                     ) : (
                       <Check className="h-3 w-3 text-white" />

@@ -73,6 +73,12 @@ export const useSendMessageMutation = (currentUser?: User) => {
     },
     // Оптимистичное обновление
     onMutate: async ({ text, chatId }) => {
+      // Если currentUser не определен, не создаем оптимистичное сообщение
+      // Это предотвратит неправильное позиционирование сообщения
+      if (!currentUser) {
+        return { previousMessages: [] };
+      }
+
       // Отменяем исходящие запросы для этого чата
       await queryClient.cancelQueries({
         queryKey: queryKeys.chats.messages(chatId),
@@ -87,8 +93,19 @@ export const useSendMessageMutation = (currentUser?: User) => {
       const chats = queryClient.getQueryData<Chat[]>(queryKeys.chats.list());
       const currentChat = chats?.find((c) => c.id === chatId);
 
-      // Используем переданного пользователя или берем из чата
-      const sender = currentUser || currentChat?.participants?.[0];
+      // Используем только переданного пользователя - это гарантирует правильное позиционирование
+      // Убеждаемся, что sender имеет все необходимые поля
+      const sender: User = {
+        id: currentUser.id,
+        username: currentUser.username,
+        email: currentUser.email,
+        displayName: currentUser.displayName || currentUser.username,
+        confirmed: currentUser.confirmed,
+        blocked: currentUser.blocked,
+        createdAt: currentUser.createdAt,
+        updatedAt: currentUser.updatedAt,
+        metadata: currentUser.metadata,
+      };
 
       // Создаем временное оптимистичное сообщение
       // Используем отрицательный ID для временных сообщений
@@ -103,7 +120,8 @@ export const useSendMessageMutation = (currentUser?: User) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isOptimistic: true,
-      } as Message & { isOptimistic?: boolean };
+        isSending: true, // Флаг для отображения индикатора отправки
+      } as Message & { isOptimistic?: boolean; isSending?: boolean };
 
       // Оптимистично добавляем сообщение
       queryClient.setQueryData<Message[]>(
