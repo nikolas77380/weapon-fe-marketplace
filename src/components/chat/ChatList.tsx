@@ -88,22 +88,14 @@ export const ChatList: React.FC<ChatListProps> = ({
   const t = useTranslations("Chat");
   const { currentUser } = useAuthContext();
 
-  // Сортируем чаты по дате последнего сообщения (или updatedAt, если сообщений нет)
+  // Сортируем чаты по updatedAt - это поле теперь обновляется при каждом действии в чате
   const sortedChats = [...chats].sort((a, b) => {
-    const getLastMessageDate = (chat: Chat) => {
-      if (chat.messages && chat.messages.length > 0) {
-        return new Date(chat.messages[0].createdAt).getTime();
-      }
-      return new Date(chat.updatedAt).getTime();
-    };
-
-    const dateA = getLastMessageDate(a);
-    const dateB = getLastMessageDate(b);
+    const dateA = new Date(a.updatedAt).getTime();
+    const dateB = new Date(b.updatedAt).getTime();
 
     // Сортируем по убыванию (самые новые сверху)
     return dateB - dateA;
   });
-
   if (loading && !chats.length) {
     return (
       <div className="space-y-4 p-2">
@@ -133,9 +125,16 @@ export const ChatList: React.FC<ChatListProps> = ({
   return (
     <div className="">
       {sortedChats.map((chat) => {
-        const lastMessage = chat.messages?.[0];
+        // Получаем последнее сообщение из кеша, если оно есть
+        // Но для отображения времени используем updatedAt, так как messages не приходит с бэка
+        const lastMessage =
+          chat.messages && chat.messages.length > 0 ? chat.messages[0] : null;
         const isActive = currentChatId === chat.id;
         const hasUnread = hasUnreadMessages(chat, currentUser?.id);
+
+        // Используем updatedAt для отображения времени, так как это поле обновляется на бэке
+        // при каждом действии в чате (отправка сообщения и т.д.)
+        const displayTime = chat.updatedAt;
 
         return (
           <div
@@ -209,24 +208,13 @@ export const ChatList: React.FC<ChatListProps> = ({
                 <div className="flex items-center gap-1">
                   <Clock className="h-4 w-4 mr-1 shrink-0 text-xs" />
                   <span className="text-xs">
-                    {formatDistanceToNow(new Date(chat.updatedAt), {
+                    {formatDistanceToNow(new Date(displayTime), {
                       addSuffix: true,
                       locale: uk,
                     })}
                   </span>
                 </div>
               </div>
-
-              {lastMessage && (
-                <div className="text-sm text-gray-600 truncate">
-                  <span className="font-medium">
-                    {lastMessage.sender?.displayName ||
-                      lastMessage.sender?.username}
-                    :
-                  </span>
-                  <span className="ml-1">{lastMessage.text}</span>
-                </div>
-              )}
             </div>
           </div>
         );

@@ -52,11 +52,8 @@ export const useChatMessagesQuery = (
     refetchInterval: chatStatus === "active" ? 10000 : false, // 10 секунд для активных чатов
     // Используем placeholderData для сохранения старых данных при обновлении
     // Это предотвращает потерю данных во время обновления
-    placeholderData: (previousData) => {
-      // Всегда возвращаем предыдущие данные, если они есть
-      // React Query автоматически использует их как placeholder пока идет загрузка
-      return previousData;
-    },
+    // Это критически важно для предотвращения мерцания при refetch
+    placeholderData: (previousData) => previousData,
     // Гарантируем что данные не теряются при переключении между чатами
     gcTime: 5 * 60 * 1000, // 5 минут
   });
@@ -137,15 +134,33 @@ export const useSendMessageMutation = (currentUser?: User) => {
         }
       );
 
-      // Обновляем список чатов (обновляем updatedAt)
+      // Оптимистично обновляем время в списке чатов для немедленного отображения
       queryClient.setQueryData<Chat[]>(
         queryKeys.chats.list(),
         (oldChats = []) => {
-          return oldChats.map((chat) =>
-            chat.id === chatId
-              ? { ...chat, updatedAt: new Date().toISOString() }
-              : chat
-          );
+          return oldChats.map((chat) => {
+            if (chat.id !== chatId) {
+              return chat;
+            }
+
+            // Обновляем messages в чате - оптимистичное сообщение должно быть первым
+            const existingMessages = chat.messages || [];
+            // Удаляем другие оптимистичные сообщения с таким же текстом, если есть
+            const messagesWithoutOptimistic = existingMessages.filter(
+              (m) =>
+                !(m as any).isOptimistic || m.text !== optimisticMessage.text
+            );
+            const updatedMessages = [
+              optimisticMessage,
+              ...messagesWithoutOptimistic,
+            ];
+
+            return {
+              ...chat,
+              updatedAt: optimisticMessage.createdAt, // Временно используем время клиента
+              messages: updatedMessages, // Обновляем список сообщений
+            };
+          });
         }
       );
 
@@ -161,28 +176,85 @@ export const useSendMessageMutation = (currentUser?: User) => {
       }
     },
     onSuccess: async (newMessage, variables) => {
-      // Заменяем временное сообщение на реальное
+      // Заменяем временное сообщение на реальное, сохраняя все старые сообщения
       queryClient.setQueryData<Message[]>(
         queryKeys.chats.messages(variables.chatId),
         (oldMessages = []) => {
-          // Удаляем все временные сообщения с таким же текстом
-          const filtered = oldMessages.filter(
-            (msg) => !(msg as any).isOptimistic || msg.text !== newMessage.text
-          );
+          // Если старых сообщений нет, просто возвращаем новое
+          if (!oldMessages || oldMessages.length === 0) {
+            return [newMessage];
+          }
+
+          // Сохраняем все старые сообщения, которые не являются оптимистичными с таким же текстом
+          // Это гарантирует, что все реальные сообщения сохраняются
+          const messagesWithoutOptimistic = oldMessages.filter((msg) => {
+            // Сохраняем все сообщения, которые:
+            // 1. Не являются оптимистичными ИЛИ
+            // 2. Являются оптимистичными, но с другим текстом
+            const isOptimistic = (msg as any).isOptimistic;
+            const hasSameText = msg.text === newMessage.text;
+            return !isOptimistic || !hasSameText;
+          });
 
           // Проверяем, нет ли уже такого сообщения (на случай дубликатов)
-          const exists = filtered.some((msg) => msg.id === newMessage.id);
-          if (exists) return filtered;
+          const exists = messagesWithoutOptimistic.some(
+            (msg) => msg.id === newMessage.id
+          );
+          if (exists) {
+            // Если сообщение уже есть, просто возвращаем список без оптимистичных
+            return messagesWithoutOptimistic;
+          }
 
-          // Добавляем реальное сообщение
-          return [...filtered, newMessage];
+          // Добавляем реальное сообщение в конец списка
+          // Это гарантирует, что все старые сообщения сохраняются
+          return [...messagesWithoutOptimistic, newMessage];
         }
       );
 
-      // Делаем refetch сообщений, чтобы получить обновленные данные с сервера
-      // Это важно для получения актуальных данных, включая обновления от других участников
-      await queryClient.refetchQueries({
-        queryKey: queryKeys.chats.messages(variables.chatId),
+      // Обновляем список чатов с правильным временем из ответа сервера
+      // updatedAt теперь обновляется на бэкенде, но мы обновляем его в кеше для немедленного отображения
+      queryClient.setQueryData<Chat[]>(
+        queryKeys.chats.list(),
+        (oldChats = []) => {
+          return oldChats.map((chat) => {
+            if (chat.id !== variables.chatId) {
+              return chat;
+            }
+
+            // Обновляем messages в чате для отображения последнего сообщения в списке
+            // (если messages есть в кеше)
+            const existingMessages = chat.messages || [];
+            // Удаляем оптимистичные сообщения с таким же текстом и дубликаты
+            const messagesWithoutDuplicate = existingMessages.filter((m) => {
+              // Удаляем оптимистичные сообщения с таким же текстом
+              if ((m as any).isOptimistic && m.text === newMessage.text) {
+                return false;
+              }
+              // Удаляем дубликаты по ID
+              if (m.id === newMessage.id) {
+                return false;
+              }
+              return true;
+            });
+            // Новое сообщение всегда первое (самое новое)
+            const updatedMessages = [newMessage, ...messagesWithoutDuplicate];
+
+            return {
+              ...chat,
+              // Используем время из ответа сервера для updatedAt
+              // Это будет синхронизировано с бэкендом, который также обновляет updatedAt
+              updatedAt: newMessage.createdAt,
+              messages: updatedMessages, // Обновляем список сообщений для отображения в списке
+            };
+          });
+        }
+      );
+
+      // Инвалидируем список чатов, чтобы обновления применились
+      // Это гарантирует, что изменения в chat.updatedAt и chat.messages отобразятся
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.chats.list(),
+        refetchType: "none", // Не делаем refetch, только инвалидируем для обновления кеша
       });
 
       await refreshUnreadCount();
