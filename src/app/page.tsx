@@ -1,6 +1,34 @@
 import React from "react";
 import { getHomePageData } from "@/lib/homepage-server";
 import CategoryContentClient from "@/components/CategoryContent/CategoryContentClient";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Esviem Defence | Weapon Marketplace",
+  description:
+    "Esviem Defence — платформа для залучення продавців військових товарів.",
+  keywords: [
+    "військовий маркетплейс",
+    "платформа для військової амуніції",
+    "маркетплейс тактичного спорядження",
+    "товари для військових",
+    "тактичний магазин онлайн",
+    "тактичні рюкзаки",
+    "військова форма",
+    "спорядження для виживання",
+    "бронежилети та каски",
+    "військові аксесуари",
+    "армійське взуття",
+    "камуфляж та мілітарі-одяг",
+    "платформа для продавців військових товарів",
+    "розмістити товари військової тематики",
+    "маркетплейс для виробників амуніції",
+    "платформа для продавців військових товарів",
+    "платформа для продажу тактичних товарів",
+    "esviem",
+    "esviem defence",
+  ],
+};
 
 const HomePage = async () => {
   // Загружаем начальные данные на сервере
