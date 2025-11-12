@@ -41,14 +41,13 @@ const BannerSlider = ({ promos }: { promos?: Promo[] }) => {
             const alt = promo.title || "promo";
             return (
               <SwiperSlide key={promo.id || index}>
-                <div className="relative w-full h-[150px] sm:h-[180px] lg:h-[200px] rounded-sm overflow-hidden cursor-pointer">
+                <div className="relative w-full h-[150px] sm:h-[180px] lg:h-[200px] rounded-sm overflow-hidden cursor-pointer bg-gray-100">
                   <Image
                     src={imageUrl}
                     alt={alt}
-                    width={1920}
-                    height={400}
+                    fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1920px"
-                    className="object-cover w-full h-full"
+                    className="object-cover"
                     priority={index === 0}
                     loading={index === 0 ? "eager" : "lazy"}
                   />

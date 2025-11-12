@@ -12,14 +12,14 @@ const GetStarted = () => {
       className="w-full h-[473px] relative overflow-hidden"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.8 }}
     >
       <motion.div
         className="absolute z-[-1] inset-0 w-full h-full"
         initial={{ scale: 1.1, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
         <Image
@@ -29,6 +29,8 @@ const GetStarted = () => {
           priority
           sizes="100vw"
           className="object-cover w-full h-full"
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
         />
       </motion.div>
 
@@ -36,7 +38,7 @@ const GetStarted = () => {
         className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/20 z-0"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1, delay: 0.3 }}
       />
 
@@ -44,14 +46,14 @@ const GetStarted = () => {
         className="flex flex-col items-center justify-center w-full h-full relative z-10"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.3 }}
         variants={containerGetStartedVariants}
       >
         <motion.h1
           className="text-center max-w-[918px] font-bold text-5xl bg-gradient-to-b from-[#f0f0e5] to-gray-secondary bg-clip-text text-transparent"
           initial={{ y: 80, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
           Join professionals already using our platform to buy and sell weapon
@@ -62,7 +64,7 @@ const GetStarted = () => {
           className="mt-10"
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <Link
@@ -80,7 +82,7 @@ const GetStarted = () => {
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        viewport={{ once: false, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1, delay: 0.6 }}
       >
         {[...Array(8)].map((_, i) => (

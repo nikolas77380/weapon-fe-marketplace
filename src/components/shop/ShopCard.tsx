@@ -41,7 +41,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
       <div className="border border-border-foreground flex flex-col min-[400px]:flex-row p-2 rounded-sm">
         <Link
           href={`/marketplace/${item.id}`}
-          className="relative overflow-hidden flex-shrink-0"
+          className="relative overflow-hidden flex-shrink-0 w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full bg-gray-50"
         >
           <Image
             src={
@@ -49,12 +49,11 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               "/no-image.png"
             }
             alt={item.title}
-            width={200}
-            height={200}
+            fill
             sizes="(max-width: 400px) 150px, (max-width: 640px) 160px, 200px"
             loading="lazy"
             onError={(e) => handleImageError(e, "/no-image.png")}
-            className="w-full h-[150px] min-[400px]:w-[160px] sm:w-[200px] min-[400px]:h-full object-contain"
+            className="object-contain"
           />
 
           {/* Badge */}
@@ -142,19 +141,18 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   return (
     <div className="border rounded-sm border-border-foreground flex flex-col">
       <Link href={`/marketplace/${item.id}`}>
-        <div className="relative overflow-hidden h-[120px] xs:h-[150px] sm:h-[200px] min-h-[120px] xs:min-h-[150px] sm:min-h-[200px] max-h-[120px] xs:max-h-[150px] sm:max-h-[200px] p-2 xs:p-2.5 sm:p-3">
+        <div className="relative overflow-hidden h-[120px] xs:h-[150px] sm:h-[200px] min-h-[120px] xs:min-h-[150px] sm:min-h-[200px] max-h-[120px] xs:max-h-[150px] sm:max-h-[200px] p-2 xs:p-2.5 sm:p-3 bg-gray-50">
           <Image
             src={
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
               "/no-image.png"
             }
             alt={item.title}
-            width={400}
-            height={300}
+            fill
             sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, 200px"
             loading="lazy"
             onError={(e) => handleImageError(e, "/no-image.png")}
-            className="w-full h-full object-contain"
+            className="object-contain"
           />
           {/* Badge */}
           {/* <div className="absolute top-2 left-0">
