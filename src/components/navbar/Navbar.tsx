@@ -3,7 +3,6 @@
 import BuyerNavbar from "../buyer/navbar/BuyerNavbar";
 import { useAuthContext } from "@/context/AuthContext";
 import SellerNavbar from "../buyer/navbar/SellerNavbar";
-import Logo from "../ui/Logo";
 import Link from "next/link";
 import LanguageSwitcher from "../ui/LanguageSwitcher";
 import CurrencySwitcher from "../ui/CurrencySwitcher";
