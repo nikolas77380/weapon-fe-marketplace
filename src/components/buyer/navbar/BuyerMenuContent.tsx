@@ -119,7 +119,7 @@ const BuyerMenuContent = ({
               onClick={() => {
                 onLogout();
               }}
-              className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer p-3 justify-start"
+              className="bg-transparent shadow-none hover:bg-red-50 w-full flex items-start cursor-pointer p-3 justify-start"
             >
               <div className="flex items-center gap-3">
                 <LogOut size={18} />
