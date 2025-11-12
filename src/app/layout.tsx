@@ -11,6 +11,7 @@ import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
 import { NavigationProvider } from "@/context/NavigationContext";
 import { NavigationLoader } from "@/components/ui/NavigationLoader";
 import { getServerCurrentUser } from "@/lib/server-auth";
+import OpenGraphTags from "@/components/meta/OpenGraphTags";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -33,6 +34,48 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Esviem Defence",
   description: "Weapon Marketplace",
+  keywords: [
+    "військовий маркетплейс",
+    "платформа для військової амуніції",
+    "маркетплейс тактичного спорядження",
+    "товари для військових",
+    "тактичний магазин онлайн",
+    "тактичні рюкзаки",
+    "військова форма",
+    "спорядження для виживання",
+    "бронежилети та каски",
+    "військові аксесуари",
+    "армійське взуття",
+    "камуфляж та мілітарі-одяг",
+    "платформа для продавців військових товарів",
+    "розмістити товари військової тематики",
+    "маркетплейс для виробників амуніції",
+    "платформа для продавців військових товарів",
+    "платформа для продажу тактичних товарів",
+    "esviem",
+    "esviem defence",
+  ],
+  robots: "index, follow",
+  openGraph: {
+    title: "Esviem Defence",
+    description: "Weapon Marketplace",
+    url: "https://www.esviem-defence.com",
+    siteName: "esviem-defence.com",
+    images: [
+      {
+        url: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_2.png",
+        width: 1200,
+        height: 630,
+        alt: "Esviem Defence",
+      },
+    ],
+    locale: "uk_UA",
+    type: "website",
+  },
+  icons: {
+    icon: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_3.png",
+    apple: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_3.png",
+  },
 };
 
 export default async function RootLayout({
@@ -57,6 +100,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+    <head>
+        <OpenGraphTags />
+      </head>
       <body
         className={`${roboto.variable} ${inter.variable} ${manrope.variable} antialiased`}
       >
