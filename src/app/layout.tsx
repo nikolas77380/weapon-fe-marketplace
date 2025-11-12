@@ -102,6 +102,13 @@ export default async function RootLayout({
     <html lang={locale}>
     <head>
         <OpenGraphTags />
+        {/* Preload критических изображений для улучшения LCP */}
+        <link
+          rel="preload"
+          as="image"
+          href="/landing/hero-banner.png"
+          fetchPriority="high"
+        />
       </head>
       <body
         className={`${roboto.variable} ${inter.variable} ${manrope.variable} antialiased`}
