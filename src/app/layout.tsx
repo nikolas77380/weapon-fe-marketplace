@@ -11,6 +11,7 @@ import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
 import { NavigationProvider } from "@/context/NavigationContext";
 import { NavigationLoader } from "@/components/ui/NavigationLoader";
 import { getServerCurrentUser } from "@/lib/server-auth";
+import OpenGraphTags from "@/components/meta/OpenGraphTags";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -62,18 +63,18 @@ export const metadata: Metadata = {
     siteName: "esviem-defence.com",
     images: [
       {
-        url: "/logo/esviem_defence_logo_2_2.png",
+        url: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_2.png",
         width: 1200,
         height: 630,
         alt: "Esviem Defence",
       },
     ],
-    locale: "ru_RU",
+    locale: "uk_UA",
     type: "website",
   },
   icons: {
-    icon: "/logo/esviem_defence_logo_2_3.png",
-    apple: "/logo/esviem_defence_logo_2_3.png",
+    icon: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_3.png",
+    apple: "https://www.esviem-defence.com/logo/esviem_defence_logo_2_3.png",
   },
 };
 
@@ -99,6 +100,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
+    <head>
+        <OpenGraphTags />
+      </head>
       <body
         className={`${roboto.variable} ${inter.variable} ${manrope.variable} antialiased`}
       >
