@@ -16,6 +16,26 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/:path*\\.(jpg|jpeg|png|gif|ico|svg|webp|avif)$",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=604800, immutable",
+            // 7 дней кэша (604800 секунд)
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+            // 1 год (Next генерирует уникальные хэши, поэтому безопасно)
+          },
+        ],
+      },
+      {
         source: "/:path*",
         headers: [
           {
