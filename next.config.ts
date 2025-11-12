@@ -43,13 +43,23 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Кэширование Next.js статики
+        // Кэширование Next.js статики (CSS, JS, шрифты)
         source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable",
             // 1 год (Next генерирует уникальные хэши, поэтому безопасно)
+          },
+        ],
+      },
+      {
+        // Кэширование CSS файлов
+        source: "/_next/static/css/:path*\\.css",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

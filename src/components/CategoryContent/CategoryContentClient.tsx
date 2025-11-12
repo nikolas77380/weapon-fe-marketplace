@@ -46,7 +46,7 @@ const TopProductsSliderLazy = dynamic(
 );
 
 const BannerSliderLazy = dynamic(() => import("./BannerSlider"), {
-  ssr: true, // Включаем SSR для улучшения Speed Index
+  ssr: false, // Отключаем SSR для уменьшения блокировки рендера
   loading: () => (
     <div className="h-[150px] sm:h-[180px] lg:h-[200px] animate-pulse bg-gray-200 rounded-sm mb-4 sm:mb-6" />
   ),

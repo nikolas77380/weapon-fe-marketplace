@@ -17,18 +17,24 @@ const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
+  display: "swap", // Предотвращает блокировку рендера
+  preload: true,
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: "swap", // Предотвращает блокировку рендера
+  preload: true,
 });
 
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
   weight: ["200", "300", "400", "500", "600", "700", "800"],
+  display: "swap", // Предотвращает блокировку рендера
+  preload: false, // Не критичный шрифт, можно загрузить позже
 });
 
 export const metadata: Metadata = {
@@ -100,15 +106,8 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-    <head>
+      <head>
         <OpenGraphTags />
-        {/* Preload критических изображений для улучшения LCP */}
-        <link
-          rel="preload"
-          as="image"
-          href="/landing/hero-banner.png"
-          fetchPriority="high"
-        />
       </head>
       <body
         className={`${roboto.variable} ${inter.variable} ${manrope.variable} antialiased`}
