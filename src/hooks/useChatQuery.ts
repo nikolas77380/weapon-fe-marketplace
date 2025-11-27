@@ -32,8 +32,6 @@ export const useChatMessagesQuery = (
   enabled = true,
   chatStatus?: string
 ) => {
-  const queryClient = useQueryClient();
-
   return useQuery({
     queryKey: queryKeys.chats.messages(chatId ? Number(chatId) : 0),
     queryFn: async () => {
@@ -46,11 +44,6 @@ export const useChatMessagesQuery = (
     refetchOnWindowFocus: false,
     // Автоматическое обновление для активных чатов (polling)
     refetchInterval: chatStatus === "active" ? 10000 : false, // 10 секунд для активных чатов
-    // Используем placeholderData для сохранения старых данных при обновлении
-    // Это предотвращает потерю данных во время обновления
-    // Это критически важно для предотвращения мерцания при refetch
-    placeholderData: (previousData) => previousData,
-    // Гарантируем что данные не теряются при переключении между чатами
     gcTime: 5 * 60 * 1000, // 5 минут
   });
 };
