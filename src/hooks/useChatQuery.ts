@@ -32,8 +32,8 @@ export const useChatMessagesQuery = (
   enabled = true,
   chatStatus?: string
 ) => {
-  return useQuery({
-    queryKey: queryKeys.chats.messages(chatId ? Number(chatId) : 0),
+  return useQuery<Message[], Error>({
+    queryKey: queryKeys.chats.messages(chatId ? String(chatId) : "0"),
     queryFn: async () => {
       if (!chatId) return [];
       const messages = await getChatMessages(chatId);
