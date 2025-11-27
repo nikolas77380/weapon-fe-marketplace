@@ -36,7 +36,7 @@ export interface User {
 }
 
 export interface Chat {
-  id: number;
+  id: number | string; // Может быть number (старый формат) или string (UUID из message-service)
   topic: string;
   participants: User[];
   status:
@@ -45,7 +45,9 @@ export interface Chat {
     | "unsuccessfully_completed"
     | "closed";
   messages?: Message[];
-  hasUnreadMessages?: boolean; // Флаг наличия непрочитанных сообщений
+  hasUnreadMessages?: boolean; // Флаг наличия непрочитанных сообщений (deprecated, use unreadCount)
+  unreadCount?: number; // Количество непрочитанных сообщений
+  productId?: number; // ID продукта из контекста чата
   product?: {
     id: number;
     title: string;
@@ -57,14 +59,28 @@ export interface Chat {
   };
   createdAt: string;
   updatedAt: string;
+  // Временные поля для загрузки данных пользователей на фронтенде
+  buyer_id?: number;
+  seller_id?: number;
+  // Последнее сообщение в чате
+  lastMessage?: {
+    id: string | number;
+    text: string;
+    sender_id: number;
+    createdAt: string;
+  };
+  // Пользовательские настройки чата
+  isArchived?: boolean;
+  isFavorite?: boolean;
 }
 
 export interface Message {
-  id: number;
+  id: number | string; // Может быть number или string (UUID)
   text: string;
   sender?: User; // Опционально для системных сообщений
+  sender_id?: number; // ID отправителя для определения, является ли сообщение собственным
   chat: Chat;
-  isRead: boolean;
+  isRead?: boolean; // Прочитано ли сообщение текущим пользователем
   readBy: User[];
   isSystem?: boolean;
   product?: {

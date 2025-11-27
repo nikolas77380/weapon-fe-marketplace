@@ -115,7 +115,7 @@ export const NavbarSearch = ({
       if (onProductSelect) {
         onProductSelect(product);
       } else {
-        router.push(`/products/${product.id}`);
+        router.push(`/marketplace/${product.slug}`);
       }
       setSearchQuery("");
       setIsDropdownOpen(false);

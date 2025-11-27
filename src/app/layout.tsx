@@ -7,7 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/lib/query-client";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { UnreadChatsProvider } from "@/context/UnreadChatsContext";
 import { NavigationProvider } from "@/context/NavigationContext";
 import { NavigationLoader } from "@/components/ui/NavigationLoader";
 import { getServerCurrentUser } from "@/lib/server-auth";
@@ -116,13 +115,11 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <NavigationProvider>
               <AuthContextProvider>
-                <UnreadChatsProvider>
-                  <ConditionalLayout initialUser={initialUser}>
-                    {children}
-                  </ConditionalLayout>
-                  <NavigationLoader />
-                  <Toaster />
-                </UnreadChatsProvider>
+                <ConditionalLayout initialUser={initialUser}>
+                  {children}
+                </ConditionalLayout>
+                <NavigationLoader />
+                <Toaster />
               </AuthContextProvider>
             </NavigationProvider>
           </NextIntlClientProvider>

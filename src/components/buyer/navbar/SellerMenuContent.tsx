@@ -15,9 +15,7 @@ import { Separator } from "../../ui/separator";
 import { Button } from "../../ui/button";
 import type { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
-import { useFavourites } from "@/hooks/useFavourites";
 import { useRouter } from "next/navigation";
-import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 interface SellerMenuContentProps {
   user: UserProfile;
@@ -33,8 +31,6 @@ const SellerMenuContent = ({
   onClose,
 }: SellerMenuContentProps) => {
   const t = useTranslations("Navbar.sellerNavbar");
-  const { favourites } = useFavourites();
-  const { unreadChatsCount } = useUnreadChats();
   const router = useRouter();
 
   const handleLinkClick = () => {
@@ -72,6 +68,14 @@ const SellerMenuContent = ({
   return (
     <div className={containerClass}>
       <div className={isMobile ? "space-y-1" : ""}>
+        {user && (
+          <div className="px-3 pb-2">
+            <p className="text-sm font-semibold">{user.username}</p>
+            {user.email ? (
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            ) : null}
+          </div>
+        )}
         {isMobile ? (
           // Mobile version - обычные элементы
           <>
@@ -229,9 +233,6 @@ const SellerMenuContent = ({
                     <p className={`font-semibold ${textClass}`}>
                       {t("titleMessages")}
                     </p>
-                    <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                      {unreadChatsCount}
-                    </div>
                   </div>
                 </div>
               </Link>

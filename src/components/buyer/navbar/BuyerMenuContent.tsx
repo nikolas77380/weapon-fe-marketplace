@@ -16,7 +16,6 @@ import type { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useRouter } from "next/navigation";
-import { useUnreadChats } from "@/context/UnreadChatsContext";
 
 interface BuyerMenuContentProps {
   user: UserProfile;
@@ -33,7 +32,6 @@ const BuyerMenuContent = ({
 }: BuyerMenuContentProps) => {
   const t = useTranslations("Navbar.buyerNavbar");
   const { favourites } = useFavourites();
-  const { unreadChatsCount } = useUnreadChats();
   const router = useRouter();
 
   const handleLinkClick = () => {
@@ -60,6 +58,14 @@ const BuyerMenuContent = ({
   return (
     <div className={containerClass}>
       <div className={isMobile ? "space-y-1" : ""}>
+        {user && (
+          <div className="px-3 pb-2">
+            <p className="text-sm font-semibold">{user.username}</p>
+            {user.email ? (
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            ) : null}
+          </div>
+        )}
         {isMobile ? (
           <>
             <Link
@@ -170,9 +176,6 @@ const BuyerMenuContent = ({
                     <p className={`font-semibold ${textClass}`}>
                       {t("titleMessages")}
                     </p>
-                    <div className="bg-muted text-xs px-1.5 py-0.5 rounded-full font-semibold">
-                      3
-                    </div>
                   </div>
                 </div>
               </Link>

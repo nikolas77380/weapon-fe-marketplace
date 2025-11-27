@@ -51,6 +51,7 @@
     "react-easy-crop": "^1.13.1",
     "react-hook-form": "^7.62.0",
     "react-image-crop": "^11.0.10",
+    "socket.io-client": "^4.8.1",
     "sonner": "^2.0.7",
     "swiper": "^11.2.10",
     "tailwind-merge": "^3.3.1",
