@@ -614,6 +614,11 @@
     "footerNote": "This confirmation link can only be used once."
   },
   "Chat": {
+    "messages": "Messages",
+    "searchChats": "Search chats...",
+    "typeMessage": "Type a message...",
+    "online": "Online",
+    "offline": "Offline",
     "title": "Chats",
     "selectChat": "Select a chat",
     "selectChatDescription": "Choose a chat from the list on the left",
@@ -625,6 +630,20 @@
     "retryButton": "Try again",
     "participants": "participants",
     "loadingChats": "Loading chats...",
+    "filters": {
+      "all": "All",
+      "unread": "Unread",
+      "favorites": "Favorites",
+      "archived": "Archived"
+    },
+    "contextMenu": {
+      "markAsRead": "Mark as read",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "addToFavorites": "Add to favorites",
+      "removeFromFavorites": "Remove from favorites",
+      "deleteChat": "Delete chat"
+    },
     "status": {
       "active": "Active",
       "successfully_completed": "Successfully completed",
@@ -749,7 +768,7 @@
         "successMessage": "Your request has been sent successfully! We will contact you soon.",
         "errorMessage": "Error sending request. Please try again.",
         "errorMessageTurnstile": "Security verification failed. Please try again.",
-        "buttonContactSeller": "Contact Seller"
+        "buttonContactSeller": "Write to Seller"
       },
       "closeButton": "Close"
     }

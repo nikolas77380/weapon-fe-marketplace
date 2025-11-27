@@ -8,7 +8,6 @@ import {
   PackagePlus,
   PackageSearch,
   Settings,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { Product, UserProfile } from "@/lib/types";
@@ -24,8 +23,6 @@ import ViewModeToggle from "@/components/ui/ViewModeToggle";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import MetaForm from "./MetaForm";
 import AddProductPageComponent from "../add-product/AddProductPageComponent";
-import { useUnreadChats } from "@/context/UnreadChatsContext";
-import { useChatStats } from "@/hooks/useChatStats";
 
 interface SellerTabsDesktopProps {
   products: Product[];
@@ -46,7 +43,6 @@ const SellerTabsDesktop = ({
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { stats } = useChatStats();
   const { favourites, loading: favouritesLoading, refresh } = useFavourites();
   const { viewMode, toggleToGrid, toggleToList } = useViewMode("grid");
   const [activeTab, setActiveTab] = useState("myInquiries");
@@ -86,7 +82,6 @@ const SellerTabsDesktop = ({
     );
     return { activeProducts: active, archivedProducts: archived };
   }, [products]);
-  const { unreadChatsCount } = useUnreadChats();
   // Check URL search params for tab parameter
   useEffect(() => {
     if (pathname === "/account") {
@@ -146,7 +141,6 @@ const SellerTabsDesktop = ({
         </TabsList>
         <div className="grow w-full">
           <SellerAccountHeader
-            products={products}
             currentUser={currentUser}
             className="hidden md:block"
           />
@@ -286,89 +280,13 @@ const SellerTabsDesktop = ({
                 <p className="text-sm font-medium text-[#C4C2C2] mt-2">
                   {t("tabMessage.descriptionCustomerMessages")}
                 </p>
-                <div className="flex items-center justify-between gap-16 w-full mt-5">
-                  <div className="w/full border border-gray-primary rounded-xl py-5 flex items-center px-10">
-                    <div className="flex justify-center gap-3">
-                      <div className="rounded-xl bg-red-100 px-3.5 flex items-center justify-center">
-                        <MessageSquare size={22} className="text-red-500" />
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">
-                          {unreadChatsCount}
-                        </p>
-                        <p className="font-roboto font-light">
-                          {t("tabMessage.titleUnreadChats")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w/full border border-gray-primary rounded-xl py-5 flex items-center px-10">
-                    <div className="flex justify-center gap-3">
-                      <div className="rounded-xl bg-blue-100 px-3.5 flex items-center justify-center">
-                        <Users size={22} className="text-blue-500" />
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">
-                          {stats?.activeChatsCount}
-                        </p>
-                        <p className="font-roboto font-light">
-                          {t("tabMessage.titleActiveConversations")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w/full border border-gray-primary rounded-xl py-5 flex items-center px-10">
-                    <div className="flex justify-center gap-3">
-                      <div className="rounded-xl bg-red-100 px-3.5 flex items-center justify-center">
-                        <MessageSquare size={22} className="text-red-500" />
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-roboto text-xl font-medium">
-                          {stats?.closedChatsCount}
-                        </p>
-                        <p className="font-roboto font-light">
-                          {t("tabMessage.titleFinishedChats")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div className="mt-9 border border-gray-primary rounded-xl p-5 flex flex-col gap-5">
                   <h2 className="font-roboto">
                     {t("tabMessage.titleLatestMessages")}
                   </h2>
-                  {stats?.latestMessages?.map((message) => (
-                    <div
-                      onClick={() => router.push(`/messages/${message.id}`)}
-                      key={message.id}
-                      className={`border rounded-xl w-full flex gap-5 py-3 px-6 cursor-pointer transition-all duration-200 ${
-                        !message.isRead
-                          ? "border-black bg-gray-primary hover:bg-gray-200"
-                          : "border-gray-primary hover:bg-gray-50"
-                      }`}
-                    >
-                      <div className="rounded-full bg-[#CED8EE] p-1 size-fit">
-                        <Users size={20} />
-                      </div>
-                      <div className="flex flex-col font-roboto">
-                        <div className="flex items-center gap-2">
-                          <p>{message.sender?.username || "Unknown"}</p>
-                          {!message.isRead && (
-                            <div className="w-2 h-2 bg-black rounded-full"></div>
-                          )}
-                        </div>
-                        <p className="text-[15px] font-semibold text-[#727070]">
-                          {message.chat?.topic || "No topic"}
-                        </p>
-                        <p className="text-[15px] font-semibold">
-                          {message.text}
-                        </p>
-                        <p className="text-[15px] font-extrabold text-[#7C7A7A]">
-                          {new Date(message.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+                  <p className="text-sm text-muted-foreground">
+                    {t("tabMessage.descriptionCustomerMessages")}
+                  </p>
                 </div>
               </div>
             </TabsContent>

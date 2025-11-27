@@ -10,6 +10,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useChatSocket } from "@/hooks/useChatSocket";
 
 interface AuthContextContextValue {
   currentUser: UserProfile | null;
@@ -19,6 +20,10 @@ interface AuthContextContextValue {
   fetchUser: () => Promise<void>;
   handleLogout: () => Promise<void>;
   handleEmailConfirmation: (confirmationToken: string) => Promise<boolean>;
+  chatSocketConnected: boolean;
+  chatSocketError: string | null;
+  reconnectChatSocket: () => void;
+  socket: any; // Socket instance from useChatSocket
 }
 
 export const AuthContext = createContext<AuthContextContextValue | null>(null);
@@ -26,6 +31,12 @@ export const AuthContext = createContext<AuthContextContextValue | null>(null);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [currentUserLoading, setCurrentUserLoading] = useState(true);
+  const {
+    socket,
+    isConnected: chatSocketConnected,
+    lastError: chatSocketError,
+    forceReconnect,
+  } = useChatSocket(!!currentUser);
   const fetchUser = async () => {
     try {
       const userData = await getCurrentUserFromCookie();
@@ -83,6 +94,12 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    if (chatSocketError) {
+      console.warn("[AuthContext] Chat socket error:", chatSocketError);
+    }
+  }, [chatSocketError]);
   return (
     <AuthContext.Provider
       value={{
@@ -93,6 +110,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         fetchUser,
         handleLogout,
         handleEmailConfirmation,
+        chatSocketConnected,
+        chatSocketError,
+        reconnectChatSocket: forceReconnect,
+        socket,
       }}
     >
       {children}

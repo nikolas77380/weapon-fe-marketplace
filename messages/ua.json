@@ -454,7 +454,7 @@
       "titleCountry": "Країна:",
       "titleAddress": "Адреса:",
       "buttonClose": "Закрити",
-      "buttonContactSeller": "Зв'язатися з продавцем",
+      "buttonContactSeller": "Написати продавцю",
       "loadingSellerMeta": "Завантаження інформації про продавця..."
     }
   },
@@ -615,6 +615,11 @@
     "footerNote": "Це посилання підтвердження можна використати лише один раз."
   },
   "Chat": {
+    "messages": "Повідомлення",
+    "searchChats": "Пошук чатів...",
+    "online": "Онлайн",
+    "offline": "Оффлайн",
+    "typeMessage": "Введіть повідомлення...",
     "loadingChats": "Завантаження чатів...",
     "title": "Чати",
     "selectChat": "Виберіть чат",
@@ -626,6 +631,20 @@
     "loadingError": "Помилка завантаження чатів",
     "retryButton": "Спробувати знову",
     "participants": "учасників",
+    "filters": {
+      "all": "Всі",
+      "unread": "Непрочитані",
+      "favorites": "Обране",
+      "archived": "Архівні"
+    },
+    "contextMenu": {
+      "markAsRead": "Позначити як прочитане",
+      "archive": "Архівувати",
+      "unarchive": "Розархівувати",
+      "addToFavorites": "Додати до обраного",
+      "removeFromFavorites": "Видалити з обраного",
+      "deleteChat": "Видалити чат"
+    },
     "status": {
       "active": "Активний",
       "successfully_completed": "Успішно завершений",

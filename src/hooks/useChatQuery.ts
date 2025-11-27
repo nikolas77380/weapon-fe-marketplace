@@ -9,37 +9,33 @@ import {
 } from "@/lib/chat-api";
 import { Chat, Message, CreateChatRequest } from "@/types/chat";
 import { queryKeys } from "@/lib/query-keys";
-import { useUnreadChats } from "@/context/UnreadChatsContext";
 import { User } from "@/types/chat";
 
 // Хук для получения списка чатов пользователя
 export const useUserChatsQuery = (initialChats?: Chat[]) => {
-  const { refreshUnreadCount } = useUnreadChats();
-
   return useQuery({
     queryKey: queryKeys.chats.list(),
     queryFn: async () => {
       const chats = await getUserChats();
-      // Обновляем счетчик непрочитанных после загрузки
-      refreshUnreadCount();
       return chats;
     },
     initialData: initialChats,
     staleTime: 30 * 1000, // 30 секунд
     refetchOnWindowFocus: false,
+    enabled: true, // Явно включаем запрос
   });
 };
 
 // Хук для получения сообщений чата
 export const useChatMessagesQuery = (
-  chatId: number | null,
+  chatId: number | string | null,
   enabled = true,
   chatStatus?: string
 ) => {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: queryKeys.chats.messages(chatId || 0),
+    queryKey: queryKeys.chats.messages(chatId ? Number(chatId) : 0),
     queryFn: async () => {
       if (!chatId) return [];
       const messages = await getChatMessages(chatId);
@@ -62,7 +58,6 @@ export const useChatMessagesQuery = (
 // Хук для отправки сообщения
 export const useSendMessageMutation = (currentUser?: User) => {
   const queryClient = useQueryClient();
-  const { refreshUnreadCount } = useUnreadChats();
 
   return useMutation({
     mutationFn: async (data: { text: string; chatId: number }) => {
@@ -263,8 +258,6 @@ export const useSendMessageMutation = (currentUser?: User) => {
         queryKey: queryKeys.chats.list(),
         refetchType: "none", // Не делаем refetch, только инвалидируем для обновления кеша
       });
-
-      await refreshUnreadCount();
     },
   });
 };
@@ -272,7 +265,6 @@ export const useSendMessageMutation = (currentUser?: User) => {
 // Хук для отметки чата как прочитанного
 export const useMarkChatAsReadMutation = () => {
   const queryClient = useQueryClient();
-  const { refreshUnreadCount } = useUnreadChats();
 
   return useMutation({
     mutationFn: async (chatId: number) => {
@@ -282,7 +274,7 @@ export const useMarkChatAsReadMutation = () => {
       // Обновляем сообщения в кеше
       queryClient.setQueryData<Message[]>(
         queryKeys.chats.messages(chatId),
-        messages
+        messages as any
       );
 
       // Обновляем hasUnreadMessages для этого чата в списке чатов
@@ -294,8 +286,6 @@ export const useMarkChatAsReadMutation = () => {
           );
         }
       );
-
-      await refreshUnreadCount();
     },
   });
 };

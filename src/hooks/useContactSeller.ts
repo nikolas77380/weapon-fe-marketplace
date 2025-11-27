@@ -24,7 +24,12 @@ export const useContactSeller = () => {
           topic: options?.productTitle, // topic теперь опциональный, бэкенд сгенерирует автоматически
         });
 
-        router.push(`/messages?chatId=${chat.id}`);
+        const params = new URLSearchParams({ chatId: String(chat.id) });
+        if (options?.productId) {
+          params.set("productId", String(options.productId));
+        }
+
+        router.push(`/messages?${params.toString()}`);
 
         return true;
       } catch (error) {

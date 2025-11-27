@@ -34,3 +34,14 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Chat WebSocket configuration
+
+Real-time chat requires a running `marketplace-message-service` instance.  
+Expose its HTTP/WebSocket endpoint via the `NEXT_PUBLIC_MESSAGE_SERVICE_URL` environment variable (defaults to `http://localhost:3001`):
+
+```
+NEXT_PUBLIC_MESSAGE_SERVICE_URL=http://localhost:3001
+```
+
+Only authenticated users establish a Socket.IO connection; guests browse the site without opening a WebSocket.
