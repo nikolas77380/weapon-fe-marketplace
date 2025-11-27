@@ -60,8 +60,8 @@ const SellerMenuContent = ({
   const containerClass = isMobile ? "space-y-2" : "grid w-[200px] gap-1";
 
   const linkClass = isMobile
-    ? "flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer"
-    : "p-3 cursor-pointer";
+    ? "flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer shadow-none "
+    : "p-3 cursor-pointer shadow-none border-none";
 
   const textClass = isMobile ? "text-sm xs:text-base" : "";
 
@@ -154,13 +154,14 @@ const SellerMenuContent = ({
               </div>
             </button>
 
-            <Separator />
+            <Separator className="mb-2" />
 
             <Button
               onClick={() => {
                 onLogout();
               }}
-              className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer p-3 justify-start"
+              variant={"default"}
+              className="bg-transparent shadow-none hover:bg-red-50 w-full flex items-start cursor-pointer p-3 justify-start"
             >
               <div className="flex items-center gap-3">
                 <LogOut size={18} />
@@ -259,7 +260,8 @@ const SellerMenuContent = ({
                 onClick={() => {
                   onLogout();
                 }}
-                className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer"
+                variant={"default"}
+                className="bg-transparent hover:bg-red-50 w-full flex items-start cursor-pointer border-none"
               >
                 <div className="flex items-center gap-3">
                   <LogOut size={18} />

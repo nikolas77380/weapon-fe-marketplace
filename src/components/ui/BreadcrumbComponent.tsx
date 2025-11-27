@@ -72,6 +72,8 @@ const BreadcrumbComponent = ({
           const isLast = index === normalizedCrumbs.length - 1;
           const truncateClass = isIntermediate
             ? "max-w-[120px] md:max-w-none truncate"
+            : isLast
+            ? "max-w-[200px] sm:max-w-[300px] md:max-w-none truncate"
             : "truncate";
           return (
             <React.Fragment key={`${href}-${index}`}>

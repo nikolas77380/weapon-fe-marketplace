@@ -232,7 +232,7 @@ const MobileDrawer = ({
             </>
           )}
 
-          <Separator className="my-2" />
+          <Separator className="mb-2" />
 
           <div className="flex items-center gap-3 p-3">
             <CurrencySwitcher

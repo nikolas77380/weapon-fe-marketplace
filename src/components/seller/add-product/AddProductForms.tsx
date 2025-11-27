@@ -513,7 +513,7 @@ const AddProductForms = ({
                         maxFiles={5}
                         maxSize={5 * 1024 * 1024}
                         enableCrop={true}
-                        aspectRatio={16 / 9}
+                        aspectRatio={1 / 1}
                         externalFiles={field.value || []}
                         onFilesChange={(files) => {
                           field.onChange(files || []);
