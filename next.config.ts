@@ -83,7 +83,7 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vimeo.com;",
+              "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vimeo.com https://challenges.cloudflare.com;",
           },
         ],
       },
