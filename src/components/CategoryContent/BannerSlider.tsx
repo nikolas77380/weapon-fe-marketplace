@@ -14,7 +14,7 @@ import { Promo } from "@/lib/types";
 
 const BannerSlider = ({ promos }: { promos?: Promo[] }) => {
   return (
-    <div className="mb-4 sm:mb-6 w-full overflow-hidden px-2 sm:px-0">
+    <div className="mb-4 sm:mb-6 w-full overflow-hidden sm:px-0">
       <div className="relative w-full">
         <Swiper
           modules={[Pagination, Navigation, Autoplay]}
