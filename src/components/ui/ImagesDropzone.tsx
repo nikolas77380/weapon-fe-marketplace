@@ -4,7 +4,6 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { X, Upload, File } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import ImageCropPreview from "./ImageCropPreview";
@@ -295,7 +294,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
             {files.map((file, index) => (
               <div
                 key={index}
-                className="relative group size-28 rounded p-2 bg-transparent hover:bg-gray-100 transition-colors"
+                className="relative size-28 rounded p-2 bg-transparent"
               >
                 {/* Preview */}
                 <div className="relative w-full h-24 mb-2 rounded overflow-hidden">
@@ -320,19 +319,19 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
                       <File className="h-8 w-8 text-red-500" />
                     </div>
                   )}
-                </div>
-                {/* Action buttons */}
-                <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {/* Delete button */}
-                  <Button
+                  {/* Delete button - внутри контейнера превью */}
+                  <button
                     type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="h-6 w-6 p-0"
                     onClick={() => removeFile(index)}
+                    className="absolute top-0 right-0 z-50 h-6 w-6 p-0 bg-destructive text-white rounded-sm flex items-center justify-center hover:bg-destructive/90 transition-colors"
+                    style={{
+                      opacity: 1,
+                      visibility: "visible",
+                      display: "flex",
+                    }}
                   >
                     <X className="h-3 w-3" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}
