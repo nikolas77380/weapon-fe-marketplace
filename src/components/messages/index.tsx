@@ -719,16 +719,14 @@ const Messages = () => {
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
                 {!chatSocketConnected && (
                   <div className="bg-amber-50 border border-amber-200 text-sm text-amber-900 rounded-lg p-3 flex items-center justify-between gap-3">
-                    <span>
-                      Connection to chat server lost. Trying to reconnect...
-                    </span>
+                    <span>{t("connectionLost")}</span>
                     <Button
                       size="sm"
                       variant="outline"
                       className="text-amber-900 border-amber-300"
                       onClick={() => reconnectChatSocket?.()}
                     >
-                      Retry
+                      {t("retryButton")}
                     </Button>
                   </div>
                 )}
@@ -740,7 +738,7 @@ const Messages = () => {
 
                 {messages.length === 0 ? (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
-                    <p>No messages yet. Start the conversation!</p>
+                    <p>{t("noMessagesYet")}</p>
                   </div>
                 ) : (
                   messages.map((message: Message, index: number) => {

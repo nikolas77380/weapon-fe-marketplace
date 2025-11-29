@@ -124,10 +124,10 @@ const SellerTabsDesktop = ({
             <Heart className="mr-1" />
             {tBuyer("tabFavourites.titleFavourites")}
           </TabsTrigger>
-          <TabsTrigger value="messages" className={cn(triggerClasses)}>
+          {/* <TabsTrigger value="messages" className={cn(triggerClasses)}>
             <MessageSquare className="mr-1" />
             {t("tabMessage.titleMessages")}
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value="addProduct" className={cn(triggerClasses)}>
             <PackagePlus className="mr-1" />
             {t("tabAddProduct.titleAddProduct")}
