@@ -11,7 +11,7 @@ export const ChatDetailSkeleton: React.FC<ChatDetailSkeletonProps> = ({
   messageCount = 4,
 }) => {
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full flex-col bg-white w-full">
       {/* Header skeleton */}
       <div className="p-4 border-b border-gray-200 bg-white flex items-center gap-3">
         <div className="hidden md:block w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
@@ -35,7 +35,7 @@ export const ChatDetailSkeleton: React.FC<ChatDetailSkeletonProps> = ({
             >
               <div
                 className={cn(
-                  "rounded-2xl px-4 py-3 max-w-[70%] animate-pulse",
+                  "rounded-2xl px-4 py-3 max-w-[85%] md:max-w-[70%] lg:max-w-[60%] animate-pulse",
                   isOwn ? "bg-gray-200" : "bg-white border border-gray-200"
                 )}
               >
@@ -54,5 +54,3 @@ export const ChatDetailSkeleton: React.FC<ChatDetailSkeletonProps> = ({
     </div>
   );
 };
-
-

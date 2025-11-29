@@ -618,6 +618,8 @@
     "searchChats": "Search chats...",
     "typeMessage": "Type a message...",
     "online": "Online",
+    "errorLoadingChats": "Error loading chats",
+    "loginRequired": "Please log in to use the chat",
     "offline": "Offline",
     "title": "Chats",
     "selectChat": "Select a chat",

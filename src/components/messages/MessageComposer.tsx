@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 
@@ -19,7 +19,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   canSend,
 }) => {
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         onSend();
@@ -30,14 +30,14 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   return (
     <div className="p-4 border-t border-gray-200 bg-white">
-      <div className="flex gap-2">
-        <Input
-          type="text"
+      <div className="flex gap-2 items-end">
+        <Textarea
           placeholder={placeholder}
           value={message}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1"
+          className="flex-1 min-h-[44px] max-h-40 resize-none"
+          rows={1}
         />
         <Button
           onClick={onSend}
