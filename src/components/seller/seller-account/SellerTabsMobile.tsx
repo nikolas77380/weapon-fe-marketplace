@@ -353,7 +353,7 @@ const SellerTabsMobile = ({
           </AccordionItem>
 
           <AccordionItem value="messages" className="rounded-md border-b-0">
-            <AccordionTrigger
+            {/* <AccordionTrigger
               id="accordion-messages"
               data-accordion-item="messages"
               className="bg-gold-main text-white px-4 py-3 hover:no-underline [&>svg]:text-white"
@@ -364,7 +364,7 @@ const SellerTabsMobile = ({
                   {t("tabMessage.titleMessages")}
                 </span>
               </div>
-            </AccordionTrigger>
+            </AccordionTrigger> */}
             <AccordionContent className="pt-4">
               <div className="mt-7.5">
                 <div className="flex items-center justify-between">
