@@ -42,7 +42,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         <Button
           onClick={onSend}
           disabled={!message.trim() || !canSend}
-          className="bg-gold-main hover:bg-gold-dark disabled:opacity-60"
+          className="bg-gold-main hover:bg-gold-dark disabled:opacity-60 self-stretch"
         >
           <Send className="h-4 w-4" />
         </Button>
