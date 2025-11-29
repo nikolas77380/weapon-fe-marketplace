@@ -583,6 +583,13 @@ const Messages = () => {
   const isInitialChatsLoading =
     (chatsLoading || chatsFetching) && !chatsFetched;
 
+  // Редирект на логин, если пользователь не авторизован
+  useEffect(() => {
+    if (!currentUserLoading && !currentUser) {
+      router.push("/auth?mode=login");
+    }
+  }, [currentUser, currentUserLoading, router]);
+
   if (currentUserLoading || isInitialChatsLoading) {
     return (
       <div className="h-screen flex bg-white">
@@ -606,18 +613,7 @@ const Messages = () => {
   }
 
   if (!currentUser) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <p className="text-lg font-semibold mb-2">
-            {t("loginRequired") || "Login required"}
-          </p>
-          <Button onClick={() => router.push("/login")}>
-            {t("login") || "Login"}
-          </Button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -639,16 +635,7 @@ const Messages = () => {
         <div className="flex-1 overflow-y-auto">
           {chatsError || participantsError ? (
             <div className="text-center py-8 text-red-500">
-              <p className="font-semibold">
-                {t("errorLoadingChats") || "Error loading chats"}
-              </p>
-              <p className="text-sm mt-1">
-                {chatsError instanceof Error
-                  ? chatsError.message
-                  : participantsError
-                  ? "Failed to load participants data"
-                  : "Unknown error"}
-              </p>
+              <p className="font-semibold">{t("errorLoadingChats")}</p>
             </div>
           ) : participantsLoading || isInitialChatsLoading ? (
             <ChatListSkeleton count={5} t={t} />
