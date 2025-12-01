@@ -18,6 +18,7 @@ import { NavbarSearch } from "../search/NavbarSearch";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { UserProfile } from "@/lib/types";
+import { useUnreadMessagesCount } from "@/hooks/useUnreadMessagesCount";
 
 interface NavbarClientProps {
   initialUser?: UserProfile | null;
@@ -66,6 +67,7 @@ const NavbarClient: React.FC<NavbarClientProps> = ({ initialUser }) => {
   // Используем currentUser из контекста или initialUser
   const user: UserProfile | null = currentUser || initialUser || null;
   const isLoading = currentUserLoading && !initialUser;
+  const unreadCount = useUnreadMessagesCount();
 
   const handleToggleCatalog = useCallback(() => {
     setIsCatalogOpen(!isCatalogOpen);
@@ -97,10 +99,13 @@ const NavbarClient: React.FC<NavbarClientProps> = ({ initialUser }) => {
         <div className="flex items-center gap-2 sm:gap-4 lg:gap-36">
           {/* Burger Menu Button - shows at <1024px */}
           <button
-            className="lg:hidden p-1.5 sm:p-2 hover:bg-white/10 rounded-md transition-colors"
+            className="lg:hidden p-1.5 sm:p-2 hover:bg-white/10 rounded-md transition-colors relative"
             onClick={handleToggleMobileDrawer}
           >
             <Menu size={16} className="text-white sm:w-5 sm:h-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-[6px] left-[12px] z-10 h-2.5 w-2.5 rounded-full bg-red-500 shadow-lg transform translate-x-1/2 -translate-y-1/2" />
+            )}
           </button>
 
           <div className="mr-1 lg:mr-0 flex-shrink-0">
