@@ -16,6 +16,7 @@ import type { UserProfile } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useRouter } from "next/navigation";
+import { useUnreadMessagesCount } from "@/hooks/useUnreadMessagesCount";
 
 interface BuyerMenuContentProps {
   user: UserProfile;
@@ -33,6 +34,7 @@ const BuyerMenuContent = ({
   const t = useTranslations("Navbar.buyerNavbar");
   const { favourites } = useFavourites();
   const router = useRouter();
+  const unreadCount = useUnreadMessagesCount();
 
   const handleLinkClick = () => {
     if (isMobile && onClose) {
@@ -106,6 +108,11 @@ const BuyerMenuContent = ({
                   <p className={`font-semibold ${textClass}`}>
                     {t("titleMessages")}
                   </p>
+                  {unreadCount > 0 && (
+                    <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 bg-red-500 text-white text-xs font-semibold rounded-full">
+                      {unreadCount > 99 ? "99+" : unreadCount}
+                    </span>
+                  )}
                 </div>
               </div>
             </Link>
