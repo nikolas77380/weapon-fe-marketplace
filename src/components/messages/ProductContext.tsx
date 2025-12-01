@@ -75,7 +75,7 @@ export const ProductContext: React.FC<ProductContextProps> = ({
   return (
     <div className="mb-4">
       <Link
-        href={`/marketplace/${product.slug}`}
+        href={`/marketplace/${product.id}`}
         target="_blank"
         className="flex items-start gap-3 p-3 bg-white rounded-lg border border-gray-200 hover:border-gold-main hover:shadow-sm transition-all group"
       >
