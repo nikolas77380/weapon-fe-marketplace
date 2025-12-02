@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import Footer from "@/components/landing/Footer";
 import { useNavigation } from "@/context/NavigationContext";
@@ -18,6 +18,7 @@ export default function ConditionalLayout({
   initialUser,
 }: ConditionalLayoutProps) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { setIsNavigating } = useNavigation();
   const prevPathnameRef = useRef(pathname);
 
@@ -50,9 +51,12 @@ export default function ConditionalLayout({
   // List of paths where only Footer should NOT be shown
   const hideFooterOnlyPaths = ["/messages"];
 
-  const shouldHideNavbarFooter = hideNavbarFooterPaths.some((path) =>
-    pathname.startsWith(path)
-  );
+  // Check if we're inside a specific chat (chatId parameter present)
+  const isInsideChat = pathname.startsWith("/messages") && searchParams.get("chatId");
+
+  const shouldHideNavbarFooter = 
+    hideNavbarFooterPaths.some((path) => pathname.startsWith(path)) || 
+    isInsideChat;
 
   const shouldHideFooter =
     shouldHideNavbarFooter ||
