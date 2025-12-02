@@ -531,7 +531,7 @@ const Messages = () => {
   // Форматирование времени для сообщений
   const formatMessageTime = (dateString: string | undefined): string => {
     if (!dateString) {
-      return "now";
+      return t("timeFormat.now");
     }
 
     try {
@@ -539,13 +539,13 @@ const Messages = () => {
       const now = new Date();
 
       if (isNaN(date.getTime())) {
-        return "now";
+        return t("timeFormat.now");
       }
 
       const diffInMs = now.getTime() - date.getTime();
 
       if (diffInMs < 0) {
-        return "now";
+        return t("timeFormat.now");
       }
 
       const diffInSeconds = Math.floor(diffInMs / 1000);
@@ -554,20 +554,20 @@ const Messages = () => {
       const diffInDays = Math.floor(diffInHours / 24);
 
       if (diffInSeconds < 10) {
-        return "just now";
+        return t("timeFormat.justNow");
       }
 
       if (diffInMinutes < 1) {
-        return "now";
+        return t("timeFormat.now");
       }
       if (diffInMinutes < 60) {
-        return `${diffInMinutes}m`;
+        return t("timeFormat.minutesShort", { count: diffInMinutes });
       }
       if (diffInHours < 24) {
-        return `${diffInHours}h`;
+        return t("timeFormat.hoursShort", { count: diffInHours });
       }
       if (diffInDays < 7) {
-        return `${diffInDays}d`;
+        return t("timeFormat.daysShort", { count: diffInDays });
       }
 
       return date.toLocaleDateString("en-US", {
@@ -576,8 +576,51 @@ const Messages = () => {
       });
     } catch (error) {
       console.error("Error formatting message time:", error);
-      return "now";
+      return t("timeFormat.now");
     }
+  };
+
+  // Функция для получения даты сообщения (для разделителей дней)
+  const getMessageDateLabel = (dateString: string | undefined): string | null => {
+    if (!dateString) return null;
+
+    try {
+      const date = new Date(normalizeToIsoString(dateString));
+      const now = new Date();
+
+      if (isNaN(date.getTime())) return null;
+
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const messageDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+      if (messageDate.getTime() === today.getTime()) {
+        return t("timeFormat.today");
+      }
+      if (messageDate.getTime() === yesterday.getTime()) {
+        return t("timeFormat.yesterday");
+      }
+
+      return date.toLocaleDateString("uk-UA", {
+        day: "numeric",
+        month: "long",
+        year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+      });
+    } catch (error) {
+      console.error("Error getting message date label:", error);
+      return null;
+    }
+  };
+
+  // Проверка, нужно ли показывать разделитель дня
+  const shouldShowDaySeparator = (currentMessage: Message, previousMessage: Message | null): boolean => {
+    if (!previousMessage) return true;
+
+    const currentDate = getMessageDateLabel(currentMessage.createdAt);
+    const previousDate = getMessageDateLabel(previousMessage.createdAt);
+
+    return currentDate !== previousDate;
   };
 
   const isInitialChatsLoading =
@@ -756,8 +799,19 @@ const Messages = () => {
                         !previousMessage.product?.id ||
                         previousMessage.product.id !== message.product.id);
 
+                    // Проверяем, нужно ли показывать разделитель дня
+                    const showDaySeparator = shouldShowDaySeparator(message, previousMessage);
+                    const dateLabel = showDaySeparator ? getMessageDateLabel(message.createdAt) : null;
+
                     return (
                       <React.Fragment key={message.id}>
+                        {showDaySeparator && dateLabel && (
+                          <div className="flex items-center justify-center my-4">
+                            <div className="bg-gray-200 text-gray-600 text-xs font-medium px-3 py-1 rounded-full">
+                              {dateLabel}
+                            </div>
+                          </div>
+                        )}
                         {shouldShowProductContext && message.product?.id && (
                           <ProductContext productId={message.product.id} />
                         )}
