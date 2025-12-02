@@ -682,6 +682,15 @@
       "noMessages": "Поки немає повідомлень",
       "read": "Прочитано",
       "unread": "Непрочитано"
+    },
+    "timeFormat": {
+      "justNow": "щойно",
+      "now": "зараз",
+      "minutesShort": "{count, plural, one {# хв} few {# хв} many {# хв} other {# хв}}",
+      "hoursShort": "{count, plural, one {# год} few {# год} many {# год} other {# год}}",
+      "daysShort": "{count, plural, one {# день} few {# дні} many {# днів} other {# днів}}",
+      "today": "Сьогодні",
+      "yesterday": "Вчора"
     }
   },
   "FAQ": {

@@ -681,6 +681,15 @@
       "noMessages": "No messages yet",
       "read": "Read",
       "unread": "Unread"
+    },
+    "timeFormat": {
+      "justNow": "just now",
+      "now": "now",
+      "minutesShort": "{count, plural, one {# min} other {# min}}",
+      "hoursShort": "{count, plural, one {# hr} other {# hrs}}",
+      "daysShort": "{count, plural, one {# day} other {# days}}",
+      "today": "Today",
+      "yesterday": "Yesterday"
     }
   },
   "FAQ": {
