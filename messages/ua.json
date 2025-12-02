@@ -689,6 +689,7 @@
       "minutesShort": "{count, plural, one {# хв} few {# хв} many {# хв} other {# хв}}",
       "hoursShort": "{count, plural, one {# год} few {# год} many {# год} other {# год}}",
       "daysShort": "{count, plural, one {# день} few {# дні} many {# днів} other {# днів}}",
+      "weeksShort": "{count, plural, one {# тиж} few {# тиж} many {# тиж} other {# тиж}}",
       "today": "Сьогодні",
       "yesterday": "Вчора"
     }
