@@ -688,6 +688,7 @@
       "minutesShort": "{count, plural, one {# min} other {# min}}",
       "hoursShort": "{count, plural, one {# hr} other {# hrs}}",
       "daysShort": "{count, plural, one {# day} other {# days}}",
+      "weeksShort": "{count, plural, one {# wk} other {# wks}}",
       "today": "Today",
       "yesterday": "Yesterday"
     }

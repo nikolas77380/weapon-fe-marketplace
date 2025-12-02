@@ -30,7 +30,7 @@ interface ChatListProps {
   onSearchChange: (query: string) => void;
   onChatSelect: (chatId: string | number) => void;
   onlineUsers: Set<number>;
-  t: (key: string) => string;
+  t: (key: string, params?: any) => string;
   activeFilter?: ChatFilter;
   onFilterChange?: (filter: ChatFilter) => void;
   onMarkAsRead?: (chatId: string | number) => void;
@@ -195,7 +195,10 @@ export const ChatList: React.FC<ChatListProps> = ({
 
             const lastMessageText = chat.lastMessage?.text || "";
             const lastMessageTime = chat.lastMessage?.createdAt
-              ? formatRelativeTimeShort(chat.lastMessage.createdAt)
+              ? (() => {
+                  console.log('[ChatList] Calling formatRelativeTimeShort with t:', typeof t, 'date:', chat.lastMessage.createdAt);
+                  return formatRelativeTimeShort(chat.lastMessage.createdAt, t);
+                })()
               : "";
 
             return (
