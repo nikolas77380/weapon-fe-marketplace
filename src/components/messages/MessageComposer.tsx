@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
@@ -18,14 +18,38 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   onSend,
   canSend,
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Определяем тип устройства
+  useEffect(() => {
+    const checkIfMobile = () => {
+      // Проверяем ширину экрана (мобильные устройства обычно < 768px)
+      const isMobileWidth = window.innerWidth < 768;
+      // Проверяем touch support
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      setIsMobile(isMobileWidth && isTouchDevice);
+    };
+
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      // На мобильных устройствах Enter всегда создает новую строку
+      if (isMobile) {
+        return; // Не блокируем Enter на мобильных
+      }
+
+      // На десктопе: Enter отправляет, Shift+Enter создает новую строку
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         onSend();
       }
     },
-    [onSend]
+    [onSend, isMobile]
   );
 
   return (

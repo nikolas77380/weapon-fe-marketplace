@@ -626,6 +626,17 @@ const Messages = () => {
   const isInitialChatsLoading =
     (chatsLoading || chatsFetching) && !chatsFetched;
 
+  // Блокируем скролл страницы на /messages
+  useEffect(() => {
+    // Блокируем скролл body
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      // Возвращаем скролл при размонтировании
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   // Редирект на логин, если пользователь не авторизован
   useEffect(() => {
     if (!currentUserLoading && !currentUser) {
@@ -635,7 +646,7 @@ const Messages = () => {
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="h-[calc(100vh-64px)] flex bg-white">
+      <div className="h-[100dvh] flex bg-white overflow-hidden pt-16">
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -660,7 +671,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] flex bg-white">
+    <div className="h-[100dvh] flex bg-white overflow-hidden pt-16">
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
