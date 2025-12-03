@@ -635,7 +635,7 @@ const Messages = () => {
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="min-h-[calc(100vh-64px)] flex bg-white">
+      <div className="h-[calc(100vh-64px)] flex bg-white">
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -660,7 +660,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex bg-white">
+    <div className="h-[calc(100vh-64px)] flex bg-white">
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
