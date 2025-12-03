@@ -59,9 +59,11 @@ export default function ConditionalLayout({
     shouldHideNavbarFooter ||
     hideFooterOnlyPaths.some((path) => pathname.startsWith(path));
 
+  const isMessagesPage = pathname.startsWith("/messages");
+
   return (
     <>
-      <div className="relative">
+      <div className={isMessagesPage ? "fixed top-0 left-0 right-0 z-50" : "relative"}>
         {!shouldHideNavbarFooter && (
           <NavbarClient initialUser={initialUser ?? null} />
         )}
