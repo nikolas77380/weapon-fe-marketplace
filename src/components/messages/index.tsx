@@ -36,6 +36,7 @@ const Messages = () => {
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
+  const [viewportOffsetTop, setViewportOffsetTop] = useState<number>(0);
 
   // Получаем chatId из URL при загрузке
   const chatIdFromUrl = searchParams.get("chatId");
@@ -636,6 +637,7 @@ const Messages = () => {
     const updateHeight = () => {
       if (window.visualViewport) {
         setViewportHeight(window.visualViewport.height);
+        setViewportOffsetTop(window.visualViewport.offsetTop);
       }
     };
 
@@ -667,10 +669,14 @@ const Messages = () => {
   }, [currentUser, currentUserLoading, router]);
 
   const containerHeight = viewportHeight ? `${viewportHeight}px` : '100vh';
+  const containerStyle: React.CSSProperties = {
+    height: containerHeight,
+    ...(viewportOffsetTop > 0 && { marginTop: `-${viewportOffsetTop}px` })
+  };
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="flex bg-white overflow-hidden pt-16" style={{ height: containerHeight }}>
+      <div className="flex bg-white overflow-hidden pt-16" style={containerStyle}>
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -695,7 +701,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="flex bg-white overflow-hidden pt-16" style={{ height: containerHeight }}>
+    <div className="flex bg-white overflow-hidden pt-16" style={containerStyle}>
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
