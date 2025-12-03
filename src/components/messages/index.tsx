@@ -35,6 +35,7 @@ const Messages = () => {
   const searchParams = useSearchParams();
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
 
   // Получаем chatId из URL при загрузке
   const chatIdFromUrl = searchParams.get("chatId");
@@ -631,21 +632,29 @@ const Messages = () => {
     // Блокируем скролл body
     document.body.style.overflow = 'hidden';
     
-    // Для iOS: фиксируем высоту и предотвращаем скролл при открытии клавиатуры
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    if (isIOS) {
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.height = '100vh';
+    // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
+    const updateHeight = () => {
+      if (window.visualViewport) {
+        setViewportHeight(window.visualViewport.height);
+      }
+    };
+
+    // Устанавливаем начальную высоту
+    updateHeight();
+
+    // Слушаем изменения viewport (когда открывается/закрывается клавиатура)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateHeight);
+      window.visualViewport.addEventListener('scroll', updateHeight);
     }
     
     return () => {
       // Возвращаем скролл при размонтировании
       document.body.style.overflow = '';
-      if (isIOS) {
-        document.body.style.position = '';
-        document.body.style.width = '';
-        document.body.style.height = '';
+      
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateHeight);
+        window.visualViewport.removeEventListener('scroll', updateHeight);
       }
     };
   }, []);
@@ -657,9 +666,11 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
+  const containerHeight = viewportHeight ? `${viewportHeight}px` : '100vh';
+
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="h-[100vh] flex bg-white overflow-hidden pt-16">
+      <div className="flex bg-white overflow-hidden pt-16" style={{ height: containerHeight }}>
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -684,7 +695,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="h-[100vh] flex bg-white overflow-hidden pt-16">
+    <div className="flex bg-white overflow-hidden pt-16" style={{ height: containerHeight }}>
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
