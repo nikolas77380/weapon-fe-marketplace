@@ -51,12 +51,9 @@ export default function ConditionalLayout({
   // List of paths where only Footer should NOT be shown
   const hideFooterOnlyPaths = ["/messages"];
 
-  // Check if we're inside a specific chat (chatId parameter present)
-  const isInsideChat = pathname.startsWith("/messages") && searchParams.get("chatId");
-
-  const shouldHideNavbarFooter = 
-    hideNavbarFooterPaths.some((path) => pathname.startsWith(path)) || 
-    isInsideChat;
+  const shouldHideNavbarFooter = hideNavbarFooterPaths.some((path) =>
+    pathname.startsWith(path)
+  );
 
   const shouldHideFooter =
     shouldHideNavbarFooter ||
