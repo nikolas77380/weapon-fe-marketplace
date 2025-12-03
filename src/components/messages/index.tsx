@@ -631,9 +631,22 @@ const Messages = () => {
     // Блокируем скролл body
     document.body.style.overflow = 'hidden';
     
+    // Для iOS: фиксируем высоту и предотвращаем скролл при открытии клавиатуры
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100vh';
+    }
+    
     return () => {
       // Возвращаем скролл при размонтировании
       document.body.style.overflow = '';
+      if (isIOS) {
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.height = '';
+      }
     };
   }, []);
 
@@ -646,7 +659,7 @@ const Messages = () => {
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="h-[100dvh] flex bg-white overflow-hidden pt-16">
+      <div className="h-[100vh] flex bg-white overflow-hidden pt-16">
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -671,7 +684,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="h-[100dvh] flex bg-white overflow-hidden pt-16">
+    <div className="h-[100vh] flex bg-white overflow-hidden pt-16">
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
