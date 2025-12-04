@@ -37,6 +37,7 @@ const Messages = () => {
   const queryClient = useQueryClient();
   const [viewportHeight, setViewportHeight] = useState<number | null>(null);
   const [viewportOffsetTop, setViewportOffsetTop] = useState<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Получаем chatId из URL при загрузке
   const chatIdFromUrl = searchParams.get("chatId");
@@ -642,8 +643,18 @@ const Messages = () => {
     // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
     const updateHeight = () => {
       if (window.visualViewport) {
-        setViewportHeight(window.visualViewport.height);
-        setViewportOffsetTop(window.visualViewport.offsetTop);
+        const height = window.visualViewport.height;
+        const offsetTop = window.visualViewport.offsetTop;
+        
+        setViewportHeight(height);
+        setViewportOffsetTop(offsetTop);
+
+        // Direct DOM update to prevent jumping
+        if (containerRef.current) {
+          const navbarHeight = 64;
+          containerRef.current.style.height = `${height - navbarHeight}px`;
+          containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
+        }
       }
     };
 
@@ -688,15 +699,21 @@ const Messages = () => {
   const containerStyle: React.CSSProperties = {
     height: containerHeight,
     position: 'fixed', // Always fixed to prevent scrolling issues
+    top: 0,
     // Top position: visualViewport offset + navbar height
-    top: `${viewportOffsetTop + navbarHeight}px`,
+    transform: `translateY(${viewportOffsetTop + navbarHeight}px)`,
     left: 0,
     right: 0,
+    willChange: 'transform, height'
   };
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="flex bg-white overflow-hidden" style={containerStyle}>
+      <div 
+        ref={containerRef}
+        className="flex bg-white overflow-hidden" 
+        style={containerStyle}
+      >
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -721,7 +738,12 @@ const Messages = () => {
   }
 
   return (
-    <div className="flex bg-white overflow-hidden" style={containerStyle}>
+
+    <div 
+      ref={containerRef}
+      className="flex bg-white overflow-hidden" 
+      style={containerStyle}
+    >
       {/* Левая панель: Список чатов */}
       <div
         className={cn(
