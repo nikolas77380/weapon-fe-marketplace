@@ -671,7 +671,10 @@ const Messages = () => {
   const containerHeight = viewportHeight ? `${viewportHeight}px` : '100vh';
   const containerStyle: React.CSSProperties = {
     height: containerHeight,
-    ...(viewportOffsetTop > 0 && { marginTop: `-${viewportOffsetTop}px` })
+    position: viewportOffsetTop > 0 ? 'fixed' : 'relative',
+    top: viewportOffsetTop > 0 ? `${viewportOffsetTop}px` : 0,
+    left: 0,
+    right: 0,
   };
 
   if (currentUserLoading || isInitialChatsLoading) {
