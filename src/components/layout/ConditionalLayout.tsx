@@ -72,12 +72,17 @@ export default function ConditionalLayout({
         const offset = window.visualViewport.offsetTop;
         setViewportOffsetTop(offset);
         
-        // Direct DOM update to prevent jumping
-        if (navbarRef.current) {
-          navbarRef.current.style.transform = `translateY(${offset}px)`;
-        }
+        // Use requestAnimationFrame for smooth updates
+        requestAnimationFrame(() => {
+          if (navbarRef.current) {
+            navbarRef.current.style.transform = `translateY(${offset}px)`;
+          }
+        });
       }
     };
+
+    // Initialize immediately
+    updateOffset();
 
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", updateOffset);
