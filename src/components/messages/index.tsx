@@ -648,17 +648,16 @@ const Messages = () => {
         const height = window.visualViewport.height;
         const offsetTop = window.visualViewport.offsetTop;
         
+        // Применяем изменения синхронно для мгновенной реакции
         setViewportHeight(height);
         setViewportOffsetTop(offsetTop);
 
-        // Use requestAnimationFrame for smooth updates
-        requestAnimationFrame(() => {
-          if (containerRef.current) {
-            const navbarHeight = 64;
-            containerRef.current.style.height = `${height - navbarHeight}px`;
-            containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
-          }
-        });
+        // Применяем стили напрямую без задержки
+        if (containerRef.current) {
+          const navbarHeight = 64;
+          containerRef.current.style.height = `${height - navbarHeight}px`;
+          containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
+        }
       }
     };
 
@@ -670,6 +669,24 @@ const Messages = () => {
       window.visualViewport.addEventListener('resize', updateHeight);
       window.visualViewport.addEventListener('scroll', updateHeight);
     }
+
+    // Обработчик для мгновенной реакции при фокусе на инпут
+    const handleFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+        // Применяем изменения сразу при фокусе
+        updateHeight();
+      }
+    };
+
+    // Обработчик для закрытия клавиатуры
+    const handleFocusOut = () => {
+      // Небольшая задержка для правильной обработки закрытия клавиатуры
+      setTimeout(updateHeight, 100);
+    };
+
+    document.addEventListener('focusin', handleFocusIn);
+    document.addEventListener('focusout', handleFocusOut);
 
     // Prevent body scroll on iOS
     const preventBodyScroll = (e: TouchEvent) => {
@@ -690,6 +707,9 @@ const Messages = () => {
       bodyElement.style.scrollBehavior = '';
       
       bodyElement.removeEventListener('touchmove', preventBodyScroll);
+      
+      document.removeEventListener('focusin', handleFocusIn);
+      document.removeEventListener('focusout', handleFocusOut);
       
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', updateHeight);
