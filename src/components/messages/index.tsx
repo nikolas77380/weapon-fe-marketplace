@@ -630,8 +630,14 @@ const Messages = () => {
 
   // Блокируем скролл страницы на /messages
   useEffect(() => {
-    // Блокируем скролл body
-    document.body.style.overflow = 'hidden';
+    // Блокируем скролл body и устанавливаем фиксированную высоту
+    const htmlElement = document.documentElement;
+    const bodyElement = document.body;
+    
+    htmlElement.style.height = '100%';
+    htmlElement.style.overflow = 'hidden';
+    bodyElement.style.height = '100%';
+    bodyElement.style.overflow = 'hidden';
     
     // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
     const updateHeight = () => {
@@ -652,7 +658,10 @@ const Messages = () => {
     
     return () => {
       // Возвращаем скролл при размонтировании
-      document.body.style.overflow = '';
+      htmlElement.style.height = '';
+      htmlElement.style.overflow = '';
+      bodyElement.style.height = '';
+      bodyElement.style.overflow = '';
       
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', updateHeight);
@@ -668,11 +677,14 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
-  const containerHeight = viewportHeight ? `${viewportHeight}px` : '100vh';
+  const navbarHeight = 64; // Height of navbar in pixels
+  const containerHeight = viewportHeight 
+    ? (viewportOffsetTop > 0 ? `${viewportHeight - navbarHeight}px` : `${viewportHeight}px`)
+    : '100vh';
   const containerStyle: React.CSSProperties = {
     height: containerHeight,
     position: viewportOffsetTop > 0 ? 'fixed' : 'relative',
-    top: viewportOffsetTop > 0 ? `${viewportOffsetTop}px` : 0,
+    top: viewportOffsetTop > 0 ? `${viewportOffsetTop + navbarHeight}px` : 0,
     left: 0,
     right: 0,
   };
