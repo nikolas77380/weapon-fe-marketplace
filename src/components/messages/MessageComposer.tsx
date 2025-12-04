@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
@@ -19,6 +19,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   canSend,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Определяем тип устройства
   useEffect(() => {
@@ -35,6 +36,25 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
+
+  // Обработчик для мгновенной реакции при касании textarea на iOS
+  const handleTouchStart = useCallback(() => {
+    if (isMobile && window.visualViewport) {
+      // Применяем изменения сразу при касании, до открытия клавиатуры
+      const initialHeight = window.innerHeight;
+      const estimatedKeyboardHeight = 300;
+      const estimatedHeight = initialHeight - estimatedKeyboardHeight;
+      const estimatedOffset = estimatedKeyboardHeight;
+      
+      // Находим контейнер мессенджера и применяем изменения напрямую
+      const container = document.querySelector('[data-messages-container]') as HTMLElement;
+      if (container) {
+        const navbarHeight = 64;
+        container.style.height = `${estimatedHeight - navbarHeight}px`;
+        container.style.transform = `translateY(${estimatedOffset + navbarHeight}px)`;
+      }
+    }
+  }, [isMobile]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -56,10 +76,12 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     <div className="p-4 border-t border-gray-200 bg-white">
       <div className="flex gap-2 items-end">
         <Textarea
+          ref={textareaRef}
           placeholder={placeholder}
           value={message}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
+          onTouchStart={handleTouchStart}
           className="flex-1 min-h-[44px] max-h-40 resize-none"
           rows={1}
         />

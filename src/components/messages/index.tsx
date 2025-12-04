@@ -642,40 +642,70 @@ const Messages = () => {
     bodyElement.style.overflow = 'hidden';
     bodyElement.style.scrollBehavior = 'auto';
     
+    const navbarHeight = 64;
+    let initialViewportHeight = window.visualViewport?.height || window.innerHeight;
+    let isKeyboardOpen = false;
+
+    // Обновляем начальную высоту при изменении размера окна (когда клавиатура закрыта)
+    const updateInitialHeight = () => {
+      if (window.visualViewport && !isKeyboardOpen) {
+        initialViewportHeight = window.visualViewport.height;
+      } else if (!window.visualViewport) {
+        initialViewportHeight = window.innerHeight;
+      }
+    };
+
+    // Функция для применения изменений напрямую в DOM без задержки
+    const applyHeightChanges = (height: number, offsetTop: number) => {
+      if (containerRef.current) {
+        containerRef.current.style.height = `${height - navbarHeight}px`;
+        containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
+      }
+      // Обновляем state для других компонентов
+      setViewportHeight(height);
+      setViewportOffsetTop(offsetTop);
+    };
+
     // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
     const updateHeight = () => {
       if (window.visualViewport) {
         const height = window.visualViewport.height;
         const offsetTop = window.visualViewport.offsetTop;
         
+        // Определяем, открыта ли клавиатура
+        isKeyboardOpen = offsetTop > 0 || height < initialViewportHeight * 0.75;
+        
         // Применяем изменения синхронно для мгновенной реакции
-        setViewportHeight(height);
-        setViewportOffsetTop(offsetTop);
-
-        // Применяем стили напрямую без задержки
-        if (containerRef.current) {
-          const navbarHeight = 64;
-          containerRef.current.style.height = `${height - navbarHeight}px`;
-          containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
-        }
+        applyHeightChanges(height, offsetTop);
+      } else {
+        // Fallback для браузеров без visualViewport
+        const height = window.innerHeight;
+        applyHeightChanges(height, 0);
       }
     };
 
-    // Устанавливаем начальную высоту
-    updateHeight();
-
-    // Слушаем изменения viewport (когда открывается/закрывается клавиатура)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', updateHeight);
-      window.visualViewport.addEventListener('scroll', updateHeight);
-    }
-
-    // Обработчик для мгновенной реакции при фокусе на инпут
+    // Предсказываем открытие клавиатуры и применяем изменения заранее
     const handleFocusIn = (e: FocusEvent) => {
       const target = e.target as HTMLElement;
       if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-        // Применяем изменения сразу при фокусе
-        updateHeight();
+        // Сразу применяем изменения, предполагая что клавиатура откроется
+        // Используем типичную высоту клавиатуры iOS (~300px)
+        const estimatedKeyboardHeight = 300;
+        const estimatedHeight = initialViewportHeight - estimatedKeyboardHeight;
+        const estimatedOffset = estimatedKeyboardHeight;
+        
+        // Применяем изменения мгновенно
+        applyHeightChanges(estimatedHeight, estimatedOffset);
+        
+        // Затем обновляем с реальными значениями сразу когда они станут доступны
+        // Используем синхронную проверку без задержек
+        if (window.visualViewport) {
+          const realHeight = window.visualViewport.height;
+          const realOffset = window.visualViewport.offsetTop;
+          if (realHeight !== estimatedHeight || realOffset !== estimatedOffset) {
+            applyHeightChanges(realHeight, realOffset);
+          }
+        }
       }
     };
 
@@ -685,8 +715,38 @@ const Messages = () => {
       setTimeout(updateHeight, 100);
     };
 
+    // Обработчик touchstart для еще более ранней реакции
+    const handleTouchStart = (e: TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+        // Применяем изменения сразу при касании
+        const estimatedKeyboardHeight = 300;
+        const estimatedHeight = initialViewportHeight - estimatedKeyboardHeight;
+        const estimatedOffset = estimatedKeyboardHeight;
+        applyHeightChanges(estimatedHeight, estimatedOffset);
+      }
+    };
+
+    // Устанавливаем начальную высоту
+    updateHeight();
+    updateInitialHeight();
+
+    // Слушаем изменения viewport (когда открывается/закрывается клавиатура)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', () => {
+        updateInitialHeight();
+        updateHeight();
+      });
+      window.visualViewport.addEventListener('scroll', updateHeight);
+    }
+
+    // Также слушаем изменения размера окна
+    window.addEventListener('resize', updateInitialHeight);
+
+    // Добавляем обработчики для мгновенной реакции
     document.addEventListener('focusin', handleFocusIn);
     document.addEventListener('focusout', handleFocusOut);
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
 
     // Prevent body scroll on iOS
     const preventBodyScroll = (e: TouchEvent) => {
@@ -710,6 +770,9 @@ const Messages = () => {
       
       document.removeEventListener('focusin', handleFocusIn);
       document.removeEventListener('focusout', handleFocusOut);
+      document.removeEventListener('touchstart', handleTouchStart);
+      
+      window.removeEventListener('resize', updateInitialHeight);
       
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', updateHeight);
@@ -748,6 +811,7 @@ const Messages = () => {
     return (
       <div 
         ref={containerRef}
+        data-messages-container
         className="flex bg-white overflow-hidden" 
         style={containerStyle}
       >
