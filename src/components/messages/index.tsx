@@ -637,8 +637,10 @@ const Messages = () => {
     
     htmlElement.style.height = '100%';
     htmlElement.style.overflow = 'hidden';
+    htmlElement.style.scrollBehavior = 'auto';
     bodyElement.style.height = '100%';
     bodyElement.style.overflow = 'hidden';
+    bodyElement.style.scrollBehavior = 'auto';
     
     // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
     const updateHeight = () => {
@@ -649,12 +651,14 @@ const Messages = () => {
         setViewportHeight(height);
         setViewportOffsetTop(offsetTop);
 
-        // Direct DOM update to prevent jumping
-        if (containerRef.current) {
-          const navbarHeight = 64;
-          containerRef.current.style.height = `${height - navbarHeight}px`;
-          containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
-        }
+        // Use requestAnimationFrame for smooth updates
+        requestAnimationFrame(() => {
+          if (containerRef.current) {
+            const navbarHeight = 64;
+            containerRef.current.style.height = `${height - navbarHeight}px`;
+            containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
+          }
+        });
       }
     };
 
@@ -666,13 +670,26 @@ const Messages = () => {
       window.visualViewport.addEventListener('resize', updateHeight);
       window.visualViewport.addEventListener('scroll', updateHeight);
     }
+
+    // Prevent body scroll on iOS
+    const preventBodyScroll = (e: TouchEvent) => {
+      if (e.target === bodyElement || e.target === htmlElement) {
+        e.preventDefault();
+      }
+    };
+    
+    bodyElement.addEventListener('touchmove', preventBodyScroll, { passive: false });
     
     return () => {
       // Возвращаем скролл при размонтировании
       htmlElement.style.height = '';
       htmlElement.style.overflow = '';
+      htmlElement.style.scrollBehavior = '';
       bodyElement.style.height = '';
       bodyElement.style.overflow = '';
+      bodyElement.style.scrollBehavior = '';
+      
+      bodyElement.removeEventListener('touchmove', preventBodyScroll);
       
       if (window.visualViewport) {
         window.visualViewport.removeEventListener('resize', updateHeight);
