@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Footer from "@/components/landing/Footer";
 import { useNavigation } from "@/context/NavigationContext";
 import { useGlobalLinkHandler } from "@/hooks/useGlobalLinkHandler";
@@ -59,57 +59,11 @@ export default function ConditionalLayout({
     shouldHideNavbarFooter ||
     hideFooterOnlyPaths.some((path) => pathname.startsWith(path));
 
-  const isMessagesPage = pathname.startsWith("/messages");
-  const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
-
-  const navbarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!isMessagesPage) return;
-
-    const updateOffset = () => {
-      if (window.visualViewport) {
-        const offset = window.visualViewport.offsetTop;
-        setViewportOffsetTop(offset);
-        
-        // Применяем стили синхронно для мгновенной реакции
-        if (navbarRef.current) {
-          navbarRef.current.style.transform = `translateY(${offset}px)`;
-        }
-      }
-    };
-
-    // Initialize immediately
-    updateOffset();
-
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", updateOffset);
-      window.visualViewport.addEventListener("scroll", updateOffset);
-    }
-
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", updateOffset);
-        window.visualViewport.removeEventListener("scroll", updateOffset);
-      }
-    };
-  }, [isMessagesPage]);
-
   return (
     <>
-      <div 
-        ref={navbarRef}
-        className={isMessagesPage ? "fixed left-0 right-0 z-50" : "relative"}
-        style={isMessagesPage ? { 
-          top: 0,
-          transform: `translateY(${viewportOffsetTop}px)`,
-          willChange: 'transform'
-        } : undefined}
-      >
-        {!shouldHideNavbarFooter && (
-          <NavbarClient initialUser={initialUser ?? null} />
-        )}
-      </div>
+      {!shouldHideNavbarFooter && (
+        <NavbarClient initialUser={initialUser ?? null} />
+      )}
       {children}
       {!shouldHideFooter && <Footer />}
     </>

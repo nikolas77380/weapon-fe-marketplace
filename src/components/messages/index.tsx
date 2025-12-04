@@ -21,6 +21,7 @@ import { MessageComposer } from "./MessageComposer";
 import { Avatar } from "./Avatar";
 import { normalizeToIsoString } from "@/lib/date-helpers";
 import { ChatDetailSkeleton } from "./ChatDetailSkeleton";
+import { useKeyboardViewport } from "@/hooks/useKeyboardViewport";
 
 const Messages = () => {
   const {
@@ -35,8 +36,7 @@ const Messages = () => {
   const searchParams = useSearchParams();
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
-  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
-  const [viewportOffsetTop, setViewportOffsetTop] = useState<number>(0);
+  const { height: viewportHeight, offsetTop: viewportOffsetTop } = useKeyboardViewport();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Получаем chatId из URL при загрузке
@@ -631,153 +631,19 @@ const Messages = () => {
 
   // Блокируем скролл страницы на /messages
   useEffect(() => {
-    // Блокируем скролл body и устанавливаем фиксированную высоту
     const htmlElement = document.documentElement;
     const bodyElement = document.body;
     
     htmlElement.style.height = '100%';
     htmlElement.style.overflow = 'hidden';
-    htmlElement.style.scrollBehavior = 'auto';
     bodyElement.style.height = '100%';
     bodyElement.style.overflow = 'hidden';
-    bodyElement.style.scrollBehavior = 'auto';
-    
-    const navbarHeight = 64;
-    let initialViewportHeight = window.visualViewport?.height || window.innerHeight;
-    let isKeyboardOpen = false;
-
-    // Обновляем начальную высоту при изменении размера окна (когда клавиатура закрыта)
-    const updateInitialHeight = () => {
-      if (window.visualViewport && !isKeyboardOpen) {
-        initialViewportHeight = window.visualViewport.height;
-      } else if (!window.visualViewport) {
-        initialViewportHeight = window.innerHeight;
-      }
-    };
-
-    // Функция для применения изменений напрямую в DOM без задержки
-    const applyHeightChanges = (height: number, offsetTop: number) => {
-      if (containerRef.current) {
-        containerRef.current.style.height = `${height - navbarHeight}px`;
-        containerRef.current.style.transform = `translateY(${offsetTop + navbarHeight}px)`;
-      }
-      // Обновляем state для других компонентов
-      setViewportHeight(height);
-      setViewportOffsetTop(offsetTop);
-    };
-
-    // Для iOS: отслеживаем изменения viewport при открытии клавиатуры
-    const updateHeight = () => {
-      if (window.visualViewport) {
-        const height = window.visualViewport.height;
-        const offsetTop = window.visualViewport.offsetTop;
-        
-        // Определяем, открыта ли клавиатура
-        isKeyboardOpen = offsetTop > 0 || height < initialViewportHeight * 0.75;
-        
-        // Применяем изменения синхронно для мгновенной реакции
-        applyHeightChanges(height, offsetTop);
-      } else {
-        // Fallback для браузеров без visualViewport
-        const height = window.innerHeight;
-        applyHeightChanges(height, 0);
-      }
-    };
-
-    // Предсказываем открытие клавиатуры и применяем изменения заранее
-    const handleFocusIn = (e: FocusEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-        // Сразу применяем изменения, предполагая что клавиатура откроется
-        // Используем типичную высоту клавиатуры iOS (~300px)
-        const estimatedKeyboardHeight = 300;
-        const estimatedHeight = initialViewportHeight - estimatedKeyboardHeight;
-        const estimatedOffset = estimatedKeyboardHeight;
-        
-        // Применяем изменения мгновенно
-        applyHeightChanges(estimatedHeight, estimatedOffset);
-        
-        // Затем обновляем с реальными значениями сразу когда они станут доступны
-        // Используем синхронную проверку без задержек
-        if (window.visualViewport) {
-          const realHeight = window.visualViewport.height;
-          const realOffset = window.visualViewport.offsetTop;
-          if (realHeight !== estimatedHeight || realOffset !== estimatedOffset) {
-            applyHeightChanges(realHeight, realOffset);
-          }
-        }
-      }
-    };
-
-    // Обработчик для закрытия клавиатуры
-    const handleFocusOut = () => {
-      // Небольшая задержка для правильной обработки закрытия клавиатуры
-      setTimeout(updateHeight, 100);
-    };
-
-    // Обработчик touchstart для еще более ранней реакции
-    const handleTouchStart = (e: TouchEvent) => {
-      const target = e.target as HTMLElement;
-      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-        // Применяем изменения сразу при касании
-        const estimatedKeyboardHeight = 300;
-        const estimatedHeight = initialViewportHeight - estimatedKeyboardHeight;
-        const estimatedOffset = estimatedKeyboardHeight;
-        applyHeightChanges(estimatedHeight, estimatedOffset);
-      }
-    };
-
-    // Устанавливаем начальную высоту
-    updateHeight();
-    updateInitialHeight();
-
-    // Слушаем изменения viewport (когда открывается/закрывается клавиатура)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', () => {
-        updateInitialHeight();
-        updateHeight();
-      });
-      window.visualViewport.addEventListener('scroll', updateHeight);
-    }
-
-    // Также слушаем изменения размера окна
-    window.addEventListener('resize', updateInitialHeight);
-
-    // Добавляем обработчики для мгновенной реакции
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
-
-    // Prevent body scroll on iOS
-    const preventBodyScroll = (e: TouchEvent) => {
-      if (e.target === bodyElement || e.target === htmlElement) {
-        e.preventDefault();
-      }
-    };
-    
-    bodyElement.addEventListener('touchmove', preventBodyScroll, { passive: false });
     
     return () => {
-      // Возвращаем скролл при размонтировании
       htmlElement.style.height = '';
       htmlElement.style.overflow = '';
-      htmlElement.style.scrollBehavior = '';
       bodyElement.style.height = '';
       bodyElement.style.overflow = '';
-      bodyElement.style.scrollBehavior = '';
-      
-      bodyElement.removeEventListener('touchmove', preventBodyScroll);
-      
-      document.removeEventListener('focusin', handleFocusIn);
-      document.removeEventListener('focusout', handleFocusOut);
-      document.removeEventListener('touchstart', handleTouchStart);
-      
-      window.removeEventListener('resize', updateInitialHeight);
-      
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', updateHeight);
-        window.visualViewport.removeEventListener('scroll', updateHeight);
-      }
     };
   }, []);
 
@@ -790,21 +656,16 @@ const Messages = () => {
 
   const navbarHeight = 64; // Height of navbar in pixels
   
-  // Calculate container height: visualViewport height - navbar height
-  // If keyboard is open (viewportOffsetTop > 0), we use the smaller viewport height
-  const containerHeight = viewportHeight 
-    ? `${viewportHeight - navbarHeight}px` 
-    : '100vh';
-
+  // Calculate container height and position based on viewport
+  const containerHeight = `${viewportHeight - navbarHeight}px`;
   const containerStyle: React.CSSProperties = {
     height: containerHeight,
-    position: 'fixed', // Always fixed to prevent scrolling issues
+    position: 'fixed',
     top: 0,
-    // Top position: visualViewport offset + navbar height
     transform: `translateY(${viewportOffsetTop + navbarHeight}px)`,
     left: 0,
     right: 0,
-    willChange: 'transform, height'
+    willChange: 'transform, height',
   };
 
   if (currentUserLoading || isInitialChatsLoading) {
