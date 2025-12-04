@@ -72,12 +72,10 @@ export default function ConditionalLayout({
         const offset = window.visualViewport.offsetTop;
         setViewportOffsetTop(offset);
         
-        // Use requestAnimationFrame for smooth updates
-        requestAnimationFrame(() => {
-          if (navbarRef.current) {
-            navbarRef.current.style.transform = `translateY(${offset}px)`;
-          }
-        });
+        // Применяем стили синхронно для мгновенной реакции
+        if (navbarRef.current) {
+          navbarRef.current.style.transform = `translateY(${offset}px)`;
+        }
       }
     };
 
