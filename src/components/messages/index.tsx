@@ -21,7 +21,6 @@ import { MessageComposer } from "./MessageComposer";
 import { Avatar } from "./Avatar";
 import { normalizeToIsoString } from "@/lib/date-helpers";
 import { ChatDetailSkeleton } from "./ChatDetailSkeleton";
-import { useKeyboardViewport } from "@/hooks/useKeyboardViewport";
 
 const Messages = () => {
   const {
@@ -36,7 +35,6 @@ const Messages = () => {
   const searchParams = useSearchParams();
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
-  const { height: viewportHeight, offsetTop: viewportOffsetTop } = useKeyboardViewport();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Получаем chatId из URL при загрузке
@@ -584,7 +582,9 @@ const Messages = () => {
   };
 
   // Функция для получения даты сообщения (для разделителей дней)
-  const getMessageDateLabel = (dateString: string | undefined): string | null => {
+  const getMessageDateLabel = (
+    dateString: string | undefined
+  ): string | null => {
     if (!dateString) return null;
 
     try {
@@ -596,7 +596,11 @@ const Messages = () => {
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const yesterday = new Date(today);
       yesterday.setDate(yesterday.getDate() - 1);
-      const messageDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      const messageDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      );
 
       if (messageDate.getTime() === today.getTime()) {
         return t("timeFormat.today");
@@ -617,7 +621,10 @@ const Messages = () => {
   };
 
   // Проверка, нужно ли показывать разделитель дня
-  const shouldShowDaySeparator = (currentMessage: Message, previousMessage: Message | null): boolean => {
+  const shouldShowDaySeparator = (
+    currentMessage: Message,
+    previousMessage: Message | null
+  ): boolean => {
     if (!previousMessage) return true;
 
     const currentDate = getMessageDateLabel(currentMessage.createdAt);
@@ -630,23 +637,6 @@ const Messages = () => {
     (chatsLoading || chatsFetching) && !chatsFetched;
 
   // Блокируем скролл страницы на /messages
-  useEffect(() => {
-    const htmlElement = document.documentElement;
-    const bodyElement = document.body;
-    
-    htmlElement.style.height = '100%';
-    htmlElement.style.overflow = 'hidden';
-    bodyElement.style.height = '100%';
-    bodyElement.style.overflow = 'hidden';
-    
-    return () => {
-      htmlElement.style.height = '';
-      htmlElement.style.overflow = '';
-      bodyElement.style.height = '';
-      bodyElement.style.overflow = '';
-    };
-  }, []);
-
   // Редирект на логин, если пользователь не авторизован
   useEffect(() => {
     if (!currentUserLoading && !currentUser) {
@@ -654,26 +644,19 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
-  const navbarHeight = 64; // Height of navbar in pixels
-  
-  // Calculate container height and position based on viewport
-  const containerHeight = `${viewportHeight - navbarHeight}px`;
   const containerStyle: React.CSSProperties = {
-    height: containerHeight,
-    position: 'fixed',
-    top: 0,
-    transform: `translateY(${viewportOffsetTop + navbarHeight}px)`,
-    left: 0,
-    right: 0,
-    willChange: 'transform, height',
+    display: "flex",
+    flexDirection: "row",
+    height: "calc(100dvh - 64px)", // Dynamic viewport height minus navbar
+    // marginTop: "64px", // Space for navbar
+    overflow: "hidden", // Prevent scrolling of container itself
   };
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div 
+      <div
         ref={containerRef}
-        data-messages-container
-        className="flex bg-white overflow-hidden" 
+        className="flex bg-white overflow-hidden"
         style={containerStyle}
       >
         {/* Левая панель (skeletoн) */}
@@ -700,10 +683,9 @@ const Messages = () => {
   }
 
   return (
-
-    <div 
+    <div
       ref={containerRef}
-      className="flex bg-white overflow-hidden" 
+      className="flex bg-white overflow-hidden"
       style={containerStyle}
     >
       {/* Левая панель: Список чатов */}
@@ -754,6 +736,12 @@ const Messages = () => {
           "flex-1 flex flex-col bg-white",
           selectedChatId ? "flex" : "hidden md:flex"
         )}
+        style={{
+          display: selectedChatId ? "flex" : undefined,
+          flexDirection: "column",
+          height: "100%", // Fill the parent container
+          minHeight: 0, // Important for flex children
+        }}
       >
         {selectedChatId && selectedChat ? (
           isChatDetailLoading ? (
@@ -761,7 +749,10 @@ const Messages = () => {
           ) : (
             <>
               {/* Заголовок чата */}
-              <div className="p-4 border-b border-gray-200 bg-white flex items-center gap-3">
+              <div
+                className="p-4 border-b border-gray-200 bg-white flex items-center gap-3"
+                style={{ flex: "0 0 auto", flexShrink: 0 }}
+              >
                 <Button
                   variant="ghost"
                   size="icon"
@@ -804,7 +795,14 @@ const Messages = () => {
               </div>
 
               {/* Сообщения */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+              <div
+                className="overflow-y-auto p-4 space-y-4 bg-gray-50"
+                style={{
+                  flex: "1 1 auto",
+                  minHeight: 0,
+                  WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
+                }}
+              >
                 {!chatSocketConnected && (
                   <div className="bg-amber-50 border border-amber-200 text-sm text-amber-900 rounded-lg p-3 flex items-center justify-between gap-3">
                     <span>{t("connectionLost")}</span>
@@ -845,8 +843,13 @@ const Messages = () => {
                         previousMessage.product.id !== message.product.id);
 
                     // Проверяем, нужно ли показывать разделитель дня
-                    const showDaySeparator = shouldShowDaySeparator(message, previousMessage);
-                    const dateLabel = showDaySeparator ? getMessageDateLabel(message.createdAt) : null;
+                    const showDaySeparator = shouldShowDaySeparator(
+                      message,
+                      previousMessage
+                    );
+                    const dateLabel = showDaySeparator
+                      ? getMessageDateLabel(message.createdAt)
+                      : null;
 
                     return (
                       <React.Fragment key={message.id}>
@@ -878,13 +881,15 @@ const Messages = () => {
               </div>
 
               {/* Форма отправки */}
-              <MessageComposer
-                message={messageText}
-                onChange={setMessageText}
-                onSend={handleSendMessage}
-                placeholder={t("typeMessage") || "Type a message..."}
-                canSend={Boolean(socket && chatSocketConnected)}
-              />
+              <div style={{ flex: "0 0 auto", flexShrink: 0 }}>
+                <MessageComposer
+                  message={messageText}
+                  onChange={setMessageText}
+                  onSend={handleSendMessage}
+                  placeholder={t("typeMessage") || "Type a message..."}
+                  canSend={Boolean(socket && chatSocketConnected)}
+                />
+              </div>
             </>
           )
         ) : (
