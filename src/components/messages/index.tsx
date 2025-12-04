@@ -678,20 +678,25 @@ const Messages = () => {
   }, [currentUser, currentUserLoading, router]);
 
   const navbarHeight = 64; // Height of navbar in pixels
+  
+  // Calculate container height: visualViewport height - navbar height
+  // If keyboard is open (viewportOffsetTop > 0), we use the smaller viewport height
   const containerHeight = viewportHeight 
-    ? (viewportOffsetTop > 0 ? `${viewportHeight - navbarHeight}px` : `${viewportHeight}px`)
+    ? `${viewportHeight - navbarHeight}px` 
     : '100vh';
+
   const containerStyle: React.CSSProperties = {
     height: containerHeight,
-    position: viewportOffsetTop > 0 ? 'fixed' : 'relative',
-    top: viewportOffsetTop > 0 ? `${viewportOffsetTop + navbarHeight}px` : 0,
+    position: 'fixed', // Always fixed to prevent scrolling issues
+    // Top position: visualViewport offset + navbar height
+    top: `${viewportOffsetTop + navbarHeight}px`,
     left: 0,
     right: 0,
   };
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
-      <div className="flex bg-white overflow-hidden pt-16" style={containerStyle}>
+      <div className="flex bg-white overflow-hidden" style={containerStyle}>
         {/* Левая панель (skeletoн) */}
         <div className="w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
@@ -716,7 +721,7 @@ const Messages = () => {
   }
 
   return (
-    <div className="flex bg-white overflow-hidden pt-16" style={containerStyle}>
+    <div className="flex bg-white overflow-hidden" style={containerStyle}>
       {/* Левая панель: Список чатов */}
       <div
         className={cn(

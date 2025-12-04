@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Footer from "@/components/landing/Footer";
 import { useNavigation } from "@/context/NavigationContext";
 import { useGlobalLinkHandler } from "@/hooks/useGlobalLinkHandler";
@@ -60,10 +60,36 @@ export default function ConditionalLayout({
     hideFooterOnlyPaths.some((path) => pathname.startsWith(path));
 
   const isMessagesPage = pathname.startsWith("/messages");
+  const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
+
+  useEffect(() => {
+    if (!isMessagesPage) return;
+
+    const updateOffset = () => {
+      if (window.visualViewport) {
+        setViewportOffsetTop(window.visualViewport.offsetTop);
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", updateOffset);
+      window.visualViewport.addEventListener("scroll", updateOffset);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", updateOffset);
+        window.visualViewport.removeEventListener("scroll", updateOffset);
+      }
+    };
+  }, [isMessagesPage]);
 
   return (
     <>
-      <div className={isMessagesPage ? "fixed top-0 left-0 right-0 z-50" : "relative"}>
+      <div 
+        className={isMessagesPage ? "fixed left-0 right-0 z-50" : "relative"}
+        style={isMessagesPage ? { top: `${viewportOffsetTop}px` } : undefined}
+      >
         {!shouldHideNavbarFooter && (
           <NavbarClient initialUser={initialUser ?? null} />
         )}
