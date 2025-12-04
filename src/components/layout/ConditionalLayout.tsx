@@ -62,12 +62,20 @@ export default function ConditionalLayout({
   const isMessagesPage = pathname.startsWith("/messages");
   const [viewportOffsetTop, setViewportOffsetTop] = useState(0);
 
+  const navbarRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!isMessagesPage) return;
 
     const updateOffset = () => {
       if (window.visualViewport) {
-        setViewportOffsetTop(window.visualViewport.offsetTop);
+        const offset = window.visualViewport.offsetTop;
+        setViewportOffsetTop(offset);
+        
+        // Direct DOM update to prevent jumping
+        if (navbarRef.current) {
+          navbarRef.current.style.transform = `translateY(${offset}px)`;
+        }
       }
     };
 
@@ -87,8 +95,13 @@ export default function ConditionalLayout({
   return (
     <>
       <div 
+        ref={navbarRef}
         className={isMessagesPage ? "fixed left-0 right-0 z-50" : "relative"}
-        style={isMessagesPage ? { top: `${viewportOffsetTop}px` } : undefined}
+        style={isMessagesPage ? { 
+          top: 0,
+          transform: `translateY(${viewportOffsetTop}px)`,
+          willChange: 'transform'
+        } : undefined}
       >
         {!shouldHideNavbarFooter && (
           <NavbarClient initialUser={initialUser ?? null} />
