@@ -9,6 +9,8 @@ interface MessageComposerProps {
   onChange: (value: string) => void;
   onSend: () => void;
   canSend: boolean;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 export const MessageComposer: React.FC<MessageComposerProps> = ({
@@ -17,6 +19,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   onChange,
   onSend,
   canSend,
+  onFocus,
+  onBlur,
 }) => {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -61,6 +65,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           value={message}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
+          onFocus={onFocus}
+          onBlur={onBlur}
           className="flex-1 min-h-[44px] max-h-40 resize-none"
           rows={1}
         />

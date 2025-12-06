@@ -292,7 +292,9 @@
     "titleFilesUpTo": "файлів, до",
     "titleSupportedFormats": "Формати, що підтримуються:",
     "titleUploadedFiles": "Завантажені файли",
-    "buttonImageLoading": "Завантаження..."
+    "buttonImageLoading": "Завантаження...",
+    "cropQueueInfo": "Обробка зображення {count} з {total}",
+    "cropQueueHint": "Після обробки цього зображення відкриється наступне"
   },
   "ImageCrop": {
     "titleCropImage": "Обрізати зображення",
