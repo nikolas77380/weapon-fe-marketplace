@@ -1,10 +1,17 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import Cropper from "react-easy-crop";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import ReactCrop, {
+  Crop,
+  PixelCrop,
+  centerCrop,
+  makeAspectCrop,
+} from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { getCroppedImg, getCroppedImgCircular } from "@/lib/cropUtils";
 
 interface ImageCropPreviewProps {
   src: string;
@@ -16,82 +23,6 @@ interface ImageCropPreviewProps {
   aspectRatio?: number;
 }
 
-interface CroppedArea {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-const createImage = (url: string): Promise<HTMLImageElement> =>
-  new Promise((resolve, reject) => {
-    const image = new Image();
-    image.addEventListener("load", () => resolve(image));
-    image.addEventListener("error", (error) => reject(error));
-    image.src = url;
-  });
-
-const getCroppedImg = async (
-  imageSrc: string,
-  pixelCrop: CroppedArea,
-  fileName: string,
-  isCircle: boolean = false
-): Promise<File> => {
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  if (!ctx) {
-    throw new Error("No 2d context");
-  }
-
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
-
-  if (isCircle) {
-    // Для круглого кропа создаем круглую маску
-    ctx.beginPath();
-    ctx.arc(
-      pixelCrop.width / 2,
-      pixelCrop.height / 2,
-      pixelCrop.width / 2,
-      0,
-      Math.PI * 2
-    );
-    ctx.closePath();
-    ctx.clip();
-  }
-
-  ctx.drawImage(
-    image,
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height,
-    0,
-    0,
-    pixelCrop.width,
-    pixelCrop.height
-  );
-
-  return new Promise((resolve) => {
-    canvas.toBlob(
-      (blob) => {
-        if (!blob) {
-          throw new Error("Canvas is empty");
-        }
-        const file = new File([blob], fileName, {
-          type: "image/png",
-          lastModified: Date.now(),
-        });
-        resolve(file);
-      },
-      "image/png",
-      1
-    );
-  });
-};
-
 const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   src,
   fileName,
@@ -102,59 +33,106 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   aspectRatio,
 }) => {
   const t = useTranslations("ImageCrop");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] =
-    useState<CroppedArea | null>(null);
-
-  const onCropChange = useCallback((location: { x: number; y: number }) => {
-    setCrop(location);
-  }, []);
-
-  const onZoomChange = useCallback((zoom: number) => {
-    setZoom(zoom);
-  }, []);
-
-  const onCropCompleteCallback = useCallback(
-    (_croppedArea: CroppedArea, croppedAreaPixels: CroppedArea) => {
-      setCroppedAreaPixels(croppedAreaPixels);
-    },
-    []
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
+  const [scale, setScale] = useState(1);
+  const [aspect, setAspect] = useState<number>(
+    aspectRatio || (cropShape === "circle" ? 1 : 4 / 3)
   );
 
+  // Инициализация кропа при загрузке изображения
+  const onImageLoad = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const { naturalWidth, naturalHeight } = e.currentTarget;
+
+      if (aspect) {
+        const initialCrop = centerCrop(
+          makeAspectCrop(
+            {
+              unit: "%",
+              width: 90,
+            },
+            aspect,
+            naturalWidth,
+            naturalHeight
+          ),
+          naturalWidth,
+          naturalHeight
+        );
+        setCrop(initialCrop);
+      }
+    },
+    [aspect]
+  );
+
+  // Обновляем aspect при изменении aspectRatio или cropShape и пересоздаем кроп
+  useEffect(() => {
+    const newAspect = aspectRatio || (cropShape === "circle" ? 1 : 4 / 3);
+    setAspect(newAspect);
+    
+    // Пересоздаем кроп с новым aspect ratio если изображение уже загружено
+    if (imgRef.current && imgRef.current.complete) {
+      const { naturalWidth, naturalHeight } = imgRef.current;
+      const initialCrop = centerCrop(
+        makeAspectCrop(
+          {
+            unit: "%",
+            width: 90,
+          },
+          newAspect,
+          naturalWidth,
+          naturalHeight
+        ),
+        naturalWidth,
+        naturalHeight
+      );
+      setCrop(initialCrop);
+    }
+  }, [aspectRatio, cropShape]);
+
   const handleApplyCrop = useCallback(async () => {
-    if (!croppedAreaPixels) {
+    if (!completedCrop || !imgRef.current) {
       return;
     }
 
     try {
-      const croppedFile = await getCroppedImg(
-        src,
-        croppedAreaPixels,
-        fileName,
+      const croppedFile =
         cropShape === "circle"
-      );
+          ? await getCroppedImgCircular(imgRef.current, completedCrop, fileName)
+          : await getCroppedImg(imgRef.current, completedCrop, fileName);
       onCropComplete(croppedFile);
     } catch (error) {
       console.error("Error creating cropped image:", error);
     }
-  }, [croppedAreaPixels, src, fileName, cropShape, onCropComplete]);
+  }, [completedCrop, fileName, cropShape, onCropComplete]);
 
   return (
     <div className={`space-y-3 sm:space-y-4 w-full max-w-full ${className}`}>
       {/* Cropper Container */}
-      <div className="relative w-full h-[300px] sm:h-[400px] bg-gray-900 rounded-lg overflow-hidden">
-        <Cropper
-          image={src}
-          crop={crop}
-          zoom={zoom}
-          aspect={aspectRatio || (cropShape === "circle" ? 1 : 4 / 3)}
-          cropShape={cropShape === "circle" ? "round" : "rect"}
-          showGrid={cropShape !== "circle"}
-          onCropChange={onCropChange}
-          onZoomChange={onZoomChange}
-          onCropComplete={onCropCompleteCallback}
-        />
+      <div className="relative w-full bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+        <div className="w-full max-w-full">
+          <ReactCrop
+            crop={crop}
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            aspect={aspect}
+            circularCrop={cropShape === "circle"}
+            className="max-w-full"
+          >
+            <img
+              ref={imgRef}
+              alt="Crop me"
+              src={src}
+              style={{
+                transform: `scale(${scale})`,
+                maxWidth: "100%",
+                maxHeight: "70vh",
+              }}
+              onLoad={onImageLoad}
+            />
+          </ReactCrop>
+        </div>
       </div>
 
       {/* Zoom Slider */}
@@ -164,11 +142,11 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
         </label>
         <input
           type="range"
-          min={1}
-          max={3}
+          min={0.5}
+          max={2}
           step={0.1}
-          value={zoom}
-          onChange={(e) => setZoom(Number(e.target.value))}
+          value={scale}
+          onChange={(e) => setScale(Number(e.target.value))}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gold-main"
         />
       </div>
@@ -190,7 +168,8 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
           type="button"
           size="sm"
           onClick={handleApplyCrop}
-          className="gap-1 bg-gold-main hover:bg-gold-main/90 text-white w-full sm:w-auto text-xs sm:text-sm py-2"
+          disabled={!completedCrop}
+          className="gap-1 bg-gold-main hover:bg-gold-main/90 text-white w-full sm:w-auto text-xs sm:text-sm py-2 disabled:opacity-60"
         >
           <Check className="h-3 w-3" />
           {t("buttonApply")}

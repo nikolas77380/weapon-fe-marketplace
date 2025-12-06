@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
@@ -36,6 +42,7 @@ const Messages = () => {
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Получаем chatId из URL при загрузке
   const chatIdFromUrl = searchParams.get("chatId");
@@ -644,13 +651,31 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
+  const navbarHeight = 64;
+  const keyboardOffset = isKeyboardOpen ? 300 : 0; // fixed keyboard height per requirement
+
   const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
-    height: "calc(100dvh - 64px)", // Dynamic viewport height minus navbar
-    // marginTop: "64px", // Space for navbar
-    overflow: "hidden", // Prevent scrolling of container itself
+    position: "fixed",
+    top: `${navbarHeight}px`, // keep under navbar
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: `calc(100dvh - ${navbarHeight}px - ${keyboardOffset}px)`,
+    overflow: "hidden", // prevent container scroll
+    background: "white",
   };
+
+  const handleComposerFocus = useCallback(() => {
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) {
+      setIsKeyboardOpen(true);
+    }
+  }, []);
+
+  const handleComposerBlur = useCallback(() => {
+    setIsKeyboardOpen(false);
+  }, []);
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
@@ -694,6 +719,7 @@ const Messages = () => {
           "w-full md:w-96 border-r border-gray-200 flex flex-col overflow-hidden",
           selectedChatId ? "hidden md:flex" : "flex"
         )}
+        style={{ minHeight: 0 }}
       >
         <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -881,13 +907,22 @@ const Messages = () => {
               </div>
 
               {/* Форма отправки */}
-              <div style={{ flex: "0 0 auto", flexShrink: 0 }}>
+              <div
+                style={{
+                  flex: "0 0 auto",
+                  flexShrink: 0,
+                  paddingBottom: "env(safe-area-inset-bottom)",
+                  background: "white",
+                }}
+              >
                 <MessageComposer
                   message={messageText}
                   onChange={setMessageText}
                   onSend={handleSendMessage}
                   placeholder={t("typeMessage") || "Type a message..."}
                   canSend={Boolean(socket && chatSocketConnected)}
+                  onFocus={handleComposerFocus}
+                  onBlur={handleComposerBlur}
                 />
               </div>
             </>

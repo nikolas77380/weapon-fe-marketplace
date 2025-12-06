@@ -2,14 +2,14 @@
  * Utility functions for image cropping
  */
 
-import { Crop } from "react-image-crop";
+import { Crop, PixelCrop } from "react-image-crop";
 
 /**
  * Creates a cropped image canvas from the given image and crop area
  */
 export function getCroppedImg(
   image: HTMLImageElement,
-  crop: Crop,
+  crop: PixelCrop,
   fileName: string
 ): Promise<File> {
   const canvas = document.createElement("canvas");
@@ -68,7 +68,7 @@ export function getCroppedImg(
  */
 export function getCroppedImgCircular(
   image: HTMLImageElement,
-  crop: Crop,
+  crop: PixelCrop,
   fileName: string
 ): Promise<File> {
   const canvas = document.createElement("canvas");

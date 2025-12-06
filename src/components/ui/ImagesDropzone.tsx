@@ -41,6 +41,10 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     file: File;
     preview: string;
   } | null>(null);
+  // Очередь файлов для кропа
+  const [cropQueue, setCropQueue] = useState<
+    Array<{ file: File; preview: string }>
+  >([]);
 
   // Sync with external files - reset ONLY when external files were not empty before and became empty
   // This prevents clearing files immediately after adding them
@@ -57,6 +61,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
       setPreviews([]);
       setCropIndex(null);
       setTempImageData(null);
+      setCropQueue([]);
     }
 
     prevExternalFilesLength.current = externalFiles.length;
@@ -94,33 +99,79 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
     [files, previews, onFilesChange]
   );
 
+  // Обработка очереди кропов - показываем следующий файл из очереди
+  useEffect(() => {
+    if (!tempImageData && cropQueue.length > 0 && enableCrop) {
+      const nextInQueue = cropQueue[0];
+      setTempImageData(nextInQueue);
+      setCropQueue((prev) => prev.slice(1));
+    }
+  }, [tempImageData, cropQueue, enableCrop]);
+
+  // Функция для загрузки preview изображения
+  const loadImagePreview = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    async (acceptedFiles: File[]) => {
       if (files.length + acceptedFiles.length > maxFiles) {
         toast.error(`${t("alertMaximumFiles")} ${maxFiles}`);
         return;
       }
 
+      const imagesToCrop: File[] = [];
+      const filesToAddDirectly: File[] = [];
+
+      // Разделяем файлы на те, что нуждаются в кропе, и те что можно добавить сразу
       acceptedFiles.forEach((file) => {
         if (file.type.startsWith("image/") && enableCrop) {
-          // For images with crop enabled, show crop interface immediately
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            setTempImageData({
-              file,
-              preview: e.target?.result as string,
-            });
-            // Set cropIndex to null for new files (not editing existing)
-            setCropIndex(null);
-          };
-          reader.readAsDataURL(file);
+          imagesToCrop.push(file);
         } else {
-          // For non-images or when crop is disabled, add directly
-          addFileDirectly(file);
+          filesToAddDirectly.push(file);
         }
       });
+
+      // Добавляем файлы, которые не требуют кропа
+      filesToAddDirectly.forEach((file) => {
+        addFileDirectly(file);
+      });
+
+      // Обрабатываем изображения для кропа
+      if (imagesToCrop.length > 0) {
+        try {
+          // Загружаем все preview параллельно
+          const previews = await Promise.all(
+            imagesToCrop.map((file) => loadImagePreview(file))
+          );
+
+          const imagesWithPreviews = imagesToCrop.map((file, index) => ({
+            file,
+            preview: previews[index],
+          }));
+
+          if (tempImageData) {
+            // Если уже есть активный кроп, добавляем в очередь
+            setCropQueue((prev) => [...prev, ...imagesWithPreviews]);
+          } else {
+            // Если нет активного кропа, показываем первый файл и остальные в очередь
+            setTempImageData(imagesWithPreviews[0]);
+            if (imagesWithPreviews.length > 1) {
+              setCropQueue(imagesWithPreviews.slice(1));
+            }
+          }
+        } catch (error) {
+          console.error("Error loading image previews:", error);
+          toast.error(t("errorLoadingImages") || "Ошибка загрузки изображений");
+        }
+      }
     },
-    [files, maxFiles, enableCrop, addFileDirectly, t]
+    [files, maxFiles, enableCrop, addFileDirectly, t, tempImageData]
   );
 
   const handleCropComplete = useCallback(
@@ -139,7 +190,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
             onFilesChange(newFiles);
           }
 
-          // Reset crop state after everything is done
+          // Reset crop state - следующий файл из очереди покажется автоматически через useEffect
           setTempImageData(null);
           setCropIndex(null);
         };
@@ -154,6 +205,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
       // Add original file without cropping
       addFileDirectly(tempImageData.file);
     }
+    // Reset crop state - следующий файл из очереди покажется автоматически через useEffect
     setTempImageData(null);
     setCropIndex(null);
   }, [tempImageData, addFileDirectly, cropIndex]);
@@ -237,6 +289,14 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
         sm:p-4 bg-gold-main/5 mx-auto max-w-[95vw] flex flex-col items-center justify-center sm:max-w-lg md:max-w-3xl 
         overflow-hidden"
         >
+          {cropQueue.length > 0 && (
+            <div className="mb-2 text-sm text-gray-600 text-center px-2">
+              {t("cropQueueInfo")}
+              <span className="text-xs text-gray-500 block mt-1">
+                {t("cropQueueHint")}
+              </span>
+            </div>
+          )}
           <ImageCropPreview
             src={tempImageData.preview}
             fileName={tempImageData.file.name}

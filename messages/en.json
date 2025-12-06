@@ -292,7 +292,9 @@
     "titleFilesUpTo": "file(s), up to",
     "titleSupportedFormats": "Supported formats:",
     "titleUploadedFiles": "Uploaded files",
-    "buttonImageLoading": "Loading..."
+    "buttonImageLoading": "Loading...",
+    "cropQueueInfo": "Processing image {count} of {total}",
+    "cropQueueHint": "After processing this image, the next one will appear"
   },
   "ImageCrop": {
     "titleCropImage": "Crop Image",
