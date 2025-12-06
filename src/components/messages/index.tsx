@@ -670,9 +670,11 @@ const Messages = () => {
   const handleComposerFocus = useCallback(() => {
     if (typeof window !== "undefined" && window.innerWidth <= 1024) {
       setIsKeyboardOpen(true);
-      // Scroll page to top to keep headers visible when keyboard opens
+      // Scroll page to top to keep headers visible when keyboard opens.
+      // Do an immediate jump and a follow-up to handle Safari keyboard reflow.
       requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 80);
       });
     }
   }, []);
