@@ -670,6 +670,10 @@ const Messages = () => {
   const handleComposerFocus = useCallback(() => {
     if (typeof window !== "undefined" && window.innerWidth <= 1024) {
       setIsKeyboardOpen(true);
+      // Scroll page to top to keep headers visible when keyboard opens
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     }
   }, []);
 
