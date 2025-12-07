@@ -536,55 +536,26 @@ const Messages = () => {
     // TODO: Implement delete functionality with confirmation
   };
 
-  // Форматирование времени для сообщений
+  // Форматирование времени для сообщений (24-часовой формат)
   const formatMessageTime = (dateString: string | undefined): string => {
     if (!dateString) {
-      return t("timeFormat.now");
+      return "";
     }
 
     try {
       const date = new Date(normalizeToIsoString(dateString));
-      const now = new Date();
 
       if (isNaN(date.getTime())) {
-        return t("timeFormat.now");
+        return "";
       }
 
-      const diffInMs = now.getTime() - date.getTime();
-
-      if (diffInMs < 0) {
-        return t("timeFormat.now");
-      }
-
-      const diffInSeconds = Math.floor(diffInMs / 1000);
-      const diffInMinutes = Math.floor(diffInSeconds / 60);
-      const diffInHours = Math.floor(diffInMinutes / 60);
-      const diffInDays = Math.floor(diffInHours / 24);
-
-      if (diffInSeconds < 10) {
-        return t("timeFormat.justNow");
-      }
-
-      if (diffInMinutes < 1) {
-        return t("timeFormat.now");
-      }
-      if (diffInMinutes < 60) {
-        return t("timeFormat.minutesShort", { count: diffInMinutes });
-      }
-      if (diffInHours < 24) {
-        return t("timeFormat.hoursShort", { count: diffInHours });
-      }
-      if (diffInDays < 7) {
-        return t("timeFormat.daysShort", { count: diffInDays });
-      }
-
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
+      // Форматируем время в 24-часовом формате (HH:mm)
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      return `${hours}:${minutes}`;
     } catch (error) {
       console.error("Error formatting message time:", error);
-      return t("timeFormat.now");
+      return "";
     }
   };
 
@@ -676,6 +647,10 @@ const Messages = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
         setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 80);
       });
+      // Прокручиваем блок сообщений вниз после открытия клавиатуры
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 300);
     }
   }, []);
 
