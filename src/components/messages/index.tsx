@@ -622,6 +622,40 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
+  // На мобильном блокируем прокрутку body, когда открыта клавиатура
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const body = document.body;
+    const prevOverflow = body.style.overflow;
+    const prevPosition = body.style.position;
+    const prevTop = body.style.top;
+    const prevWidth = body.style.width;
+    const scrollY = window.scrollY;
+
+    if (isKeyboardOpen && window.innerWidth <= 1024) {
+      body.style.overflow = "hidden";
+      body.style.position = "fixed";
+      body.style.width = "100%";
+      body.style.top = `-${scrollY}px`;
+
+      return () => {
+        body.style.overflow = prevOverflow;
+        body.style.position = prevPosition;
+        body.style.width = prevWidth;
+        body.style.top = prevTop;
+        window.scrollTo(0, scrollY);
+      };
+    }
+
+    return () => {
+      body.style.overflow = prevOverflow;
+      body.style.position = prevPosition;
+      body.style.width = prevWidth;
+      body.style.top = prevTop;
+    };
+  }, [isKeyboardOpen]);
+
   const navbarHeight = 64;
   const keyboardOffset = isKeyboardOpen ? 300 : 0; // fixed keyboard height per requirement
 
