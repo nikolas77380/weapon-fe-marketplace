@@ -634,6 +634,7 @@ const Messages = () => {
     const prevWidth = body.style.width;
     const prevHtmlOverflow = html.style.overflow;
     const prevHtmlHeight = html.style.height;
+    const prevHtmlOverscroll = html.style.overscrollBehavior;
     const prevBodyHeight = body.style.height;
     const prevOverscroll = body.style.overscrollBehavior;
     const scrollY = window.scrollY;
@@ -641,6 +642,7 @@ const Messages = () => {
     if (isKeyboardOpen && window.innerWidth <= 1024) {
       html.style.overflow = "hidden";
       html.style.height = "100%";
+      html.style.overscrollBehavior = "none";
       body.style.overflow = "hidden";
       body.style.position = "fixed";
       body.style.width = "100%";
@@ -651,6 +653,7 @@ const Messages = () => {
       return () => {
         html.style.overflow = prevHtmlOverflow;
         html.style.height = prevHtmlHeight;
+        html.style.overscrollBehavior = prevHtmlOverscroll;
         body.style.overflow = prevOverflow;
         body.style.position = prevPosition;
         body.style.width = prevWidth;
@@ -664,6 +667,7 @@ const Messages = () => {
     return () => {
       html.style.overflow = prevHtmlOverflow;
       html.style.height = prevHtmlHeight;
+      html.style.overscrollBehavior = prevHtmlOverscroll;
       body.style.overflow = prevOverflow;
       body.style.position = prevPosition;
       body.style.width = prevWidth;
@@ -799,6 +803,7 @@ const Messages = () => {
           flexDirection: "column",
           height: "100%", // Fill the parent container
           minHeight: 0, // Important for flex children
+          overflow: "hidden", // prevent outer scroll when keyboard shrinks height
         }}
       >
         {selectedChatId && selectedChat ? (
