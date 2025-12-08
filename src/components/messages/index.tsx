@@ -627,32 +627,49 @@ const Messages = () => {
     if (typeof window === "undefined") return;
 
     const body = document.body;
+    const html = document.documentElement;
     const prevOverflow = body.style.overflow;
     const prevPosition = body.style.position;
     const prevTop = body.style.top;
     const prevWidth = body.style.width;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevHtmlHeight = html.style.height;
+    const prevBodyHeight = body.style.height;
+    const prevOverscroll = body.style.overscrollBehavior;
     const scrollY = window.scrollY;
 
     if (isKeyboardOpen && window.innerWidth <= 1024) {
+      html.style.overflow = "hidden";
+      html.style.height = "100%";
       body.style.overflow = "hidden";
       body.style.position = "fixed";
       body.style.width = "100%";
       body.style.top = `-${scrollY}px`;
+      body.style.height = "100%";
+      body.style.overscrollBehavior = "contain";
 
       return () => {
+        html.style.overflow = prevHtmlOverflow;
+        html.style.height = prevHtmlHeight;
         body.style.overflow = prevOverflow;
         body.style.position = prevPosition;
         body.style.width = prevWidth;
         body.style.top = prevTop;
+        body.style.height = prevBodyHeight;
+        body.style.overscrollBehavior = prevOverscroll;
         window.scrollTo(0, scrollY);
       };
     }
 
     return () => {
+      html.style.overflow = prevHtmlOverflow;
+      html.style.height = prevHtmlHeight;
       body.style.overflow = prevOverflow;
       body.style.position = prevPosition;
       body.style.width = prevWidth;
       body.style.top = prevTop;
+      body.style.height = prevBodyHeight;
+      body.style.overscrollBehavior = prevOverscroll;
     };
   }, [isKeyboardOpen]);
 
