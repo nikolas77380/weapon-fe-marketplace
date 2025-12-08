@@ -56,6 +56,7 @@ const Messages = () => {
   const [activeFilter, setActiveFilter] = useState<ChatFilter>("all");
   const [pendingProductId, setPendingProductId] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesScrollRef = useRef<HTMLDivElement>(null);
   const lastReconnectAttemptRef = useRef<number>(0);
   const productContextChatIdRef = useRef<string | null>(null);
   // Получаем список чатов пользователя
@@ -677,6 +678,40 @@ const Messages = () => {
     };
   }, [isKeyboardOpen]);
 
+  // Блокируем все скроллы, кроме области сообщений, когда клавиатура открыта
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!isKeyboardOpen) return;
+
+    const allowNode = messagesScrollRef.current;
+    const isMobile = window.innerWidth <= 1024;
+    if (!isMobile) return;
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const target = e.target as Node | null;
+      if (allowNode && target && allowNode.contains(target)) {
+        return; // разрешаем скролл внутри списка сообщений
+      }
+      e.preventDefault();
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      const target = e.target as Node | null;
+      if (allowNode && target && allowNode.contains(target)) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, [isKeyboardOpen]);
+
   const navbarHeight = 64;
   const keyboardOffset = isKeyboardOpen ? 300 : 0; // fixed keyboard height per requirement
 
@@ -859,6 +894,7 @@ const Messages = () => {
 
               {/* Сообщения */}
               <div
+                ref={messagesScrollRef}
                 className="overflow-y-auto p-4 space-y-4 bg-gray-50"
                 style={{
                   flex: "1 1 auto",
