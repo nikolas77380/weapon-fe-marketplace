@@ -422,16 +422,6 @@ const Messages = () => {
       return;
     }
 
-    // На мобильных сначала закрываем клавиатуру и возвращаем высоту контейнера,
-    // чтобы первый тап по кнопке отправки сразу отправлял сообщение.
-    if (isKeyboardOpen) {
-      setIsKeyboardOpen(false);
-      if (typeof document !== "undefined") {
-        const activeEl = document.activeElement as HTMLElement | null;
-        activeEl?.blur?.();
-      }
-    }
-
     if (!socket || !chatSocketConnected) {
       console.warn("[Messages] Socket unavailable, attempting reconnect");
       reconnectChatSocket?.();
