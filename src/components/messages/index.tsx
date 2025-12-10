@@ -719,7 +719,7 @@ const Messages = () => {
     display: "flex",
     flexDirection: "row",
     position: "fixed",
-    top: `${navbarHeight}px`, // keep under navbar
+    top: `${56}px`, // keep under navbar
     left: 0,
     right: 0,
     bottom: 0,
