@@ -712,14 +712,14 @@ const Messages = () => {
     };
   }, [isKeyboardOpen]);
 
-  const navbarHeight = 58;
+  const navbarHeight = 64;
   const keyboardOffset = isKeyboardOpen ? 300 : 0; // fixed keyboard height per requirement
 
   const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
     position: "fixed",
-    top: `${navbarHeight}px`, // keep under navbar
+    top: `${56}px`, // keep under navbar
     left: 0,
     right: 0,
     bottom: 0,
