@@ -59,6 +59,33 @@ const Messages = () => {
   const messagesScrollRef = useRef<HTMLDivElement>(null);
   const lastReconnectAttemptRef = useRef<number>(0);
   const productContextChatIdRef = useRef<string | null>(null);
+
+  // Отслеживаем изменение высоты visualViewport, чтобы понимать, закрылась ли клавиатура.
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return;
+
+    const baseHeight = window.innerHeight;
+    const keyboardThreshold = 120; // px — минимальное уменьшение высоты для распознавания клавиатуры
+
+    const handleViewportResize = () => {
+      const viewportHeight = window.visualViewport?.height ?? baseHeight;
+      const keyboardLikelyOpen =
+        baseHeight - viewportHeight > keyboardThreshold;
+
+      setIsKeyboardOpen((prev) =>
+        prev === keyboardLikelyOpen ? prev : keyboardLikelyOpen
+      );
+    };
+
+    window.visualViewport.addEventListener("resize", handleViewportResize);
+
+    return () => {
+      window.visualViewport?.removeEventListener(
+        "resize",
+        handleViewportResize
+      );
+    };
+  }, []);
   // Получаем список чатов пользователя
   const {
     data: chats = [],
@@ -393,6 +420,16 @@ const Messages = () => {
   const handleSendMessage = () => {
     if (!messageText.trim() || !selectedChatId) {
       return;
+    }
+
+    // На мобильных сначала закрываем клавиатуру и возвращаем высоту контейнера,
+    // чтобы первый тап по кнопке отправки сразу отправлял сообщение.
+    if (isKeyboardOpen) {
+      setIsKeyboardOpen(false);
+      if (typeof document !== "undefined") {
+        const activeEl = document.activeElement as HTMLElement | null;
+        activeEl?.blur?.();
+      }
     }
 
     if (!socket || !chatSocketConnected) {
