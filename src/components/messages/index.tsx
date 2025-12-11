@@ -60,21 +60,43 @@ const Messages = () => {
   const lastReconnectAttemptRef = useRef<number>(0);
   const productContextChatIdRef = useRef<string | null>(null);
 
-  // Отслеживаем изменение высоты visualViewport, чтобы понимать, закрылась ли клавиатура.
+  // Более аккуратное слежение за клавиатурой: реагируем только на крупные изменения высоты
+  // и не сбрасываем флаг, если в фокусе остается поле ввода.
   useEffect(() => {
     if (typeof window === "undefined" || !window.visualViewport) return;
 
-    const baseHeight = window.innerHeight;
-    const keyboardThreshold = 120; // px — минимальное уменьшение высоты для распознавания клавиатуры
+    let baselineHeight = window.innerHeight;
+    const openThreshold = 150; // px уменьшения для определения открытия
+    const closeThreshold = 80; // px уменьшения, при котором считаем что клавиатура закрылась
+
+    const isInputFocused = () => {
+      const el = document.activeElement;
+      if (!el) return false;
+      const tag = el.tagName.toLowerCase();
+      return (
+        tag === "textarea" ||
+        tag === "input" ||
+        el.getAttribute("contenteditable") === "true"
+      );
+    };
 
     const handleViewportResize = () => {
-      const viewportHeight = window.visualViewport?.height ?? baseHeight;
-      const keyboardLikelyOpen =
-        baseHeight - viewportHeight > keyboardThreshold;
+      const viewportHeight = window.visualViewport?.height ?? baselineHeight;
 
-      setIsKeyboardOpen((prev) =>
-        prev === keyboardLikelyOpen ? prev : keyboardLikelyOpen
-      );
+      // Обновляем базовую высоту, если экран стал выше (например, скрылась адресная строка)
+      if (viewportHeight > baselineHeight) {
+        baselineHeight = viewportHeight;
+      }
+
+      const heightLoss = baselineHeight - viewportHeight;
+      const keyboardLikelyOpen = heightLoss > openThreshold;
+      const keyboardLikelyClosed = heightLoss < closeThreshold;
+
+      setIsKeyboardOpen((prev) => {
+        if (keyboardLikelyOpen && !prev) return true;
+        if (keyboardLikelyClosed && prev && !isInputFocused()) return false;
+        return prev;
+      });
     };
 
     window.visualViewport.addEventListener("resize", handleViewportResize);
@@ -746,7 +768,7 @@ const Messages = () => {
     display: "flex",
     flexDirection: "row",
     position: "fixed",
-    top: `${56}px`, // keep under navbar
+    top: `${navbarHeight}px`, // keep under navbar
     left: 0,
     right: 0,
     bottom: 0,
