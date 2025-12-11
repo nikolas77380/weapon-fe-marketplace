@@ -77,6 +77,10 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
       // Вызываем отправку сразу
       onSend();
+      setTimeout(() => {
+        // искусственный второй клик
+        onSend();
+      }, 50);
 
       // Сбрасываем флаг после небольшой задержки
       setTimeout(() => {
@@ -132,7 +136,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         />
         <Button
           onPointerDown={handleSendPointerDown}
-          onTouchStart={handleSendClick}
+          // onTouchStart={handleSendClick}
           onClick={handleSendClick}
           disabled={!message.trim() || !canSend}
           type="button"
