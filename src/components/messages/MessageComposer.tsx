@@ -25,6 +25,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const [isMobile, setIsMobile] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const isSendingRef = useRef(false);
+  const pointerDownOnSendRef = useRef(false);
 
   // Определяем тип устройства
   useEffect(() => {
@@ -59,51 +60,47 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     [onSend, isMobile]
   );
 
-  const handleSendClick = useCallback(
-    (
-      e:
-        | React.MouseEvent<HTMLButtonElement>
-        | React.TouchEvent<HTMLButtonElement>
-        | React.PointerEvent<HTMLButtonElement>
-    ) => {
-      e.preventDefault();
-      e.stopPropagation();
+  const triggerSend = useCallback(() => {
+    if (isSendingRef.current || !message.trim() || !canSend) {
+      return;
+    }
 
-      if (isSendingRef.current || !message.trim() || !canSend) {
-        return;
-      }
+    isSendingRef.current = true;
 
-      isSendingRef.current = true;
+    onSend();
 
-      // Вызываем отправку сразу
-      onSend();
-      setTimeout(() => {
-        // искусственный второй клик
-        onSend();
-      }, 50);
-
-      // Сбрасываем флаг после небольшой задержки
-      setTimeout(() => {
-        isSendingRef.current = false;
-      }, 300);
-    },
-    [onSend, message, canSend, isMobile]
-  );
+    setTimeout(() => {
+      isSendingRef.current = false;
+    }, 300);
+  }, [onSend, message, canSend]);
 
   const handleSendPointerDown = useCallback(
     (e: React.PointerEvent<HTMLButtonElement>) => {
-      // Не даем кнопке перехватывать фокус, чтобы клавиатура не закрывалась
+      // Не даём кнопке перехватить фокус, чтобы клавиатура не закрывалась
       e.preventDefault();
-      // Сохраняем фокус на textarea, если он уже там
+      e.stopPropagation();
+      pointerDownOnSendRef.current = true;
       textareaRef.current?.focus();
+      triggerSend();
+
+      // Сбрасываем флаг чуть позже, чтобы blur, вызванный pointerdown/up, игнорировался
+      setTimeout(() => {
+        pointerDownOnSendRef.current = false;
+      }, 150);
     },
-    []
+    [triggerSend]
   );
 
   const handleTextareaBlur = useCallback(
     (e: React.FocusEvent<HTMLTextAreaElement>) => {
       // Не вызываем blur, если отправка в процессе
       if (isSendingRef.current) {
+        return;
+      }
+
+      // Игнорируем blur, спровоцированный нажатием на кнопку отправки
+      if (pointerDownOnSendRef.current) {
+        textareaRef.current?.focus();
         return;
       }
 
@@ -136,18 +133,6 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         />
         <Button
           onPointerDown={handleSendPointerDown}
-          onTouchStart={(e) => {
-            e.preventDefault();
-            setTimeout(() => {
-              // искусственный второй клик
-              handleSendClick(e);
-            }, 50);
-          }}
-          onClick={handleSendClick}
-          onBlur={(e) => {
-            e.preventDefault();
-            e.target.focus(); // возвращаем фокус → клавиатура остаётся открытой
-          }}
           disabled={!message.trim() || !canSend}
           type="button"
           tabIndex={-1} // не перехватываем фокус, чтобы не закрывать клавиатуру
