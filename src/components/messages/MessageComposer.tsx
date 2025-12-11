@@ -132,6 +132,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         />
         <Button
           onPointerDown={handleSendPointerDown}
+          onTouchStart={handleSendClick}
           onClick={handleSendClick}
           disabled={!message.trim() || !canSend}
           type="button"
