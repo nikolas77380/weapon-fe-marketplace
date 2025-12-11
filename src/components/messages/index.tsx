@@ -42,7 +42,6 @@ const Messages = () => {
   const t = useTranslations("Chat");
   const queryClient = useQueryClient();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   // Получаем chatId из URL при загрузке
   const chatIdFromUrl = searchParams.get("chatId");
@@ -60,54 +59,6 @@ const Messages = () => {
   const lastReconnectAttemptRef = useRef<number>(0);
   const productContextChatIdRef = useRef<string | null>(null);
 
-  // Более аккуратное слежение за клавиатурой: реагируем только на крупные изменения высоты
-  // и не сбрасываем флаг, если в фокусе остается поле ввода.
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.visualViewport) return;
-
-    let baselineHeight = window.innerHeight;
-    const openThreshold = 150; // px уменьшения для определения открытия
-    const closeThreshold = 80; // px уменьшения, при котором считаем что клавиатура закрылась
-
-    const isInputFocused = () => {
-      const el = document.activeElement;
-      if (!el) return false;
-      const tag = el.tagName.toLowerCase();
-      return (
-        tag === "textarea" ||
-        tag === "input" ||
-        el.getAttribute("contenteditable") === "true"
-      );
-    };
-
-    const handleViewportResize = () => {
-      const viewportHeight = window.visualViewport?.height ?? baselineHeight;
-
-      // Обновляем базовую высоту, если экран стал выше (например, скрылась адресная строка)
-      if (viewportHeight > baselineHeight) {
-        baselineHeight = viewportHeight;
-      }
-
-      const heightLoss = baselineHeight - viewportHeight;
-      const keyboardLikelyOpen = heightLoss > openThreshold;
-      const keyboardLikelyClosed = heightLoss < closeThreshold;
-
-      setIsKeyboardOpen((prev) => {
-        if (keyboardLikelyOpen && !prev) return true;
-        if (keyboardLikelyClosed && prev && !isInputFocused()) return false;
-        return prev;
-      });
-    };
-
-    window.visualViewport.addEventListener("resize", handleViewportResize);
-
-    return () => {
-      window.visualViewport?.removeEventListener(
-        "resize",
-        handleViewportResize
-      );
-    };
-  }, []);
   // Получаем список чатов пользователя
   const {
     data: chats = [],
@@ -672,134 +623,29 @@ const Messages = () => {
     }
   }, [currentUser, currentUserLoading, router]);
 
-  // На мобильном блокируем прокрутку body, когда открыта клавиатура
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  // Ранее блокировали скролл body на мобильном при открытой клавиатуре.
+  // Убрали блокировку, чтобы не мешать системному поведению скролла.
 
-    const body = document.body;
-    const html = document.documentElement;
-    const prevOverflow = body.style.overflow;
-    const prevPosition = body.style.position;
-    const prevTop = body.style.top;
-    const prevWidth = body.style.width;
-    const prevHtmlOverflow = html.style.overflow;
-    const prevHtmlHeight = html.style.height;
-    const prevHtmlOverscroll = html.style.overscrollBehavior;
-    const prevBodyHeight = body.style.height;
-    const prevOverscroll = body.style.overscrollBehavior;
-    const scrollY = window.scrollY;
-
-    if (isKeyboardOpen && window.innerWidth <= 1024) {
-      html.style.overflow = "hidden";
-      html.style.height = "100%";
-      html.style.overscrollBehavior = "none";
-      body.style.overflow = "hidden";
-      body.style.position = "fixed";
-      body.style.width = "100%";
-      body.style.top = `-${scrollY}px`;
-      body.style.height = "100%";
-      body.style.overscrollBehavior = "contain";
-
-      return () => {
-        html.style.overflow = prevHtmlOverflow;
-        html.style.height = prevHtmlHeight;
-        html.style.overscrollBehavior = prevHtmlOverscroll;
-        body.style.overflow = prevOverflow;
-        body.style.position = prevPosition;
-        body.style.width = prevWidth;
-        body.style.top = prevTop;
-        body.style.height = prevBodyHeight;
-        body.style.overscrollBehavior = prevOverscroll;
-        window.scrollTo(0, scrollY);
-      };
-    }
-
-    return () => {
-      html.style.overflow = prevHtmlOverflow;
-      html.style.height = prevHtmlHeight;
-      html.style.overscrollBehavior = prevHtmlOverscroll;
-      body.style.overflow = prevOverflow;
-      body.style.position = prevPosition;
-      body.style.width = prevWidth;
-      body.style.top = prevTop;
-      body.style.height = prevBodyHeight;
-      body.style.overscrollBehavior = prevOverscroll;
-    };
-  }, [isKeyboardOpen]);
-
-  // Блокируем все скроллы, кроме области сообщений, когда клавиатура открыта
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!isKeyboardOpen) return;
-
-    const allowNode = messagesScrollRef.current;
-    const isMobile = window.innerWidth <= 1024;
-    if (!isMobile) return;
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const target = e.target as Node | null;
-      if (allowNode && target && allowNode.contains(target)) {
-        return; // разрешаем скролл внутри списка сообщений
-      }
-      e.preventDefault();
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      const target = e.target as Node | null;
-      if (allowNode && target && allowNode.contains(target)) {
-        return;
-      }
-      e.preventDefault();
-    };
-
-    window.addEventListener("touchmove", handleTouchMove, { passive: false });
-    window.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("wheel", handleWheel);
-    };
-  }, [isKeyboardOpen]);
-
-  const navbarHeight = 64;
-  const keyboardOffset = isKeyboardOpen ? 300 : 0; // fixed keyboard height per requirement
-
+  const navbarHeight = 64; // глобальный хедер
+  const composerReserve = 96; // место под инпут/футер
   const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",
-    position: "fixed",
-    top: `${navbarHeight}px`, // keep under navbar
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: `calc(100dvh - ${navbarHeight}px - ${keyboardOffset}px)`,
-    overflow: "hidden", // prevent container scroll
+    width: "100%",
+    height: `calc(100vh - ${navbarHeight}px - ${composerReserve}px)`,
+    maxHeight: `calc(100vh - ${navbarHeight}px - ${composerReserve}px)`,
+    overflow: "hidden",
     background: "white",
   };
 
   const handleComposerFocus = useCallback(() => {
-    if (typeof window !== "undefined" && window.innerWidth <= 1024) {
-      setIsKeyboardOpen(true);
-      // Scroll page to top to keep headers visible when keyboard opens.
-      // Do an immediate jump and a follow-up to handle Safari keyboard reflow.
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 80);
-      });
-      // Прокручиваем блок сообщений вниз после открытия клавиатуры
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-    }
+    // На мобильных просто прокручиваем к последним сообщениям, не меняя высоту контейнера
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 150);
   }, []);
 
-  const handleComposerBlur = useCallback(() => {
-    // На мобильных не закрываем клавиатуру и не меняем высоту контейнера по blur
-    if (typeof window !== "undefined" && window.innerWidth <= 1024) {
-      return;
-    }
-    setIsKeyboardOpen(false);
-  }, []);
+  const handleComposerBlur = useCallback(() => {}, []);
 
   if (currentUserLoading || isInitialChatsLoading) {
     return (
