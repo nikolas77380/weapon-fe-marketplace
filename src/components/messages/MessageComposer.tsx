@@ -136,13 +136,18 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         />
         <Button
           onPointerDown={handleSendPointerDown}
-          onTouchStart={(e) =>
+          onTouchStart={(e) => {
+            e.preventDefault();
             setTimeout(() => {
               // искусственный второй клик
               handleSendClick(e);
-            }, 50)
-          }
+            }, 50);
+          }}
           onClick={handleSendClick}
+          onBlur={(e) => {
+            e.preventDefault();
+            e.target.focus(); // возвращаем фокус → клавиатура остаётся открытой
+          }}
           disabled={!message.trim() || !canSend}
           type="button"
           tabIndex={-1} // не перехватываем фокус, чтобы не закрывать клавиатуру
