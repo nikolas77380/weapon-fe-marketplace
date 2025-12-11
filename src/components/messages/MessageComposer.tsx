@@ -64,6 +64,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       e:
         | React.MouseEvent<HTMLButtonElement>
         | React.TouchEvent<HTMLButtonElement>
+        | React.PointerEvent<HTMLButtonElement>
     ) => {
       e.preventDefault();
       e.stopPropagation();
@@ -82,7 +83,17 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         isSendingRef.current = false;
       }, 300);
     },
-    [onSend, message, canSend]
+    [onSend, message, canSend, isMobile]
+  );
+
+  const handleSendPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      // Не даем кнопке перехватывать фокус, чтобы клавиатура не закрывалась
+      e.preventDefault();
+      // Сохраняем фокус на textarea, если он уже там
+      textareaRef.current?.focus();
+    },
+    []
   );
 
   const handleTextareaBlur = useCallback(
@@ -120,14 +131,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           rows={1}
         />
         <Button
-          onMouseDown={handleSendClick}
-          onTouchStart={handleSendClick}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+          onPointerDown={handleSendPointerDown}
+          onClick={handleSendClick}
           disabled={!message.trim() || !canSend}
           type="button"
+          tabIndex={-1} // не перехватываем фокус, чтобы не закрывать клавиатуру
           className="bg-gold-main hover:bg-gold-dark disabled:opacity-60 self-stretch"
         >
           <Send className="h-4 w-4" />
