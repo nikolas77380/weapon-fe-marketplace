@@ -794,6 +794,10 @@ const Messages = () => {
   }, []);
 
   const handleComposerBlur = useCallback(() => {
+    // На мобильных не закрываем клавиатуру и не меняем высоту контейнера по blur
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) {
+      return;
+    }
     setIsKeyboardOpen(false);
   }, []);
 
