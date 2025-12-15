@@ -627,7 +627,7 @@ const Messages = () => {
   // Убрали блокировку, чтобы не мешать системному поведению скролла.
 
   const navbarHeight = 64; // глобальный хедер
-  const composerReserve = 70; // место под инпут/футер
+  const composerReserve = 64; // место под инпут/футер
   const containerStyle: React.CSSProperties = {
     display: "flex",
     flexDirection: "row",

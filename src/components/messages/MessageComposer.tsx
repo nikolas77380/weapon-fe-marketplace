@@ -105,37 +105,19 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   const handleTextareaBlur = useCallback(
     (e: React.FocusEvent<HTMLTextAreaElement>) => {
-      // На мобильных не даём blur закрыть клавиатуру
-      if (isMobile) {
-        textareaRef.current?.focus({ preventScroll: true });
-        return;
-      }
-
       // Не вызываем blur, если отправка в процессе
       if (isSendingRef.current) {
         return;
       }
 
-      // Игнорируем blur, спровоцированный нажатием на кнопку отправки
-      if (
-        pointerDownOnSendRef.current ||
-        Date.now() - lastSendTapRef.current < 400
-      ) {
-        textareaRef.current?.focus({ preventScroll: true });
+      // Игнорируем blur только если он вызван нажатием на кнопку отправки
+      if (pointerDownOnSendRef.current) {
         return;
       }
 
-      // Небольшая задержка для blur, чтобы дать время onClick сработать
-      setTimeout(() => {
-        if (
-          !isSendingRef.current &&
-          document.activeElement !== textareaRef.current
-        ) {
-          onBlur?.();
-        }
-      }, 150);
+      onBlur?.();
     },
-    [onBlur, isMobile]
+    [onBlur]
   );
 
   return (
