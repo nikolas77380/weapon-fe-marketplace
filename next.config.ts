@@ -82,8 +82,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value:
-              "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vimeo.com https://challenges.cloudflare.com;",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' https://challenges.cloudflare.com",
+              "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vimeo.com https://challenges.cloudflare.com",
+            ].join("; "),
           },
         ],
       },
