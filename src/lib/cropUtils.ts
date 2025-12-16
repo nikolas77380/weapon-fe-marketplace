@@ -10,7 +10,9 @@ import { Crop, PixelCrop } from "react-image-crop";
 export function getCroppedImg(
   image: HTMLImageElement,
   crop: PixelCrop,
-  fileName: string
+  fileName: string,
+  displayWidth?: number,
+  displayHeight?: number
 ): Promise<File> {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -19,30 +21,57 @@ export function getCroppedImg(
     throw new Error("No 2d context");
   }
 
-  const scaleX = image.naturalWidth / image.width;
-  const scaleY = image.naturalHeight / image.height;
-  const pixelRatio = window.devicePixelRatio;
+  // Используем реальный визуальный размер если передан (для учета transform: scale)
+  const actualDisplayWidth = displayWidth ?? image.width;
+  const actualDisplayHeight = displayHeight ?? image.height;
 
-  canvas.width = crop.width * pixelRatio * scaleX;
-  canvas.height = crop.height * pixelRatio * scaleY;
+  // Пересчитываем координаты из визуального размера в натуральные пиксели
+  const scaleX = image.naturalWidth / actualDisplayWidth;
+  const scaleY = image.naturalHeight / actualDisplayHeight;
 
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  // Пересчитываем координаты кропа в натуральные пиксели
+  const cropX = crop.x * scaleX;
+  const cropY = crop.y * scaleY;
+  const cropWidth = crop.width * scaleX;
+  const cropHeight = crop.height * scaleY;
+
+  console.log("Rect crop debug:", {
+    crop,
+    imageWidth: image.width,
+    imageHeight: image.height,
+    naturalWidth: image.naturalWidth,
+    naturalHeight: image.naturalHeight,
+    displayWidth: actualDisplayWidth,
+    displayHeight: actualDisplayHeight,
+    scaleX,
+    scaleY,
+    cropX,
+    cropY,
+    cropWidth,
+    cropHeight,
+  });
+
+  // Устанавливаем размеры холста БЕЗ pixelRatio для простоты
+  canvas.width = cropWidth;
+  canvas.height = cropHeight;
+
   ctx.imageSmoothingQuality = "high";
 
   // Fill with white background for PNG transparency
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Рисуем обрезанное изображение
   ctx.drawImage(
     image,
-    crop.x * scaleX,
-    crop.y * scaleY,
-    crop.width * scaleX,
-    crop.height * scaleY,
+    cropX,
+    cropY,
+    cropWidth,
+    cropHeight,
     0,
     0,
-    crop.width * scaleX,
-    crop.height * scaleY
+    cropWidth,
+    cropHeight
   );
 
   return new Promise((resolve) => {
@@ -69,7 +98,9 @@ export function getCroppedImg(
 export function getCroppedImgCircular(
   image: HTMLImageElement,
   crop: PixelCrop,
-  fileName: string
+  fileName: string,
+  displayWidth?: number,
+  displayHeight?: number
 ): Promise<File> {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -78,26 +109,49 @@ export function getCroppedImgCircular(
     throw new Error("No 2d context");
   }
 
-  const scaleX = image.naturalWidth / image.width;
-  const scaleY = image.naturalHeight / image.height;
-  const pixelRatio = window.devicePixelRatio;
+  // Используем реальный визуальный размер если передан (для учета transform: scale)
+  const actualDisplayWidth = displayWidth ?? image.width;
+  const actualDisplayHeight = displayHeight ?? image.height;
 
-  // Используем минимальную сторону кропа для создания квадратного холста
+  // Пересчитываем координаты из визуального размера в натуральные пиксели
+  const scaleX = image.naturalWidth / actualDisplayWidth;
+  const scaleY = image.naturalHeight / actualDisplayHeight;
+
+  // Пересчитываем координаты кропа в натуральные пиксели
+  const cropX = crop.x * scaleX;
+  const cropY = crop.y * scaleY;
   const cropWidth = crop.width * scaleX;
   const cropHeight = crop.height * scaleY;
-  const size = Math.min(cropWidth, cropHeight);
 
-  // Устанавливаем размеры холста
-  canvas.width = size * pixelRatio;
-  canvas.height = size * pixelRatio;
+  console.log("Crop debug:", {
+    crop,
+    imageWidth: image.width,
+    imageHeight: image.height,
+    naturalWidth: image.naturalWidth,
+    naturalHeight: image.naturalHeight,
+    displayWidth: actualDisplayWidth,
+    displayHeight: actualDisplayHeight,
+    scaleX,
+    scaleY,
+    cropX,
+    cropY,
+    cropWidth,
+    cropHeight,
+  });
 
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  // Для круглого кропа используем максимальную сторону, чтобы весь выбранный кроп вписывался
+  const size = Math.max(cropWidth, cropHeight);
+
+  // Устанавливаем размеры холста (квадрат для круга) БЕЗ pixelRatio для простоты
+  canvas.width = size;
+  canvas.height = size;
+
   ctx.imageSmoothingQuality = "high";
 
   // Центр круга находится в центре холста
-  const centerX = (size * pixelRatio) / 2;
-  const centerY = (size * pixelRatio) / 2;
-  const radius = (size * pixelRatio) / 2;
+  const centerX = size / 2;
+  const centerY = size / 2;
+  const radius = size / 2;
 
   // Создаем круглый клиппинг
   ctx.beginPath();
@@ -105,17 +159,29 @@ export function getCroppedImgCircular(
   ctx.closePath();
   ctx.clip();
 
-  // Рисуем изображение с учетом масштабирования и смещения
+  // Вычисляем смещение для центрирования кропа в квадратном холсте
+  const offsetX = (size - cropWidth) / 2;
+  const offsetY = (size - cropHeight) / 2;
+
+  console.log("Draw debug:", {
+    size,
+    offsetX,
+    offsetY,
+    drawWidth: cropWidth,
+    drawHeight: cropHeight,
+  });
+
+  // Рисуем изображение - весь выбранный кроп будет виден в круге
   ctx.drawImage(
     image,
-    crop.x * scaleX,
-    crop.y * scaleY,
+    cropX,
+    cropY,
     cropWidth,
     cropHeight,
-    0,
-    0,
-    size * pixelRatio,
-    size * pixelRatio
+    offsetX,
+    offsetY,
+    cropWidth,
+    cropHeight
   );
 
   return new Promise((resolve) => {
