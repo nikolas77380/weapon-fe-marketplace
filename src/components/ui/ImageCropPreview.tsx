@@ -70,7 +70,7 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
   useEffect(() => {
     const newAspect = aspectRatio || (cropShape === "circle" ? 1 : 4 / 3);
     setAspect(newAspect);
-    
+
     // Пересоздаем кроп с новым aspect ratio если изображение уже загружено
     if (imgRef.current && imgRef.current.complete) {
       const { naturalWidth, naturalHeight } = imgRef.current;
@@ -97,10 +97,37 @@ const ImageCropPreview: React.FC<ImageCropPreviewProps> = ({
     }
 
     try {
+      // При transform: scale() ReactCrop возвращает координаты относительно визуального размера
+      // Но image.width не учитывает scale, нужно получить реальный визуальный размер
+      const rect = imgRef.current.getBoundingClientRect();
+      const displayWidth = rect.width;
+      const displayHeight = rect.height;
+
+      // Пересчитываем координаты кропа с учетом реального визуального размера
+      const adjustedCrop: PixelCrop = {
+        x: completedCrop.x,
+        y: completedCrop.y,
+        width: completedCrop.width,
+        height: completedCrop.height,
+        unit: "px",
+      };
+
       const croppedFile =
         cropShape === "circle"
-          ? await getCroppedImgCircular(imgRef.current, completedCrop, fileName)
-          : await getCroppedImg(imgRef.current, completedCrop, fileName);
+          ? await getCroppedImgCircular(
+              imgRef.current,
+              adjustedCrop,
+              fileName,
+              displayWidth,
+              displayHeight
+            )
+          : await getCroppedImg(
+              imgRef.current,
+              adjustedCrop,
+              fileName,
+              displayWidth,
+              displayHeight
+            );
       onCropComplete(croppedFile);
     } catch (error) {
       console.error("Error creating cropped image:", error);

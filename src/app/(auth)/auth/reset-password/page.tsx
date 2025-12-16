@@ -54,11 +54,7 @@ const ResetPasswordPage = () => {
         return;
       }
 
-      await resetPassword(
-        code,
-        values.newPassword,
-        values.confirmPassword
-      );
+      await resetPassword(code, values.newPassword, values.confirmPassword);
 
       toast.success(t("successMessage"));
 
