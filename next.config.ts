@@ -84,7 +84,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' https://challenges.cloudflare.com",
+              "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com",
               "frame-src 'self' https://www.youtube.com https://player.vimeo.com https://vimeo.com https://challenges.cloudflare.com",
             ].join("; "),
           },

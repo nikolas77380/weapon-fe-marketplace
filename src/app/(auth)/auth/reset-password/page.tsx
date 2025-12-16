@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,6 +14,7 @@ import Logo from "@/components/ui/Logo";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
+import { resetPassword } from "@/lib/auth";
 
 type ResetPasswordFormValues = {
   newPassword: string;
@@ -23,6 +24,7 @@ type ResetPasswordFormValues = {
 const ResetPasswordPage = () => {
   const t = useTranslations("Auth.resetPassword");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
 
   const resetPasswordSchema = z
@@ -46,11 +48,17 @@ const ResetPasswordPage = () => {
   const onSubmit = async (values: ResetPasswordFormValues) => {
     setIsLoading(true);
     try {
-      // TODO: Backend integration - reset password
-      console.log("Resetting password:", values.newPassword);
+      const code = searchParams.get("code");
+      if (!code) {
+        toast.error(t("errorMessage"));
+        return;
+      }
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await resetPassword(
+        code,
+        values.newPassword,
+        values.confirmPassword
+      );
 
       toast.success(t("successMessage"));
 
@@ -60,7 +68,11 @@ const ResetPasswordPage = () => {
       }, 1000);
     } catch (error) {
       console.error("Error resetting password:", error);
-      toast.error(t("errorMessage"));
+      const message =
+        error instanceof Error
+          ? error.message
+          : (error as { message?: string })?.message;
+      toast.error(message || t("errorMessage"));
     } finally {
       setIsLoading(false);
     }
