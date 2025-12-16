@@ -17,6 +17,7 @@ import {
   ForgotPasswordFormValues,
   forgotPasswordSchema,
 } from "@/schemas/forgotPasswordSchema";
+import { forgotPassword } from "@/lib/auth";
 
 const ForgotPasswordPage = () => {
   const t = useTranslations("Auth.forgotPassword");
@@ -32,17 +33,18 @@ const ForgotPasswordPage = () => {
   const onSubmit = async (values: ForgotPasswordFormValues) => {
     setIsLoading(true);
     try {
-      // TODO: Backend integration - send password reset email
-      console.log("Sending password reset email to:", values.email);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const resetUrl = `${window.location.origin}/auth/reset-password`;
+      await forgotPassword(values.email, resetUrl);
 
       toast.success(t("successMessage"));
       form.reset();
     } catch (error) {
       console.error("Error sending reset email:", error);
-      toast.error(t("errorMessage"));
+      const message =
+        error instanceof Error
+          ? error.message
+          : (error as { message?: string })?.message;
+      toast.error(message || t("errorMessage"));
     } finally {
       setIsLoading(false);
     }
