@@ -2,7 +2,6 @@
 
 import { getCurrentUserFromCookie, logout } from "@/lib/auth";
 import { UserProfile } from "@/lib/types";
-import { redirect } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -11,6 +10,7 @@ import {
   useState,
 } from "react";
 import { useChatSocket } from "@/hooks/useChatSocket";
+import { useRouter } from "next/navigation";
 
 interface AuthContextContextValue {
   currentUser: UserProfile | null;
@@ -31,6 +31,7 @@ export const AuthContext = createContext<AuthContextContextValue | null>(null);
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(null);
   const [currentUserLoading, setCurrentUserLoading] = useState(true);
+  const router = useRouter();
   const {
     socket,
     isConnected: chatSocketConnected,
@@ -51,7 +52,11 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const handleLogout = async () => {
     await logout();
     setCurrentUser(null);
-    redirect("/");
+    setCurrentUserLoading(false);
+    // Use window.location for a full page reload to ensure all state is cleared
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
   };
 
   const handleEmailConfirmation = async (

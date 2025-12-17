@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import {
   Form,
   FormLabel,
@@ -26,17 +26,13 @@ import { toast } from "sonner";
 import ImagesDropzone from "@/components/ui/ImagesDropzone";
 import { useCategories } from "@/hooks/useCategories";
 import { useProductActions } from "@/hooks/useProductsQuery";
-import { Product, UpdateProductData } from "@/lib/types";
+import { Product, UpdateProductData, MediaFile } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { X } from "lucide-react";
 import CategoryCombobox from "@/components/ui/CategoryCombobox";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import DeleteImageDialog from "./DeleteImageDialog";
 
 interface EditProductFormProps {
   product: Product;
@@ -67,9 +63,18 @@ const EditProductForm = ({
 
   const {
     updateProduct,
+    deleteImage,
     loading: updateLoading,
     error: updateError,
   } = useProductActions();
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState<MediaFile | null>(null);
+
+  useEffect(() => {
+    console.log("EditProductForm openDialog state:", openDialog);
+    console.log("EditProductForm imageToDelete:", imageToDelete);
+  }, [openDialog, imageToDelete]);
 
   void _customLabels;
 
@@ -194,7 +199,26 @@ const EditProductForm = ({
     }
   }, [watchedCurrency, form, product, getPriceForCurrency]);
 
-  // Deletion dialog is currently disabled
+  const handleDeleteImage = async () => {
+    if (!imageToDelete) return;
+
+    try {
+      await deleteImage({
+        productId: product.id,
+        imageId: imageToDelete.id,
+      });
+
+      toast.success(t("toastSuccessDeleteImage"));
+      setOpenDialog(false);
+      setImageToDelete(null);
+
+      // Refresh the page to show updated images
+      router.refresh();
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      toast.error(t("toastErrorDeleteImage"));
+    }
+  };
 
   const onSubmit = async (values: EditProductSchemaValues) => {
     try {
@@ -260,19 +284,26 @@ const EditProductForm = ({
                 priority
                 className="object-contain size-full p-2"
               />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white 
-                    rounded-full group p-2 cursor-pointer transition duration-300 ease-in-out"
-                  >
-                    <X className="h-4 w-4 group-hover:text-white" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{t("deleteModal.buttonDelete")}</p>
-                </TooltipContent>
-              </Tooltip>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  console.log("Delete button clicked, image:", image);
+                  setImageToDelete(image);
+                  setOpenDialog(true);
+                  console.log("Dialog should open, openDialog:", true);
+                }}
+                className="absolute top-0 right-0 z-50 h-6 w-6 p-0 bg-destructive text-white rounded-sm flex items-center justify-center hover:bg-destructive/90 transition-colors cursor-pointer"
+                style={{
+                  opacity: 1,
+                  visibility: "visible",
+                  display: "flex",
+                }}
+                title={t("deleteModal.buttonDelete")}
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
           ))}
         </div>
@@ -293,6 +324,10 @@ const EditProductForm = ({
                 <FormControl>
                   <ImagesDropzone
                     maxFiles={5}
+                    maxSize={5 * 1024 * 1024}
+                    enableCrop={true}
+                    aspectRatio={1 / 1}
+                    externalFiles={field.value || []}
                     onFilesChange={(files) => {
                       field.onChange(files);
                       console.log("Images updated in form:", files);
@@ -521,14 +556,14 @@ const EditProductForm = ({
           )}
         </form>
       </Form>
-      {/* <DeleteImageDialog
+      <DeleteImageDialog
         isOpen={openDialog}
         onClose={() => {
           setOpenDialog(false);
           setImageToDelete(null);
         }}
         onConfirm={handleDeleteImage}
-      /> */}
+      />
     </div>
   );
 };

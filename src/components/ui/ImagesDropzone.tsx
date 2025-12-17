@@ -350,7 +350,7 @@ const ImagesDropzone: React.FC<ImagesDropzoneProps> = ({
           <h4 className="font-medium text-gray-700">
             {t("titleUploadedFiles")} ({files.length}/{maxFiles}):
           </h4>
-          <div className="w-full">
+          <div className="w-full flex flex-wrap gap-2">
             {files.map((file, index) => (
               <div
                 key={index}

@@ -486,6 +486,59 @@ export const deleteProduct = async ({ id }: { id: number }) => {
   });
 };
 
+export const deleteProductImage = async ({
+  productId,
+  imageId,
+  currentImages,
+}: {
+  productId: number;
+  imageId: number;
+  currentImages?: Array<{ id: number }>;
+}) => {
+  const token = getSessionTokenFromCookie();
+  if (!token) {
+    throw new Error("Authentication required");
+  }
+
+  let remainingImageIds: number[] = [];
+
+  if (currentImages && currentImages.length > 0) {
+    // Use provided images to filter out the image to delete
+    remainingImageIds = currentImages
+      .filter((img) => img.id !== imageId)
+      .map((img) => img.id);
+  } else {
+    // Fallback: get the current product to get all image IDs
+    // This should not happen if currentImages is always provided
+    const productResponse = await strapiFetchAuth({
+      path: `/api/products/${productId}?populate=images`,
+      method: "GET",
+      token,
+    });
+
+    const product = productResponse.data || productResponse;
+    const images = product?.images || [];
+    remainingImageIds = images
+      .filter((img: { id: number }) => img.id !== imageId)
+      .map((img: { id: number }) => img.id);
+  }
+
+  // Update product with remaining images
+  const updateResponse = await strapiFetchAuth({
+    path: `/api/products/${productId}`,
+    method: "PUT",
+    body: {
+      data: {
+        images: remainingImageIds,
+      },
+    },
+    token,
+  });
+
+  // Return in the same format as updateProduct
+  return updateResponse;
+};
+
 export const getProducts = async (params?: {
   category?: number;
   categorySlug?: string;

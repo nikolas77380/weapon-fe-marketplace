@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useUserRoleManagement } from "@/hooks/useChangeUserRole";
 import { toast } from "sonner";
+import { useAuthContext } from "@/context/AuthContext";
 
 interface BuyerAccountHeaderProps {
   currentUser: UserProfile;
@@ -23,6 +24,8 @@ const BuyerAccountHeader = ({
 }: BuyerAccountHeaderProps) => {
   const t = useTranslations("BuyerAccountHeader");
   const { changeUserRole, isLoading } = useUserRoleManagement();
+  const { handleLogout } = useAuthContext();
+
   const handleBecomeSeller = async () => {
     try {
       await changeUserRole(currentUser?.id, "seller");
@@ -49,57 +52,61 @@ const BuyerAccountHeader = ({
             </Link>
           </div>
         </div>
-
         <div className="mt-8">
-          <div className="flex flex-col p-5">
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-5 w-full">
-                <Avatar className="size-18 lg:size-25 border border-gray-300 cursor-pointer">
-                  <AvatarFallback className="bg-black text-white text-4xl lg:text-6xl uppercase">
-                    {currentUser?.displayName?.charAt(0) ||
-                      currentUser?.username.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <p className="text-xl lg:text-2xl font-medium">
-                    {currentUser?.displayName || currentUser?.username}
-                  </p>
-                  <div className="flex items-center gap-10">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-5">
+              <Avatar className="size-18 lg:size-25 border border-gray-300 cursor-pointer">
+                <AvatarFallback className="bg-black text-white text-4xl lg:text-6xl uppercase">
+                  {currentUser?.displayName?.charAt(0) ||
+                    currentUser?.username.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col">
+                <p className="text-xl lg:text-2xl font-medium">
+                  {currentUser?.displayName || currentUser?.username}
+                </p>
+                <div className="flex items-center gap-10">
+                  <div className="flex flex-col mt-3.5">
+                    <p className="text-muted-foreground text-sm lg:text-base">
+                      {t("titleEmail")}
+                    </p>
+                    <p className="text-sm lg:text-base">{currentUser?.email}</p>
+                  </div>
+                  {currentUser?.metadata?.phoneNumbers && (
                     <div className="flex flex-col mt-3.5">
                       <p className="text-muted-foreground text-sm lg:text-base">
-                        {t("titleEmail")}
+                        {t("titlePhone")}
                       </p>
-                      <p className="text-sm lg:text-base">
-                        {currentUser?.email}
-                      </p>
+                      <p>{currentUser?.metadata?.phoneNumbers}</p>
                     </div>
-                    {currentUser?.metadata?.phoneNumbers && (
-                      <div className="flex flex-col mt-3.5">
-                        <p className="text-muted-foreground text-sm lg:text-base">
-                          {t("titlePhone")}
-                        </p>
-                        <p>{currentUser?.metadata?.phoneNumbers}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <p className="text-sm text-gold-main mb-4 text-center">
-                  {t("becomeSellerText")}
-                </p>
-                <div className="w-full flex justify-center">
-                  <Button
-                    disabled={isLoading}
-                    onClick={handleBecomeSeller}
-                    className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white"
-                  >
-                    {t("becomeSellerButton")}
-                  </Button>
+                  )}
                 </div>
               </div>
             </div>
-            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
+            <div className="flex flex-col">
+              <p className="text-sm text-gold-main mb-4 text-center">
+                {t("becomeSellerText")}
+              </p>
+              <div className="w-full flex justify-center">
+                <Button
+                  disabled={isLoading}
+                  onClick={handleBecomeSeller}
+                  className="px-2.5 py-2 w-fit bg-gold-main hover:bg-gold-main/80 text-white"
+                >
+                  {t("becomeSellerButton")}
+                </Button>
+              </div>
+            </div>
+            <Button
+              className="bg-gold-main self-start rounded-sm px-3 py-2 text-white hover:bg-gold-main/90"
+              onClick={handleLogout}
+            >
+              <p className="text-xs sm:text-sm font-semibold">
+                {t("titleLogout")}
+              </p>
+            </Button>
+          </div>
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-7.5 mt-7.5">
               <BuyerActionCard
                 title={t("titleActiveInquiries")}
                 count={0}
@@ -120,7 +127,6 @@ const BuyerAccountHeader = ({
                 }
               />
             </div> */}
-          </div>
         </div>
       </div>
 

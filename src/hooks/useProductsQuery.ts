@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  deleteProductImage,
   getCategoryProductsElastic,
   getCategoryFiltersElastic,
   getSellerProductsElastic,
@@ -168,21 +169,61 @@ export const useDeleteProductMutation = () => {
   });
 };
 
+export const useDeleteProductImageMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      productId,
+      imageId,
+      currentImages,
+    }: {
+      productId: number;
+      imageId: number;
+      currentImages?: Array<{ id: number }>;
+    }) => deleteProductImage({ productId, imageId, currentImages }),
+    onSuccess: (updatedProduct, variables) => {
+      // Update the specific product in cache
+      queryClient.setQueryData(
+        queryKeys.products.detail(variables.productId),
+        updatedProduct
+      );
+
+      // Invalidate all product lists to refetch with updated data
+      queryClient.invalidateQueries({ queryKey: queryKeys.products.lists() });
+
+      // If the product has a seller, invalidate seller products
+      if (updatedProduct?.data?.seller?.id) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.products.seller(updatedProduct.data.seller.id),
+        });
+      }
+    },
+  });
+};
+
 // Combined hook for backward compatibility
 export const useProductActions = () => {
   const createMutation = useCreateProductMutation();
   const updateMutation = useUpdateProductMutation();
   const deleteMutation = useDeleteProductMutation();
+  const deleteImageMutation = useDeleteProductImageMutation();
 
   return {
     createProduct: createMutation.mutateAsync,
     updateProduct: updateMutation.mutateAsync,
     deleteProduct: deleteMutation.mutateAsync,
+    deleteImage: deleteImageMutation.mutateAsync,
     loading:
       createMutation.isPending ||
       updateMutation.isPending ||
-      deleteMutation.isPending,
-    error: createMutation.error || updateMutation.error || deleteMutation.error,
+      deleteMutation.isPending ||
+      deleteImageMutation.isPending,
+    error:
+      createMutation.error ||
+      updateMutation.error ||
+      deleteMutation.error ||
+      deleteImageMutation.error,
   };
 };
 
