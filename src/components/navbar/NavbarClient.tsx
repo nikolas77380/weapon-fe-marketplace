@@ -42,6 +42,11 @@ const NavbarClient: React.FC<NavbarClientProps> = ({ initialUser }) => {
 
   // Синхронизируем initialUser с контекстом при монтировании
   useEffect(() => {
+    // Если currentUser стал null (после логаута), сбрасываем флаг инициализации
+    if (currentUser === null) {
+      hasInitializedUser.current = false;
+    }
+
     // Устанавливаем initialUser только один раз при монтировании
     if (initialUser && !hasInitializedUser.current) {
       hasInitializedUser.current = true;
@@ -64,8 +69,11 @@ const NavbarClient: React.FC<NavbarClientProps> = ({ initialUser }) => {
     setCurrentUserLoading,
   ]);
 
-  // Используем currentUser из контекста или initialUser
-  const user: UserProfile | null = currentUser || initialUser || null;
+  // Используем currentUser из контекста как основной источник истины
+  // Если currentUser явно null (после логаута), игнорируем initialUser для правильной очистки UI
+  // Если currentUser еще не загружен (undefined), используем initialUser для SSR
+  const user: UserProfile | null = 
+    currentUser !== undefined ? currentUser : (initialUser || null);
   const isLoading = currentUserLoading && !initialUser;
   const unreadCount = useUnreadMessagesCount();
 

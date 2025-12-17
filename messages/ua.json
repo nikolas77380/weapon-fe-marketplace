@@ -60,7 +60,8 @@
     "becomeSellerText": "Хочете розташувати товари у нашому маркетплейсі?",
     "becomeSellerButton": "Стати продавцем",
     "becomeSellerSuccess": "Роль успішно змінена на продавця!",
-    "becomeSellerError": "Помилка при зміні ролі"
+    "becomeSellerError": "Помилка при зміні ролі",
+    "titleLogout": "Вийти"
   },
   "BuyerAccountTabs": {
     "noActiveInquiries": "Поки немає активних запитів",

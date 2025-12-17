@@ -60,7 +60,8 @@
     "becomeSellerText": "Want to place products in our marketplace?",
     "becomeSellerButton": "Become a Seller",
     "becomeSellerSuccess": "Role successfully changed to seller!",
-    "becomeSellerError": "Error changing role"
+    "becomeSellerError": "Error changing role",
+    "titleLogout": "Logout"
   },
   "BuyerAccountTabs": {
     "noActiveInquiries": "No active inquiries yet",

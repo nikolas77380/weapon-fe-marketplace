@@ -265,6 +265,13 @@ export const changePassword = async (
 export const logout = async (): Promise<ApiResponse<{ ok: boolean }>> => {
   clearSessionTokenCookie();
   deleteClientCookie("sendbirdSessionToken");
+
+  // Clear localStorage items related to authentication
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("user");
+  }
+
   return { ok: true };
 };
 
