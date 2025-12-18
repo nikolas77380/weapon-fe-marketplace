@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -21,6 +22,7 @@ import { forgotPassword } from "@/lib/auth";
 
 const ForgotPasswordPage = () => {
   const t = useTranslations("Auth.forgotPassword");
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<ForgotPasswordFormValues>({
@@ -33,11 +35,15 @@ const ForgotPasswordPage = () => {
   const onSubmit = async (values: ForgotPasswordFormValues) => {
     setIsLoading(true);
     try {
-      const resetUrl = `${window.location.origin}/auth/reset-password`;
-      await forgotPassword(values.email, resetUrl);
+      await forgotPassword(values.email);
 
       toast.success(t("successMessage"));
       form.reset();
+
+      // Redirect to login page after successful request
+      setTimeout(() => {
+        router.push("/auth?mode=login");
+      }, 1500);
     } catch (error) {
       console.error("Error sending reset email:", error);
       const message =
@@ -45,7 +51,6 @@ const ForgotPasswordPage = () => {
           ? error.message
           : (error as { message?: string })?.message;
       toast.error(message || t("errorMessage"));
-    } finally {
       setIsLoading(false);
     }
   };

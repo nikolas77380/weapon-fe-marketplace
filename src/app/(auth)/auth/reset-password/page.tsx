@@ -50,7 +50,7 @@ const ResetPasswordPage = () => {
     try {
       const code = searchParams.get("code");
       if (!code) {
-        toast.error(t("errorMessage"));
+        toast.error(t("errorMessage") || "Reset code is missing");
         return;
       }
 
@@ -68,11 +68,22 @@ const ResetPasswordPage = () => {
         error instanceof Error
           ? error.message
           : (error as { message?: string })?.message;
-      toast.error(message || t("errorMessage"));
+      toast.error(message || t("errorMessage") || "Failed to reset password");
     } finally {
       setIsLoading(false);
     }
   };
+
+  // Check if code is present on mount
+  React.useEffect(() => {
+    const code = searchParams.get("code");
+    if (!code) {
+      toast.error(
+        t("errorMessage") ||
+          "Invalid reset link. Please request a new password reset."
+      );
+    }
+  }, [searchParams, t]);
 
   return (
     <div className="min-h-screen h-full w-full relative pt-4 sm:pt-6 pb-8 sm:pb-12 lg:pb-16 z-1">
