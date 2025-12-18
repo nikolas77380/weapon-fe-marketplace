@@ -128,31 +128,15 @@ export const login = async (
 };
 
 export const forgotPassword = async (
-  email: string,
-  resetUrl?: string
+  email: string
 ): Promise<ApiResponse<{ ok: boolean }>> => {
-  const body: Record<string, string> = { email };
-
-  /**
-   * Strapi uses the provided `url` as the base for the reset link
-   * (it appends `?code=<token>`). If we can determine the frontend
-   * host, include it so the email points back to our reset page.
-   */
-  const resolvedUrl =
-    resetUrl ||
-    process.env.NEXT_PUBLIC_PASSWORD_RESET_URL ||
-    (typeof window !== "undefined"
-      ? `${window.location.origin}/auth/reset-password`
-      : undefined);
-
-  if (resolvedUrl) {
-    body.url = resolvedUrl;
-  }
-
+  // Strapi forgot-password endpoint only accepts email
+  // The reset URL should be configured in Strapi admin panel
+  // Settings > Users & Permissions plugin > Advanced settings > Reset password URL
   const response = await strapiFetch({
     path: "/api/auth/forgot-password",
     method: "POST",
-    body,
+    body: { email },
   });
 
   return response;
