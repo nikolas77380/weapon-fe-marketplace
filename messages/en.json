@@ -231,6 +231,9 @@
     "placeholderCountry": "Select Country",
     "labelAddress": "Address",
     "placeholderAddress": "Enter company address",
+    "labelEmail": "Email",
+    "placeholderEmail": "Enter your email",
+    "errorEmailExists": "This email already exists. Please use a different email.",
     "labelAvatar": "Company Avatar",
     "labelCurrentAvatar": "Current Avatar:",
     "workTime": {

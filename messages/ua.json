@@ -231,6 +231,9 @@
     "placeholderCountry": "Оберіть краіну",
     "labelAddress": "Адреса",
     "placeholderAddress": "Введіть адресу компанії",
+    "labelEmail": "E-mail",
+    "placeholderEmail": "Введіть вашу пошту",
+    "errorEmailExists": "Ця електронна адреса вже існує. Будь ласка, скористайтеся іншою.",
     "labelAvatar": "Аватар компанії",
     "labelCurrentAvatar": "Поточний аватар:",
     "workTime": {
