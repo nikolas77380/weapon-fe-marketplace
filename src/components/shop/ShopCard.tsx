@@ -7,8 +7,9 @@ import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
 import ContactModal from "./ContactModal";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface ShopCardProps {
   item: Product;
@@ -17,8 +18,9 @@ interface ShopCardProps {
 
 const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
   const t = useTranslations("ShopCard");
+  const locale = useLocale() as "ua" | "en";
   const { selectedCurrency } = useCurrency();
-  // const currentLocale = useLocale();
+  const title = getProductTitle(item, locale);
 
   // const getCategoryDisplayName = (category: any) => {
   //   return currentLocale === "ua" && category?.translate_ua
@@ -48,7 +50,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
               "/no-image.png"
             }
-            alt={item.title}
+            alt={title}
             fill
             sizes="(max-width: 400px) 150px, (max-width: 640px) 160px, 200px"
             loading="lazy"
@@ -87,7 +89,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               </p>
             </div>
             <p className="font-extrabold text-base sm:text-lg mb-2 truncate">
-              {item.title}
+              {title}
             </p>
             {/* {item.category && item.category.slug && (
               <Link
@@ -147,7 +149,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               getBestImageUrl(item.images?.[0] as ImageType, "small") ||
               "/no-image.png"
             }
-            alt={item.title}
+            alt={title}
             fill
             sizes="(max-width: 640px) 120px, (max-width: 768px) 150px, 200px"
             loading="lazy"
@@ -189,7 +191,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             href={`/marketplace/${item.id}`}
             className="font-medium text-sm xs:text-base sm:text-lg hover:text-gold-main transition-colors duration-300 w-full min-w-0 truncate"
           >
-            {item.title}
+            {title}
           </Link>
           {/* {item.category && item.category.slug && (
             <Link
@@ -239,7 +241,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
             onOpenChange={setOpen}
             sellerId={item.seller?.id}
             productId={item.id}
-            productTitle={item.title}
+            productTitle={title}
           />
         )}
       </div>

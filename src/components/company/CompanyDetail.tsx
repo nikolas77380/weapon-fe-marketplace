@@ -28,6 +28,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
 import { useLocale, useTranslations } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getProductTitle, getProductDescription } from "@/lib/product-i18n";
 import CertificateSlider from "./CertificateSlider";
 import ContactModal from "../shop/ContactModal";
 import BusinessInfo from "./BusinessInfo";
@@ -40,7 +41,7 @@ interface CompanyDetailProps {
 const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   const t = useTranslations("CompanyDetail");
   const { selectedCurrency } = useCurrency();
-  const locale = useLocale();
+  const locale = useLocale() as "ua" | "en";
 
   // View mode hook
   const { viewMode, setViewMode } = useViewMode("grid");
@@ -137,13 +138,13 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         return false;
       }
 
-      // Search filter
+      // Search filter (use locale-aware title/description)
+      const productTitle = getProductTitle(product, locale);
+      const productDesc = getProductDescription(product, locale);
       const searchMatch =
         filters.search === "" ||
-        product.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        product.description
-          ?.toLowerCase()
-          .includes(filters.search.toLowerCase());
+        productTitle.toLowerCase().includes(filters.search.toLowerCase()) ||
+        (productDesc?.toLowerCase().includes(filters.search.toLowerCase()) ?? false);
 
       // Price filter
       const price = getProductPrice(product);
@@ -170,8 +171,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
           const priceB = getProductPrice(b);
           return isDesc ? priceB - priceA : priceA - priceB;
         case "title":
-          const titleA = a.title.toLowerCase();
-          const titleB = b.title.toLowerCase();
+          const titleA = getProductTitle(a, locale).toLowerCase();
+          const titleB = getProductTitle(b, locale).toLowerCase();
           if (isDesc) {
             return titleB.localeCompare(titleA);
           }

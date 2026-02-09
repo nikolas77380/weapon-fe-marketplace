@@ -8,7 +8,8 @@ import LoadingState from "@/components/ui/LoadingState";
 import ErrorState from "@/components/ui/ErrorState";
 import NotFoundState from "@/components/ui/NotFoundState";
 import EditPageWrapper from "@/components/ui/PageWrapper";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface EditProductComponentProps {
   productSlug: string;
@@ -19,6 +20,7 @@ const EditProductComponent = ({
   productSlug,
   currentUser,
 }: EditProductComponentProps) => {
+  const locale = useLocale() as "ua" | "en";
   const {
     data: response,
     isLoading,
@@ -28,6 +30,9 @@ const EditProductComponent = ({
   const loading = isLoading;
   const product = products.find((p: Product) => p.slug === productSlug);
   const t = useTranslations("EditProduct");
+  const productLabel = product
+    ? getProductTitle(product, locale) || productSlug
+    : productSlug;
 
   return (
     <EditPageWrapper
@@ -35,7 +40,7 @@ const EditProductComponent = ({
       customLabels={
         product
           ? {
-              [productSlug]: product.title || product.name || productSlug,
+              [productSlug]: productLabel,
             }
           : {}
       }

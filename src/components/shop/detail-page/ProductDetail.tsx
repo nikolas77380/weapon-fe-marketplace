@@ -9,6 +9,7 @@ import FavouriteButton from "@/components/ui/FavouriteButton";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { getProductTitle, getProductDescription } from "@/lib/product-i18n";
 import ContactModal from "../ContactModal";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getVideoEmbedUrl } from "@/lib/videoUtils";
@@ -21,8 +22,10 @@ const ProductDetail = ({ product }: { product: Product }) => {
   const tCondition = useTranslations(
     "AddProduct.addProductForm.productCondition"
   );
-  const currentLocale = useLocale();
+  const currentLocale = useLocale() as "ua" | "en";
   const { selectedCurrency } = useCurrency();
+  const productTitle = getProductTitle(product, currentLocale);
+  const productDescription = getProductDescription(product, currentLocale);
 
   const [open, setOpen] = useState(false);
 
@@ -75,7 +78,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
       <div className="w-full lg:w-1/3">
         <ProductImageGallery
           images={product.images}
-          productTitle={product.title}
+          productTitle={productTitle}
         />
       </div>
       {/* Details */}
@@ -84,7 +87,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
         {/* Title */}
         <div className="flex items-center justify-between">
           <h1 className="text-2xl sm:text-3xl lg:text-[40px] font-medium">
-            {product?.title || t("titleProduct")}
+            {productTitle || t("titleProduct")}
           </h1>
           <FavouriteButton productId={product.id} size="lg" />
         </div>
@@ -183,7 +186,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             </TabsList>
             <TabsContent value="description">
               <p className="text-base sm:text-lg font-light">
-                {product?.description || ""}
+                {productDescription ?? ""}
               </p>
             </TabsContent>
             <TabsContent value="specifications">
@@ -289,7 +292,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             <div className="aspect-video w-full rounded-sm overflow-hidden">
               <iframe
                 src={videoEmbedUrl}
-                title={product.title}
+                title={productTitle}
                 className="w-full h-full border-0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
@@ -303,7 +306,7 @@ const ProductDetail = ({ product }: { product: Product }) => {
             onOpenChange={setOpen}
             sellerId={product?.seller?.id}
             productId={product?.id}
-            productTitle={product?.title}
+            productTitle={productTitle}
           />
         )}
       </div>

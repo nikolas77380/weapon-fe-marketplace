@@ -11,6 +11,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Product, UserProfile, Category } from "@/lib/types";
 import { useCategories } from "@/hooks/useCategories";
 import { getCategoryPath } from "@/lib/categoryUtils";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface DetailProductPageClientProps {
   initialProduct: Product;
@@ -28,12 +29,13 @@ const DetailProductPageClient = ({
   } = useProductQuery(initialProduct.id, initialProduct);
   const { addViewedProduct } = useViewedProducts();
   const loading = isLoading && !initialProduct;
-  const currentLocale = useLocale();
+  const currentLocale = useLocale() as "ua" | "en";
   const t = useTranslations("ProductDetail");
   const { categories } = useCategories();
 
   // Используем данные из query или initialData
   const productData = product || initialProduct;
+  const productTitle = getProductTitle(productData, currentLocale);
 
   // We save the product to viewed items when it is loaded.
   useEffect(() => {
@@ -43,7 +45,7 @@ const DetailProductPageClient = ({
   }, [productData, loading, error, addViewedProduct]);
 
   const customLabels = {
-    [productData.id.toString()]: productData.title || "Product",
+    [productData.id.toString()]: productTitle || "Product",
   };
 
   // Build full category hierarchy path using all categories

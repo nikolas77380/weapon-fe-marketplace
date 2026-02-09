@@ -4,8 +4,9 @@ import { FavouriteProduct } from "@/lib/favourites";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { getDisplayPrice } from "@/lib/formatUtils";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useCurrency } from "@/hooks/useCurrency";
+import { getProductTitle } from "@/lib/product-i18n";
 import { useFavourites } from "@/hooks/useFavourites";
 import { useState } from "react";
 
@@ -22,11 +23,13 @@ const FavouriteCard = ({
 }: FavouriteCardProps) => {
   const t = useTranslations("BuyerAccountTabs.tabFavourites");
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
+  const locale = useLocale() as "ua" | "en";
   const { selectedCurrency } = useCurrency();
   const { removeFromFavourites } = useFavourites();
   const [isRemoving, setIsRemoving] = useState(false);
 
   const product = favourite.product;
+  const title = getProductTitle(product, locale);
 
   const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -62,7 +65,7 @@ const FavouriteCard = ({
                 ? product.images[0]
                 : getBestImageUrl(product.images?.[0], "small") || "/shop/1.jpg"
             }
-            alt={product.title}
+            alt={title}
             width={200}
             height={150}
             onError={(e) => handleImageError(e, "/shop/1.jpg")}
@@ -84,7 +87,7 @@ const FavouriteCard = ({
           <div>
             <div className="flex items-start justify-between mb-3">
               <h3 className="font-extrabold text-sm md:text-base lg:text-lg lg:leading-tight flex-1 lg:mr-4">
-                {product.title}
+                {title}
               </h3>
               <p className="hidden min-[400px]:block text-sm md:text-base lg:text-lg font-semibold text-gold-main flex-shrink-0 ">
                 {getDisplayPrice(product, selectedCurrency)}
@@ -129,7 +132,7 @@ const FavouriteCard = ({
               ? product.images[0]
               : getBestImageUrl(product.images?.[0], "small") || "/shop/1.jpg"
           }
-          alt={product.title}
+          alt={title}
           width={300}
           height={200}
           onError={(e) => handleImageError(e, "/shop/1.jpg")}
@@ -152,7 +155,7 @@ const FavouriteCard = ({
         {/* Header with price */}
         <div className="flex items-start justify-between mb-3">
           <h3 className="font-extrabold text-sm leading-tight flex-1 mr-2 line-clamp-2">
-            {product.title}
+            {title}
           </h3>
           <p className="text-sm font-semibold text-gold-main flex-shrink-0">
             {getDisplayPrice(product, selectedCurrency)}

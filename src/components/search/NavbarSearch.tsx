@@ -13,7 +13,8 @@ import { Search, Package, Users, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { debounce } from "lodash";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface NavbarSearchProps {
   onProductSelect?: (product: Product) => void;
@@ -29,6 +30,7 @@ export const NavbarSearch = ({
   className = "",
 }: NavbarSearchProps) => {
   const t = useTranslations("Navbar");
+  const locale = useLocale() as "ua" | "en";
   const { selectedCurrency } = useCurrency();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -223,7 +225,7 @@ export const NavbarSearch = ({
                                     ?.url) ||
                                 "/placeholder-image.jpg"
                               }
-                              alt={product.title}
+                              alt={getProductTitle(product, locale)}
                               fill
                               className="object-cover"
                             />
@@ -231,7 +233,7 @@ export const NavbarSearch = ({
                         )}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-gray-900 truncate">
-                            {product.title}
+                            {getProductTitle(product, locale)}
                           </p>
                           <p className="text-xs text-gray-500">
                             {getDisplayPrice(product, selectedCurrency)}
