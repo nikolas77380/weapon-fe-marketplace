@@ -32,6 +32,7 @@ import { useProductActions } from "@/hooks/useProductsQuery";
 import { toast } from "sonner";
 import { getBestImageUrl, handleImageError } from "@/lib/imageUtils";
 import { useLocale, useTranslations } from "next-intl";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface SellerListenedCardProps {
   product: Product;
@@ -43,7 +44,8 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
   // const tCondition = useTranslations(
   //   "AddProduct.addProductForm.productCondition"
   // );
-  const currentLocale = useLocale();
+  const currentLocale = useLocale() as "ua" | "en";
+  const title = getProductTitle(product, currentLocale);
 
   const getCategoryDisplayName = (category: any) => {
     return currentLocale === "ua" && category?.translate_ua
@@ -130,14 +132,14 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
             getBestImageUrl(product.images?.[0] as ImageType, "small") ||
             "/shop/1.jpg"
           }
-          alt={product.title}
+          alt={title}
           width={80}
           height={60}
           onError={(e) => handleImageError(e, "/shop/1.jpg")}
           className="rounded-md object-contain aspect-square"
         />
         <div className="flex flex-col">
-          <h2 className="font-roboto text-lg sm:text-xl">{product.title}</h2>
+          <h2 className="font-roboto text-lg sm:text-xl">{title}</h2>
           <div className="flex flex-wrap items-center mt-1 gap-3 sm:gap-6 font-extralight text-sm text-black">
             <p className="truncate max-w-[200px] sm:max-w-[260px]">
               {getCategoryDisplayName(product.category)}
@@ -229,7 +231,7 @@ const SellerListenedCard = ({ product }: SellerListenedCardProps) => {
                 <DialogTitle>{t("titleToogleDeleteCard")}</DialogTitle>
                 <DialogDescription>
                   {t("descriptionModalDeleteProduct1")} &ldquo;
-                  {product.title}&rdquo;? {t("descriptionModalDeleteProduct2")}
+                  {title}&rdquo;? {t("descriptionModalDeleteProduct2")}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="gap-2">

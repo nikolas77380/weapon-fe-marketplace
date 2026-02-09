@@ -189,6 +189,7 @@ const AddProductForms = ({
       const productData = {
         title: values.productName,
         description: values.productDescription,
+        contentLanguage: locale as "ua" | "en",
         price: values.productPrice,
         currency: values.productCurrency,
         category: selectedCategory.id,

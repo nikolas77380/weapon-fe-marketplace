@@ -4,6 +4,8 @@ import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useProductData } from "@/hooks/useProductData";
+import { useLocale } from "next-intl";
+import { getProductTitle } from "@/lib/product-i18n";
 
 interface ProductContextProps {
   productData?: any;
@@ -37,11 +39,14 @@ export const ProductContext: React.FC<ProductContextProps> = ({
     isLoading: fetchedIsLoading,
     error: fetchedError,
   } = useProductData(productId);
+  const locale = useLocale() as "ua" | "en";
 
   // Используем переданные данные или загруженные
   const productData = externalProductData ?? fetchedProductData;
   const isLoading = externalIsLoading ?? fetchedIsLoading;
   const error = externalError ?? fetchedError;
+  const product = productData?.data || productData;
+  const title = product ? getProductTitle(product, locale) : "";
 
   console.log("[ProductContext] Full productData:", productData);
   console.log(
@@ -61,9 +66,6 @@ export const ProductContext: React.FC<ProductContextProps> = ({
       </div>
     );
   }
-
-  // Проверяем разные варианты структуры данных
-  const product = productData?.data || productData;
 
   if (!product || !product.id) {
     console.log("[ProductContext] No valid product data");
@@ -88,7 +90,7 @@ export const ProductContext: React.FC<ProductContextProps> = ({
           {product.images?.[0]?.url ? (
             <Image
               src={product.images[0].url}
-              alt={product.title}
+              alt={title}
               fill
               className="object-cover"
             />
@@ -96,7 +98,7 @@ export const ProductContext: React.FC<ProductContextProps> = ({
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="text-sm font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-gold-main transition-colors">
-            {product.title}
+            {title}
           </h4>
           <p className="text-sm font-bold text-gold-main">
             ${product.priceUSD?.toLocaleString()}

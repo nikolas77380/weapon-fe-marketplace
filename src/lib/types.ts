@@ -199,6 +199,12 @@ export interface Product {
   updatedAt: string;
   publishedAt: string;
   viewsCount: number;
+  // Localized title/description (UA/EN)
+  titleUa?: string | null;
+  titleEn?: string | null;
+  descriptionUa?: string | null;
+  descriptionEn?: string | null;
+  contentLanguage?: "ua" | "en" | null;
 }
 
 export interface Tag {
@@ -227,6 +233,8 @@ export interface CreateProductData {
   condition?: "new" | "used";
   videoUrl?: string;
   attributesJson?: AttributesJson;
+  /** Language of the title/description being sent (for auto-translation to the other) */
+  contentLanguage?: "ua" | "en";
 }
 
 export interface UpdateProductData {
