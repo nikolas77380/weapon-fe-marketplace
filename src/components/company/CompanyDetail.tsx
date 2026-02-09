@@ -10,7 +10,6 @@ import { debounce } from "lodash";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { useSellerProducts } from "@/hooks/useSellerProducts";
 import {
   useSellerProductsElastic,
   useSellerFiltersElastic,
@@ -192,6 +191,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     filters.categoryId,
     filters.sort,
     selectedCurrency,
+    locale,
   ]);
 
   // Products filtered only by price (for category synchronization)

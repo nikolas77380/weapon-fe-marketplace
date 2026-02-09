@@ -39,11 +39,14 @@ export const ProductContext: React.FC<ProductContextProps> = ({
     isLoading: fetchedIsLoading,
     error: fetchedError,
   } = useProductData(productId);
+  const locale = useLocale() as "ua" | "en";
 
   // Используем переданные данные или загруженные
   const productData = externalProductData ?? fetchedProductData;
   const isLoading = externalIsLoading ?? fetchedIsLoading;
   const error = externalError ?? fetchedError;
+  const product = productData?.data || productData;
+  const title = product ? getProductTitle(product, locale) : "";
 
   console.log("[ProductContext] Full productData:", productData);
   console.log(
@@ -63,11 +66,6 @@ export const ProductContext: React.FC<ProductContextProps> = ({
       </div>
     );
   }
-
-  // Проверяем разные варианты структуры данных
-  const product = productData?.data || productData;
-  const locale = useLocale() as "ua" | "en";
-  const title = product ? getProductTitle(product, locale) : "";
 
   if (!product || !product.id) {
     console.log("[ProductContext] No valid product data");
