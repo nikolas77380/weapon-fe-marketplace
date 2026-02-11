@@ -419,6 +419,9 @@
     "buttonCancel": "Cancel",
     "error": "Error:",
     "errorDescription": "Failed to update product",
+    "translationLabelEn": "Translation (EN)",
+    "translationLabelUa": "Translation (UA)",
+    "translationEmpty": "Translation will update after save",
     "deleteModal": {
       "dialogTitleDeleteImage": "Deleting an image",
       "dialogDescriptionDeleteImage": "Are you sure you want to delete this image?",

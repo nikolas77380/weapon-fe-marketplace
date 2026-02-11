@@ -419,6 +419,9 @@
     "buttonCancel": "Скасувати",
     "error": "Помилка:",
     "errorDescription": "Помилка оновлення товару",
+    "translationLabelEn": "Переклад (EN)",
+    "translationLabelUa": "Переклад (UA)",
+    "translationEmpty": "Переклад буде оновлено після збереження",
     "deleteModal": {
       "dialogTitleDeleteImage": "Видалення зображення",
       "dialogDescriptionDeleteImage": "Ви впевнені, що хочете видалити це зображення?",
