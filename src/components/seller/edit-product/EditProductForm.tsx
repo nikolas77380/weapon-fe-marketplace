@@ -46,11 +46,11 @@ const EditProductForm = ({
   const t = useTranslations("EditProduct");
   const tAddProduct = useTranslations("AddProduct.addProductForm");
   const tCondition = useTranslations(
-    "AddProduct.addProductForm.productCondition"
+    "AddProduct.addProductForm.productCondition",
   );
   const tStatus = useTranslations("AddProduct.addProductForm.productStatus");
   const tAccessibility = useTranslations(
-    "AddProduct.addProductForm.productAccessibility"
+    "AddProduct.addProductForm.productAccessibility",
   );
 
   const router = useRouter();
@@ -92,10 +92,11 @@ const EditProductForm = ({
           return 0;
       }
     },
-    [product.priceUSD, product.priceEUR, product.priceUAH]
+    [product.priceUSD, product.priceEUR, product.priceUAH],
   );
 
   // Determine initial price and currency from product (default to USD)
+
   const getInitialPriceAndCurrency = useCallback(() => {
     // Default to USD if available
     if (product.priceUSD && product.priceUSD > 0) {
@@ -113,6 +114,15 @@ const EditProductForm = ({
   }, [product.priceUSD, product.priceEUR, product.priceUAH]);
 
   const initialPriceData = getInitialPriceAndCurrency();
+
+  // Translation display: the "other" locale (EN or UA) from product
+  const contentLang = product.contentLanguage === "en" ? "en" : "ua";
+  const translationLabel =
+    contentLang === "ua" ? t("translationLabelEn") : t("translationLabelUa");
+  const translatedTitle =
+    contentLang === "ua" ? product.titleEn : product.titleUa;
+  const translatedDescription =
+    contentLang === "ua" ? product.descriptionEn : product.descriptionUa;
 
   const form = useForm<EditProductSchemaValues>({
     resolver: zodResolver(editProductSchema),
@@ -192,7 +202,7 @@ const EditProductForm = ({
       prevCurrencyRef.current !== watchedCurrency
     ) {
       const priceForCurrency = getPriceForCurrency(
-        watchedCurrency as "USD" | "EUR" | "UAH"
+        watchedCurrency as "USD" | "EUR" | "UAH",
       );
       form.setValue("price", priceForCurrency);
       prevCurrencyRef.current = watchedCurrency;
@@ -348,6 +358,16 @@ const EditProductForm = ({
             placeholder={t("placeholderProductName")}
             classNameLabel="bg-background outline-none"
           />
+          {translationLabel && (
+            <div className="text-muted-foreground text-sm">
+              <span className="font-medium">{translationLabel}:</span>{" "}
+              {translatedTitle?.trim() ? (
+                translatedTitle
+              ) : (
+                <span className="italic">{t("translationEmpty")}</span>
+              )}
+            </div>
+          )}
 
           {/* Description */}
           <FormFieldComponent
@@ -358,6 +378,18 @@ const EditProductForm = ({
             placeholder={t("placeholderDescription")}
             rows={4}
           />
+          {translationLabel && (
+            <div className="text-muted-foreground text-sm">
+              <span className="font-medium">{translationLabel}:</span>{" "}
+              {translatedDescription?.trim() ? (
+                <span className="whitespace-pre-wrap">
+                  {translatedDescription}
+                </span>
+              ) : (
+                <span className="italic">{t("translationEmpty")}</span>
+              )}
+            </div>
+          )}
 
           {/* Price */}
           <div className="flex flex-col gap-4">
@@ -431,7 +463,7 @@ const EditProductForm = ({
             placeholder={tAccessibility("placeholder")}
             className="w-full rounded-sm"
             options={getProductAccessibilityOptions((key: string) =>
-              tAccessibility(key)
+              tAccessibility(key),
             )}
           />
 
