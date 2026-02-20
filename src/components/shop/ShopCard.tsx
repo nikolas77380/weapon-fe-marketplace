@@ -213,7 +213,7 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
                 </Link>
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex flex-1 justify-end items-center gap-1">
               <Eye size={12} className="xs:w-4 xs:h-4 text-foreground/50" />
               <p className="text-xs xs:text-sm text-foreground/50">
                 {item.viewsCount}
