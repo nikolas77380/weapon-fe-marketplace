@@ -202,12 +202,12 @@ const ShopCard = ({ item, viewMode = "grid" }: ShopCardProps) => {
               {getCategoryDisplayName(item.category)}
             </Link>
           )} */}
-          <div className="flex flex-col justify-between">
+          <div className="flex justify-between">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 <Link
                   href={`/company/${item.seller?.id}`}
-                  className="text-xs xs:text-sm hover:underline cursor-pointer truncate"
+                  className="text-xs xs:text-sm hover:underline cursor-pointer truncate max-w-[100px]"
                 >
                   {item.seller?.companyName || item.seller?.username}
                 </Link>
