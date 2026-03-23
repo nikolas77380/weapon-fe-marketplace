@@ -1538,8 +1538,7 @@ export const getProductAggregations = async (params?: {
   });
 };
 
-// Elasticsearch-based category products
-export const getCategoryProductsElastic = async (params: {
+export const getCategoryProducts = async (params: {
   categorySlug: string;
   search?: string;
   priceRange?: {
@@ -1619,8 +1618,7 @@ export const getCategoryProductsElastic = async (params: {
   });
 };
 
-// Elasticsearch-based category filters
-export const getCategoryFiltersElastic = async (params: {
+export const getCategoryFilters = async (params: {
   categorySlug: string;
   priceRange?: {
     min?: number;
@@ -1659,8 +1657,7 @@ export const getCategoryFiltersElastic = async (params: {
   });
 };
 
-// Elasticsearch-based seller products
-export const getSellerProductsElastic = async (params: {
+export const getSellerProducts = async (params: {
   sellerId: number;
   search?: string;
   priceRange?: {
@@ -1735,8 +1732,7 @@ export const getSellerProductsElastic = async (params: {
   });
 };
 
-// Elasticsearch-based seller product filters
-export const getSellerProductFiltersElastic = async (params: {
+export const getSellerProductFilters = async (params: {
   sellerId: number;
   priceRange?: {
     min?: number;

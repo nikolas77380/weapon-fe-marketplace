@@ -6,10 +6,10 @@ import {
   updateProduct,
   deleteProduct,
   deleteProductImage,
-  getCategoryProductsElastic,
-  getCategoryFiltersElastic,
-  getSellerProductsElastic,
-  getSellerProductFiltersElastic,
+  getCategoryProducts,
+  getCategoryFilters,
+  getSellerProducts,
+  getSellerProductFilters,
 } from "@/lib/strapi";
 import { CreateProductData, UpdateProductData, Product } from "@/lib/types";
 import { queryKeys } from "@/lib/query-keys";
@@ -227,7 +227,6 @@ export const useProductActions = () => {
   };
 };
 
-// Elasticsearch-based hooks
 export interface CategoryProductsElasticParams {
   categorySlug: string;
   search?: string;
@@ -257,25 +256,31 @@ export interface CategoryFiltersElasticParams {
   status?: string;
 }
 
-export const useCategoryProductsElastic = (
+export const useCategoryProducts = (
   params: CategoryProductsElasticParams
 ) => {
   return useQuery({
-    queryKey: ["category-products-elastic", params],
-    queryFn: () => getCategoryProductsElastic(params),
+    queryKey: ["category-products", params],
+    queryFn: () => getCategoryProducts(params),
     enabled: !!params.categorySlug,
   });
 };
 
-export const useCategoryFiltersElastic = (
+// backward-compat alias
+export const useCategoryProductsElastic = useCategoryProducts;
+
+export const useCategoryFilters = (
   params: CategoryFiltersElasticParams
 ) => {
   return useQuery({
-    queryKey: ["category-filters-elastic", params],
-    queryFn: () => getCategoryFiltersElastic(params),
+    queryKey: ["category-filters", params],
+    queryFn: () => getCategoryFilters(params),
     enabled: !!params.categorySlug,
   });
 };
+
+// backward-compat alias
+export const useCategoryFiltersElastic = useCategoryFilters;
 
 // Seller Elasticsearch hooks
 export interface SellerProductsElasticParams {
@@ -308,20 +313,26 @@ export interface SellerFiltersElasticParams {
   categories?: string[];
 }
 
-export const useSellerProductsElastic = (
+export const useSellerProducts = (
   params: SellerProductsElasticParams
 ) => {
   return useQuery({
-    queryKey: ["seller-products-elastic", params],
-    queryFn: () => getSellerProductsElastic(params),
+    queryKey: ["seller-products", params],
+    queryFn: () => getSellerProducts(params),
     enabled: !!params.sellerId,
   });
 };
 
-export const useSellerFiltersElastic = (params: SellerFiltersElasticParams) => {
+// backward-compat alias
+export const useSellerProductsElastic = useSellerProducts;
+
+export const useSellerFilters = (params: SellerFiltersElasticParams) => {
   return useQuery({
-    queryKey: ["seller-filters-elastic", params],
-    queryFn: () => getSellerProductFiltersElastic(params),
+    queryKey: ["seller-filters", params],
+    queryFn: () => getSellerProductFilters(params),
     enabled: !!params.sellerId,
   });
 };
+
+// backward-compat alias
+export const useSellerFiltersElastic = useSellerFilters;

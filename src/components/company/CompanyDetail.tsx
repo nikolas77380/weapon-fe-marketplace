@@ -11,8 +11,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import {
-  useSellerProductsElastic,
-  useSellerFiltersElastic,
+  useSellerProducts,
+  useSellerFilters,
 } from "@/hooks/useProductsQuery";
 import ShopCard from "../shop/ShopCard";
 import SkeletonComponent from "../ui/SkeletonComponent";
@@ -58,38 +58,35 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     categories: [] as string[],
   });
 
-  // Elasticsearch hooks
-  const { data: elasticProducts, isLoading: elasticLoading } =
-    useSellerProductsElastic({
-      sellerId: sellerData.id,
-      search: filters.search,
-      priceRange: {
-        min: filters.minPrice,
-        max: filters.maxPrice,
-      },
-      sort: filters.sort !== "id:desc" ? filters.sort : undefined,
-      page: filters.page,
-      pageSize: 6,
-      availability:
-        filters.availability.length > 0 ? filters.availability : undefined,
-      condition: filters.condition.length > 0 ? filters.condition : undefined,
-      categories:
-        filters.categories.length > 0 ? filters.categories : undefined,
-    });
+  const { data: productsData, isLoading } = useSellerProducts({
+    sellerId: sellerData.id,
+    search: filters.search,
+    priceRange: {
+      min: filters.minPrice,
+      max: filters.maxPrice,
+    },
+    sort: filters.sort !== "id:desc" ? filters.sort : undefined,
+    page: filters.page,
+    pageSize: 6,
+    availability:
+      filters.availability.length > 0 ? filters.availability : undefined,
+    condition: filters.condition.length > 0 ? filters.condition : undefined,
+    categories:
+      filters.categories.length > 0 ? filters.categories : undefined,
+  });
 
-  const { data: elasticFilters } = useSellerFiltersElastic({
+  const { data: filtersData } = useSellerFilters({
     sellerId: sellerData.id,
     priceRange: {
       min: filters.minPrice,
       max: filters.maxPrice,
     },
   });
+
   const sellerProducts: Product[] = useMemo(
-    () => elasticProducts?.data || [],
-    [elasticProducts]
+    () => productsData?.data || [],
+    [productsData],
   );
-  console.log(elasticProducts);
-  console.log(elasticLoading);
 
   // Local loading state for products tab
   const [productsTabLoading, setProductsTabLoading] = useState(false);
@@ -112,9 +109,9 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
   // Use Elasticsearch data if available, otherwise fallback to local filtering
   const filteredProducts = useMemo(() => {
-    if (elasticProducts?.data) {
-      return elasticProducts.data.filter(
-        (product: Product) => product.activityStatus !== "archived"
+    if (productsData?.data) {
+      return productsData.data.filter(
+        (product: Product) => product.activityStatus !== "archived",
       );
     }
 
@@ -143,7 +140,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       const searchMatch =
         filters.search === "" ||
         productTitle.toLowerCase().includes(filters.search.toLowerCase()) ||
-        (productDesc?.toLowerCase().includes(filters.search.toLowerCase()) ?? false);
+        (productDesc?.toLowerCase().includes(filters.search.toLowerCase()) ??
+          false);
 
       // Price filter
       const price = getProductPrice(product);
@@ -183,7 +181,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
     return sorted;
   }, [
-    elasticProducts?.data,
+    productsData?.data,
     sellerProducts,
     filters.search,
     filters.minPrice,
@@ -222,7 +220,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     const categoryIds = new Set(
       priceFilteredProducts
         .map((product) => product.category?.id)
-        .filter((id): id is number => id !== undefined)
+        .filter((id): id is number => id !== undefined),
     );
     return categories.filter((category) => categoryIds.has(category.id));
   }, [categories, priceFilteredProducts]);
@@ -230,10 +228,10 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   // Memoize priceRange objects to prevent infinite re-renders
   const desktopPriceRange = useMemo(
     () => ({
-      min: elasticFilters?.data?.priceStats?.min || 1,
-      max: elasticFilters?.data?.priceStats?.max || 500000,
+      min: filtersData?.data?.priceStats?.min || 1,
+      max: filtersData?.data?.priceStats?.max || 500000,
     }),
-    [elasticFilters?.data?.priceStats]
+    [filtersData?.data?.priceStats],
   );
 
   // Category counts for all seller products
@@ -250,25 +248,25 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
   // Memoize other objects that might cause re-renders
   const memoizedCategoryCounts = useMemo(
     () => categoryCounts,
-    [categoryCounts]
+    [categoryCounts],
   );
 
   // Use Elasticsearch pagination if available, otherwise client-side pagination
   const paginatedProducts = useMemo(() => {
-    if (elasticProducts?.data) {
-      return elasticProducts.data;
+    if (productsData?.data) {
+      return productsData.data;
     }
 
     // Client-side pagination for filtered products
     const pageSize = 6;
     const startIndex = (filters.page - 1) * pageSize;
     return filteredProducts.slice(startIndex, startIndex + pageSize);
-  }, [elasticProducts?.data, filteredProducts, filters.page]);
+  }, [productsData?.data, filteredProducts, filters.page]);
 
   // Pagination data for filtered products
   const paginationData = useMemo(() => {
-    if (elasticProducts?.meta?.pagination) {
-      return elasticProducts.meta.pagination;
+    if (productsData?.meta?.pagination) {
+      return productsData.meta.pagination;
     }
 
     const pageSize = 6;
@@ -279,7 +277,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       total: filteredProducts.length,
     };
   }, [
-    elasticProducts?.meta?.pagination,
+    productsData?.meta?.pagination,
     filteredProducts.length,
     filters.page,
   ]);
@@ -308,7 +306,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         const availableCategoryIds = new Set(
           newPriceProducts
             .map((product) => product.category?.id)
-            .filter((id): id is number => id !== undefined)
+            .filter((id): id is number => id !== undefined),
         );
 
         return {
@@ -323,7 +321,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         };
       });
     },
-    [sellerProducts, selectedCurrency]
+    [sellerProducts, selectedCurrency],
   );
 
   const handleCategoryChange = useCallback((categoryId: number | null) => {
@@ -339,7 +337,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         categoryId: null,
         page: 1,
       }));
-    }, 300)
+    }, 300),
   ).current;
 
   // Cleanup debounced function on unmount
@@ -355,7 +353,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
       setSearchInput(value); // Update input immediately
       debouncedUpdateFilters(value); // Update filters with debounce
     },
-    [debouncedUpdateFilters]
+    [debouncedUpdateFilters],
   );
 
   const handlePageChange = useCallback((page: number) => {
@@ -422,7 +420,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
         }, 800);
       }
     },
-    [activeTab]
+    [activeTab],
   );
 
   return (
@@ -448,28 +446,28 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
               <p className="text-xs sm:text-sm">
                 {sellerData?.metadata?.country ? (
                   COUNTRIES.find(
-                    (country) => country.iso2 === sellerData?.metadata?.country
+                    (country) => country.iso2 === sellerData?.metadata?.country,
                   )?.name ? (
                     locale === "ua" ? (
                       COUNTRIES.find(
                         (country) =>
-                          country.iso2 === sellerData?.metadata?.country
+                          country.iso2 === sellerData?.metadata?.country,
                       )?.ua
                     ) : (
                       COUNTRIES.find(
                         (country) =>
-                          country.iso2 === sellerData?.metadata?.country
+                          country.iso2 === sellerData?.metadata?.country,
                       )?.name
                     )
                   ) : locale === "ua" ? (
                     COUNTRIES.find(
                       (country) =>
-                        country.name === sellerData?.metadata?.country
+                        country.name === sellerData?.metadata?.country,
                     )?.ua
                   ) : (
                     COUNTRIES.find(
                       (country) =>
-                        country.name === sellerData?.metadata?.country
+                        country.name === sellerData?.metadata?.country,
                     )?.name
                   )
                 ) : (
@@ -592,7 +590,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       {t("tabOverview.titleFeaturedProducts")}
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-7.5">
-                      {elasticLoading ? (
+                      {isLoading ? (
                         <SkeletonComponent
                           type="productCard"
                           count={4}
@@ -701,7 +699,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                                   <a
                                     href={
                                       sellerData.metadata.webSite.startsWith(
-                                        "http"
+                                        "http",
                                       )
                                         ? sellerData.metadata.webSite
                                         : `https://${sellerData.metadata.webSite}`
@@ -815,7 +813,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
 
                 {/* Shop Filtering Content */}
                 <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
-                  {productsTabLoading || elasticLoading ? (
+                  {productsTabLoading || isLoading ? (
                     <>
                       {/* Skeleton for filters - Hidden on mobile */}
                       <div className="hidden lg:block w-64">
@@ -855,7 +853,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           priceRange={desktopPriceRange}
                           categories={memoizedCategoryCounts}
                           hideCategoryFilter={false}
-                          elasticFilters={elasticFilters?.data}
+                          elasticFilters={filtersData?.data}
                         />
                       </div>
                       {/* Shop Content - Full width on mobile, flex-1 on desktop */}
@@ -865,7 +863,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           pagination={paginationData}
                           onPageChange={handlePageChange}
                           viewMode={viewMode}
-                          loading={elasticLoading}
+                          loading={isLoading}
                         />
                       </div>
                     </>
@@ -883,12 +881,12 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                   selectedSubcategoryId={filters.categoryId}
                   priceRange={{
                     min:
-                      elasticFilters?.data?.priceStats?.min || filters.minPrice,
+                      filtersData?.data?.priceStats?.min || filters.minPrice,
                     max:
-                      elasticFilters?.data?.priceStats?.max || filters.maxPrice,
+                      filtersData?.data?.priceStats?.max || filters.maxPrice,
                   }}
                   categories={memoizedCategoryCounts}
-                  elasticFilters={elasticFilters?.data}
+                  elasticFilters={filtersData?.data}
                   onAvailabilityChange={handleAvailabilityChange}
                   onConditionChange={handleConditionChange}
                   onCategoriesChange={handleCategoriesChange}
