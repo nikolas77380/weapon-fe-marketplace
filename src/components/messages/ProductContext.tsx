@@ -51,7 +51,7 @@ export const ProductContext: React.FC<ProductContextProps> = ({
   console.log("[ProductContext] Full productData:", productData);
   console.log(
     "[ProductContext] productData keys:",
-    productData ? Object.keys(productData) : "null"
+    productData ? Object.keys(productData) : "null",
   );
   console.log("[ProductContext] productData.data:", productData?.data);
 
@@ -84,7 +84,7 @@ export const ProductContext: React.FC<ProductContextProps> = ({
         <div
           className={cn(
             "relative w-16 h-16 flex-shrink-0 rounded overflow-hidden",
-            !product.images?.[0]?.url && "bg-gray-100"
+            !product.images?.[0]?.url && "bg-gray-100",
           )}
         >
           {product.images?.[0]?.url ? (

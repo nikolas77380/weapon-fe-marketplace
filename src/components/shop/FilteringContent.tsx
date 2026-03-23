@@ -5,8 +5,8 @@ import Filters from "./Filters";
 import ShopContent from "./ShopContent";
 import FilterDrawer from "./FilterDrawer";
 import {
-  useCategoryProductsElastic,
-  useCategoryFiltersElastic,
+  useCategoryProducts,
+  useCategoryFilters,
 } from "@/hooks/useProductsQuery";
 import { useCategories, useCategoryBySlug } from "@/hooks/useCategories";
 import { useViewMode } from "@/hooks/useViewMode";
@@ -52,7 +52,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     categories: [],
   });
 
-  const { data: response, isLoading } = useCategoryProductsElastic({
+  const { data: response, isLoading } = useCategoryProducts({
     categorySlug: categorySlug,
     sort: filters.sort !== "id:desc" ? filters.sort : undefined,
     priceRange:
@@ -71,7 +71,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     categories: filters.categories.length > 0 ? filters.categories : undefined,
   });
 
-  const { data: filtersData } = useCategoryFiltersElastic({
+  const { data: filtersData } = useCategoryFilters({
     categorySlug: categorySlug,
     priceRange:
       filters.minPrice > 0 || filters.maxPrice > 0
@@ -91,38 +91,32 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
 
-  // Use Elasticsearch data for filters instead of old hooks
-  const elasticFilters = useMemo(() => filtersData?.data, [filtersData]);
+  const filters = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
-  // Обогащаем elasticFilters.categories данными из categories
-  const enrichedElasticFilters = useMemo(() => {
-    if (!elasticFilters || !categories) return elasticFilters;
+  const enrichedFilters = useMemo(() => {
+    if (!filters || !categories) return filters;
 
     return {
-      ...elasticFilters,
+      ...filters,
       categories:
-        elasticFilters.categories?.map((elasticCategory: any) => {
-          // Находим полные данные категории по slug
-          const fullCategory = categories.find(
-            (cat) => cat.slug === elasticCategory.key
-          );
+        filters.categories?.map((cat: any) => {
+          const fullCategory = categories.find((c) => c.slug === cat.key);
           return {
-            ...elasticCategory,
-            name: fullCategory?.name || elasticCategory.key,
+            ...cat,
+            name: fullCategory?.name || cat.key,
             translate_ua: fullCategory?.translate_ua,
           };
         }) || [],
     };
-  }, [elasticFilters, categories]);
+  }, [filters, categories]);
 
-  // Отключаем isInitialLoad после первой успешной загрузки
   React.useEffect(() => {
-    if (!isLoading && elasticFilters) {
+    if (!isLoading && filters) {
       setIsInitialLoad(false);
     }
-  }, [isLoading, elasticFilters]);
+  }, [isLoading, filters]);
 
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
@@ -244,10 +238,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   }, [currentCategory, categories, currentLocale]);
 
   // Memoize priceRange objects to prevent infinite re-renders
-  // Берём лимиты из priceStatsByCurrency[selectedCurrency]; fallback на старое поле priceStats
-  const currentStats = elasticFilters?.priceStatsByCurrency
-    ? elasticFilters.priceStatsByCurrency[selectedCurrency]
-    : elasticFilters?.priceStats;
+  const currentStats = filters?.priceStatsByCurrency
+    ? filters.priceStatsByCurrency[selectedCurrency]
+    : filters?.priceStats;
 
   const desktopPriceRange = useMemo(
     () => ({
@@ -265,10 +258,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
     [currentStats?.min, currentStats?.max]
   );
 
-  // Memoize other objects that might cause re-renders
   const memoizedCategoryCounts = useMemo(
-    () => elasticFilters?.categories || {},
-    [elasticFilters?.categories]
+    () => filters?.categories || {},
+    [filters?.categories]
   );
   const availableCategoriesList = useMemo(
     () => (categorySlug ? [] : categories),
@@ -327,7 +319,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
       <div className="flex h-full w-full mt-3 gap-0 lg:gap-6">
         {/* Filters - Hidden on mobile, visible on desktop */}
         <div className="hidden lg:block">
-          {isInitialLoad && !enrichedElasticFilters ? (
+          {isInitialLoad && !enrichedFilters ? (
             <SkeletonComponent type="filters" />
           ) : (
             <Filters
@@ -350,7 +342,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
               }
               categories={memoizedCategoryCounts}
               hideCategoryFilter={!!categorySlug}
-              elasticFilters={enrichedElasticFilters}
+              elasticFilters={enrichedFilters}
               isDisabled={loading}
             />
           )}
@@ -384,7 +376,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         }
         categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-        elasticFilters={enrichedElasticFilters}
+        elasticFilters={enrichedFilters}
         selectedSubcategoryId={filters.subcategoryId}
         onAvailabilityChange={handleAvailabilityChange}
         onConditionChange={handleConditionChange}
