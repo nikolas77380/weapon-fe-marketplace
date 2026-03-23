@@ -91,17 +91,17 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
 
-  const filters = useMemo(() => filtersData?.data, [filtersData]);
+  const filterOptions = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
   const enrichedFilters = useMemo(() => {
-    if (!filters || !categories) return filters;
+    if (!filterOptions || !categories) return filterOptions;
 
     return {
-      ...filters,
+      ...filterOptions,
       categories:
-        filters.categories?.map((cat: any) => {
+        filterOptions.categories?.map((cat: any) => {
           const fullCategory = categories.find((c) => c.slug === cat.key);
           return {
             ...cat,
@@ -110,13 +110,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           };
         }) || [],
     };
-  }, [filters, categories]);
+  }, [filterOptions, categories]);
 
   React.useEffect(() => {
-    if (!isLoading && filters) {
+    if (!isLoading && filterOptions) {
       setIsInitialLoad(false);
     }
-  }, [isLoading, filters]);
+  }, [isLoading, filterOptions]);
 
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
@@ -238,9 +238,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   }, [currentCategory, categories, currentLocale]);
 
   // Memoize priceRange objects to prevent infinite re-renders
-  const currentStats = filters?.priceStatsByCurrency
-    ? filters.priceStatsByCurrency[selectedCurrency]
-    : filters?.priceStats;
+  const currentStats = filterOptions?.priceStatsByCurrency
+    ? filterOptions.priceStatsByCurrency[selectedCurrency]
+    : filterOptions?.priceStats;
 
   const desktopPriceRange = useMemo(
     () => ({
@@ -259,8 +259,8 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   );
 
   const memoizedCategoryCounts = useMemo(
-    () => filters?.categories || {},
-    [filters?.categories]
+    () => filterOptions?.categories || [],
+    [filterOptions?.categories]
   );
   const availableCategoriesList = useMemo(
     () => (categorySlug ? [] : categories),
