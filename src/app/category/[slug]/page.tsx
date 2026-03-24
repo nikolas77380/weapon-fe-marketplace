@@ -13,7 +13,7 @@ const CategoryPage = async ({ params }: CategoryPageProps) => {
   return (
     <div className="mb-20">
       <div className="container mx-auto">
-        <FilteringContent categorySlug={slug} />
+        <FilteringContent key={slug} categorySlug={slug} />
       </div>
     </div>
   );
