@@ -91,17 +91,17 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   const pagination = response?.meta?.pagination;
   const loading = isLoading;
 
-  const filterOptions = useMemo(() => filtersData?.data, [filtersData]);
+  const filterAggregations = useMemo(() => filtersData?.data, [filtersData]);
   const { categories } = useCategories();
   const { category: currentCategory } = useCategoryBySlug(categorySlug);
 
   const enrichedFilters = useMemo(() => {
-    if (!filterOptions || !categories) return filterOptions;
+    if (!filterAggregations || !categories) return filterAggregations;
 
     return {
-      ...filterOptions,
+      ...filterAggregations,
       categories:
-        filterOptions.categories?.map((cat: any) => {
+        filterAggregations.categories?.map((cat: any) => {
           const fullCategory = categories.find((c) => c.slug === cat.key);
           return {
             ...cat,
@@ -110,13 +110,13 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
           };
         }) || [],
     };
-  }, [filterOptions, categories]);
+  }, [filterAggregations, categories]);
 
   React.useEffect(() => {
-    if (!isLoading && filterOptions) {
+    if (!isLoading && filterAggregations) {
       setIsInitialLoad(false);
     }
-  }, [isLoading, filterOptions]);
+  }, [isLoading, filterAggregations]);
 
   const { data: promosResponse } = usePromosQuery({
     categorySlug,
@@ -238,9 +238,9 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   }, [currentCategory, categories, currentLocale]);
 
   // Memoize priceRange objects to prevent infinite re-renders
-  const currentStats = filterOptions?.priceStatsByCurrency
-    ? filterOptions.priceStatsByCurrency[selectedCurrency]
-    : filterOptions?.priceStats;
+  const currentStats = filterAggregations?.priceStatsByCurrency
+    ? filterAggregations.priceStatsByCurrency[selectedCurrency]
+    : filterAggregations?.priceStats;
 
   const desktopPriceRange = useMemo(
     () => ({
@@ -259,8 +259,8 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
   );
 
   const memoizedCategoryCounts = useMemo(
-    () => filterOptions?.categories || [],
-    [filterOptions?.categories]
+    () => filterAggregations?.categories || [],
+    [filterAggregations?.categories]
   );
   const availableCategoriesList = useMemo(
     () => (categorySlug ? [] : categories),
@@ -342,7 +342,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
               }
               categories={memoizedCategoryCounts}
               hideCategoryFilter={!!categorySlug}
-              elasticFilters={enrichedFilters}
+              filterAggregations={enrichedFilters}
               isDisabled={loading}
             />
           )}
@@ -376,7 +376,7 @@ const FilteringContent = ({ categorySlug }: { categorySlug: string }) => {
         }
         categories={memoizedCategoryCounts}
         hideCategoryFilter={!!categorySlug}
-        elasticFilters={enrichedFilters}
+        filterAggregations={enrichedFilters}
         selectedSubcategoryId={filters.subcategoryId}
         onAvailabilityChange={handleAvailabilityChange}
         onConditionChange={handleConditionChange}

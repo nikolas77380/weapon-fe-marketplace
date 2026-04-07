@@ -107,7 +107,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     setOpen(true);
   };
 
-  // Use Elasticsearch data if available, otherwise fallback to local filtering
+  // Use search data if available, otherwise fallback to local filtering
   const filteredProducts = useMemo(() => {
     if (productsData?.data) {
       return productsData.data.filter(
@@ -251,7 +251,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
     [categoryCounts],
   );
 
-  // Use Elasticsearch pagination if available, otherwise client-side pagination
+  // Use search pagination if available, otherwise client-side pagination
   const paginatedProducts = useMemo(() => {
     if (productsData?.data) {
       return productsData.data;
@@ -852,8 +852,8 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                           selectedCategories={filters.categories}
                           priceRange={desktopPriceRange}
                           categories={memoizedCategoryCounts}
-                          hideCategoryFilter={false}
-                          elasticFilters={filtersData?.data}
+                          hideCategoryFilter={true}
+                          filterAggregations={filtersData?.data}
                         />
                       </div>
                       {/* Shop Content - Full width on mobile, flex-1 on desktop */}
@@ -886,7 +886,7 @@ const CompanyDetail = ({ sellerData }: CompanyDetailProps) => {
                       filtersData?.data?.priceStats?.max || filters.maxPrice,
                   }}
                   categories={memoizedCategoryCounts}
-                  elasticFilters={filtersData?.data}
+                  filterAggregations={filtersData?.data}
                   onAvailabilityChange={handleAvailabilityChange}
                   onConditionChange={handleConditionChange}
                   onCategoriesChange={handleCategoriesChange}

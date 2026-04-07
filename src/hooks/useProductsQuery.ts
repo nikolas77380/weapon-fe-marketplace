@@ -227,7 +227,7 @@ export const useProductActions = () => {
   };
 };
 
-export interface CategoryProductsElasticParams {
+export interface CategoryProductsParams {
   categorySlug: string;
   search?: string;
   priceRange?: {
@@ -245,7 +245,7 @@ export interface CategoryProductsElasticParams {
   categories?: string[];
 }
 
-export interface CategoryFiltersElasticParams {
+export interface CategoryFiltersParams {
   categorySlug: string;
   priceRange?: {
     min?: number;
@@ -257,7 +257,7 @@ export interface CategoryFiltersElasticParams {
 }
 
 export const useCategoryProducts = (
-  params: CategoryProductsElasticParams
+  params: CategoryProductsParams
 ) => {
   return useQuery({
     queryKey: ["category-products", params],
@@ -270,7 +270,7 @@ export const useCategoryProducts = (
 export const useCategoryProductsElastic = useCategoryProducts;
 
 export const useCategoryFilters = (
-  params: CategoryFiltersElasticParams
+  params: CategoryFiltersParams
 ) => {
   return useQuery({
     queryKey: ["category-filters", params],
@@ -282,8 +282,8 @@ export const useCategoryFilters = (
 // backward-compat alias
 export const useCategoryFiltersElastic = useCategoryFilters;
 
-// Seller Elasticsearch hooks
-export interface SellerProductsElasticParams {
+// Seller Search hooks
+export interface SellerProductsParams {
   sellerId: number;
   search?: string;
   priceRange?: {
@@ -300,7 +300,7 @@ export interface SellerProductsElasticParams {
   categories?: string[];
 }
 
-export interface SellerFiltersElasticParams {
+export interface SellerFiltersParams {
   sellerId: number;
   priceRange?: {
     min?: number;
@@ -314,7 +314,7 @@ export interface SellerFiltersElasticParams {
 }
 
 export const useSellerProducts = (
-  params: SellerProductsElasticParams
+  params: SellerProductsParams
 ) => {
   return useQuery({
     queryKey: ["seller-products", params],
@@ -326,7 +326,7 @@ export const useSellerProducts = (
 // backward-compat alias
 export const useSellerProductsElastic = useSellerProducts;
 
-export const useSellerFilters = (params: SellerFiltersElasticParams) => {
+export const useSellerFilters = (params: SellerFiltersParams) => {
   return useQuery({
     queryKey: ["seller-filters", params],
     queryFn: () => getSellerProductFilters(params),
