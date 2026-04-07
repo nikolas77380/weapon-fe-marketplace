@@ -33,7 +33,7 @@ interface FiltersProps {
   categories?: { [key: number]: number };
   hideCategoryFilter?: boolean;
   isMobile?: boolean;
-  elasticFilters?: any; // Elasticsearch aggregations data
+  filterAggregations?: any; // Filter aggregations data (stats, availability, etc.)
   isDisabled?: boolean;
 }
 
@@ -54,7 +54,7 @@ const Filters = ({
   categories = {},
   hideCategoryFilter = false,
   isMobile = false,
-  elasticFilters,
+  filterAggregations,
   isDisabled = false,
 }: FiltersProps) => {
   const t = useTranslations("CompanyDetail.tabProducts");
@@ -156,8 +156,8 @@ const Filters = ({
         </div>
       </div> */}
 
-      {/* Elasticsearch Tags Filter */}
-      {elasticFilters?.tags && elasticFilters.tags.length > 0 && (
+      {/* Filter Tags */}
+      {filterAggregations?.tags && filterAggregations.tags.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
           <Accordion
             type="single"
@@ -176,7 +176,7 @@ const Filters = ({
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
-                  {elasticFilters.tags.map((tag: any) => (
+                  {filterAggregations.tags.map((tag: any) => (
                     <div key={tag.key} className="flex items-center gap-3">
                       <Checkbox id={`tag-${tag.key}`} disabled={isDisabled} />
                       <Label
@@ -194,8 +194,8 @@ const Filters = ({
         </div>
       )}
 
-      {/* Elasticsearch Categories Filter */}
-      {elasticFilters?.categories && elasticFilters.categories.length > 0 && (
+      {/* Filter Categories */}
+      {filterAggregations?.categories && filterAggregations.categories.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
           <Accordion
             type="single"
@@ -214,7 +214,7 @@ const Filters = ({
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
-                  {elasticFilters.categories.map((category: any) => (
+                  {filterAggregations.categories.map((category: any) => (
                     <div key={category.key} className="flex items-center gap-3">
                       <Checkbox
                         disabled={isDisabled}
@@ -255,9 +255,9 @@ const Filters = ({
         </div>
       )}
 
-      {/* Elasticsearch Availability Filter */}
-      {elasticFilters?.availability &&
-        elasticFilters.availability.length > 0 && (
+      {/* Filter Availability */}
+      {filterAggregations?.availability &&
+        filterAggregations.availability.length > 0 && (
           <div className="border-b border-border-foreground pb-3.5">
             <Accordion
               type="single"
@@ -279,7 +279,7 @@ const Filters = ({
                 </AccordionTrigger>
                 <AccordionContent className="pt-3">
                   <div className="flex flex-col gap-2">
-                    {elasticFilters.availability.map((item: any) => (
+                    {filterAggregations.availability.map((item: any) => (
                       <div key={item.key} className="flex items-center gap-3">
                         <Checkbox
                           disabled={isDisabled}
@@ -316,8 +316,8 @@ const Filters = ({
           </div>
         )}
 
-      {/* Elasticsearch Condition Filter */}
-      {elasticFilters?.condition && elasticFilters.condition.length > 0 && (
+      {/* Filter Condition */}
+      {filterAggregations?.condition && filterAggregations.condition.length > 0 && (
         <div className="border-b border-border-foreground pb-3.5">
           <Accordion
             type="single"
@@ -336,7 +336,7 @@ const Filters = ({
               </AccordionTrigger>
               <AccordionContent className="pt-3">
                 <div className="flex flex-col gap-2">
-                  {elasticFilters.condition.map((item: any) => (
+                  {filterAggregations.condition.map((item: any) => (
                     <div key={item.key} className="flex items-center gap-3">
                       <Checkbox
                         disabled={isDisabled}

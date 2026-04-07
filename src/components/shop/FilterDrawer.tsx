@@ -25,7 +25,7 @@ interface FilterDrawerProps {
   selectedPriceRange?: { min: number; max: number };
   categories: Record<number, number>;
   hideCategoryFilter: boolean;
-  elasticFilters: any;
+  filterAggregations: any;
   onAvailabilityChange: (availability: string[]) => void;
   onConditionChange: (condition: string[]) => void;
   onCategoriesChange: (categories: string[]) => void;
@@ -47,7 +47,7 @@ const FilterDrawer = ({
   selectedPriceRange,
   categories,
   hideCategoryFilter,
-  elasticFilters,
+  filterAggregations,
   onAvailabilityChange,
   onConditionChange,
   onCategoriesChange,
@@ -97,7 +97,7 @@ const FilterDrawer = ({
             categories={categories}
             hideCategoryFilter={hideCategoryFilter}
             isMobile={true}
-            elasticFilters={elasticFilters}
+            filterAggregations={filterAggregations}
             onAvailabilityChange={onAvailabilityChange}
             onConditionChange={onConditionChange}
             onCategoriesChange={onCategoriesChange}
